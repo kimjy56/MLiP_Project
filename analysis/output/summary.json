@@ -1,0 +1,61 @@
+{
+  "train_rows": 12222,
+  "catalog_rows": 78595,
+  "train_unique_vessels": 5851,
+  "training_catalog_coverage": 0.07444493924549908,
+  "hangul_rows": 1191,
+  "hangul_fraction": 0.0974472263132057,
+  "hangul_vessels": 382,
+  "catalog_hangul_rows": 0,
+  "target_frequency_histogram": {
+    "1": 3173,
+    "2": 628,
+    "3": 407,
+    "4": 1643
+  },
+  "duplicate_full_inputs": 1000,
+  "conflicting_full_input_groups": 0,
+  "duplicate_name_tonnage": 6103,
+  "call_sign_ambiguous": 0,
+  "normalized_name_ambiguous": 0,
+  "tonnage_pearson": 0.9999811322065509,
+  "tonnage_two_predictor_vif": 26500.434104464286,
+  "both_tonnages_present": 11429,
+  "equal_tonnages": 11264,
+  "international_only_catalog_exact": 123,
+  "gross_only_catalog_exact": 1,
+  "true_catalog_gt_missing": 0,
+  "normalized_name_exact_rate": 0.5839469808541974,
+  "matched_tonnage_gap_max": 0.08748413705583756,
+  "matched_tonnage_gap_over_10pct": 0,
+  "tonnage_exact_either": 6136,
+  "catalog_gt_dwt_pearson": 0.9201735321684144,
+  "chi2_missingness_exploratory": {
+    "gross_tonnage": {
+      "chi2": 90.37863571069614,
+      "p_value": 1.9667841262101e-21,
+      "phi": 0.08599273282701718,
+      "warning": "Exploratory row-level test; repeated vessels violate independence. Not proof of MAR/MNAR."
+    },
+    "flag_name": {
+      "chi2": 43.086764530651536,
+      "p_value": 5.2365305118792254e-11,
+      "phi": 0.05937461436931434,
+      "warning": "Exploratory row-level test; repeated vessels violate independence. Not proof of MAR/MNAR."
+    }
+  },
+  "temporal_example": {
+    "2023": {
+      "train_rows": 9091,
+      "validation_rows": 3131,
+      "seen_vessel_fraction": 0.5611625678696902,
+      "hangul_rows": 307
+    },
+    "2024": {
+      "train_rows": 10365,
+      "validation_rows": 1857,
+      "seen_vessel_fraction": 0.6106623586429726,
+      "hangul_rows": 176
+    }
+  }
+}

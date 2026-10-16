@@ -1,0 +1,10 @@
+column,dtype,unique,missing_count,missing_rate,constant_nonmissing,blank_or_whitespace,trim_changes,numeric_parse_failures,nonfinite_numeric,nonpositive_numeric
+sample_id,object,12222,0,0.0,False,0,0,,,
+vessel_name,object,5857,0,0.0,False,0,0,,,
+call_sign,object,5851,0,0.0,False,0,0,,,
+gross_tonnage,float64,4582,793,0.0648829978726886,False,793,0,0.0,0.0,0.0
+international_gross_tonnage,float64,4572,793,0.0648829978726886,False,793,0,0.0,0.0,0.0
+flag_name,object,76,2015,0.16486663393879888,False,2015,0,,,
+vessel_type,object,19,0,0.0,False,0,0,,,
+arrival_year,int64,12,0,0.0,False,0,0,0.0,0.0,0.0
+target_vessel_id,object,5851,0,0.0,False,0,0,,,

@@ -1,0 +1,27 @@
+# Local Python environment and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.log
+
+# Competition input data and original downloaded baseline
+/data/
+/official_baseline/
+
+# Generated model assets and submission archives
+/model/assets.json
+/model/ranker.txt
+/validation_model/
+/output/
+*.zip
+
+# Row-level data and diagnostics; aggregate reports remain versioned
+/reports/*_predictions.csv
+/reports/split.csv
+/analysis/output/*_head.csv
+/analysis/output/target_counts.csv
+
+# Local workspace IPC sockets
+kernel-ipc-*

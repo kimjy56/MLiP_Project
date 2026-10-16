@@ -1,0 +1,9 @@
+,dtype,unique,missing_count,missing_rate
+vessel_id,object,78595,0,0.0
+vessel_type,object,138,0,0.0
+vessel_name,object,78594,0,0.0
+size,float64,24147,6563,0.08350403969718176
+unit,object,17,1,1.2723455690565558e-05
+deadweight_tonnage,float64,27220,5592,0.07114956422164259
+gross_tonnage,float64,17577,214,0.0027228195177810294
+flag_name,object,195,0,0.0

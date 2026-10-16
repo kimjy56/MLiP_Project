@@ -1,0 +1,38 @@
+{
+  "train_rows": 12222,
+  "catalog_rows": 78595,
+  "train_unique_vessels": 5851,
+  "hangul_rows": 1191,
+  "hangul_fraction": 0.0974472263132057,
+  "hangul_unique_vessels": 382,
+  "catalog_hangul_rows": 0,
+  "call_sign_unique": 5851,
+  "ambiguous_call_signs": 0,
+  "unknown_targets": 0,
+  "missing_train": {
+    "sample_id": 0,
+    "vessel_name": 0,
+    "call_sign": 0,
+    "gross_tonnage": 793,
+    "international_gross_tonnage": 793,
+    "flag_name": 2015,
+    "vessel_type": 0,
+    "arrival_year": 0,
+    "target_vessel_id": 0
+  },
+  "missing_catalog": {
+    "vessel_id": 0,
+    "vessel_type": 0,
+    "vessel_name": 0,
+    "size": 6563,
+    "unit": 1,
+    "deadweight_tonnage": 5592,
+    "gross_tonnage": 214,
+    "flag_name": 0
+  },
+  "tonnage_exact_any": 0.5020454917362134,
+  "test_present": false,
+  "sample_submission_rows": 3000,
+  "python_local": "3.12",
+  "runtime_note": "Competition uses Python 3.11.17; identical server environment not yet tested."
+}

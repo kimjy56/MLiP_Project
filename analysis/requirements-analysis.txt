@@ -1,0 +1,8 @@
+# Run inside the existing project environment, or a separate development venv.
+numpy>=1.26,<3
+pandas>=2.0,<3
+scipy>=1.15,<2
+scikit-learn>=1.5,<2
+matplotlib>=3.8,<4
+rapidfuzz==3.14.3
+Unidecode==1.4.0

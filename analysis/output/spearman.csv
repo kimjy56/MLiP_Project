@@ -1,0 +1,4 @@
+,gross_tonnage,international_gross_tonnage,arrival_year
+gross_tonnage,1.0,0.9999189991322004,0.020866114219452652
+international_gross_tonnage,0.9999189991322004,1.0,0.02088156074601483
+arrival_year,0.020866114219452652,0.02088156074601483,1.0

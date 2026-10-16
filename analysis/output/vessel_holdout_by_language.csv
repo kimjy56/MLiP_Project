@@ -1,0 +1,3 @@
+language,rows,vessels,accuracy,errors
+Hangul,205,71,0.926829268292683,15
+Non-Hangul,2195,1101,0.9995444191343964,1

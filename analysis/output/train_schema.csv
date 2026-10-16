@@ -1,0 +1,10 @@
+,dtype,unique,missing_count,missing_rate
+sample_id,object,12222,0,0.0
+vessel_name,object,5857,0,0.0
+call_sign,object,5851,0,0.0
+gross_tonnage,float64,4582,793,0.0648829978726886
+international_gross_tonnage,float64,4572,793,0.0648829978726886
+flag_name,object,76,2015,0.16486663393879888
+vessel_type,object,19,0,0.0
+arrival_year,int64,12,0,0.0
+target_vessel_id,object,5851,0,0.0

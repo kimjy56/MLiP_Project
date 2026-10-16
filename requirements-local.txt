@@ -1,0 +1,8 @@
+# For a separate Python 3.11 development environment, matching server versions.
+numpy==1.26.4
+pandas==2.0.3
+scipy==1.15.3
+scikit-learn==1.5.2
+lightgbm==4.6.0
+rapidfuzz==3.14.3
+Unidecode==1.4.0

@@ -1,0 +1,17 @@
+{
+  "python": "3.12.14",
+  "packages": {
+    "numpy": "2.3.5",
+    "pandas": "2.2.3",
+    "scipy": "1.17.0",
+    "scikit-learn": "1.8.0",
+    "lightgbm": "4.6.0",
+    "rapidfuzz": "3.14.3",
+    "Unidecode": "1.4.0"
+  },
+  "input_sha256": {
+    "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+    "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "sample_submission.csv": "85a6be7541485083903dbf4d465f38a5c621b135c613dd0cef20c5b3614a46a9"
+  }
+}

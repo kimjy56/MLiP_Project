@@ -1,0 +1,86 @@
+{
+  "integrity": {
+    "train": {
+      "rows": 12222,
+      "columns": 9,
+      "exact_duplicate_rows": 0,
+      "constant_columns": []
+    },
+    "catalog": {
+      "rows": 78595,
+      "columns": 8,
+      "exact_duplicate_rows": 0,
+      "constant_columns": []
+    },
+    "year_noninteger": 0,
+    "year_range": [
+      2015,
+      2026
+    ],
+    "catalog_normalized_name_ambiguous_groups": 311,
+    "catalog_normalized_name_duplicate_excess_rows": 312,
+    "catalog_normalized_name_max_multiplicity": 3,
+    "dwt_size_comparison": {
+      "complete_rows": 49297,
+      "unequal_rows": 1
+    }
+  },
+  "representation": {
+    "catalog_gt_median": 4270.0,
+    "labeled_unique_ship_gt_median": 29354.0,
+    "train_record_gt_median": 27658.0,
+    "labeled_ship_count": 5851,
+    "catalog_ship_count": 78595,
+    "single_record_vessel_fraction": 0.5423004614595796,
+    "vessel_type": {
+      "catalog_categories": 138,
+      "labeled_categories": 47,
+      "unlabeled_categories": 91,
+      "labeled_categories_with_1_to_5_ships": 22
+    },
+    "flag_name": {
+      "catalog_categories": 195,
+      "labeled_categories": 84,
+      "unlabeled_categories": 111,
+      "labeled_categories_with_1_to_5_ships": 34
+    }
+  },
+  "prior_model_diagnostics": {
+    "vessel_holdout": {
+      "available": true,
+      "source": "saved predictions of prior LightGBM experiment",
+      "rows": 2400,
+      "vessels": 1171,
+      "error_rows": 16,
+      "vessels_with_any_error": 7,
+      "record_accuracy": 0.9933333333333333,
+      "macro_vessel_accuracy": 0.9946626814688301,
+      "hangul_accuracy": 0.926829268292683,
+      "non_hangul_accuracy": 0.9995444191343964,
+      "weighted_accuracy": 0.948643813545197
+    },
+    "row_holdout": {
+      "available": true,
+      "source": "saved predictions of prior LightGBM experiment",
+      "rows": 1965,
+      "vessels": 1642,
+      "error_rows": 7,
+      "vessels_with_any_error": 7,
+      "record_accuracy": 0.9964376590330789,
+      "macro_vessel_accuracy": 0.9957369062119367,
+      "hangul_accuracy": 0.9796954314720813,
+      "non_hangul_accuracy": 0.9983031674208145,
+      "weighted_accuracy": 0.9852777522567011
+    }
+  },
+  "input_sha256": {
+    "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+  },
+  "limitations": [
+    "No hidden test data",
+    "No port/route/location columns",
+    "Unknown sampling and observation cutoff",
+    "No new model trained; validation metrics reuse earlier saved predictions"
+  ]
+}

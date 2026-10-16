@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "purpose": "execution check only, not a model performance estimate",
+  "training_queries": 300,
+  "validation_queries": 80,
+  "training_pairs": 17192,
+  "validation_pairs": 4704,
+  "training_positive_pair_fraction": 0.017449976733364354,
+  "transformed_columns": 1159,
+  "checks": [
+    "vessel-disjoint split",
+    "no forced validation positive",
+    "fit only on train",
+    "single-query prediction equality",
+    "shuffled-pair prediction equality",
+    "missing and unseen categories"
+  ]
+}

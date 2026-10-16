@@ -1,0 +1,5 @@
+gross_tonnage,international_gross_tonnage,flag_name,rows
+False,False,False,9632
+False,False,True,1797
+True,True,False,575
+True,True,True,218
