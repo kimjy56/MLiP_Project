@@ -1,0 +1,17 @@
+{
+  "recorded_at_kst": "2026-10-19T16:29:51.683275+09:00",
+  "action": "Install local Windows environment",
+  "python": "3.11.17",
+  "environment": ".venv-server",
+  "package_count": 50,
+  "pinned_package_count": 16,
+  "environment_passed": true,
+  "dependency_check_passed": true,
+  "unit_tests_passed": 6,
+  "cuda_available": false,
+  "report": "reports/local_environment.windows.json",
+  "freeze": "environment/windows-freeze.local.txt",
+  "issue": "uv python install reported missing minor-version link target after download",
+  "resolution": "Created venv using the downloaded Python 3.11.17 executable explicitly; used project .cache/uv; reran existing setup_windows.ps1 successfully",
+  "scope": "Environment installation and existing tests only; no data, model training or ZIP generation"
+}

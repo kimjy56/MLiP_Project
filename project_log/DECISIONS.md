@@ -106,3 +106,11 @@ E004 완료: 선박 보류 가중 정확도 baseline 0.948644, structure 0.97596
 SNPT 전체 학습은 12,222행/539,925쌍, 자산·인덱스·특징·모델·저장 포함 258.74초였다. 새 ZIP은 `/workspace/vessel_matching/ngram_submission/submit.zip`, 674,023바이트, SHA-256 `5e69b5c1ceccb8d7645a6870666fb35207ea8744894f9ca137409b8c8dc1cda6`이다. 깨끗한 해제·오프라인·입력 보존·출력 형식·전체/순서변경/부분/단독/빈 입력 검사를 통과했고 이전 두 ZIP의 해시도 보존했다.
 
 공개 train 12,222행의 호출부호를 모두 미등록 값으로 바꾼 실행 비용은 385.00초, 최대 RSS 545,734,656바이트(520.5 MiB)였다. 새 프로세스·import·CSV 로딩·카탈로그 및 n-gram 인덱스·검색·특징·예측·CSV 저장 포함, ZIP 해제·입력 준비 제외다. 전체 학습 별칭을 유지했으며 정확도 평가는 아니다. 공식 서버 성적·시간으로 해석하지 않는다. 혼합 첫 분할의 성능 하락을 포함한 선택 근거는 D10/E007/E008에 보존했다.
+
+## 2026-10-19 KST — Windows 로컬 폴더 구성
+
+사용자 요청에 따라 프로젝트 루트의 data/를 생성하고 기본 CSV 위치를 명시했다. model/은 기존 경로와 호환되도록 Python 코드와 학습 산출물을 파일 역할·Git 추적 여부로 구분한다. .gitignore에 데이터·.venv-server·assets.json·ranker.txt 제외 규칙이 이미 있어 유지했다. 현재 CSV·모델 산출물·가상환경은 없으며, 가상환경은 기존 Windows 설치 절차로 생성한다. 코드 이동·학습·ZIP 생성·commit·push는 수행하지 않았다. 안내는 README.md, docs/MULTI_PC_SETUP.md, model/README.md에 기록했다.
+
+## 2026-10-19 KST — Windows 환경 설치 완료
+
+사용자 요청으로 .venv-server를 설치했다. Python 3.11.17, 지정 16개 패키지 버전·import, 전체 50개 의존성 검사 및 CPU 연산이 통과했고 기존 테스트 6개도 통과했다. CUDA 12.8 빌드는 설치됐으나 GPU 사용은 감지되지 않았다. 최초 uv Python 경로 연결 오류는 다운로드된 실행 파일을 직접 지정하여 해결했다. 상세 기록: project_log/windows_environment_setup.json. PC별 검사·전체 버전은 reports/local_environment.windows.json 및 environment/windows-freeze.local.txt에 보존하며 Git 제외다.

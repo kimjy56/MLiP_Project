@@ -8,7 +8,7 @@
 2. 프로젝트 폴더에서 [Windows 환경 설치](../environment/README.md)의 PowerShell 명령을 실행한다.
 3. 대회 원본 CSV는 각 PC에서 공식 경로로 직접 받아 `data/` 같은 로컬 폴더에 둔다. 파일을 AI 채팅이나 Git에 업로드하지 않는다.
 4. 고정 fold·평가기·필요한 OOF/모델은 팀 승인 공간에서 받는다. fold를 새로 생성하지 않는다. 파일 해시·실험 ID·환경을 대조한다.
-5. 실제 데이터 경로가 정해지면 프로젝트 상대 경로나 `--data-dir` 옵션을 사용한다. 사용자 로컬 데이터 경로는 현재 미정이다.
+5. 기본 데이터 위치는 프로젝트 루트의 `data/`다. 공식 CSV를 `data/train.csv`, `data/vessel_catalog.csv`로 배치한다. 다른 위치는 `--data-dir` 옵션으로 지정한다.
 
 환경 설치에는 데이터가 필요하지 않다. 시스템 Python이나 다른 PC의 가상환경을 복사하지 않는다. OS가 다른 컴퓨터에는 해당 OS의 wheel을 설치한다. macOS는 이 Windows/CUDA 설치 파일의 지원 대상이 아니다.
 

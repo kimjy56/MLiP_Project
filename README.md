@@ -1,4 +1,22 @@
 # 선박 정보 매칭 프로젝트
+## 로컬 폴더 구성
+
+```text
+실전기계학습/
+├─ train.py, script.py, docs/, ...  # 코드·문서: Git 동기화
+├─ data/                          # 각 PC에서 직접 받은 CSV, Git 제외
+│  ├─ train.csv
+│  └─ vessel_catalog.csv
+├─ .venv-server/                  # 각 PC에서 별도 설치, Git 제외
+└─ model/
+   ├─ *.py                       # 모델 코드: Git 동기화
+   ├─ assets.json                # 학습 산출물: Git 제외
+   └─ ranker.txt                 # 학습 산출물: Git 제외
+```
+
+현재 PC에는 빈 data/와 모델 코드가 준비되어 있다. CSV와 학습 산출물은 별도로 준비한다.
+.venv-server/는 environment/setup_windows.ps1을 실행하면 실제 환경과 함께 생성된다.
+모델 파일 구분은 [model/README.md](model/README.md)를 참고한다.
 
 여러 컴퓨터에서의 코드·데이터 분리와 동기화 절차는
 [다중 PC 작업 안내](docs/MULTI_PC_SETUP.md)를 참고하세요.

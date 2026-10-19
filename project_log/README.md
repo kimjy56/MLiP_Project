@@ -68,3 +68,11 @@
 가설과 조건 명시 → 학습·검증 실행 → 설정과 결과 보존 → 동일 조건의 이전 실험과 비교 → 오답 분류 → 채택/보류 이유 기록 → 보고서·발표 근거 연결.
 
 예정된 실험은 DECISIONS.md에서 관리한다. 완료하지 않은 실험에는 성능 수치를 넣지 않는다. 이 기록 체계는 이후 작업의 규칙이며, 예약 실행이나 자동 실험을 생성한 것은 아니다.
+
+## 2026-10-19 KST — Windows 로컬 폴더 구성
+
+사용자 요청에 따라 프로젝트 루트의 data/를 생성하고 기본 CSV 위치를 명시했다. model/은 기존 경로와 호환되도록 Python 코드와 학습 산출물을 파일 역할·Git 추적 여부로 구분한다. .gitignore에 데이터·.venv-server·assets.json·ranker.txt 제외 규칙이 이미 있어 유지했다. 현재 CSV·모델 산출물·가상환경은 없으며, 가상환경은 기존 Windows 설치 절차로 생성한다. 코드 이동·학습·ZIP 생성·commit·push는 수행하지 않았다. 안내는 README.md, docs/MULTI_PC_SETUP.md, model/README.md에 기록했다.
+
+## 2026-10-19 KST — Windows 환경 설치 완료
+
+사용자 요청으로 .venv-server를 설치했다. Python 3.11.17, 지정 16개 패키지 버전·import, 전체 50개 의존성 검사 및 CPU 연산이 통과했고 기존 테스트 6개도 통과했다. CUDA 12.8 빌드는 설치됐으나 GPU 사용은 감지되지 않았다. 최초 uv Python 경로 연결 오류는 다운로드된 실행 파일을 직접 지정하여 해결했다. 상세 기록: project_log/windows_environment_setup.json. PC별 검사·전체 버전은 reports/local_environment.windows.json 및 environment/windows-freeze.local.txt에 보존하며 Git 제외다.
