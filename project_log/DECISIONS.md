@@ -1,5 +1,11 @@
 # 선택 이유와 다음 실험
 
+## P08 — 팀 규칙 v4 코드 반영 (2026-10-19 KST, 구현·합성 검사 완료)
+
+조회 통합 스위치, 정답과 추론 입력의 분리, 고정 5-fold OOF 생성·입력 검사, data/open 경로 우선순위 및 CPU 예산을 구현한다. 기존 특징·LightGBM 설정은 유지한다. 합성 데이터로 누수 방지·행 독립성·저장/로딩·파일 경로를 검사한다. 공식 CSV와 배포 fold·평가기는 현재 없으므로 실제 OOF 점수·E00 재현·성능 개선은 미측정으로 남긴다. 기존 실험 기록과 ZIP은 보존한다.
+
+위 계획에 따라 `train_oof.py`, 조회 통합 설정, label-free 검증 입력, 경로 fallback, 스레드 제한을 구현했다. 기본 조회 사용 여부는 기존과 같이 켜짐이며 저장한 설정 또는 명시적 override로 호출부호·별칭을 함께 제어한다. Windows 한글 경로에서 LightGBM 기본 파일 저장이 실패하는 문제를 재현해 UTF-8 텍스트 입출력으로 수정했다. 최종 테스트 15개와 OOF CLI 진입점 검사를 통과했다. 초기 테스트의 UTF-8 디코딩 오류와 한글 경로 저장 실패도 `project_log/team_rules_implementation.json`에 보존한다. 합성 학습은 실행 검사이며 대회 성능 근거가 아니다. 사용법과 실제 검증에 필요한 파일은 `docs/TEAM_RULES_IMPLEMENTATION.md`에 정리했다.
+
 ## D16 — 다른 PC에서 이어갈 코드·기록 push 요청
 
 사용자가 Git push를 명시적으로 요청했다. 원격 origin의 기본 브랜치 work와 로컬 기준 커밋이 같음을 확인하고, 누적된 검색 개선 코드·실험 집계·팀 규칙·평가 안내·Windows 설치 구성을 커밋 대상으로 정리했다. 원본 CSV·OOF·fold·행별 예측/오류 파일·가중치·가상환경·ZIP은 제외한다. 새 학습·ZIP 생성·Git 이력 재작성 없이 일반 push를 사용하며 성공 여부는 원격 브랜치와 로컬 커밋 해시를 대조해 확인한다. 실제 커밋 식별자는 Git 기록을 따른다.
@@ -114,3 +120,7 @@ SNPT 전체 학습은 12,222행/539,925쌍, 자산·인덱스·특징·모델·�
 ## 2026-10-19 KST — Windows 환경 설치 완료
 
 사용자 요청으로 .venv-server를 설치했다. Python 3.11.17, 지정 16개 패키지 버전·import, 전체 50개 의존성 검사 및 CPU 연산이 통과했고 기존 테스트 6개도 통과했다. CUDA 12.8 빌드는 설치됐으나 GPU 사용은 감지되지 않았다. 최초 uv Python 경로 연결 오류는 다운로드된 실행 파일을 직접 지정하여 해결했다. 상세 기록: project_log/windows_environment_setup.json. PC별 검사·전체 버전은 reports/local_environment.windows.json 및 environment/windows-freeze.local.txt에 보존하며 Git 제외다.
+
+## 2026-10-19 KST — data/eval_kit 수령
+
+사용자가 배치한 평가 묶음 10개 파일을 확인했다. fold 5개 모두 배포 평가기 내부의 SHA-256과 일치하며 12,222행·ID 유일성·fold 범위 검사를 통과했다. 그룹 fold 4개의 선박 분리와 E00 OOF의 기준 fold ID·분할 일치도 확인했다. 이는 같은 배포본 내부 대조이며 외부 진위 인증은 아니다. 기본 OOF fold 경로를 data/eval_kit로 변경했다. 원본 train.csv와 vessel_catalog.csv는 아직 없으므로 원본과의 대조·평가기 자체 시험·E00 점수 재현은 미실시다. 원본 평가기는 수정하지 않았다. 근거: project_log/eval_kit_received.json.

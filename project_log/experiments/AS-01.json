@@ -1,0 +1,79 @@
+{
+  "experiment_id": "AS-01",
+  "status": "failed",
+  "recorded_at_kst": "2026-10-19T21:25:53.062736+09:00",
+  "purpose": "Generate full OOF using supplied fixed group folds; no model selection or tuning",
+  "hypothesis": "Not a performance-improvement claim; evaluate the specified configuration",
+  "code": {
+    "git_revision": "4f0ba9dace15f414f21a6539c9540a637bb4473b",
+    "dirty": true,
+    "sha256": {
+      "train_oof.py": "4b1cbc39ea8570726684dd279dfc547fa9798cae52894aac1630f2489bb3e750",
+      "train.py": "732788bdfb95ac25c8445f82408edf1ba6bb422b809cea65116ec59f2fe48c34",
+      "model/matcher.py": "cd99bf3e45381743ec79818dc1202225ef1dda07ad1cf03324db5d95c7fa5d34",
+      "model/name_processing.py": "6f7dbd9f6c0689b5c6fa7c3f0002e213b0c760cc161ddeb5fcbe6e5a6fde2848",
+      "model/ngram_retrieval.py": "9c1e0e73a4b35c2723a30dd261bfc6561e9b465d9f4f3041e196c45f3e3ed59a",
+      "script.py": "88219370d5ceeabd61449affceef38fc032265caefd14c89533c117507251df1"
+    }
+  },
+  "configuration": {
+    "name_mode": "baseline",
+    "phonetic_search": 0,
+    "retrieval_channels": null,
+    "use_train_lookup": true,
+    "model": {
+      "n_estimators": 350,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "max_depth": -1,
+      "min_child_samples": 40,
+      "colsample_bytree": 0.9,
+      "reg_lambda": 2,
+      "random_state": 20261016,
+      "n_jobs": 4,
+      "verbosity": -1,
+      "deterministic": true,
+      "force_col_wise": true
+    }
+  },
+  "command": [
+    "C:\\Users\\jy200\\Documents\\ChatGPT\\실전기계학습\\.venv-server\\Scripts\\python.exe",
+    "train_oof.py",
+    "--experiment-id",
+    "AS-01"
+  ],
+  "environment": {
+    "python": "3.11.17",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "executable": "C:\\Users\\jy200\\Documents\\ChatGPT\\실전기계학습\\.venv-server\\Scripts\\python.exe"
+  },
+  "data": {
+    "train": {
+      "path": "C:\\Users\\jy200\\Documents\\ChatGPT\\실전기계학습\\data\\train.csv",
+      "sha256": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c"
+    },
+    "catalog": {
+      "path": "C:\\Users\\jy200\\Documents\\ChatGPT\\실전기계학습\\data\\vessel_catalog.csv",
+      "sha256": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "folds": {
+      "path": "C:\\Users\\jy200\\Documents\\ChatGPT\\실전기계학습\\eval_kit\\folds_group5_seed42.csv",
+      "sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    }
+  },
+  "fold_results": [],
+  "team_evaluation": null,
+  "limitations": [
+    "Local diagnostics are not the distributed team evaluator result",
+    "E00/selftest, CI comparison and auxiliary folds require the team evaluation kit",
+    "No final fit, submission ZIP or hidden-test result"
+  ],
+  "started_at_kst": "2026-10-19T21:25:53.118445+09:00",
+  "failure": {
+    "type": "ValueError",
+    "message": "Fold hash differs from the supplied team hash"
+  },
+  "finished_at_kst": "2026-10-19T21:25:53.141366+09:00",
+  "elapsed_seconds": 0.0319999999992433,
+  "timing_scope": "input hashes/loading, five sequential folds, probes and output save"
+}

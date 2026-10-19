@@ -1,0 +1,60 @@
+{
+  "recorded_at_kst": "2026-10-19T20:23:32.0297861+09:00",
+  "status": "implementation_and_synthetic_tests_completed",
+  "plan_id": "P08",
+  "purpose": "Align model code with TEAM_RULES v4 and eval_kit README 1.1",
+  "git_revision": "4f0ba9dace15f414f21a6539c9540a637bb4473b",
+  "dirty": true,
+  "code_sha256": {
+    "model/matcher.py": "cd99bf3e45381743ec79818dc1202225ef1dda07ad1cf03324db5d95c7fa5d34",
+    "train.py": "08afc48dd9818daf6876c7d8e4157627f8437c7ee7a81fe722fe594da1b0ed53",
+    "train_oof.py": "65d1c2a59c63a5cd1521de9f2a6019c48faf9e85c4f7fe8381d020bfc907801f",
+    "script.py": "88219370d5ceeabd61449affceef38fc032265caefd14c89533c117507251df1",
+    "tests/test_team_rules.py": "d02d1334a7fa38e84c814716d223cb512757fabcee1475856aaf7bdd14112d80",
+    "docs/TEAM_RULES_IMPLEMENTATION.md": "b7437a321748fab0438ca440b0c4d58b153a61761060ef7c1e829e1ba0f4d9b1"
+  },
+  "environment_report": "reports/local_environment.windows.json",
+  "environment_report_sha256": "18caa841887f14486458323761da575b9c04cd4b3c705aea0e38555c1416a201",
+  "commands": [
+    ".venv-server/Scripts/python.exe -m unittest discover -s tests -v",
+    ".venv-server/Scripts/python.exe train_oof.py --help",
+    "git diff --check"
+  ],
+  "checks": {
+    "tests_passed": 15,
+    "final_test_seconds": 0.892,
+    "cli_help_passed": true,
+    "diff_check_passed": true,
+    "synthetic_training_rows": 10,
+    "synthetic_catalog_rows": 5,
+    "synthetic_fold_count": 5,
+    "invalid_fold_cases": 14,
+    "unicode_windows_model_path": true,
+    "network_disabled_entrypoint": true
+  },
+  "changes": [
+    "Persisted combined call-sign and training-name alias switch with explicit inference override",
+    "Five fixed group folds with exact ID alignment, production row count and expected SHA-256 checks",
+    "Only query columns enter validation prediction; diagnostics computed afterwards",
+    "Deterministic data/open fallback and string ID preservation",
+    "Sequential OOF; training numerical threads capped at 4 and inference at 1",
+    "OOF, model hashes and planned/running/completed/failed/interrupted records without overwriting prior IDs",
+    "UTF-8 model text I/O supports Unicode Windows project paths"
+  ],
+  "initial_failures": [
+    "Synthetic test used default cp949 for UTF-8 assets; fixed test read encoding",
+    "Native LightGBM save_model failed on Unicode Windows path; replaced native path I/O with Python UTF-8 model text save/load"
+  ],
+  "actual_competition_data_read": false,
+  "official_training": false,
+  "official_oof": false,
+  "team_evaluation": null,
+  "performance_improvement": null,
+  "submission_zip_created": false,
+  "limitations": [
+    "Official train/catalog CSV, distributed folds/evaluator and E00 baseline are absent",
+    "Synthetic small-model training verifies contracts only, not model quality",
+    "Official OOF, E00/selftest, bootstrap CI, auxiliary folds and Ubuntu/L4 execution remain unverified",
+    "Legacy development scripts remain distinct from the new team OOF path"
+  ]
+}

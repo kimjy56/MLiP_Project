@@ -1,0 +1,70 @@
+{
+  "recorded_at_kst": "2026-10-19T20:27:26.080673+09:00",
+  "status": "received_and_static_checks_passed",
+  "eval_version": "1.0",
+  "files_sha256": {
+    "data\\eval_kit\\aux\\folds_group5_seed0.csv": "c94ffbf0552694a5e21401db46ae4aad0f4727fbaad0faf3fddf99025557901a",
+    "data\\eval_kit\\aux\\folds_group5_seed1.csv": "1aa3025df3845a5f3e5e7ff72cf1f38141c70652fe89d8dc12997f5dfcf88588",
+    "data\\eval_kit\\aux\\folds_group5_seed2.csv": "354efbb2488596f38798de98788ca3db363497fa4ec64a3863ef02f914dc51ad",
+    "data\\eval_kit\\aux\\folds_row5_seed42.csv": "b0b3b9b2f5c31dee9cba8dc4c309ff9ec748c5628c67536ae21fba454cad9526",
+    "data\\eval_kit\\check_submission.py": "d72e3ea4792327554875c3d21578c39c27b5374bb3b310ea80cf7166d4206338",
+    "data\\eval_kit\\evaluate.py": "e87363d3301a550ac66e8a1e3a3952477b3e8fcb995af9ea1c53d6b9fa35720e",
+    "data\\eval_kit\\folds_group5_seed42.csv": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "data\\eval_kit\\oof_E00_baseline.csv": "7463030c429aa8ad09e28e8eed887eb44ff813137bfa112602d517066c34721c",
+    "data\\eval_kit\\README.md": "2163cb0b7b06f891fe2b96335eca2780cb12473e24a8b837c5b6e6b9a2768983",
+    "data\\eval_kit\\selftest_evaluate.py": "ffc1bcd86a5f9a5457122945247d9a3c01f6204d39f7f9c68f2f96a818a850c6"
+  },
+  "fold_checks": [
+    {
+      "path": "data\\eval_kit\\aux\\folds_group5_seed0.csv",
+      "sha256": "c94ffbf0552694a5e21401db46ae4aad0f4727fbaad0faf3fddf99025557901a",
+      "scheme": "G5-s0",
+      "rows": 12222,
+      "structural_checks_passed": true,
+      "vessel_groups_disjoint": true
+    },
+    {
+      "path": "data\\eval_kit\\aux\\folds_group5_seed1.csv",
+      "sha256": "1aa3025df3845a5f3e5e7ff72cf1f38141c70652fe89d8dc12997f5dfcf88588",
+      "scheme": "G5-s1",
+      "rows": 12222,
+      "structural_checks_passed": true,
+      "vessel_groups_disjoint": true
+    },
+    {
+      "path": "data\\eval_kit\\aux\\folds_group5_seed2.csv",
+      "sha256": "354efbb2488596f38798de98788ca3db363497fa4ec64a3863ef02f914dc51ad",
+      "scheme": "G5-s2",
+      "rows": 12222,
+      "structural_checks_passed": true,
+      "vessel_groups_disjoint": true
+    },
+    {
+      "path": "data\\eval_kit\\aux\\folds_row5_seed42.csv",
+      "sha256": "b0b3b9b2f5c31dee9cba8dc4c309ff9ec748c5628c67536ae21fba454cad9526",
+      "scheme": "R5-s42",
+      "rows": 12222,
+      "structural_checks_passed": true,
+      "vessel_groups_disjoint": false
+    },
+    {
+      "path": "data\\eval_kit\\folds_group5_seed42.csv",
+      "sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+      "scheme": "G5-s42",
+      "rows": 12222,
+      "structural_checks_passed": true,
+      "vessel_groups_disjoint": true
+    }
+  ],
+  "baseline_oof_rows": 12222,
+  "baseline_oof_id_fold_alignment": true,
+  "train_available": false,
+  "catalog_available": false,
+  "selftest_run": false,
+  "E00_score_reproduced": false,
+  "limitations": [
+    "Hashes match constants in the same delivered evaluator, not an independently authenticated distribution",
+    "No train/catalog CSV: original data alignment and scores unverified",
+    "Original evaluator preserved; CI including zero remains inconclusive under TEAM_RULES v4"
+  ]
+}

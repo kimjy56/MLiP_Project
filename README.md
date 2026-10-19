@@ -1,4 +1,9 @@
 # 선박 정보 매칭 프로젝트
+
+팀 규칙 v4에 맞춘 조회 설정·고정 5-fold OOF 실행 방법은
+[모델 코드 적용 안내](docs/TEAM_RULES_IMPLEMENTATION.md)를 참고하세요.
+팀 공통 OOF 생성은 `train_oof.py`, 기존 개발 holdout·최종 학습은 `train.py`입니다.
+실제 CSV·배포 fold·평가기를 준비해야 팀 검증을 실행할 수 있습니다.
 ## 로컬 폴더 구성
 
 ```text

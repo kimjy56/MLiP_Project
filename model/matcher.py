@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 from rapidfuzz import fuzz, process
 from unidecode import unidecode
+from threadpoolctl import threadpool_limits
 from name_processing import NameFeatureIndex, STRUCTURE_FEATURES, PHONETIC_FEATURES, name_view
 from ngram_retrieval import CharacterNgramIndex
 
@@ -82,7 +83,8 @@ def text(value):
     return value if isinstance(value, str) else ''
 
 
-def make_assets(train, catalog, name_mode='baseline', phonetic_search=0, retrieval_channels=None):
+def make_assets(train, catalog, name_mode='baseline', phonetic_search=0, retrieval_channels=None,
+                use_train_lookup=True):
     """Must be called on a training fold only during validation."""
     c = catalog.set_index('vessel_id')
     calls, names = defaultdict(set), defaultdict(set)
@@ -101,7 +103,10 @@ def make_assets(train, catalog, name_mode='baseline', phonetic_search=0, retriev
                 counts[q][text(c.loc[row['target_vessel_id'], col])] += 1
         tables[col] = {q: {k: n / sum(v.values()) for k, n in v.items()}
                        for q, v in counts.items()}
-    return {'version': 3, 'features': feature_names(name_mode),
+    if not isinstance(use_train_lookup, bool):
+        raise ValueError('use_train_lookup must be a boolean')
+    return {'version': 4, 'features': feature_names(name_mode),
+            'use_train_lookup': use_train_lookup,
             'name_mode': name_mode, 'phonetic_search': int(phonetic_search),
             'retrieval_channels': validate_channels(retrieval_channels),
             'calls': {k: next(iter(v)) for k, v in calls.items() if len(v) == 1},
@@ -109,15 +114,20 @@ def make_assets(train, catalog, name_mode='baseline', phonetic_search=0, retriev
 
 
 class CatalogIndex:
-    def __init__(self, catalog, assets):
+    def __init__(self, catalog, assets, use_train_lookup=None):
         required = {'vessel_id', 'vessel_name', 'gross_tonnage', 'vessel_type', 'flag_name'}
         if not required.issubset(catalog.columns):
             raise ValueError('Catalog schema is incomplete')
-        if catalog.empty or catalog.vessel_id.isna().any() or not catalog.vessel_id.is_unique:
+        if (catalog.empty or catalog.vessel_id.isna().any()
+                or catalog.vessel_id.eq('').any() or not catalog.vessel_id.is_unique):
             raise ValueError('Catalog IDs must be nonempty and unique')
         # Explicit ordering gives deterministic score ties and retrieval ties.
         self.catalog = catalog.sort_values('vessel_id', kind='stable').reset_index(drop=True)
         self.assets = assets
+        self.use_train_lookup = (assets.get('use_train_lookup', True)
+                                 if use_train_lookup is None else use_train_lookup)
+        if not isinstance(self.use_train_lookup, bool):
+            raise ValueError('use_train_lookup must be a boolean')
         self.name_mode = assets.get('name_mode', 'baseline')
         self.phonetic_search = assets.get('phonetic_search', 0)
         self.retrieval_channels = validate_channels(assets.get('retrieval_channels'))
@@ -143,6 +153,8 @@ class CatalogIndex:
                              for k in sorted(set(self.types))}
 
     def direct(self, row):
+        if not self.use_train_lookup:
+            return None
         vessel = self.assets['calls'].get(text(row.get('call_sign')))
         return vessel if vessel in self.lookup else None
 
@@ -199,7 +211,7 @@ class CatalogIndex:
         channels = ('S', 'P', 'T') if self.retrieval_channels is None else self.retrieval_channels
         for channel in channels:
             result.update(self.channel_candidates(row, channel))
-        if use_aliases:
+        if self.use_train_lookup and use_aliases:
             result.update(self.lookup[v] for v in self.assets['aliases'].get(norm(row.get('vessel_name')), [])
                           if v in self.lookup)
         return sorted(result) if result else [0]
@@ -244,35 +256,59 @@ class CatalogIndex:
 
 
 class Matcher:
-    def __init__(self, catalog, model_dir):
+    @threadpool_limits.wrap(limits=1)
+    def __init__(self, catalog, model_dir, use_train_lookup=None):
         model_dir = Path(model_dir)
         assets = json.loads((model_dir / 'assets.json').read_text(encoding='utf-8'))
         if assets['features'] != feature_names(assets.get('name_mode', 'baseline')):
             raise ValueError('Feature version mismatch')
-        self.index = CatalogIndex(catalog, assets)
-        self.model = lgb.Booster(model_file=str(model_dir / 'ranker.txt'))
+        self.index = CatalogIndex(catalog, assets, use_train_lookup=use_train_lookup)
+        # Read through Python so Unicode Windows project paths also work.
+        self.model = lgb.Booster(model_str=(model_dir / 'ranker.txt').read_text(encoding='utf-8'))
         if self.model.feature_name() != assets['features']:
             raise ValueError('Model and assets feature names differ')
 
     def predict(self, queries, use_direct=True, diagnostics=False):
+        """Use only query columns; legacy label diagnostics run after prediction.
+
+        use_direct=False disables calls only for historical experiments.
+        Matcher(use_train_lookup=False) disables both calls and name aliases.
+        New validation code uses predict_details with label-free queries.
+        """
+        pred, candidates, direct = self._predict(queries, use_direct, diagnostics)
+        if diagnostics:
+            truth = queries.get('target_vessel_id', [None] * len(queries))
+            recall = [gold in ids for gold, ids in zip(truth, candidates)]
+            return pred, recall, direct
+        return pred
+
+    def predict_details(self, queries, use_direct=True):
+        """Public holdout diagnostics: predictions, candidate IDs, lookup flags.
+
+        No labels are needed, and no rows or predictions are written to disk.
+        """
+        return self._predict(queries, use_direct, True)
+
+    @threadpool_limits.wrap(limits=1)
+    def _predict(self, queries, use_direct, details):
         missing = set(QUERY_COLUMNS) - set(queries.columns)
         if missing:
             raise ValueError(f'Missing input columns: {sorted(missing)}')
-        predictions, recalled, direct_flags = [], [], []
+        predictions, candidate_ids, direct_flags = [], [], []
         # No fitting, accumulated aliases, query aggregation, or mutable cache.
-        for row in queries.to_dict('records'):
+        for row in queries.loc[:, QUERY_COLUMNS].to_dict('records'):
             direct = self.index.direct(row) if use_direct else None
             if direct:
                 predictions.append(direct)
-                recalled.append(direct == row.get('target_vessel_id'))
-                direct_flags.append(True)
+                if details:
+                    candidate_ids.append([direct])
+                    direct_flags.append(True)
                 continue
             candidates = self.index.candidates(row)
             features = self.index.features(row, candidates)
             scores = self.model.predict(features, num_threads=1)
             predictions.append(self.index.ids[candidates[int(np.argmax(scores))]])
-            recalled.append(row.get('target_vessel_id') in {self.index.ids[i] for i in candidates})
-            direct_flags.append(False)
-        if diagnostics:
-            return predictions, recalled, direct_flags
-        return predictions
+            if details:
+                candidate_ids.append([self.index.ids[i] for i in candidates])
+                direct_flags.append(False)
+        return predictions, candidate_ids, direct_flags

@@ -76,3 +76,10 @@
 ## 2026-10-19 KST — Windows 환경 설치 완료
 
 사용자 요청으로 .venv-server를 설치했다. Python 3.11.17, 지정 16개 패키지 버전·import, 전체 50개 의존성 검사 및 CPU 연산이 통과했고 기존 테스트 6개도 통과했다. CUDA 12.8 빌드는 설치됐으나 GPU 사용은 감지되지 않았다. 최초 uv Python 경로 연결 오류는 다운로드된 실행 파일을 직접 지정하여 해결했다. 상세 기록: project_log/windows_environment_setup.json. PC별 검사·전체 버전은 reports/local_environment.windows.json 및 environment/windows-freeze.local.txt에 보존하며 Git 제외다.
+
+## 2026-10-19 KST — 팀 규칙 모델 코드 반영
+
+P08 구현과 합성 테스트 15개를 완료했다. 조회 통합 스위치, 고정 5-fold OOF 생성·ID/그룹/해시 검사, 정답과 추론 입력 분리, data/open 경로 우선순위 및 CPU 예산을 반영했다. Windows 한글 경로의 LightGBM 저장 실패도 수정했다. 기존 특징·모델 설정과 과거 결과는 유지한다. 상세 근거는 project_log/team_rules_implementation.json, 실행 안내는 docs/TEAM_RULES_IMPLEMENTATION.md다. 실제 CSV·배포 fold·평가기가 없어 대회 데이터 학습·OOF 점수·E00 재현은 미실시이며 ZIP은 생성하지 않았다.
+## 2026-10-19 KST — data/eval_kit 수령
+
+사용자가 배치한 평가 묶음 10개 파일을 확인했다. fold 5개 모두 배포 평가기 내부의 SHA-256과 일치하며 12,222행·ID 유일성·fold 범위 검사를 통과했다. 그룹 fold 4개의 선박 분리와 E00 OOF의 기준 fold ID·분할 일치도 확인했다. 이는 같은 배포본 내부 대조이며 외부 진위 인증은 아니다. 기본 OOF fold 경로를 data/eval_kit로 변경했다. 원본 train.csv와 vessel_catalog.csv는 아직 없으므로 원본과의 대조·평가기 자체 시험·E00 점수 재현은 미실시다. 원본 평가기는 수정하지 않았다. 근거: project_log/eval_kit_received.json.

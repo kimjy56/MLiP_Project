@@ -10,12 +10,13 @@ import time
 
 import lightgbm as lgb
 import numpy as np
-import pandas as pd
+import pandas as pdS
 from sklearn.model_selection import GroupShuffleSplit, train_test_split
+from threadpoolctl import threadpool_limits
 
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / 'model'))
-from matcher import CatalogIndex, FEATURES, Matcher, hangul, make_assets
+from matcher import CatalogIndex, FEATURES, QUERY_COLUMNS, Matcher, hangul, make_assets
 
 
 MODEL_PARAMETERS = dict(n_estimators=350, learning_rate=.05, num_leaves=31,
@@ -24,9 +25,12 @@ MODEL_PARAMETERS = dict(n_estimators=350, learning_rate=.05, num_leaves=31,
                         verbosity=-1, deterministic=True, force_col_wise=True)
 
 
-def fit(train, catalog, destination, name_mode='baseline', phonetic_search=0, retrieval_channels=None):
+@threadpool_limits.wrap(limits=4)
+def fit(train, catalog, destination, name_mode='baseline', phonetic_search=0, retrieval_channels=None,
+        use_train_lookup=True):
+    start = time.monotonic()
     destination.mkdir(parents=True, exist_ok=True)
-    assets = make_assets(train, catalog, name_mode, phonetic_search, retrieval_channels)
+    assets = make_assets(train, catalog, name_mode, phonetic_search, retrieval_channels, use_train_lookup)
     index = CatalogIndex(catalog, assets)
     # Calls and aliases are used only at inference; the pair model must learn
     # catalog similarity without seeing its own label as an alias feature.
@@ -37,7 +41,6 @@ def fit(train, catalog, destination, name_mode='baseline', phonetic_search=0, re
     matrices, labels, weights = [], [], []
     retrieved = []
     pair_hash = hashlib.sha256()
-    start = time.monotonic()
     for n, row in enumerate(unique.to_dict('records')):
         truth = index.lookup[row['target_vessel_id']]
         candidates = index.candidates(row, use_aliases=False)
@@ -68,18 +71,21 @@ def fit(train, catalog, destination, name_mode='baseline', phonetic_search=0, re
     x = np.concatenate(matrices)
     model = lgb.LGBMClassifier(**MODEL_PARAMETERS)
     model.fit(x, np.asarray(labels), sample_weight=np.asarray(weights), feature_name=index.feature_names)
-    model.booster_.save_model(str(destination / 'ranker.txt'))
+    # Python handles Unicode Windows paths; native LightGBM fopen does not.
+    (destination / 'ranker.txt').write_text(model.booster_.model_to_string(), encoding='utf-8')
     (destination / 'assets.json').write_text(json.dumps(assets, ensure_ascii=False), encoding='utf-8')
     return {'training_rows': len(train), 'unique_feature_rows': len(unique),
             'training_pair_sha256': pair_hash.hexdigest(),
             'training_pairs': len(labels), 'training_candidate_recall': float(np.mean(retrieved)),
             'fit_seconds': time.monotonic()-start,
+            'timing_scope': 'assets, catalog index, candidate/features, training and model save; excludes CSV load',
             'feature_importance_gain': dict(zip(index.feature_names, model.booster_.feature_importance('gain').tolist()))}
 
 
 def evaluate(matcher, validation, training_ids):
     start = time.monotonic()
-    pred, recall, direct = matcher.predict(validation, diagnostics=True)
+    pred, candidates, direct = matcher.predict_details(validation.loc[:, QUERY_COLUMNS])
+    recall = [gold in ids for gold, ids in zip(validation.target_vessel_id, candidates)]
     ko = validation.vessel_name.map(hangul).to_numpy()
     correct = validation.target_vessel_id.to_numpy() == np.asarray(pred)
     seen = validation.target_vessel_id.isin(training_ids).to_numpy()
@@ -90,22 +96,34 @@ def evaluate(matcher, validation, training_ids):
         output[name+'_rows'] = int(mask.sum())
         output[name+'_accuracy'] = float(correct[mask].mean()) if mask.any() else None
         output[name+'_candidate_recall'] = float(np.asarray(recall)[mask].mean()) if mask.any() else None
-    output['weighted_accuracy'] = .7*output['hangul_accuracy'] + .3*output['non_hangul_accuracy']
+    output['weighted_accuracy'] = (.7*output['hangul_accuracy'] + .3*output['non_hangul_accuracy']
+                                   if ko.any() and (~ko).any() else None)
+    output['metric_source'] = 'local diagnostic; use distributed eval_kit for team ranking'
     return output, pred
+
+
+def read_data(data_dir):
+    train = pd.read_csv(data_dir / 'train.csv', encoding='utf-8-sig', keep_default_na=False,
+                        dtype={'sample_id': str, 'target_vessel_id': str, 'call_sign': str})
+    catalog = pd.read_csv(data_dir / 'vessel_catalog.csv', encoding='utf-8-sig',
+                          keep_default_na=False, dtype={'vessel_id': str})
+    return train, catalog
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--final-only', action='store_true')
-    parser.add_argument('--validate-only', action='store_true')
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument('--final-only', action='store_true')
+    modes.add_argument('--validate-only', action='store_true')
+    parser.add_argument('--use-train-lookup', action=argparse.BooleanOptionalAction, default=True,
+                        help='Persist whether calls and training-name aliases are both enabled')
     parser.add_argument('--name-mode', choices=['baseline', 'structure', 'all'], default='baseline')
     parser.add_argument('--phonetic-search', type=int, default=0)
     parser.add_argument('--retrieval-channels', nargs='*', choices=['S','N','P','T'], default=None)
     parser.add_argument('--data-dir', type=Path, default=ROOT / 'data')
     parser.add_argument('--output-root', type=Path, default=ROOT)
     args = parser.parse_args()
-    train = pd.read_csv(args.data_dir / 'train.csv')
-    catalog = pd.read_csv(args.data_dir / 'vessel_catalog.csv')
+    train, catalog = read_data(args.data_dir)
     reports = args.output_root / 'reports'
     reports.mkdir(parents=True, exist_ok=True)
     if not args.final_only:
@@ -116,7 +134,9 @@ def main():
                                         stratify=pool.vessel_name.map(hangul))
         assert not set(fitted.target_vessel_id) & set(unseen.target_vessel_id)
         dest = args.output_root / 'validation_model'
-        results = {'seed': 20261016, 'fit': fit(fitted, catalog, dest, args.name_mode, args.phonetic_search, args.retrieval_channels)}
+        results = {'scope': 'legacy development holdouts, not team 5-fold OOF',
+                   'seed': 20261016, 'fit': fit(fitted, catalog, dest, args.name_mode,
+                       args.phonetic_search, args.retrieval_channels, args.use_train_lookup)}
         matcher = Matcher(catalog, dest)
         for label, data in [('vessel_holdout', unseen), ('row_holdout', mixed)]:
             result, pred = evaluate(matcher, data, set(fitted.target_vessel_id))
@@ -126,7 +146,7 @@ def main():
                           'prediction': pred}).to_csv(reports / (label+'_predictions.csv'), index=False)
             print(label, json.dumps(result), flush=True)
         # Exercise both lookup hits and the general matcher on public held-out data.
-        probe = pd.concat([unseen.head(12), mixed.head(12), unseen[unseen.vessel_name.map(hangul)].head(8)])
+        probe = pd.concat([unseen.head(12), mixed.head(12), unseen[unseen.vessel_name.map(hangul)].head(8)]).loc[:, QUERY_COLUMNS]
         expected = dict(zip(probe.sample_id, matcher.predict(probe)))
         reordered = probe.sample(frac=1, random_state=7)
         assert dict(zip(reordered.sample_id, matcher.predict(reordered))) == expected
@@ -142,7 +162,8 @@ def main():
                                         np.where(train.index.isin(unseen.index), 'vessel_holdout', 'row_holdout'))
                       }).to_csv(reports / 'split.csv', index=False)
     if not args.validate_only:
-        result = fit(train, catalog, args.output_root / 'model', args.name_mode, args.phonetic_search, args.retrieval_channels)
+        result = fit(train, catalog, args.output_root / 'model', args.name_mode,
+                     args.phonetic_search, args.retrieval_channels, args.use_train_lookup)
         (reports / 'final_training.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
         print('Final training complete', flush=True)
 
