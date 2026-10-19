@@ -1,0 +1,331 @@
+{
+  "experiment_id": "E006",
+  "plan_id": "P03 adoption",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-18T23:16:00.697477+09:00",
+  "started_at_kst": "2026-10-18T23:19:38.259876+09:00",
+  "finished_at_kst": "2026-10-18T23:26:57.263566+09:00",
+  "purpose": "Fit E004/E005 selected name variant on all official train, create a separate submit.zip and verify offline row independence.",
+  "hypothesis": "Chosen configuration remains executable within the documented deployment interface.",
+  "baseline_experiment_id": "E002",
+  "changed_factors": [
+    "Selected name feature/search configuration"
+  ],
+  "fixed_conditions": [
+    "Same full official train/catalog",
+    "Same classifier parameters",
+    "Same submission paths/schema"
+  ],
+  "code": {
+    "git_revision_at_run": "b5e9b1e16928d2a76d4e83e8abdd0618d4daa0bb",
+    "dirty": true,
+    "file_sha256": {
+      "train.py": "bec1e2c1f93316cb3a9f9044d79c5007391e6c69531583202759bf6a3dee8648",
+      "model/matcher.py": "25a0be43ddf88b0d8115fb6f6bc23e72c046aebc77100cb704693beeea620d3d",
+      "model/name_processing.py": "2979db4eef2d4cb00a8d1e4da52e34867cd89ae784bfc555b543e234d4d04f3f",
+      "script.py": "95eba81b5af7530e5c21a06832598e2aab6c4a724673196fbde98cfa78f351ac",
+      "verify_submission.py": "0ba26b797fcf8006e7db6439c0953936c9376448c633b56e67fced214864d3a4",
+      "experiments/finalize_name_model.py": "7e01c50902474d2779c057ef51621157e9a51b98e557ebdad2b228f46c1b7ef9"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "training_rows": 12222,
+    "split_id": "full official train; not validation",
+    "seed": 20261016
+  },
+  "retrieval": "baseline union extra top24 simplified vowel-preserving phonetic-key matches; variable union size",
+  "features": [
+    "exact",
+    "ratio",
+    "partial",
+    "roman_ratio",
+    "phonetic_ratio",
+    "phonetic_partial",
+    "length_ratio",
+    "digits_equal",
+    "digits_missing",
+    "gross_gap",
+    "international_gap",
+    "best_gap",
+    "gross_exact",
+    "international_exact",
+    "gross_missing",
+    "international_missing",
+    "catalog_gross_missing",
+    "type_probability",
+    "flag_probability",
+    "flag_missing",
+    "is_hangul",
+    "name_length",
+    "catalog_name_length",
+    "number_sequence_equal",
+    "number_conflict",
+    "catalog_number_missing",
+    "number_count_gap",
+    "token_count_gap",
+    "token_roman_idf",
+    "token_roman_min",
+    "token_roman_last",
+    "weighted_phone_full",
+    "weighted_phone_token_idf",
+    "weighted_phone_token_min",
+    "weighted_phone_last",
+    "weighted_phone_residual",
+    "phone_shared_edge"
+  ],
+  "preprocessing": {
+    "statistics_source": "fixed official catalog for token IDF; training fold only for call/alias/category maps",
+    "romanization": "Unidecode per original token, NFKC uppercase",
+    "phonetic_costs": {
+      "ordinary_edit": 4,
+      "vowel_insertion_deletion": 2,
+      "similar_consonant_or_vowel_substitution": 1
+    },
+    "shared_edge_threshold": 0.8,
+    "original_features_preserved": true
+  },
+  "training_pairs": {
+    "positive_rule": "same target vessel=1; positive injected in training only",
+    "negative_rule": "original top80 hardness union top20 tonnage plus true candidate when pool>100",
+    "aliases_used_during_pair_training": false,
+    "language_weight": ".7/p_H or .3/p_N on deduplicated training rows; applied per candidate pair",
+    "count": 445948
+  },
+  "model": {
+    "type": "LGBMClassifier",
+    "parameters": {
+      "n_estimators": 350,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "max_depth": -1,
+      "min_child_samples": 40,
+      "colsample_bytree": 0.9,
+      "reg_lambda": 2,
+      "random_state": 20261016,
+      "n_jobs": 4,
+      "verbosity": -1,
+      "deterministic": true,
+      "force_col_wise": true
+    },
+    "loss": "binary_logloss"
+  },
+  "commands": [
+    "experiments/finalize_name_model.py --data-dir /workspace/vessel_matching/data --output-dir /workspace/vessel_matching/name_improved_submission --record project_log/experiments/E006.json --benchmark"
+  ],
+  "environment": {
+    "python": "3.12.14",
+    "packages": {
+      "numpy": "2.3.5",
+      "pandas": "2.2.3",
+      "lightgbm": "4.6.0",
+      "rapidfuzz": "3.14.3",
+      "Unidecode": "1.4.0"
+    },
+    "logical_cpu_count": 3,
+    "cgroup_cpu_max": "200000 100000"
+  },
+  "metrics": {
+    "metric_source": "not evaluated after full-data fit; use E004/E005 for local predictive validation",
+    "official_score": null
+  },
+  "cost": {
+    "training_seconds": 137.1088102629983,
+    "inference_seconds": 275.2195324839995,
+    "timing_scope": "fresh process startup, imports, CSV reads, catalog index, features, prediction, CSV write; excludes ZIP extraction and preparing inputs",
+    "peak_memory_bytes": 475856896,
+    "model_bytes": 1240893,
+    "assets_bytes": 462953,
+    "submission_zip_bytes": 672889
+  },
+  "artifacts": {
+    "script.py": {
+      "path": "/workspace/vessel_matching/name_improved_submission/script.py",
+      "bytes": 1527,
+      "sha256": "95eba81b5af7530e5c21a06832598e2aab6c4a724673196fbde98cfa78f351ac"
+    },
+    "requirements.txt": {
+      "path": "/workspace/vessel_matching/name_improved_submission/requirements.txt",
+      "bytes": 153,
+      "sha256": "a7a333a5a6e3c5bf0d20223b9cb4c1e16c851f45193580c8ba043d64cd590fd9"
+    },
+    "model/matcher.py": {
+      "path": "/workspace/vessel_matching/name_improved_submission/model/matcher.py",
+      "bytes": 11998,
+      "sha256": "25a0be43ddf88b0d8115fb6f6bc23e72c046aebc77100cb704693beeea620d3d"
+    },
+    "model/name_processing.py": {
+      "path": "/workspace/vessel_matching/name_improved_submission/model/name_processing.py",
+      "bytes": 7364,
+      "sha256": "2979db4eef2d4cb00a8d1e4da52e34867cd89ae784bfc555b543e234d4d04f3f"
+    },
+    "model/ranker.txt": {
+      "path": "/workspace/vessel_matching/name_improved_submission/model/ranker.txt",
+      "bytes": 1240893,
+      "sha256": "0d3717144b374db1d0cb360823d0f276aa80d647041c68fa2d659963d78433b0"
+    },
+    "model/assets.json": {
+      "path": "/workspace/vessel_matching/name_improved_submission/model/assets.json",
+      "bytes": 462953,
+      "sha256": "75a0bf85e6861468ffd48e656ffd006d2068cc7c5934f0e6f890763c749a58a6"
+    },
+    "submit.zip": {
+      "path": "/workspace/vessel_matching/name_improved_submission/submit.zip",
+      "bytes": 672889,
+      "sha256": "b8ca7cb433c617b9952efd705834fa1d88790d019888615716ebb379da85b002"
+    }
+  },
+  "error_cases_file": null,
+  "observations": [
+    "All full/shuffled/subset/single/empty probes passed.",
+    "All 12,222 public train rows were benchmarked with calls deliberately unknown; full-train aliases stayed fixed.",
+    "Original baseline ZIP hash verified unchanged."
+  ],
+  "interpretations": [],
+  "limitations": [
+    "Full-data fit is not a new validation performance estimate",
+    "Local Python 3.12 environment differs from official server",
+    "Full public input benchmark is not a hidden test workload"
+  ],
+  "failure": null,
+  "decision": "Adopt separate improved bundle; offline entry point and row-independence checks passed; no official submission was made.",
+  "next_actions": [],
+  "selected_variant": "search",
+  "name_mode": "all",
+  "phonetic_search": 24,
+  "code_sha256": {
+    "train.py": "bec1e2c1f93316cb3a9f9044d79c5007391e6c69531583202759bf6a3dee8648",
+    "model/matcher.py": "25a0be43ddf88b0d8115fb6f6bc23e72c046aebc77100cb704693beeea620d3d",
+    "model/name_processing.py": "2979db4eef2d4cb00a8d1e4da52e34867cd89ae784bfc555b543e234d4d04f3f",
+    "script.py": "95eba81b5af7530e5c21a06832598e2aab6c4a724673196fbde98cfa78f351ac",
+    "verify_submission.py": "0ba26b797fcf8006e7db6439c0953936c9376448c633b56e67fced214864d3a4",
+    "experiments/finalize_name_model.py": "7e01c50902474d2779c057ef51621157e9a51b98e557ebdad2b228f46c1b7ef9"
+  },
+  "data_sha256": {
+    "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+  },
+  "fit": {
+    "training_rows": 12222,
+    "unique_feature_rows": 6683,
+    "training_pair_sha256": "1644ebe0882ec90578fb704776bae11ca20d43c7380ea642ac649038d85b8c2e",
+    "training_pairs": 445948,
+    "training_candidate_recall": 0.9991021996109531,
+    "fit_seconds": 133.98370719499871,
+    "feature_importance_gain": {
+      "exact": 0.0,
+      "ratio": 14999.476610690355,
+      "partial": 306.7621073871851,
+      "roman_ratio": 6123.90703009069,
+      "phonetic_ratio": 22783.976149216294,
+      "phonetic_partial": 1808.6361736357212,
+      "length_ratio": 8471.956283330917,
+      "digits_equal": 3738.9257728755474,
+      "digits_missing": 356.36328172683716,
+      "gross_gap": 5992.6738561838865,
+      "international_gap": 123931.36975374818,
+      "best_gap": 6254.476073220372,
+      "gross_exact": 0.0,
+      "international_exact": 1005.7316413521767,
+      "gross_missing": 842.3478656560183,
+      "international_missing": 162.1943862438202,
+      "catalog_gross_missing": 0.0,
+      "type_probability": 20934.66858267784,
+      "flag_probability": 7288.202807947993,
+      "flag_missing": 48.74700993299484,
+      "is_hangul": 2790.876358643174,
+      "name_length": 2249.712211281061,
+      "catalog_name_length": 2323.6707092374563,
+      "number_sequence_equal": 1316.4137309342623,
+      "number_conflict": 297.09110260009766,
+      "catalog_number_missing": 0.6575850248336792,
+      "number_count_gap": 105.38370132446289,
+      "token_count_gap": 359.57753823697567,
+      "token_roman_idf": 168074.11457900703,
+      "token_roman_min": 12320.608074098825,
+      "token_roman_last": 2796.273866042495,
+      "weighted_phone_full": 138171.68120484054,
+      "weighted_phone_token_idf": 22292.195616424084,
+      "weighted_phone_token_min": 13546.212884053588,
+      "weighted_phone_last": 9916.492687553167,
+      "weighted_phone_residual": 162362.01299105585,
+      "phone_shared_edge": 680.0830552875996
+    }
+  },
+  "fit_wall_seconds": 137.1088102629983,
+  "submission_checks": {
+    "passed": true,
+    "files": [
+      "script.py",
+      "requirements.txt",
+      "model/matcher.py",
+      "model/name_processing.py",
+      "model/ranker.txt",
+      "model/assets.json"
+    ],
+    "zip_bytes": 672889,
+    "uncompressed_bytes": 1724888,
+    "sha256": "b8ca7cb433c617b9952efd705834fa1d88790d019888615716ebb379da85b002",
+    "checks": [
+      "clean extraction",
+      "offline entry point",
+      "read-only inputs",
+      "output schema",
+      "catalog membership",
+      "input order preserved",
+      "full/shuffled/subset/single/empty consistency"
+    ],
+    "runs": [
+      {
+        "mode": "full",
+        "rows": 60,
+        "seconds": 5.9614012020028895
+      },
+      {
+        "mode": "shuffled",
+        "rows": 60,
+        "seconds": 5.583074406000378
+      },
+      {
+        "mode": "subset",
+        "rows": 15,
+        "seconds": 4.993461615002161
+      },
+      {
+        "mode": "single",
+        "rows": 1,
+        "seconds": 4.779260512001201
+      },
+      {
+        "mode": "empty",
+        "rows": 0,
+        "seconds": 4.410549733998778
+      }
+    ],
+    "limitation": "Local Python 3.12 environment; not the official evaluation server."
+  },
+  "benchmark": {
+    "rows": 12222,
+    "hangul_rows": 1191,
+    "call_sign": "all deliberately unknown",
+    "aliases": "unchanged full-train assets",
+    "seconds": 275.2195324839995,
+    "peak_rss_bytes": 475856896,
+    "scope": "fresh process startup, imports, CSV reads, catalog index, features, prediction, CSV write; excludes ZIP extraction and preparing inputs",
+    "checks": [
+      "offline",
+      "read-only inputs unchanged",
+      "row count/order",
+      "catalog membership"
+    ],
+    "limitation": "Public training-input execution benchmark, not predictive evaluation or official server measurement; hidden test size is unknown."
+  },
+  "record_enriched_at_kst": "2026-10-18T23:28:02.254032+09:00",
+  "original_archive_preserved": {
+    "path": "/workspace/vessel_matching/submit.zip",
+    "sha256": "fee02079a32221c8a6c0f43462a3e61e02b577193a2423e0562e4873f5828319"
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "passed": true,
+  "runs": [
+    {
+      "mode": "reference",
+      "rows": 60,
+      "seconds": 9.865902669000207
+    },
+    {
+      "mode": "full",
+      "rows": 60,
+      "seconds": 7.615741113004333
+    },
+    {
+      "mode": "repeat",
+      "rows": 60,
+      "seconds": 7.6069605849988875
+    },
+    {
+      "mode": "shuffled",
+      "rows": 60,
+      "seconds": 7.59104594499513
+    },
+    {
+      "mode": "half",
+      "rows": 30,
+      "seconds": 7.5097763880039565
+    },
+    {
+      "mode": "single",
+      "rows": 1,
+      "seconds": 6.098717353997927
+    },
+    {
+      "mode": "empty",
+      "rows": 0,
+      "seconds": 6.14823583499674
+    }
+  ],
+  "source_sha256": {
+    "script.py": "95eba81b5af7530e5c21a06832598e2aab6c4a724673196fbde98cfa78f351ac",
+    "model/matcher.py": "3bda1ccf50736ca59579f7dcb27d625aeadc55b1c17f768e7e96759a88639f4b",
+    "model/name_processing.py": "2979db4eef2d4cb00a8d1e4da52e34867cd89ae784bfc555b543e234d4d04f3f",
+    "model/ngram_retrieval.py": "62f5ac839d41bbbc26acce50fc3227889e6747557bf7075a4c8b85d0a52d3a6e",
+    "model/assets.json": "0de9d4a97821b73fcf747d019b03b75ff72d296604bfb99f79754da0bcb20bbc",
+    "model/ranker.txt": "7e9d202a912f482624db151392415f1fc9a790a0ed548786d5ae344cab58335c"
+  },
+  "checks": [
+    "same predictions as old Python environment on 60 public train probes",
+    "offline entry point",
+    "read-only inputs unchanged",
+    "schema/order/catalog membership",
+    "repeat/shuffled/half/single/empty consistency",
+    "source bundle unchanged"
+  ],
+  "limitations": [
+    "Public training probes only, not accuracy evaluation or exhaustive equivalence",
+    "No training, no ZIP creation, no full hidden-test timing, no GPU execution"
+  ]
+}

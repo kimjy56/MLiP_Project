@@ -1,0 +1,56 @@
+experiment_id,kind,status,metric_scope,weighted_accuracy,evidence
+E001,LightGBM local validation,completed,unseen vessel holdout,0.948643813545197,experiments/E001.json
+E001,LightGBM local validation,completed,mixed row holdout,0.9852777522567011,experiments/E001.json
+E002,full fit and packaging,completed_local_checks,not evaluated,,experiments/E002.json
+E003,logistic pipeline smoke,execution_check_passed,not performance evaluation,,experiments/E003.json
+E004,name ablation: baseline,completed,vessel_holdout,0.948643813545197,experiments/E004.json
+E004,name ablation: baseline,completed,row_holdout,0.9852777522567011,experiments/E004.json
+E004,name ablation: structure,completed,vessel_holdout,0.9759608867159286,experiments/E004.json
+E004,name ablation: structure,completed,row_holdout,0.9890007350070054,experiments/E004.json
+E004,name ablation: all,completed,vessel_holdout,0.9691316184232457,experiments/E004.json
+E004,name ablation: all,completed,row_holdout,0.9959376507338584,experiments/E004.json
+E004,name ablation: search,completed,vessel_holdout,0.9759608867159286,experiments/E004.json
+E004,name ablation: search,completed,row_holdout,0.996107333991777,experiments/E004.json
+E005,name ablation: baseline,completed,vessel_holdout,0.9691687976202901,experiments/E005.json
+E005,name ablation: baseline,completed,row_holdout,0.999829931972789,experiments/E005.json
+E005,name ablation: structure,completed,vessel_holdout,0.9693044828306021,experiments/E005.json
+E005,name ablation: structure,completed,row_holdout,0.9962766324804033,experiments/E005.json
+E005,name ablation: all,completed,vessel_holdout,0.9658034130049056,experiments/E005.json
+E005,name ablation: all,completed,row_holdout,0.9962766324804033,experiments/E005.json
+E005,name ablation: search,completed,vessel_holdout,0.9758995668510593,experiments/E005.json
+E005,name ablation: search,completed,row_holdout,0.999829931972789,experiments/E005.json
+E006,full fit and improved ZIP,completed_local_checks,execution benchmark; not accuracy,,experiments/E006.json
+E007,retrieval combination NONE,completed,vessel_holdout pure,0.0,experiments/E007.json
+E007,retrieval combination S,completed,vessel_holdout pure,0.2997266514806378,experiments/E007.json
+E007,retrieval combination N,completed,vessel_holdout pure,0.6454225234735262,experiments/E007.json
+E007,retrieval combination SN,completed,vessel_holdout pure,0.6480193344074671,experiments/E007.json
+E007,retrieval combination P,completed,vessel_holdout pure,0.9607967109283848,experiments/E007.json
+E007,retrieval combination SP,completed,vessel_holdout pure,0.9553364075781988,experiments/E007.json
+E007,retrieval combination NP,completed,vessel_holdout pure,0.9616189788321572,experiments/E007.json
+E007,retrieval combination SNP,completed,vessel_holdout pure,0.9655803100172231,experiments/E007.json
+E007,retrieval combination T,completed,vessel_holdout pure,0.6669014945274736,experiments/E007.json
+E007,retrieval combination ST,completed,vessel_holdout pure,0.8120584476915385,experiments/E007.json
+E007,retrieval combination NT,completed,vessel_holdout pure,0.9132674037446524,experiments/E007.json
+E007,retrieval combination SNT,completed,vessel_holdout pure,0.9281560086671482,experiments/E007.json
+E007,retrieval combination PT,completed,vessel_holdout pure,0.97363742430135,experiments/E007.json
+E007,retrieval combination SPT,completed,vessel_holdout pure,0.9759608867159286,experiments/E007.json
+E007,retrieval combination NPT,completed,vessel_holdout pure,0.9719995555308627,experiments/E007.json
+E007,retrieval combination SNPT,completed,vessel_holdout pure,0.986204789154953,experiments/E007.json
+E008,retrieval combination NONE,completed,vessel_holdout pure,0.0,experiments/E008.json
+E008,retrieval combination S,completed,vessel_holdout pure,0.2994572591587517,experiments/E008.json
+E008,retrieval combination N,completed,vessel_holdout pure,0.6782264377413632,experiments/E008.json
+E008,retrieval combination SN,completed,vessel_holdout pure,0.6831111053125979,experiments/E008.json
+E008,retrieval combination P,completed,vessel_holdout pure,0.9732948022127126,experiments/E008.json
+E008,retrieval combination SP,completed,vessel_holdout pure,0.979264951466444,experiments/E008.json
+E008,retrieval combination NP,completed,vessel_holdout pure,0.9746783999582507,experiments/E008.json
+E008,retrieval combination SNP,completed,vessel_holdout pure,0.979264951466444,experiments/E008.json
+E008,retrieval combination T,completed,vessel_holdout pure,0.6896970566746685,experiments/E008.json
+E008,retrieval combination ST,completed,vessel_holdout pure,0.8446495668510594,experiments/E008.json
+E008,retrieval combination NT,completed,vessel_holdout pure,0.9150245277110948,experiments/E008.json
+E008,retrieval combination SNT,completed,vessel_holdout pure,0.9186880283895209,experiments/E008.json
+E008,retrieval combination PT,completed,vessel_holdout pure,0.9492211147061893,experiments/E008.json
+E008,retrieval combination SPT,completed,vessel_holdout pure,0.9758995668510593,experiments/E008.json
+E008,retrieval combination NPT,completed,vessel_holdout pure,0.9819519100302682,experiments/E008.json
+E008,retrieval combination SNPT,completed,vessel_holdout pure,0.9760352520613713,experiments/E008.json
+E009,SNPT full-data fit and offline benchmark,completed,execution only; no holdout accuracy,,experiments/E009.json
+E010,Python 3.11.17 and server package compatibility,completed,environment and execution only; no accuracy,,experiments/E010.json

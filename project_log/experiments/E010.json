@@ -1,0 +1,264 @@
+{
+  "experiment_id": "E010",
+  "plan_id": "P07",
+  "status": "completed",
+  "started_at_kst": "2026-10-19T09:14:53.363571+09:00",
+  "purpose": "Server Python/package compatibility, no retraining or ZIP creation",
+  "target_python": "3.11.17",
+  "requirements": "environment/server-requirements.txt",
+  "environment_path": "/workspace/MLiP_Project/.venv-server",
+  "original_archives": [
+    {
+      "path": "/workspace/vessel_matching/submit.zip",
+      "sha256": "fee02079a32221c8a6c0f43462a3e61e02b577193a2423e0562e4873f5828319"
+    },
+    {
+      "path": "/workspace/vessel_matching/name_improved_submission/submit.zip",
+      "sha256": "b8ca7cb433c617b9952efd705834fa1d88790d019888615716ebb379da85b002"
+    },
+    {
+      "path": "/workspace/vessel_matching/ngram_submission/submit.zip",
+      "sha256": "5e69b5c1ceccb8d7645a6870666fb35207ea8744894f9ca137409b8c8dc1cda6"
+    }
+  ],
+  "failures": [
+    {
+      "step": "Initial uv Python download in default sandbox",
+      "error": "Network connect Operation not permitted",
+      "retry": "same command with network permission"
+    },
+    {
+      "step": "First package resolution with extra PyTorch index",
+      "error": "NVIDIA wheel link at pypi.nvidia.com unavailable through configured proxy",
+      "retry": "Official PyTorch wheel directly; other dependencies via allowed PyPI index; succeeded"
+    }
+  ],
+  "metrics": null,
+  "limitations": [
+    "Python and 16 named packages match. OS is Debian 13, not Ubuntu 22.04.",
+    "CUDA 12.8 build installed; no GPU available, GPU execution untested.",
+    "Only 60 public training probes; no full-data benchmark, retraining or accuracy evaluation."
+  ],
+  "finished_at_kst": "2026-10-19T09:19:24.052859+09:00",
+  "environment": {
+    "recorded_at_kst": "2026-10-19T09:17:55.729525+09:00",
+    "python_expected": "3.11.17",
+    "python_actual": "3.11.17",
+    "executable": "/workspace/MLiP_Project/.venv-server/bin/python",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "os": "Debian GNU/Linux 13 (trixie)",
+    "packages": {
+      "torch": {
+        "expected": "2.7.1+cu128",
+        "installed": "2.7.1+cu128",
+        "import_ok": true,
+        "passed": true
+      },
+      "pandas": {
+        "expected": "2.0.3",
+        "installed": "2.0.3",
+        "import_ok": true,
+        "passed": true
+      },
+      "numpy": {
+        "expected": "1.26.4",
+        "installed": "1.26.4",
+        "import_ok": true,
+        "passed": true
+      },
+      "scipy": {
+        "expected": "1.15.3",
+        "installed": "1.15.3",
+        "import_ok": true,
+        "passed": true
+      },
+      "scikit-learn": {
+        "expected": "1.5.2",
+        "installed": "1.5.2",
+        "import_ok": true,
+        "passed": true
+      },
+      "joblib": {
+        "expected": "1.5.2",
+        "installed": "1.5.2",
+        "import_ok": true,
+        "passed": true
+      },
+      "threadpoolctl": {
+        "expected": "3.7.0",
+        "installed": "3.7.0",
+        "import_ok": true,
+        "passed": true
+      },
+      "lightgbm": {
+        "expected": "4.6.0",
+        "installed": "4.6.0",
+        "import_ok": true,
+        "passed": true
+      },
+      "catboost": {
+        "expected": "1.2.8",
+        "installed": "1.2.8",
+        "import_ok": true,
+        "passed": true
+      },
+      "rapidfuzz": {
+        "expected": "3.14.3",
+        "installed": "3.14.3",
+        "import_ok": true,
+        "passed": true
+      },
+      "Unidecode": {
+        "expected": "1.4.0",
+        "installed": "1.4.0",
+        "import_ok": true,
+        "passed": true
+      },
+      "transformers": {
+        "expected": "4.57.6",
+        "installed": "4.57.6",
+        "import_ok": true,
+        "passed": true
+      },
+      "accelerate": {
+        "expected": "1.9.0",
+        "installed": "1.9.0",
+        "import_ok": true,
+        "passed": true
+      },
+      "safetensors": {
+        "expected": "0.6.2",
+        "installed": "0.6.2",
+        "import_ok": true,
+        "passed": true
+      },
+      "sentencepiece": {
+        "expected": "0.2.0",
+        "installed": "0.2.0",
+        "import_ok": true,
+        "passed": true
+      },
+      "tqdm": {
+        "expected": "4.66.5",
+        "installed": "4.66.5",
+        "import_ok": true,
+        "passed": true
+      }
+    },
+    "torch_cuda_build": "12.8",
+    "cuda_available": false,
+    "cpu_tensor_test": true,
+    "gpu_tensor_test": null,
+    "passed": true,
+    "scope": "Python and listed package versions/imports, CPU tensor operation; not an Ubuntu/L4 hardware replica"
+  },
+  "model_compatibility": {
+    "passed": true,
+    "runs": [
+      {
+        "mode": "reference",
+        "rows": 60,
+        "seconds": 9.865902669000207
+      },
+      {
+        "mode": "full",
+        "rows": 60,
+        "seconds": 7.615741113004333
+      },
+      {
+        "mode": "repeat",
+        "rows": 60,
+        "seconds": 7.6069605849988875
+      },
+      {
+        "mode": "shuffled",
+        "rows": 60,
+        "seconds": 7.59104594499513
+      },
+      {
+        "mode": "half",
+        "rows": 30,
+        "seconds": 7.5097763880039565
+      },
+      {
+        "mode": "single",
+        "rows": 1,
+        "seconds": 6.098717353997927
+      },
+      {
+        "mode": "empty",
+        "rows": 0,
+        "seconds": 6.14823583499674
+      }
+    ],
+    "source_sha256": {
+      "script.py": "95eba81b5af7530e5c21a06832598e2aab6c4a724673196fbde98cfa78f351ac",
+      "model/matcher.py": "3bda1ccf50736ca59579f7dcb27d625aeadc55b1c17f768e7e96759a88639f4b",
+      "model/name_processing.py": "2979db4eef2d4cb00a8d1e4da52e34867cd89ae784bfc555b543e234d4d04f3f",
+      "model/ngram_retrieval.py": "62f5ac839d41bbbc26acce50fc3227889e6747557bf7075a4c8b85d0a52d3a6e",
+      "model/assets.json": "0de9d4a97821b73fcf747d019b03b75ff72d296604bfb99f79754da0bcb20bbc",
+      "model/ranker.txt": "7e9d202a912f482624db151392415f1fc9a790a0ed548786d5ae344cab58335c"
+    },
+    "checks": [
+      "same predictions as old Python environment on 60 public train probes",
+      "offline entry point",
+      "read-only inputs unchanged",
+      "schema/order/catalog membership",
+      "repeat/shuffled/half/single/empty consistency",
+      "source bundle unchanged"
+    ],
+    "limitations": [
+      "Public training probes only, not accuracy evaluation or exhaustive equivalence",
+      "No training, no ZIP creation, no full hidden-test timing, no GPU execution"
+    ]
+  },
+  "unit_tests": {
+    "passed": true,
+    "count": 6,
+    "seconds": 0.143
+  },
+  "dependency_check": {
+    "passed": true,
+    "installed_packages": 66,
+    "tool": "uv pip check"
+  },
+  "original_archives_unchanged": true,
+  "decision": "Use .venv-server for subsequent work; preserve old environment and all existing ZIPs",
+  "observations": [
+    "All 16 pinned package imports and versions passed; CPU tensor check passed.",
+    "Existing model predictions unchanged for 60 public probes; repeated and reordered/subset/single/empty inputs passed.",
+    "Matplotlib initially used a temporary cache because HOME is read-only; activation/setup now set writable MPLCONFIGDIR."
+  ],
+  "commands": [
+    "UV_PYTHON_INSTALL_DIR=/workspace/python-runtimes UV_CACHE_DIR=/workspace/.cache/uv uv python install 3.11.17 --no-bin",
+    "UV_PYTHON_INSTALL_DIR=/workspace/python-runtimes UV_CACHE_DIR=/workspace/.cache/uv uv venv --python 3.11.17 .venv-server",
+    "UV_CACHE_DIR=/workspace/.cache/uv uv pip install --python .venv-server/bin/python -r environment/server-requirements.txt",
+    "uv pip check --python .venv-server/bin/python",
+    ".venv-server/bin/python environment/check_environment.py --output reports/server_environment.json",
+    ".venv-server/bin/python -m unittest discover -s tests -v",
+    ".venv-server/bin/python environment/check_model_compatibility.py --bundle /workspace/vessel_matching/ngram_submission --data-dir /workspace/vessel_matching/data --reference-python /workspace/vessel_matching/.venv/bin/python --output reports/server_model_compatibility.json"
+  ],
+  "code": {
+    "git_revision": "b5e9b1e16928d2a76d4e83e8abdd0618d4daa0bb",
+    "dirty": true,
+    "file_sha256": {
+      "environment/README.md": "53173de9985c1f13f89b30ec7f6297ffea5a59302d44b0a96c591692e1e84912",
+      "environment/server-requirements.txt": "26b80ca5548e0345191d2a02201b04aa900ece5df524a29bcda000feaba69c56",
+      "environment/activate.sh": "e9ef3a29320b389f509aff3558edbdfe26a494bd01d3387a078a318997357677",
+      "environment/check_model_compatibility.py": "213fd9f2225342b9e1b226cfabce4812a5474d7d06d61c88928204282b5ba9e4",
+      "environment/setup_server.sh": "e0091262cfdcfe9f0addd9e93992d120116072088b4ea74e72588607bafe1d29",
+      "environment/server-freeze.txt": "125e55924368962fdcd43c21f58d6528bb4d1b92fe8e8df991dad564a30ab08e",
+      "environment/check_environment.py": "4ddb698899bfd79235ee58346820b706ca70fdd99cd6be29a2a67b7ae1999806"
+    }
+  },
+  "evidence": {
+    "reports/server_environment.json": "3151290ecb2ef62b9a5290eecbe8c1d31dca03bae9c37e097b72a3cbd47b64b3",
+    "reports/server_model_compatibility.json": "126d987787020f31b43d6ed8fdfa7828d66641072a85b30be2fb23a73acc215c",
+    "environment/server-freeze.txt": "125e55924368962fdcd43c21f58d6528bb4d1b92fe8e8df991dad564a30ab08e"
+  },
+  "data_sha256": {
+    "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+  },
+  "logs_dir": "/workspace/vessel_matching/environment_e010"
+}

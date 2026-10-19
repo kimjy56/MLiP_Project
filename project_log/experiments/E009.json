@@ -1,0 +1,429 @@
+{
+  "experiment_id": "E009",
+  "plan_id": "P06 four-channel full factorial",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-19T08:39:15.647166+09:00",
+  "started_at_kst": "2026-10-19T08:53:20.560293+09:00",
+  "finished_at_kst": "2026-10-19T09:04:51.170534+09:00",
+  "purpose": "Fit best n-gram-enabled combination on all train and package offline submission.",
+  "hypothesis": "n-gram retrieval may complement the existing string, phonetic and specification candidate channels.",
+  "baseline_experiment_id": "E006",
+  "changed_factors": [
+    "S/N/P/T retrieval channel subset; resulting negative candidate pool"
+  ],
+  "fixed_conditions": [
+    "37 comparison features",
+    "Original train order, splits and LightGBM parameters",
+    "Catalog-only TF-IDF fit; train-fold category and alias assets",
+    "Train-only positive injection; original hard-negative sampling"
+  ],
+  "code": {
+    "git_revision_at_run": "b5e9b1e16928d2a76d4e83e8abdd0618d4daa0bb",
+    "dirty": true,
+    "file_sha256": {
+      "train.py": "23c865e31747c01b748baada0595b97a6ce7242582fcbbdcfcf371910607a8bf",
+      "model/matcher.py": "3bda1ccf50736ca59579f7dcb27d625aeadc55b1c17f768e7e96759a88639f4b",
+      "model/name_processing.py": "2979db4eef2d4cb00a8d1e4da52e34867cd89ae784bfc555b543e234d4d04f3f",
+      "model/ngram_retrieval.py": "62f5ac839d41bbbc26acce50fc3227889e6747557bf7075a4c8b85d0a52d3a6e",
+      "script.py": "95eba81b5af7530e5c21a06832598e2aab6c4a724673196fbde98cfa78f351ac",
+      "verify_submission.py": "56290f0ffbd5167b78b2bee980ec192acad660b190aa3a648feea95e8c8aa761",
+      "experiments/finalize_name_model.py": "a9db2057c217eba6f00d0e6679b7199044202527938b711e85216c1e7c009908"
+    },
+    "source_snapshot": "/workspace/vessel_matching/ngram_submission/source"
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "split_id": "all official train",
+    "split_file_sha256": null,
+    "seed": 20261016,
+    "training_rows": 12222,
+    "validation_rows": 0
+  },
+  "retrieval": {
+    "S": {
+      "non_hangul": 24,
+      "hangul": 0
+    },
+    "N": {
+      "hangul": 60,
+      "non_hangul": 24,
+      "positive_cosine_only": true
+    },
+    "P": {
+      "hangul_roman": 60,
+      "hangul_legacy_phone": 60,
+      "extra_phone_all_languages": 24
+    },
+    "T": {
+      "per_tonnage_hangul": 60,
+      "per_tonnage_non_hangul": 24,
+      "likely_types_hangul": 2,
+      "per_type_per_tonnage_hangul": 40
+    },
+    "union": "deduplicated, variable count, catalog-ID sorted",
+    "empty_fallback": "first sorted catalog ID",
+    "enabled_channels": [
+      "S",
+      "N",
+      "P",
+      "T"
+    ]
+  },
+  "features": [
+    "exact",
+    "ratio",
+    "partial",
+    "roman_ratio",
+    "phonetic_ratio",
+    "phonetic_partial",
+    "length_ratio",
+    "digits_equal",
+    "digits_missing",
+    "gross_gap",
+    "international_gap",
+    "best_gap",
+    "gross_exact",
+    "international_exact",
+    "gross_missing",
+    "international_missing",
+    "catalog_gross_missing",
+    "type_probability",
+    "flag_probability",
+    "flag_missing",
+    "is_hangul",
+    "name_length",
+    "catalog_name_length",
+    "number_sequence_equal",
+    "number_conflict",
+    "catalog_number_missing",
+    "number_count_gap",
+    "token_count_gap",
+    "token_roman_idf",
+    "token_roman_min",
+    "token_roman_last",
+    "weighted_phone_full",
+    "weighted_phone_token_idf",
+    "weighted_phone_token_min",
+    "weighted_phone_last",
+    "weighted_phone_residual",
+    "phone_shared_edge"
+  ],
+  "preprocessing": {
+    "ngram_fit": "official catalog only; char 2-4 TF-IDF on compact Unidecode names",
+    "token_idf": "official catalog only",
+    "learned_calls_aliases_category_maps": "all official train for final model",
+    "query_fit": false
+  },
+  "training_pairs": {
+    "positive_rule": "same target vessel=1, training-only injection",
+    "negative_rule": "subset candidates; if >100, top80 original hardness union top20 tonnage plus positive",
+    "language_weight": ".7/p_H or .3/p_N on deduplicated train, applied per pair",
+    "aliases_used_during_pair_training": false,
+    "count": 539925,
+    "sha256": "db82a1eb87052e6d57ac7e54b7a7a6415651921c36a5e01a8ff0cf7a619f8a73"
+  },
+  "model": {
+    "type": "LGBMClassifier",
+    "loss": "binary_logloss",
+    "parameters": {
+      "n_estimators": 350,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "max_depth": -1,
+      "min_child_samples": 40,
+      "colsample_bytree": 0.9,
+      "reg_lambda": 2,
+      "random_state": 20261016,
+      "n_jobs": 4,
+      "verbosity": -1,
+      "deterministic": true,
+      "force_col_wise": true
+    }
+  },
+  "commands": [
+    "experiments/finalize_name_model.py --data-dir /workspace/vessel_matching/data --output-dir /workspace/vessel_matching/ngram_submission --record project_log/experiments/E009.json --selection-file reports/retrieval_combinations.json --benchmark"
+  ],
+  "environment": {
+    "python": "3.12.14",
+    "packages": {
+      "numpy": "2.3.5",
+      "pandas": "2.2.3",
+      "lightgbm": "4.6.0",
+      "rapidfuzz": "3.14.3",
+      "Unidecode": "1.4.0",
+      "scipy": "1.17.0",
+      "scikit-learn": "1.8.0"
+    },
+    "logical_cpu_count": 3,
+    "cgroup_cpu_max": "200000 100000",
+    "concurrent_experiment": null
+  },
+  "metrics": {
+    "metric_source": "No holdout accuracy for full-data fit; model selection evidence E007 and E008",
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": 258.7400098549988,
+    "training_timing_scope": "assets, catalog indexes, training pair features, model fit and writes; excludes source CSV loading",
+    "inference_seconds": 385.0045202640031,
+    "timing_scope": "fresh process startup, imports, CSV reads, catalog index, features, prediction, CSV write; excludes ZIP extraction and preparing inputs",
+    "peak_memory_bytes": 545734656,
+    "peak_memory_scope": "inference subprocess peak RSS",
+    "model_bytes": 1242077,
+    "assets_bytes": 462997,
+    "submission_zip_bytes": 674023
+  },
+  "artifacts": {
+    "script.py": {
+      "path": "/workspace/vessel_matching/ngram_submission/script.py",
+      "bytes": 1527,
+      "sha256": "95eba81b5af7530e5c21a06832598e2aab6c4a724673196fbde98cfa78f351ac"
+    },
+    "requirements.txt": {
+      "path": "/workspace/vessel_matching/ngram_submission/requirements.txt",
+      "bytes": 227,
+      "sha256": "190870893f1d4520781f0206a03390b22d97bde55df4b95efdfa2357304d014e"
+    },
+    "model/matcher.py": {
+      "path": "/workspace/vessel_matching/ngram_submission/model/matcher.py",
+      "bytes": 13483,
+      "sha256": "3bda1ccf50736ca59579f7dcb27d625aeadc55b1c17f768e7e96759a88639f4b"
+    },
+    "model/name_processing.py": {
+      "path": "/workspace/vessel_matching/ngram_submission/model/name_processing.py",
+      "bytes": 7364,
+      "sha256": "2979db4eef2d4cb00a8d1e4da52e34867cd89ae784bfc555b543e234d4d04f3f"
+    },
+    "model/ngram_retrieval.py": {
+      "path": "/workspace/vessel_matching/ngram_submission/model/ngram_retrieval.py",
+      "bytes": 1368,
+      "sha256": "62f5ac839d41bbbc26acce50fc3227889e6747557bf7075a4c8b85d0a52d3a6e"
+    },
+    "model/ranker.txt": {
+      "path": "/workspace/vessel_matching/ngram_submission/model/ranker.txt",
+      "bytes": 1242077,
+      "sha256": "7e9d202a912f482624db151392415f1fc9a790a0ed548786d5ae344cab58335c"
+    },
+    "model/assets.json": {
+      "path": "/workspace/vessel_matching/ngram_submission/model/assets.json",
+      "bytes": 462997,
+      "sha256": "0de9d4a97821b73fcf747d019b03b75ff72d296604bfb99f79754da0bcb20bbc"
+    },
+    "submit.zip": {
+      "path": "/workspace/vessel_matching/ngram_submission/submit.zip",
+      "bytes": 674023,
+      "sha256": "5e69b5c1ceccb8d7645a6870666fb35207ea8744894f9ca137409b8c8dc1cda6"
+    }
+  },
+  "error_cases_file": null,
+  "observations": [
+    "All 16 combinations evaluated on each of two development splits; SNPT selected by predeclared mean vessel-holdout score.",
+    "Full-data fit and clean-extraction/offline/row-independence checks passed.",
+    "Full public training-input benchmark passed with deliberately unknown calls; no accuracy claim."
+  ],
+  "interpretations": [
+    "Mean vessel-holdout score improved but first mixed production holdout regressed; no universal improvement claim."
+  ],
+  "limitations": [
+    "Development splits overlap and have already been inspected",
+    "Channel budgets fixed per path, union candidate counts vary",
+    "Search removal does not remove the corresponding reranking features",
+    "Local Python/package/CPU environment differs from official evaluation server.",
+    "Unknown hidden test size; public train execution cost does not guarantee official runtime.",
+    "Full-train aliases retained in benchmark; this is not a simulated fully unseen fleet."
+  ],
+  "failure": null,
+  "decision": "Adopt SNPT for local submission artifact; official upload and score not performed",
+  "next_actions": [
+    "Review official evaluation result when available; use a new experiment ID for future model comparisons"
+  ],
+  "client_request_date_kst": "2026-10-19",
+  "design": {
+    "S": "legacy normalized string retrieval: non-Hangul top24; Hangul uses P instead",
+    "N": "romanized compact catalog names, char 2-4 TF-IDF, positive cosine top60 Hangul/top24 non-Hangul",
+    "P": "legacy Hangul roman top60 + consonant key top60; extra phonetic key top24 for every language",
+    "T": "legacy two-tonnage nearest and Hangul likely-type subsets",
+    "combinations": [
+      "NONE",
+      "S",
+      "N",
+      "SN",
+      "P",
+      "SP",
+      "NP",
+      "SNP",
+      "T",
+      "ST",
+      "NT",
+      "SNT",
+      "PT",
+      "SPT",
+      "NPT",
+      "SNPT"
+    ],
+    "primary": "pure retrieval: no call lookup or aliases",
+    "secondary": "production lookup and fixed training-fold aliases enabled",
+    "empty": "no retrieval; deterministic first catalog ID, no classifier training",
+    "selection": "report unrestricted best and best N-enabled by mean vessel weighted accuracy, mixed production weighted accuracy, then fewer candidates. Package best N-enabled to implement requested n-gram."
+  },
+  "selected_variant": "SNPT",
+  "name_mode": "all",
+  "phonetic_search": 24,
+  "retrieval_channels": [
+    "S",
+    "N",
+    "P",
+    "T"
+  ],
+  "selection_file_sha256": "3258a5cd8a4f39c92b51eb5d725b30d5d1fa79a2c55d76157af7fa5296190971",
+  "code_sha256": {
+    "train.py": "23c865e31747c01b748baada0595b97a6ce7242582fcbbdcfcf371910607a8bf",
+    "model/matcher.py": "3bda1ccf50736ca59579f7dcb27d625aeadc55b1c17f768e7e96759a88639f4b",
+    "model/name_processing.py": "2979db4eef2d4cb00a8d1e4da52e34867cd89ae784bfc555b543e234d4d04f3f",
+    "model/ngram_retrieval.py": "62f5ac839d41bbbc26acce50fc3227889e6747557bf7075a4c8b85d0a52d3a6e",
+    "script.py": "95eba81b5af7530e5c21a06832598e2aab6c4a724673196fbde98cfa78f351ac",
+    "verify_submission.py": "56290f0ffbd5167b78b2bee980ec192acad660b190aa3a648feea95e8c8aa761",
+    "experiments/finalize_name_model.py": "a9db2057c217eba6f00d0e6679b7199044202527938b711e85216c1e7c009908"
+  },
+  "data_sha256": {
+    "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+  },
+  "fit": {
+    "training_rows": 12222,
+    "unique_feature_rows": 6683,
+    "training_pair_sha256": "db82a1eb87052e6d57ac7e54b7a7a6415651921c36a5e01a8ff0cf7a619f8a73",
+    "training_pairs": 539925,
+    "training_candidate_recall": 0.9991021996109531,
+    "fit_seconds": 251.55231338299927,
+    "feature_importance_gain": {
+      "exact": 0.0,
+      "ratio": 10676.92453931272,
+      "partial": 205.60209234058857,
+      "roman_ratio": 171950.66432739794,
+      "phonetic_ratio": 23293.732971310616,
+      "phonetic_partial": 1954.1164766848087,
+      "length_ratio": 7946.767993569374,
+      "digits_equal": 3910.336709111929,
+      "digits_missing": 183.23947191238403,
+      "gross_gap": 2489.578012123704,
+      "international_gap": 100676.38464973867,
+      "best_gap": 38103.00655460358,
+      "gross_exact": 16.11634063720703,
+      "international_exact": 1033.381640136242,
+      "gross_missing": 2362.798004627228,
+      "international_missing": 53.92246115207672,
+      "catalog_gross_missing": 0.0,
+      "type_probability": 19041.03642526269,
+      "flag_probability": 8288.975417673588,
+      "flag_missing": 50.54022352397442,
+      "is_hangul": 2294.948811098933,
+      "name_length": 2330.7141697853804,
+      "catalog_name_length": 2652.193026289344,
+      "number_sequence_equal": 1806.3508581221104,
+      "number_conflict": 164.87230084836483,
+      "catalog_number_missing": 39.57820129394531,
+      "number_count_gap": 0.5712549984455109,
+      "token_count_gap": 465.8698380738497,
+      "token_roman_idf": 6835.55504386127,
+      "token_roman_min": 13385.788529321551,
+      "token_roman_last": 3983.47919087857,
+      "weighted_phone_full": 136901.9775045663,
+      "weighted_phone_token_idf": 15875.941554963589,
+      "weighted_phone_token_min": 18397.241939768195,
+      "weighted_phone_last": 11020.280693545938,
+      "weighted_phone_residual": 166056.91623672843,
+      "phone_shared_edge": 709.374603703618
+    }
+  },
+  "fit_wall_seconds": 258.7400098549988,
+  "submission_checks": {
+    "passed": true,
+    "files": [
+      "script.py",
+      "requirements.txt",
+      "model/matcher.py",
+      "model/name_processing.py",
+      "model/ngram_retrieval.py",
+      "model/ranker.txt",
+      "model/assets.json"
+    ],
+    "zip_bytes": 674023,
+    "uncompressed_bytes": 1729043,
+    "sha256": "5e69b5c1ceccb8d7645a6870666fb35207ea8744894f9ca137409b8c8dc1cda6",
+    "checks": [
+      "clean extraction",
+      "offline entry point",
+      "read-only inputs",
+      "output schema",
+      "catalog membership",
+      "input order preserved",
+      "full/shuffled/subset/single/empty consistency"
+    ],
+    "runs": [
+      {
+        "mode": "full",
+        "rows": 60,
+        "seconds": 10.458177726999565
+      },
+      {
+        "mode": "shuffled",
+        "rows": 60,
+        "seconds": 10.268829080996511
+      },
+      {
+        "mode": "subset",
+        "rows": 15,
+        "seconds": 9.739214667999477
+      },
+      {
+        "mode": "single",
+        "rows": 1,
+        "seconds": 7.674289293994661
+      },
+      {
+        "mode": "empty",
+        "rows": 0,
+        "seconds": 7.484853354006191
+      }
+    ],
+    "limitation": "Local Python 3.12 environment; not the official evaluation server."
+  },
+  "benchmark": {
+    "rows": 12222,
+    "hangul_rows": 1191,
+    "call_sign": "all deliberately unknown",
+    "aliases": "unchanged full-train assets",
+    "seconds": 385.0045202640031,
+    "peak_rss_bytes": 545734656,
+    "scope": "fresh process startup, imports, CSV reads, catalog index, features, prediction, CSV write; excludes ZIP extraction and preparing inputs",
+    "checks": [
+      "offline",
+      "read-only inputs unchanged",
+      "row count/order",
+      "catalog membership"
+    ],
+    "limitation": "Public training-input execution benchmark, not predictive evaluation or official server measurement; hidden test size is unknown."
+  },
+  "original_archives_preserved": [
+    {
+      "path": "/workspace/vessel_matching/submit.zip",
+      "sha256": "fee02079a32221c8a6c0f43462a3e61e02b577193a2423e0562e4873f5828319"
+    },
+    {
+      "path": "/workspace/vessel_matching/name_improved_submission/submit.zip",
+      "sha256": "b8ca7cb433c617b9952efd705834fa1d88790d019888615716ebb379da85b002"
+    }
+  ],
+  "metadata_enriched_at_kst": "2026-10-19T09:05:18.469597+09:00"
+}

@@ -1,0 +1,3979 @@
+{
+  "experiment_id": "E007",
+  "plan_id": "P06 four-channel full factorial",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-19T08:39:15.646456+09:00",
+  "started_at_kst": "2026-10-19T08:41:46.005601+09:00",
+  "finished_at_kst": "2026-10-19T08:52:00.593463+09:00",
+  "purpose": "Implement catalog-only character 2-4 gram TF-IDF and test all 16 retrieval combinations.",
+  "hypothesis": "n-gram retrieval may complement the existing string, phonetic and specification candidate channels.",
+  "baseline_experiment_id": "E004 search",
+  "changed_factors": [
+    "S/N/P/T retrieval channel subset; resulting negative candidate pool"
+  ],
+  "fixed_conditions": [
+    "37 comparison features",
+    "Original train order, splits and LightGBM parameters",
+    "Catalog-only TF-IDF fit; train-fold category and alias assets",
+    "Train-only positive injection; original hard-negative sampling"
+  ],
+  "code": {
+    "git_revision_at_run": "b5e9b1e16928d2a76d4e83e8abdd0618d4daa0bb",
+    "dirty": true,
+    "file_sha256": {
+      "model/matcher.py": "3bda1ccf50736ca59579f7dcb27d625aeadc55b1c17f768e7e96759a88639f4b",
+      "model/name_processing.py": "2979db4eef2d4cb00a8d1e4da52e34867cd89ae784bfc555b543e234d4d04f3f",
+      "model/ngram_retrieval.py": "62f5ac839d41bbbc26acce50fc3227889e6747557bf7075a4c8b85d0a52d3a6e",
+      "train.py": "23c865e31747c01b748baada0595b97a6ce7242582fcbbdcfcf371910607a8bf",
+      "experiments/retrieval_factorial.py": "5f98a601940d5dc5381699a3a89e7183a0a32f8907902340184ac30ffe9d1c08"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "split_id": null,
+    "split_file_sha256": "0ca283d104f889b4caf59bebc9441a9030bdcbaeb290919fdfe863fd78564fa6",
+    "seed": 20261016,
+    "training_rows": 7857,
+    "validation_rows": {
+      "vessel_holdout": 2400,
+      "row_holdout": 1965
+    }
+  },
+  "retrieval": {
+    "S": {
+      "non_hangul": 24,
+      "hangul": 0
+    },
+    "N": {
+      "hangul": 60,
+      "non_hangul": 24,
+      "positive_cosine_only": true
+    },
+    "P": {
+      "hangul_roman": 60,
+      "hangul_legacy_phone": 60,
+      "extra_phone_all_languages": 24
+    },
+    "T": {
+      "per_tonnage_hangul": 60,
+      "per_tonnage_non_hangul": 24,
+      "likely_types_hangul": 2,
+      "per_type_per_tonnage_hangul": 40
+    },
+    "union": "deduplicated, variable count, catalog-ID sorted",
+    "empty_fallback": "first sorted catalog ID"
+  },
+  "features": [
+    "exact",
+    "ratio",
+    "partial",
+    "roman_ratio",
+    "phonetic_ratio",
+    "phonetic_partial",
+    "length_ratio",
+    "digits_equal",
+    "digits_missing",
+    "gross_gap",
+    "international_gap",
+    "best_gap",
+    "gross_exact",
+    "international_exact",
+    "gross_missing",
+    "international_missing",
+    "catalog_gross_missing",
+    "type_probability",
+    "flag_probability",
+    "flag_missing",
+    "is_hangul",
+    "name_length",
+    "catalog_name_length",
+    "number_sequence_equal",
+    "number_conflict",
+    "catalog_number_missing",
+    "number_count_gap",
+    "token_count_gap",
+    "token_roman_idf",
+    "token_roman_min",
+    "token_roman_last",
+    "weighted_phone_full",
+    "weighted_phone_token_idf",
+    "weighted_phone_token_min",
+    "weighted_phone_last",
+    "weighted_phone_residual",
+    "phone_shared_edge"
+  ],
+  "preprocessing": {
+    "ngram_fit": "official catalog only; char 2-4 TF-IDF on compact Unidecode names",
+    "token_idf": "official catalog only",
+    "learned_calls_aliases_category_maps": "training fold only",
+    "query_fit": false,
+    "shared_feature_cache": "same public row and candidate independent of other query rows; fold-specific category features"
+  },
+  "training_pairs": {
+    "positive_rule": "same target vessel=1, training-only injection",
+    "negative_rule": "subset candidates; if >100, top80 original hardness union top20 tonnage plus positive",
+    "language_weight": ".7/p_H or .3/p_N on deduplicated train, applied per pair",
+    "aliases_used_during_pair_training": false,
+    "model_fit_count": 15,
+    "empty_baseline_count": 1
+  },
+  "model": {
+    "type": "LGBMClassifier",
+    "loss": "binary_logloss",
+    "parameters": {
+      "n_estimators": 350,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "max_depth": -1,
+      "min_child_samples": 40,
+      "colsample_bytree": 0.9,
+      "reg_lambda": 2,
+      "random_state": 20261016,
+      "n_jobs": 4,
+      "verbosity": -1,
+      "deterministic": true,
+      "force_col_wise": true
+    }
+  },
+  "commands": [
+    "experiments/retrieval_factorial.py --data-dir /workspace/vessel_matching/data --output-dir /workspace/vessel_matching/retrieval_e007 --record project_log/experiments/E007.json --seed 20261016 --previous-record project_log/experiments/E004.json --previous-artifacts /workspace/vessel_matching/name_e004"
+  ],
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "packages": {
+      "numpy": "2.3.5",
+      "pandas": "2.2.3",
+      "scipy": "1.17.0",
+      "scikit-learn": "1.8.0",
+      "lightgbm": "4.6.0",
+      "rapidfuzz": "3.14.3",
+      "Unidecode": "1.4.0"
+    },
+    "logical_cpu_count": 3,
+    "cgroup_cpu_max": "200000 100000",
+    "concurrent_experiment": "E008"
+  },
+  "metrics": {
+    "metric_source": "two overlapping public-train development splits; details in variants",
+    "official_score": null,
+    "primary": "vessel_holdout.pure",
+    "secondary": "row_holdout.production"
+  },
+  "cost": {
+    "index_build_seconds": 5.039702811998723,
+    "shared_cache": "cache.*: all-path retrieval and union features, not per-combination end-to-end cost",
+    "fit": "variants.*.fit.pair_selection_and_fit_seconds; excludes shared features",
+    "inference_seconds": null,
+    "timing_scope": "cached evaluation excludes retrieval/features; two experiments concurrently share CPU",
+    "peak_memory_bytes": 650391552,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "/workspace/vessel_matching/retrieval_e007",
+    "/workspace/MLiP_Project/reports/retrieval_combinations.csv",
+    "/workspace/MLiP_Project/docs/RETRIEVAL_COMBINATIONS.md"
+  ],
+  "error_cases_file": "/workspace/vessel_matching/retrieval_e007/<combination>/<holdout>_<pure-or-production>_errors.json",
+  "observations": [
+    "All 16 subsets completed; 15 separate models and one no-fit fixed-ID baseline.",
+    "SPT reproduces prior training-pair hash, holdout candidate hashes and all production predictions.",
+    "All 15 trained variants passed runtime/cached consistency and row-independence probes on both holdouts."
+  ],
+  "interpretations": [],
+  "limitations": [
+    "Development splits overlap and have already been inspected",
+    "Channel budgets fixed per path, union candidate counts vary",
+    "Search removal does not remove the corresponding reranking features",
+    "Two concurrently running processes shared a 2-CPU quota; per-variant training/cached timings must not be interpreted as deployment latency.",
+    "16 combinations were selected on observed development holdouts; potential selection bias and vessel-repeat dependence remain."
+  ],
+  "failure": null,
+  "decision": "SNPT selected by pre-recorded two-split mean vessel score; both unrestricted and N-enabled best. See reports/retrieval_combinations.json.",
+  "next_actions": [],
+  "client_request_date_kst": "2026-10-19",
+  "design": {
+    "S": "legacy normalized string retrieval: non-Hangul top24; Hangul uses P instead",
+    "N": "romanized compact catalog names, char 2-4 TF-IDF, positive cosine top60 Hangul/top24 non-Hangul",
+    "P": "legacy Hangul roman top60 + consonant key top60; extra phonetic key top24 for every language",
+    "T": "legacy two-tonnage nearest and Hangul likely-type subsets",
+    "combinations": [
+      "NONE",
+      "S",
+      "N",
+      "SN",
+      "P",
+      "SP",
+      "NP",
+      "SNP",
+      "T",
+      "ST",
+      "NT",
+      "SNT",
+      "PT",
+      "SPT",
+      "NPT",
+      "SNPT"
+    ],
+    "primary": "pure retrieval: no call lookup or aliases",
+    "secondary": "production lookup and fixed training-fold aliases enabled",
+    "empty": "no retrieval; deterministic first catalog ID, no classifier training",
+    "selection": "report unrestricted best and best N-enabled by mean vessel weighted accuracy, mixed production weighted accuracy, then fewer candidates. Package best N-enabled to implement requested n-gram."
+  },
+  "variants": {
+    "NONE": {
+      "mask": 0,
+      "channels": [],
+      "fit": {
+        "training_pairs": 0,
+        "model_trained": false,
+        "reason": "No search: fixed first-catalog-ID baseline, with optional production lookup/alias handling."
+      },
+      "vessel_holdout": {
+        "pure": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 2400,
+          "candidate_sha256": "933b820449cb65f2ec5efccc584d48846ed0b77b73c9782da4dfd9371d2cfb63",
+          "errors": 2400,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 2400,
+            "retrieval": 0,
+            "selection": 0
+          },
+          "cached_evaluation_seconds": 0.03621406999445753,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 1.0,
+            "p95": 1.0,
+            "max": 1
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.0,
+            "candidate_recall": 0.0
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.0,
+            "candidate_recall": 0.0
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.0,
+            "candidate_recall": 0.0
+          },
+          "weighted_accuracy": 0.0
+        },
+        "production": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 2400,
+          "candidate_sha256": "933b820449cb65f2ec5efccc584d48846ed0b77b73c9782da4dfd9371d2cfb63",
+          "errors": 2400,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 2400,
+            "retrieval": 0,
+            "selection": 0
+          },
+          "cached_evaluation_seconds": 0.04393025799799943,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 1.0,
+            "p95": 1.0,
+            "max": 1
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.0,
+            "candidate_recall": 0.0
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.0,
+            "candidate_recall": 0.0
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.0,
+            "candidate_recall": 0.0
+          },
+          "weighted_accuracy": 0.0
+        }
+      },
+      "row_holdout": {
+        "pure": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 1965,
+          "candidate_sha256": "455746235c7ae35e0d12e8d3bde04b8d8f12e419c6de8e377fc539fae5ca4885",
+          "errors": 1965,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 1965,
+            "retrieval": 0,
+            "selection": 0
+          },
+          "cached_evaluation_seconds": 0.11092742100299802,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 1.0,
+            "p95": 1.0,
+            "max": 1
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.0,
+            "candidate_recall": 0.0
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.0,
+            "candidate_recall": 0.0
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 0.0,
+            "candidate_recall": 0.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.0,
+            "candidate_recall": 0.0
+          },
+          "weighted_accuracy": 0.0
+        },
+        "production": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 1393,
+          "empty_search_rows_nonlookup": 572,
+          "candidate_sha256": "3e83979dcb3af112892ff9cb5ee34bca648c75d07db7773fc3e869d5f06a5ac3",
+          "errors": 572,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 572,
+            "retrieval": 0,
+            "selection": 0
+          },
+          "cached_evaluation_seconds": 0.01968361699982779,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 1.0,
+            "p95": 1.0,
+            "max": 1
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9086294416243654,
+            "candidate_recall": 0.9086294416243654
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.6866515837104072,
+            "candidate_recall": 0.6866515837104072
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 1.0,
+            "candidate_recall": 1.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.0,
+            "candidate_recall": 0.0
+          },
+          "weighted_accuracy": 0.842036084250178
+        }
+      },
+      "artifact_sha256": {
+        "assets.json": "118868d6904e58a0c7b8f02a4625fb948dcafea05b6e193360e43dac4b4a6d6c"
+      }
+    },
+    "S": {
+      "mask": 1,
+      "channels": [
+        "S"
+      ],
+      "fit": {
+        "training_pairs": 104090,
+        "unique_feature_rows": 4698,
+        "model_trained": true,
+        "training_pair_sha256": "2420e1ea847951cea8a66b7219c2efcff617e3ac1e0fee179ed272794cd66025",
+        "training_candidate_recall": 0.9148573861217539,
+        "pair_selection_and_fit_seconds": 5.3493905939976685,
+        "timing_scope": "subset pair selection, concatenate, LightGBM fit and model write; shared feature cache excluded",
+        "model_bytes": 1131095,
+        "model_sha256": "5abd35a5ccf6ca0b6174b3d7d2f4db862390c9234c899ce30f02071fc7fabc00"
+      },
+      "vessel_holdout": {
+        "pure": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 205,
+          "candidate_sha256": "f018422912a6e6969577435c5cd13f6bb32b05aeef5bcb10bc6d66a66d81c93d",
+          "errors": 207,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 205,
+            "retrieval": 2,
+            "selection": 0
+          },
+          "cached_evaluation_seconds": 0.7428855660036788,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 22.035416666666666,
+            "p95": 24.0,
+            "max": 24
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.0,
+            "candidate_recall": 0.0
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9990888382687927,
+            "candidate_recall": 0.9990888382687927
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.91375,
+            "candidate_recall": 0.91375
+          },
+          "weighted_accuracy": 0.2997266514806378
+        },
+        "production": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 205,
+          "candidate_sha256": "f018422912a6e6969577435c5cd13f6bb32b05aeef5bcb10bc6d66a66d81c93d",
+          "errors": 207,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 205,
+            "retrieval": 2,
+            "selection": 0
+          },
+          "cached_evaluation_seconds": 0.6080697469951701,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 22.035416666666666,
+            "p95": 24.0,
+            "max": 24
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.0,
+            "candidate_recall": 0.0
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9990888382687927,
+            "candidate_recall": 0.9990888382687927
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.91375,
+            "candidate_recall": 0.91375
+          },
+          "weighted_accuracy": 0.2997266514806378
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "row_holdout": {
+        "pure": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 197,
+          "candidate_sha256": "b29c9b3c92f61e574e40ab1d5afb61207355eca0873b68515c01a9506d4f34b0",
+          "errors": 201,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 197,
+            "retrieval": 4,
+            "selection": 0
+          },
+          "cached_evaluation_seconds": 0.4947156019989052,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 21.6941475826972,
+            "p95": 24.0,
+            "max": 24
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.0,
+            "candidate_recall": 0.0
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.997737556561086,
+            "candidate_recall": 0.997737556561086
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 0.8715003589375449,
+            "candidate_recall": 0.8715003589375449
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9615384615384616,
+            "candidate_recall": 0.9615384615384616
+          },
+          "weighted_accuracy": 0.2993212669683258
+        },
+        "production": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 1393,
+          "empty_search_rows_nonlookup": 18,
+          "candidate_sha256": "cb408de233e7a0b346c55356453085edc34292daf994b998f9c2cec482bf5f07",
+          "errors": 22,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 18,
+            "retrieval": 4,
+            "selection": 0
+          },
+          "cached_evaluation_seconds": 0.17010045100323623,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 23.276223776223777,
+            "p95": 24.0,
+            "max": 24
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9086294416243654,
+            "candidate_recall": 0.9086294416243654
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.997737556561086,
+            "candidate_recall": 0.997737556561086
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 1.0,
+            "candidate_recall": 1.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9615384615384616,
+            "candidate_recall": 0.9615384615384616
+          },
+          "weighted_accuracy": 0.9353618761053815
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "artifact_sha256": {
+        "assets.json": "e7538f89f2725ae7b69f1ee473c946b2302cf08c14aa94c3b36feb5524220f5a",
+        "ranker.txt": "5abd35a5ccf6ca0b6174b3d7d2f4db862390c9234c899ce30f02071fc7fabc00"
+      }
+    },
+    "N": {
+      "mask": 2,
+      "channels": [
+        "N"
+      ],
+      "fit": {
+        "training_pairs": 127186,
+        "unique_feature_rows": 4698,
+        "model_trained": true,
+        "training_pair_sha256": "8bdf0205454147474852e437478712632e4846e5acbc5814d1e23db1e1c2f49f",
+        "training_candidate_recall": 0.9467858663260962,
+        "pair_selection_and_fit_seconds": 6.615062313001545,
+        "timing_scope": "subset pair selection, concatenate, LightGBM fit and model write; shared feature cache excluded",
+        "model_bytes": 1240910,
+        "model_sha256": "4e4cdf10407e5ab3a1268e1eb68563ca3edbdfcb72f12bcb9ea11a96a2fa1e5c"
+      },
+      "vessel_holdout": {
+        "pure": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "6e221bae978b11e4409f35cc7c1f496f8d5e746a05de02ded84c35096129a549",
+          "errors": 124,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 124,
+            "selection": 0
+          },
+          "cached_evaluation_seconds": 0.8080084539978998,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 27.075,
+            "p95": 60.0,
+            "max": 60
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.4975609756097561,
+            "candidate_recall": 0.4975609756097561
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9904328018223235,
+            "candidate_recall": 0.9904328018223235
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9483333333333334,
+            "candidate_recall": 0.9483333333333334
+          },
+          "weighted_accuracy": 0.6454225234735262
+        },
+        "production": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "6e221bae978b11e4409f35cc7c1f496f8d5e746a05de02ded84c35096129a549",
+          "errors": 124,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 124,
+            "selection": 0
+          },
+          "cached_evaluation_seconds": 0.8062243450040114,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 27.075,
+            "p95": 60.0,
+            "max": 60
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.4975609756097561,
+            "candidate_recall": 0.4975609756097561
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9904328018223235,
+            "candidate_recall": 0.9904328018223235
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9483333333333334,
+            "candidate_recall": 0.9483333333333334
+          },
+          "weighted_accuracy": 0.6454225234735262
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "row_holdout": {
+        "pure": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "9877881223b2dabd02a32bd54abd8f1cdf76f86453d5cd7eeab57b91356f8681",
+          "errors": 125,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 124,
+            "selection": 1
+          },
+          "cached_evaluation_seconds": 0.6742604680039221,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 27.60916030534351,
+            "p95": 60.0,
+            "max": 60
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.5279187817258884,
+            "candidate_recall": 0.5329949238578681
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.9819004524886877,
+            "candidate_recall": 0.9819004524886877
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 0.923905240488155,
+            "candidate_recall": 0.923905240488155
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9667832167832168,
+            "candidate_recall": 0.9685314685314685
+          },
+          "weighted_accuracy": 0.664113282954728
+        },
+        "production": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 1393,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "bda6aa601a446283c55009d09387f0fad6f6f24d2951d71e5c661516d8fefb47",
+          "errors": 19,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 18,
+            "selection": 1
+          },
+          "cached_evaluation_seconds": 0.19576935000077356,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 25.132867132867133,
+            "p95": 24.0,
+            "max": 60
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.949238578680203,
+            "candidate_recall": 0.9543147208121827
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.9949095022624435,
+            "candidate_recall": 0.9949095022624435
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 1.0,
+            "candidate_recall": 1.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9667832167832168,
+            "candidate_recall": 0.9685314685314685
+          },
+          "weighted_accuracy": 0.9629398557548752
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "artifact_sha256": {
+        "assets.json": "b14a8f8f0da929328a62e025b28dafb82030270758171249e8d8f58749cc4399",
+        "ranker.txt": "4e4cdf10407e5ab3a1268e1eb68563ca3edbdfcb72f12bcb9ea11a96a2fa1e5c"
+      }
+    },
+    "SN": {
+      "mask": 3,
+      "channels": [
+        "S",
+        "N"
+      ],
+      "fit": {
+        "training_pairs": 195662,
+        "unique_feature_rows": 4698,
+        "model_trained": true,
+        "training_pair_sha256": "922f2ee14c87d73d9adc5b5bf7b458cefda7b975b7384482450f7937eca17b3b",
+        "training_candidate_recall": 0.958492975734355,
+        "pair_selection_and_fit_seconds": 8.572709590000159,
+        "timing_scope": "subset pair selection, concatenate, LightGBM fit and model write; shared feature cache excluded",
+        "model_bytes": 1244545,
+        "model_sha256": "5b7e62e851b059e403adc091dcbb6dfe5b7329eb8a582392443d0cfd0229f8fb"
+      },
+      "vessel_holdout": {
+        "pure": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "6e0bab735f429b7d315e72e45bcc2216ba0355b812e5896c3f388d21db28857e",
+          "errors": 105,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 105,
+            "selection": 0
+          },
+          "cached_evaluation_seconds": 1.548676055004762,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 41.56375,
+            "p95": 60.0,
+            "max": 60
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.4975609756097561,
+            "candidate_recall": 0.4975609756097561
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9990888382687927,
+            "candidate_recall": 0.9990888382687927
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.95625,
+            "candidate_recall": 0.95625
+          },
+          "weighted_accuracy": 0.6480193344074671
+        },
+        "production": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "6e0bab735f429b7d315e72e45bcc2216ba0355b812e5896c3f388d21db28857e",
+          "errors": 105,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 105,
+            "selection": 0
+          },
+          "cached_evaluation_seconds": 1.5708257660007803,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 41.56375,
+            "p95": 60.0,
+            "max": 60
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.4975609756097561,
+            "candidate_recall": 0.4975609756097561
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9990888382687927,
+            "candidate_recall": 0.9990888382687927
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.95625,
+            "candidate_recall": 0.95625
+          },
+          "weighted_accuracy": 0.6480193344074671
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "row_holdout": {
+        "pure": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "1067b3f3419384ddb99e45625d99f6a9a4734a387d3aacc22cc7dadabf62151b",
+          "errors": 95,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 94,
+            "selection": 1
+          },
+          "cached_evaluation_seconds": 1.2013970030020573,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 41.89363867684478,
+            "p95": 60.0,
+            "max": 60
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.5279187817258884,
+            "candidate_recall": 0.5329949238578681
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.998868778280543,
+            "candidate_recall": 0.998868778280543
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 0.9404163675520459,
+            "candidate_recall": 0.9404163675520459
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9790209790209791,
+            "candidate_recall": 0.9807692307692307
+          },
+          "weighted_accuracy": 0.6692037806922847
+        },
+        "production": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 1393,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "674019c6f4d1121f4a3e838134e95a18745b7b75837e28a0024462275cfcba99",
+          "errors": 12,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 11,
+            "selection": 1
+          },
+          "cached_evaluation_seconds": 0.2959339410008397,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 40.44405594405595,
+            "p95": 46.0,
+            "max": 60
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.949238578680203,
+            "candidate_recall": 0.9543147208121827
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.998868778280543,
+            "candidate_recall": 0.998868778280543
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 1.0,
+            "candidate_recall": 1.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9790209790209791,
+            "candidate_recall": 0.9807692307692307
+          },
+          "weighted_accuracy": 0.964127638560305
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "artifact_sha256": {
+        "assets.json": "902f186a903eca36ef09f4e91056cfe614d5186d8bfbf57f4b9518f48a0ce250",
+        "ranker.txt": "5b7e62e851b059e403adc091dcbb6dfe5b7329eb8a582392443d0cfd0229f8fb"
+      }
+    },
+    "P": {
+      "mask": 4,
+      "channels": [
+        "P"
+      ],
+      "fit": {
+        "training_pairs": 135357,
+        "unique_feature_rows": 4698,
+        "model_trained": true,
+        "training_pair_sha256": "77a2c810a6441bd56ca1f70eee3e592824ebfc5fb3bbfca7c9520adf29e6153f",
+        "training_candidate_recall": 0.9797786292039166,
+        "pair_selection_and_fit_seconds": 7.402163899001607,
+        "timing_scope": "subset pair selection, concatenate, LightGBM fit and model write; shared feature cache excluded",
+        "model_bytes": 1235898,
+        "model_sha256": "73dae636c6790844f3b1ab4ef090cbdc51c76af2e0b707257b3a2e0f44026400"
+      },
+      "vessel_holdout": {
+        "pure": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "0c63fd522920443f1d9367d1c1b23e3ddf08214d842f5fc6299d7cbdb0c474cb",
+          "errors": 47,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 47,
+            "selection": 0
+          },
+          "cached_evaluation_seconds": 1.024304063001182,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 33.055416666666666,
+            "p95": 130.0,
+            "max": 140
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.9512195121951219,
+            "candidate_recall": 0.9512195121951219
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9831435079726651,
+            "candidate_recall": 0.9831435079726651
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9804166666666667,
+            "candidate_recall": 0.9804166666666667
+          },
+          "weighted_accuracy": 0.9607967109283848
+        },
+        "production": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "0c63fd522920443f1d9367d1c1b23e3ddf08214d842f5fc6299d7cbdb0c474cb",
+          "errors": 47,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 47,
+            "selection": 0
+          },
+          "cached_evaluation_seconds": 1.0247258390008938,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 33.055416666666666,
+            "p95": 130.0,
+            "max": 140
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.9512195121951219,
+            "candidate_recall": 0.9512195121951219
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9831435079726651,
+            "candidate_recall": 0.9831435079726651
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9804166666666667,
+            "candidate_recall": 0.9804166666666667
+          },
+          "weighted_accuracy": 0.9607967109283848
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "row_holdout": {
+        "pure": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "c327982f735ddac2a6f4231f9b803eb3d6c39595671c2be5ba3610c5dd7c1320",
+          "errors": 42,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 40,
+            "selection": 2
+          },
+          "cached_evaluation_seconds": 0.8625389250009903,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 34.645801526717555,
+            "p95": 132.0,
+            "max": 143
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9289340101522843,
+            "candidate_recall": 0.9390862944162437
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.9841628959276018,
+            "candidate_recall": 0.9841628959276018
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 0.9813352476669059,
+            "candidate_recall": 0.9813352476669059
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.972027972027972,
+            "candidate_recall": 0.9755244755244755
+          },
+          "weighted_accuracy": 0.9455026758848795
+        },
+        "production": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 1393,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "4d49fb5a591af84b42ced75b4f57340658892257a142068253ab75cccf229b58",
+          "errors": 16,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 14,
+            "selection": 2
+          },
+          "cached_evaluation_seconds": 0.22136617999785813,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 27.405594405594407,
+            "p95": 24.0,
+            "max": 140
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9847715736040609,
+            "candidate_recall": 0.9949238578680203
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.9926470588235294,
+            "candidate_recall": 0.9926470588235294
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 1.0,
+            "candidate_recall": 1.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.972027972027972,
+            "candidate_recall": 0.9755244755244755
+          },
+          "weighted_accuracy": 0.9871342191699013
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "artifact_sha256": {
+        "assets.json": "951045460725f978fb17af94253974113eda7244d41207f2f9c23c50b77efcbe",
+        "ranker.txt": "73dae636c6790844f3b1ab4ef090cbdc51c76af2e0b707257b3a2e0f44026400"
+      }
+    },
+    "SP": {
+      "mask": 5,
+      "channels": [
+        "S",
+        "P"
+      ],
+      "fit": {
+        "training_pairs": 216342,
+        "unique_feature_rows": 4698,
+        "model_trained": true,
+        "training_pair_sha256": "1ecac88ad2c2a5fed70598e15bed79f75f9aa728b56fdb3c12242c995dea323a",
+        "training_candidate_recall": 0.9931885908897403,
+        "pair_selection_and_fit_seconds": 9.54824636199919,
+        "timing_scope": "subset pair selection, concatenate, LightGBM fit and model write; shared feature cache excluded",
+        "model_bytes": 1237750,
+        "model_sha256": "60158c24e10b0b42e4dc62e82b87a41d40a50020d9a22592cd423ce631cb916c"
+      },
+      "vessel_holdout": {
+        "pure": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "f7b13ceda9727992ca1a1abb153acdd8761ca947bb87a0dfd32405e77eb85e52",
+          "errors": 15,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 12,
+            "selection": 3
+          },
+          "cached_evaluation_seconds": 1.863741563000076,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 50.26083333333333,
+            "p95": 130.0,
+            "max": 140
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.9365853658536586,
+            "candidate_recall": 0.9512195121951219
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9990888382687927,
+            "candidate_recall": 0.9990888382687927
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.99375,
+            "candidate_recall": 0.995
+          },
+          "weighted_accuracy": 0.9553364075781988
+        },
+        "production": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "f7b13ceda9727992ca1a1abb153acdd8761ca947bb87a0dfd32405e77eb85e52",
+          "errors": 15,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 12,
+            "selection": 3
+          },
+          "cached_evaluation_seconds": 1.5542925300032948,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 50.26083333333333,
+            "p95": 130.0,
+            "max": 140
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.9365853658536586,
+            "candidate_recall": 0.9512195121951219
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9990888382687927,
+            "candidate_recall": 0.9990888382687927
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.99375,
+            "candidate_recall": 0.995
+          },
+          "weighted_accuracy": 0.9553364075781988
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "row_holdout": {
+        "pure": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "d218441fc82e4230311c8b5aae3bced0d3597b0369018f4a26498cb3fc25eccc",
+          "errors": 18,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 16,
+            "selection": 2
+          },
+          "cached_evaluation_seconds": 1.1946169160000863,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 51.62493638676845,
+            "p95": 132.0,
+            "max": 143
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9289340101522843,
+            "candidate_recall": 0.9390862944162437
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.997737556561086,
+            "candidate_recall": 0.997737556561086
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 0.9921033740129217,
+            "candidate_recall": 0.9921033740129217
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9877622377622378,
+            "candidate_recall": 0.9912587412587412
+          },
+          "weighted_accuracy": 0.9495750740749247
+        },
+        "production": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 1393,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "96e9e8ad5d7a32e2f2230cca65f0b8dec1c4b2a238a6d245a5a7abe5a3c18e3c",
+          "errors": 7,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 5,
+            "selection": 2
+          },
+          "cached_evaluation_seconds": 0.33094398800312774,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 45.60489510489511,
+            "p95": 47.0,
+            "max": 140
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9847715736040609,
+            "candidate_recall": 0.9949238578680203
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.997737556561086,
+            "candidate_recall": 0.997737556561086
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 1.0,
+            "candidate_recall": 1.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9877622377622378,
+            "candidate_recall": 0.9912587412587412
+          },
+          "weighted_accuracy": 0.9886613684911683
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "artifact_sha256": {
+        "assets.json": "4fa8c994f1d9f1cf20a5331b7fe3b327063681bc967557d3922944fb8536a32f",
+        "ranker.txt": "60158c24e10b0b42e4dc62e82b87a41d40a50020d9a22592cd423ce631cb916c"
+      }
+    },
+    "NP": {
+      "mask": 6,
+      "channels": [
+        "N",
+        "P"
+      ],
+      "fit": {
+        "training_pairs": 223863,
+        "unique_feature_rows": 4698,
+        "model_trained": true,
+        "training_pair_sha256": "e9006f907210d1e9484dcd2b1c699850761ce233eb2822404942377fb7dc56e4",
+        "training_candidate_recall": 0.9899957428693061,
+        "pair_selection_and_fit_seconds": 10.872808186002658,
+        "timing_scope": "subset pair selection, concatenate, LightGBM fit and model write; shared feature cache excluded",
+        "model_bytes": 1237440,
+        "model_sha256": "707913fb280d858060488fbb81d63d169bf7a96d546c57da684b95e6d0f2e904"
+      },
+      "vessel_holdout": {
+        "pure": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "38ea9cb81ea4f8a5e24acf9bfbf8eaf5298791cf9ffe7fc71944b6b00fb254b3",
+          "errors": 17,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 16,
+            "selection": 1
+          },
+          "cached_evaluation_seconds": 2.348987453005975,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 56.15958333333333,
+            "p95": 183.0,
+            "max": 196
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.9463414634146341,
+            "candidate_recall": 0.9512195121951219
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9972665148063782,
+            "candidate_recall": 0.9972665148063782
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9929166666666667,
+            "candidate_recall": 0.9933333333333333
+          },
+          "weighted_accuracy": 0.9616189788321572
+        },
+        "production": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "38ea9cb81ea4f8a5e24acf9bfbf8eaf5298791cf9ffe7fc71944b6b00fb254b3",
+          "errors": 17,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 16,
+            "selection": 1
+          },
+          "cached_evaluation_seconds": 2.091489760998229,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 56.15958333333333,
+            "p95": 183.0,
+            "max": 196
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.9463414634146341,
+            "candidate_recall": 0.9512195121951219
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9972665148063782,
+            "candidate_recall": 0.9972665148063782
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9929166666666667,
+            "candidate_recall": 0.9933333333333333
+          },
+          "weighted_accuracy": 0.9616189788321572
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "row_holdout": {
+        "pure": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "5a37a0397311d91ddc1a6d6c8c322314f22469bb2bad0c137b2f1d1409af0d89",
+          "errors": 23,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 22,
+            "selection": 1
+          },
+          "cached_evaluation_seconds": 2.3016832540015457,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 58.14096692111959,
+            "p95": 183.0,
+            "max": 199
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.934010152284264,
+            "candidate_recall": 0.9390862944162437
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.994343891402715,
+            "candidate_recall": 0.994343891402715
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 0.9877961234745154,
+            "candidate_recall": 0.9877961234745154
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9895104895104895,
+            "candidate_recall": 0.9912587412587412
+          },
+          "weighted_accuracy": 0.9521102740197993
+        },
+        "production": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 1393,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "23d56085eaf7003965a76146d3589d108b9d4e4540a55188aa14cb3f8bc083e8",
+          "errors": 6,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 5,
+            "selection": 1
+          },
+          "cached_evaluation_seconds": 0.5038839640037622,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 48.80594405594405,
+            "p95": 47.44999999999993,
+            "max": 194
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9898477157360406,
+            "candidate_recall": 0.9949238578680203
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.997737556561086,
+            "candidate_recall": 0.997737556561086
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 1.0,
+            "candidate_recall": 1.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9895104895104895,
+            "candidate_recall": 0.9912587412587412
+          },
+          "weighted_accuracy": 0.9922146679835542
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "artifact_sha256": {
+        "assets.json": "e3ae644bad35e365f54b24a4b8abebc606cc8a1d4c8e8098ce637cfa69623695",
+        "ranker.txt": "707913fb280d858060488fbb81d63d169bf7a96d546c57da684b95e6d0f2e904"
+      }
+    },
+    "SNP": {
+      "mask": 7,
+      "channels": [
+        "S",
+        "N",
+        "P"
+      ],
+      "fit": {
+        "training_pairs": 283234,
+        "unique_feature_rows": 4698,
+        "model_trained": true,
+        "training_pair_sha256": "ae2fbcbf6a5f2f292f16b48c5c89bfdea57e8c099c342d3a3e056b9feb3ea1e9",
+        "training_candidate_recall": 0.9931885908897403,
+        "pair_selection_and_fit_seconds": 14.683639327995479,
+        "timing_scope": "subset pair selection, concatenate, LightGBM fit and model write; shared feature cache excluded",
+        "model_bytes": 1238539,
+        "model_sha256": "a7be3444bd1cf8f768bc1e04ec682599e4072255db3e63c617c1616364672b39"
+      },
+      "vessel_holdout": {
+        "pure": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "6990966a8674c420662c7a7d47803c75940f4d29c12fc1dbd5e0e3e23e4a02a1",
+          "errors": 12,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 12,
+            "selection": 0
+          },
+          "cached_evaluation_seconds": 2.7619216390012298,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 68.65541666666667,
+            "p95": 183.0,
+            "max": 196
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.9512195121951219,
+            "candidate_recall": 0.9512195121951219
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9990888382687927,
+            "candidate_recall": 0.9990888382687927
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.995,
+            "candidate_recall": 0.995
+          },
+          "weighted_accuracy": 0.9655803100172231
+        },
+        "production": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "6990966a8674c420662c7a7d47803c75940f4d29c12fc1dbd5e0e3e23e4a02a1",
+          "errors": 12,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 12,
+            "selection": 0
+          },
+          "cached_evaluation_seconds": 2.8324140539989457,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 68.65541666666667,
+            "p95": 183.0,
+            "max": 196
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.9512195121951219,
+            "candidate_recall": 0.9512195121951219
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9990888382687927,
+            "candidate_recall": 0.9990888382687927
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.995,
+            "candidate_recall": 0.995
+          },
+          "weighted_accuracy": 0.9655803100172231
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "row_holdout": {
+        "pure": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "5c1862f1aace5893dedea9f26d5e138f24a00cb771abac0dc1630c85543a2362",
+          "errors": 16,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 14,
+            "selection": 2
+          },
+          "cached_evaluation_seconds": 2.4389070729957893,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 70.5236641221374,
+            "p95": 183.0,
+            "max": 199
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9289340101522843,
+            "candidate_recall": 0.9390862944162437
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.998868778280543,
+            "candidate_recall": 0.998868778280543
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 0.9921033740129217,
+            "candidate_recall": 0.9921033740129217
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9912587412587412,
+            "candidate_recall": 0.9947552447552448
+          },
+          "weighted_accuracy": 0.9499144405907618
+        },
+        "production": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 1393,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "beb568e541a812e99ca2f88a79e2e6368c7efe34a34c0e3c2343f2b03eeb68e3",
+          "errors": 5,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 3,
+            "selection": 2
+          },
+          "cached_evaluation_seconds": 0.6224601620051544,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 62.03321678321678,
+            "p95": 68.0,
+            "max": 194
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9847715736040609,
+            "candidate_recall": 0.9949238578680203
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.998868778280543,
+            "candidate_recall": 0.998868778280543
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 1.0,
+            "candidate_recall": 1.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9912587412587412,
+            "candidate_recall": 0.9947552447552448
+          },
+          "weighted_accuracy": 0.9890007350070054
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "artifact_sha256": {
+        "assets.json": "884dbc276fd0afad5bb7d34f71fe738077f48a9900fe253ad05e71bbbc397b69",
+        "ranker.txt": "a7be3444bd1cf8f768bc1e04ec682599e4072255db3e63c617c1616364672b39"
+      }
+    },
+    "T": {
+      "mask": 8,
+      "channels": [
+        "T"
+      ],
+      "fit": {
+        "training_pairs": 133697,
+        "unique_feature_rows": 4698,
+        "model_trained": true,
+        "training_pair_sha256": "eb2b9af461ebbf1cb7c65ada7e5f9bb92e791174a0b197d4bb3665c1219f4a31",
+        "training_candidate_recall": 0.49723286504895703,
+        "pair_selection_and_fit_seconds": 7.799171431004652,
+        "timing_scope": "subset pair selection, concatenate, LightGBM fit and model write; shared feature cache excluded",
+        "model_bytes": 1234867,
+        "model_sha256": "756117246633bf4631d201c1dda690044a4e3a432abb823ad91ba56cd45911b3"
+      },
+      "vessel_holdout": {
+        "pure": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 175,
+          "candidate_sha256": "e0f3447742a61ce959dba5817ed948fbdb7ee079eb222077e7f530492d2249ab",
+          "errors": 1214,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 175,
+            "retrieval": 1035,
+            "selection": 4
+          },
+          "cached_evaluation_seconds": 1.1892761730050552,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 31.279583333333335,
+            "p95": 120.04999999999973,
+            "max": 279
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.751219512195122,
+            "candidate_recall": 0.7707317073170732
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.47015945330296127,
+            "candidate_recall": 0.47015945330296127
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.49416666666666664,
+            "candidate_recall": 0.49583333333333335
+          },
+          "weighted_accuracy": 0.6669014945274736
+        },
+        "production": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 175,
+          "candidate_sha256": "e0f3447742a61ce959dba5817ed948fbdb7ee079eb222077e7f530492d2249ab",
+          "errors": 1214,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 175,
+            "retrieval": 1035,
+            "selection": 4
+          },
+          "cached_evaluation_seconds": 1.1705494620036916,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 31.279583333333335,
+            "p95": 120.04999999999973,
+            "max": 279
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.751219512195122,
+            "candidate_recall": 0.7707317073170732
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.47015945330296127,
+            "candidate_recall": 0.47015945330296127
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.49416666666666664,
+            "candidate_recall": 0.49583333333333335
+          },
+          "weighted_accuracy": 0.6669014945274736
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "row_holdout": {
+        "pure": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 130,
+          "candidate_sha256": "b08bfc7f5a39e973f23f9b695ec05110a174d361a42960ccd6bacb95ab096f9d",
+          "errors": 903,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 130,
+            "retrieval": 769,
+            "selection": 4
+          },
+          "cached_evaluation_seconds": 1.0853714859986212,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 33.67837150127227,
+            "p95": 127.0,
+            "max": 248
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.8020304568527918,
+            "candidate_recall": 0.8020304568527918
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.5113122171945701,
+            "candidate_recall": 0.5135746606334841
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 0.5441493180186647,
+            "candidate_recall": 0.5441493180186647
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.5314685314685315,
+            "candidate_recall": 0.5384615384615384
+          },
+          "weighted_accuracy": 0.7148149849553252
+        },
+        "production": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 1393,
+          "empty_search_rows_nonlookup": 36,
+          "candidate_sha256": "ee8183c2b43b7cd3548308e97ed8082c0810899cd279df695c2468c89c7884ff",
+          "errors": 268,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 36,
+            "retrieval": 228,
+            "selection": 4
+          },
+          "cached_evaluation_seconds": 0.22557502000563545,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 25.552447552447553,
+            "p95": 24.0,
+            "max": 209
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9898477157360406,
+            "candidate_recall": 0.9898477157360406
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.8495475113122172,
+            "candidate_recall": 0.8518099547511312
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 1.0,
+            "candidate_recall": 1.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.5314685314685315,
+            "candidate_recall": 0.5384615384615384
+          },
+          "weighted_accuracy": 0.9477576544088935
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "artifact_sha256": {
+        "assets.json": "8d31db0a257ff148a42423b9b66401576f70551b3570e70da581d4dfdd7bb28e",
+        "ranker.txt": "756117246633bf4631d201c1dda690044a4e3a432abb823ad91ba56cd45911b3"
+      }
+    },
+    "ST": {
+      "mask": 9,
+      "channels": [
+        "S",
+        "T"
+      ],
+      "fit": {
+        "training_pairs": 231371,
+        "unique_feature_rows": 4698,
+        "model_trained": true,
+        "training_pair_sha256": "d8de6d7fa09d5d1cb2714f717612bb4324b9c8551fca44207d180013e294f716",
+        "training_candidate_recall": 0.9821200510855683,
+        "pair_selection_and_fit_seconds": 12.863500634004595,
+        "timing_scope": "subset pair selection, concatenate, LightGBM fit and model write; shared feature cache excluded",
+        "model_bytes": 1240096,
+        "model_sha256": "a06b4cb91859530f6222ded0dc93ee6b2eb5a7297e1955217d7bb6ad7b901240"
+      },
+      "vessel_holdout": {
+        "pure": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "8b9eb62763501d19efc4efce536956e7cfd858c33d46499ea18b328bfd09cf06",
+          "errors": 56,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 48,
+            "selection": 8
+          },
+          "cached_evaluation_seconds": 2.343546979005623,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 52.49375,
+            "p95": 120.04999999999973,
+            "max": 279
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.7317073170731707,
+            "candidate_recall": 0.7707317073170732
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9995444191343964,
+            "candidate_recall": 0.9995444191343964
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9766666666666667,
+            "candidate_recall": 0.98
+          },
+          "weighted_accuracy": 0.8120584476915385
+        },
+        "production": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "8b9eb62763501d19efc4efce536956e7cfd858c33d46499ea18b328bfd09cf06",
+          "errors": 56,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 48,
+            "selection": 8
+          },
+          "cached_evaluation_seconds": 2.373001125997689,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 52.49375,
+            "p95": 120.04999999999973,
+            "max": 279
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.7317073170731707,
+            "candidate_recall": 0.7707317073170732
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9995444191343964,
+            "candidate_recall": 0.9995444191343964
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9766666666666667,
+            "candidate_recall": 0.98
+          },
+          "weighted_accuracy": 0.8120584476915385
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "row_holdout": {
+        "pure": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "52b16ed30f05e138561a5d369ab706fd9dd133bb2b2bf0a1ae6e342037fffc3d",
+          "errors": 41,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 39,
+            "selection": 2
+          },
+          "cached_evaluation_seconds": 1.8929347429948393,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 54.44020356234097,
+            "p95": 127.0,
+            "max": 248
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.8020304568527918,
+            "candidate_recall": 0.8020304568527918
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.998868778280543,
+            "candidate_recall": 1.0
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 0.9734386216798278,
+            "candidate_recall": 0.9734386216798278
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.993006993006993,
+            "candidate_recall": 0.9965034965034965
+          },
+          "weighted_accuracy": 0.8610819532811171
+        },
+        "production": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 1393,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "6faaab426a36aa67c460d63a7ef26e5f1499db806d9b47d600f54a02d2b71596",
+          "errors": 4,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 2,
+            "selection": 2
+          },
+          "cached_evaluation_seconds": 0.540171716005716,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 47.94580419580419,
+            "p95": 48.0,
+            "max": 209
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9898477157360406,
+            "candidate_recall": 0.9898477157360406
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.998868778280543,
+            "candidate_recall": 1.0
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 1.0,
+            "candidate_recall": 1.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.993006993006993,
+            "candidate_recall": 0.9965034965034965
+          },
+          "weighted_accuracy": 0.9925540344993913
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "artifact_sha256": {
+        "assets.json": "dd28155931b77de2a43c4923eb6908216119f6aed527e0674175221eef528d61",
+        "ranker.txt": "a06b4cb91859530f6222ded0dc93ee6b2eb5a7297e1955217d7bb6ad7b901240"
+      }
+    },
+    "NT": {
+      "mask": 10,
+      "channels": [
+        "N",
+        "T"
+      ],
+      "fit": {
+        "training_pairs": 231411,
+        "unique_feature_rows": 4698,
+        "model_trained": true,
+        "training_pair_sha256": "43bbd9b8d48dba78ca52428b7f88c69b2756c59e48c7667236707969301d10bf",
+        "training_candidate_recall": 0.9808429118773946,
+        "pair_selection_and_fit_seconds": 13.435816878998594,
+        "timing_scope": "subset pair selection, concatenate, LightGBM fit and model write; shared feature cache excluded",
+        "model_bytes": 1240557,
+        "model_sha256": "777a943a7c1edb0db5606eb5ed9a671f49dd182c48c20e3eb9a8f5f8164d6bcc"
+      },
+      "vessel_holdout": {
+        "pure": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "334772678565c239430bbad5f38055b9ca3e7ada548275661e3f447d1ce5a5b3",
+          "errors": 35,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 27,
+            "selection": 8
+          },
+          "cached_evaluation_seconds": 2.646898956001678,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 57.61083333333333,
+            "p95": 180.0,
+            "max": 338
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.8780487804878049,
+            "candidate_recall": 0.9170731707317074
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9954441913439636,
+            "candidate_recall": 0.9954441913439636
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9854166666666667,
+            "candidate_recall": 0.98875
+          },
+          "weighted_accuracy": 0.9132674037446524
+        },
+        "production": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "334772678565c239430bbad5f38055b9ca3e7ada548275661e3f447d1ce5a5b3",
+          "errors": 35,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 27,
+            "selection": 8
+          },
+          "cached_evaluation_seconds": 1.9035632320010336,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 57.61083333333333,
+            "p95": 180.0,
+            "max": 338
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.8780487804878049,
+            "candidate_recall": 0.9170731707317074
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9954441913439636,
+            "candidate_recall": 0.9954441913439636
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9854166666666667,
+            "candidate_recall": 0.98875
+          },
+          "weighted_accuracy": 0.9132674037446524
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "row_holdout": {
+        "pure": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "0ec646cd3f5b73847dc98bbb106601017f5772921ffb8a1081b2c73a6b2d38c2",
+          "errors": 46,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 43,
+            "selection": 3
+          },
+          "cached_evaluation_seconds": 1.487718386000779,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 60.391857506361326,
+            "p95": 186.0,
+            "max": 307
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9187817258883249,
+            "candidate_recall": 0.9238578680203046
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.9830316742081447,
+            "candidate_recall": 0.9841628959276018
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 0.9741564967695621,
+            "candidate_recall": 0.9741564967695621
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9825174825174825,
+            "candidate_recall": 0.9877622377622378
+          },
+          "weighted_accuracy": 0.9380567103842707
+        },
+        "production": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 1393,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "2e82613ec1dc14de4db608bf552a066fb05f4f9442fc57c56567f41a82414151",
+          "errors": 10,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 7,
+            "selection": 3
+          },
+          "cached_evaluation_seconds": 0.38468531500257086,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 49.83916083916084,
+            "p95": 48.0,
+            "max": 268
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9898477157360406,
+            "candidate_recall": 0.9949238578680203
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.995475113122172,
+            "candidate_recall": 0.996606334841629
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 1.0,
+            "candidate_recall": 1.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9825174825174825,
+            "candidate_recall": 0.9877622377622378
+          },
+          "weighted_accuracy": 0.99153593495188
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "artifact_sha256": {
+        "assets.json": "c6e3a54beae44a3069761b009ca3ab882b25de66e20a7fac0b36388d6cfef917",
+        "ranker.txt": "777a943a7c1edb0db5606eb5ed9a671f49dd182c48c20e3eb9a8f5f8164d6bcc"
+      }
+    },
+    "SNT": {
+      "mask": 11,
+      "channels": [
+        "S",
+        "N",
+        "T"
+      ],
+      "fit": {
+        "training_pairs": 299434,
+        "unique_feature_rows": 4698,
+        "model_trained": true,
+        "training_pair_sha256": "147db9c0451992d4e2ca45f021e824ec3875e5ebf882e80ee1a2495cfed94f6e",
+        "training_candidate_recall": 0.9908471690080886,
+        "pair_selection_and_fit_seconds": 15.347481238997716,
+        "timing_scope": "subset pair selection, concatenate, LightGBM fit and model write; shared feature cache excluded",
+        "model_bytes": 1242197,
+        "model_sha256": "b0d5d5cc0e1dab1475dfe5d3367266d4208858dc1d6f6c477b1a1db69b3762ed"
+      },
+      "vessel_holdout": {
+        "pure": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "8b24d5429a50a21d364c87a298e06eed208f4849ac4ef3541fc24877ef60e14b",
+          "errors": 22,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 18,
+            "selection": 4
+          },
+          "cached_evaluation_seconds": 2.7831592820002697,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 71.98041666666667,
+            "p95": 180.0,
+            "max": 338
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.8975609756097561,
+            "candidate_recall": 0.9170731707317074
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9995444191343964,
+            "candidate_recall": 0.9995444191343964
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9908333333333333,
+            "candidate_recall": 0.9925
+          },
+          "weighted_accuracy": 0.9281560086671482
+        },
+        "production": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "8b24d5429a50a21d364c87a298e06eed208f4849ac4ef3541fc24877ef60e14b",
+          "errors": 22,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 18,
+            "selection": 4
+          },
+          "cached_evaluation_seconds": 2.230169549002312,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 71.98041666666667,
+            "p95": 180.0,
+            "max": 338
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.8975609756097561,
+            "candidate_recall": 0.9170731707317074
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9995444191343964,
+            "candidate_recall": 0.9995444191343964
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9908333333333333,
+            "candidate_recall": 0.9925
+          },
+          "weighted_accuracy": 0.9281560086671482
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "row_holdout": {
+        "pure": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "d4a318b1926a74815241f33db59ae4519703df6249d3a57a9cdc0ce8df5c9cf5",
+          "errors": 18,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 15,
+            "selection": 3
+          },
+          "cached_evaluation_seconds": 1.8912811289992533,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 74.55267175572519,
+            "p95": 186.0,
+            "max": 307
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9187817258883249,
+            "candidate_recall": 0.9238578680203046
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.998868778280543,
+            "candidate_recall": 1.0
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 0.9899497487437185,
+            "candidate_recall": 0.9899497487437185
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.993006993006993,
+            "candidate_recall": 0.9982517482517482
+          },
+          "weighted_accuracy": 0.9428078416059902
+        },
+        "production": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 1393,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "7d631fd481e59e2184b57a646bae1ad7dd768d07d37f037f000be135466270f2",
+          "errors": 4,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 1,
+            "selection": 3
+          },
+          "cached_evaluation_seconds": 0.513705397999729,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 65.0437062937063,
+            "p95": 70.0,
+            "max": 268
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9898477157360406,
+            "candidate_recall": 0.9949238578680203
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.998868778280543,
+            "candidate_recall": 1.0
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 1.0,
+            "candidate_recall": 1.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.993006993006993,
+            "candidate_recall": 0.9982517482517482
+          },
+          "weighted_accuracy": 0.9925540344993913
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "artifact_sha256": {
+        "assets.json": "a08f0760c92818166b357ee47ff6ac7149daca3875ff5f912415b9dc624f73e5",
+        "ranker.txt": "b0d5d5cc0e1dab1475dfe5d3367266d4208858dc1d6f6c477b1a1db69b3762ed"
+      }
+    },
+    "PT": {
+      "mask": 12,
+      "channels": [
+        "P",
+        "T"
+      ],
+      "fit": {
+        "training_pairs": 234341,
+        "unique_feature_rows": 4698,
+        "model_trained": true,
+        "training_pair_sha256": "10338da5a5478f326f0ef0e87f051d4cf4e5066e01595a4ba2aabc7417d3bc51",
+        "training_candidate_recall": 0.9897828863346104,
+        "pair_selection_and_fit_seconds": 14.65030069200293,
+        "timing_scope": "subset pair selection, concatenate, LightGBM fit and model write; shared feature cache excluded",
+        "model_bytes": 1240016,
+        "model_sha256": "cf0d01ab8d305be49f8a22ea9565514b2805db7a8dfc8062bfbd7bdaf75c96af"
+      },
+      "vessel_holdout": {
+        "pure": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "f2f73e0de651981477120096ec1b0c3efb85bf2baee222031eb9932b35ecc91b",
+          "errors": 25,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 18,
+            "selection": 7
+          },
+          "cached_evaluation_seconds": 3.061505327001214,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 63.59125,
+            "p95": 247.0,
+            "max": 407
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.9658536585365853,
+            "candidate_recall": 1.0
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9917995444191344,
+            "candidate_recall": 0.9917995444191344
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9895833333333334,
+            "candidate_recall": 0.9925
+          },
+          "weighted_accuracy": 0.97363742430135
+        },
+        "production": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "f2f73e0de651981477120096ec1b0c3efb85bf2baee222031eb9932b35ecc91b",
+          "errors": 25,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 18,
+            "selection": 7
+          },
+          "cached_evaluation_seconds": 3.0574602899941965,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 63.59125,
+            "p95": 247.0,
+            "max": 407
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.9658536585365853,
+            "candidate_recall": 1.0
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9917995444191344,
+            "candidate_recall": 0.9917995444191344
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9895833333333334,
+            "candidate_recall": 0.9925
+          },
+          "weighted_accuracy": 0.97363742430135
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "row_holdout": {
+        "pure": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "b36fb1ca2645cbfd4012e7d1d09497b7271eee05b7083e11cd09a76e23badb6d",
+          "errors": 25,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 21,
+            "selection": 4
+          },
+          "cached_evaluation_seconds": 2.5950662839968572,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 67.45699745547074,
+            "p95": 255.79999999999995,
+            "max": 385
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9847715736040609,
+            "candidate_recall": 0.9949238578680203
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.9875565610859729,
+            "candidate_recall": 0.9886877828054299
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 0.990667623833453,
+            "candidate_recall": 0.990667623833453
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9790209790209791,
+            "candidate_recall": 0.986013986013986
+          },
+          "weighted_accuracy": 0.9856070698486343
+        },
+        "production": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 1393,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "0a1b82cdfcadd47d51a84f5a4eb2f36a261fcdc436c5edd9bc636f7b0531c809",
+          "errors": 12,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 8,
+            "selection": 4
+          },
+          "cached_evaluation_seconds": 0.6122683180001331,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 52.18006993006993,
+            "p95": 48.0,
+            "max": 346
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9898477157360406,
+            "candidate_recall": 1.0
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.994343891402715,
+            "candidate_recall": 0.995475113122172
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 1.0,
+            "candidate_recall": 1.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9790209790209791,
+            "candidate_recall": 0.986013986013986
+          },
+          "weighted_accuracy": 0.9911965684360429
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "artifact_sha256": {
+        "assets.json": "c74b0cb08f22797bf0ecf4c8fcb2183495a39b9498d33a01a8d2c843ad327c73",
+        "ranker.txt": "cf0d01ab8d305be49f8a22ea9565514b2805db7a8dfc8062bfbd7bdaf75c96af"
+      }
+    },
+    "SPT": {
+      "mask": 13,
+      "channels": [
+        "S",
+        "P",
+        "T"
+      ],
+      "fit": {
+        "training_pairs": 314716,
+        "unique_feature_rows": 4698,
+        "model_trained": true,
+        "training_pair_sha256": "10fec366f0b5bc5e620e12b1737a66dddc15f17b24e3818a58f4148ab24d3fa7",
+        "training_candidate_recall": 0.998935717326522,
+        "pair_selection_and_fit_seconds": 16.86876643299911,
+        "timing_scope": "subset pair selection, concatenate, LightGBM fit and model write; shared feature cache excluded",
+        "model_bytes": 1241977,
+        "model_sha256": "bd9e419b5f3e6299cd0193e31af26cecdc8fabfd3c6d85a534993a0c526ad0c8"
+      },
+      "vessel_holdout": {
+        "pure": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "57d6342cc71f6b407da5194a5c44aed64530e1d6fafd0313d1c899688e1d55ad",
+          "errors": 8,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 1,
+            "selection": 7
+          },
+          "cached_evaluation_seconds": 4.926421456999378,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 80.6475,
+            "p95": 247.0,
+            "max": 407
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.9658536585365853,
+            "candidate_recall": 1.0
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9995444191343964,
+            "candidate_recall": 0.9995444191343964
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9966666666666667,
+            "candidate_recall": 0.9995833333333334
+          },
+          "weighted_accuracy": 0.9759608867159286
+        },
+        "production": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "57d6342cc71f6b407da5194a5c44aed64530e1d6fafd0313d1c899688e1d55ad",
+          "errors": 8,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 1,
+            "selection": 7
+          },
+          "cached_evaluation_seconds": 4.615684863994829,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 80.6475,
+            "p95": 247.0,
+            "max": 407
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.9658536585365853,
+            "candidate_recall": 1.0
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9995444191343964,
+            "candidate_recall": 0.9995444191343964
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9966666666666667,
+            "candidate_recall": 0.9995833333333334
+          },
+          "weighted_accuracy": 0.9759608867159286
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "row_holdout": {
+        "pure": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "78fd6ba897577074316b773dd7aa3152b3df891df26d8cd8bb52ec1f7bd434f2",
+          "errors": 4,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 1,
+            "selection": 3
+          },
+          "cached_evaluation_seconds": 5.434044128000096,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 84.25699745547074,
+            "p95": 255.79999999999995,
+            "max": 385
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9898477157360406,
+            "candidate_recall": 0.9949238578680203
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.998868778280543,
+            "candidate_recall": 1.0
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 0.9992821249102656,
+            "candidate_recall": 0.9992821249102656
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9947552447552448,
+            "candidate_recall": 1.0
+          },
+          "weighted_accuracy": 0.9925540344993913
+        },
+        "production": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 1393,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "a96c84ce030b87ff6e92f68047545ff55482717ceec3265e38e798b9835cf279",
+          "errors": 3,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 0,
+            "selection": 3
+          },
+          "cached_evaluation_seconds": 1.4429893650012673,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 70.18706293706293,
+            "p95": 71.0,
+            "max": 346
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9949238578680203,
+            "candidate_recall": 1.0
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.998868778280543,
+            "candidate_recall": 1.0
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 1.0,
+            "candidate_recall": 1.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9947552447552448,
+            "candidate_recall": 1.0
+          },
+          "weighted_accuracy": 0.996107333991777
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "previous_search_reproduction": {
+        "passed": true,
+        "checks": [
+          "training pair hash",
+          "validation candidate hash",
+          "all production predictions"
+        ]
+      },
+      "artifact_sha256": {
+        "assets.json": "a80e7290c564ab9b6579dfd89f91c0d02dd57b5bb8ff3c143f4c2db9b0234d4f",
+        "ranker.txt": "bd9e419b5f3e6299cd0193e31af26cecdc8fabfd3c6d85a534993a0c526ad0c8"
+      }
+    },
+    "NPT": {
+      "mask": 14,
+      "channels": [
+        "N",
+        "P",
+        "T"
+      ],
+      "fit": {
+        "training_pairs": 321591,
+        "unique_feature_rows": 4698,
+        "model_trained": true,
+        "training_pair_sha256": "705e413e23aad989944640ec89903e2352e83a0dfd2a14e23ee8d968c01e9920",
+        "training_candidate_recall": 0.9963814389101745,
+        "pair_selection_and_fit_seconds": 24.96823970999685,
+        "timing_scope": "subset pair selection, concatenate, LightGBM fit and model write; shared feature cache excluded",
+        "model_bytes": 1241668,
+        "model_sha256": "7d6bf4517528ce3a70f58d2af770c3c33f6e4c819177d4bf8267da3dbb728543"
+      },
+      "vessel_holdout": {
+        "pure": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "cd4cdba8dfea505bf54524f554dd9dba2f0ea3eeefcd1e292b111d5a04500389",
+          "errors": 13,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 5,
+            "selection": 8
+          },
+          "cached_evaluation_seconds": 3.8137701340019703,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 86.55708333333334,
+            "p95": 298.0,
+            "max": 462
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.9609756097560975,
+            "candidate_recall": 1.0
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9977220956719818,
+            "candidate_recall": 0.9977220956719818
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9945833333333334,
+            "candidate_recall": 0.9979166666666667
+          },
+          "weighted_accuracy": 0.9719995555308627
+        },
+        "production": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "cd4cdba8dfea505bf54524f554dd9dba2f0ea3eeefcd1e292b111d5a04500389",
+          "errors": 13,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 5,
+            "selection": 8
+          },
+          "cached_evaluation_seconds": 3.7976033550003194,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 86.55708333333334,
+            "p95": 298.0,
+            "max": 462
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.9609756097560975,
+            "candidate_recall": 1.0
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9977220956719818,
+            "candidate_recall": 0.9977220956719818
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9945833333333334,
+            "candidate_recall": 0.9979166666666667
+          },
+          "weighted_accuracy": 0.9719995555308627
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "row_holdout": {
+        "pure": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "a0041e623ea32a7c941b3adbdc31e857d8bc13cfe3bb3da578928271f0b73b0e",
+          "errors": 12,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 8,
+            "selection": 4
+          },
+          "cached_evaluation_seconds": 3.291338198003359,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 90.73994910941475,
+            "p95": 309.0,
+            "max": 444
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9847715736040609,
+            "candidate_recall": 0.9949238578680203
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.9949095022624435,
+            "candidate_recall": 0.9960407239819005
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 0.9956927494615937,
+            "candidate_recall": 0.9956927494615937
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9895104895104895,
+            "candidate_recall": 0.9965034965034965
+          },
+          "weighted_accuracy": 0.9878129522015755
+        },
+        "production": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 1393,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "cc7f09911d1296cb8e1b10db6baae0375e6d3bc2dada72beedb3d729fa94f21f",
+          "errors": 6,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 2,
+            "selection": 4
+          },
+          "cached_evaluation_seconds": 0.9043457090010634,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 73.40034965034965,
+            "p95": 71.0,
+            "max": 399
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9898477157360406,
+            "candidate_recall": 1.0
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.997737556561086,
+            "candidate_recall": 0.998868778280543
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 1.0,
+            "candidate_recall": 1.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.9895104895104895,
+            "candidate_recall": 0.9965034965034965
+          },
+          "weighted_accuracy": 0.9922146679835542
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "artifact_sha256": {
+        "assets.json": "de043d210f1b568ecf2135df492c9c8e699b9cb5b62e6bfe4901e32bbdd28054",
+        "ranker.txt": "7d6bf4517528ce3a70f58d2af770c3c33f6e4c819177d4bf8267da3dbb728543"
+      }
+    },
+    "SNPT": {
+      "mask": 15,
+      "channels": [
+        "S",
+        "N",
+        "P",
+        "T"
+      ],
+      "fit": {
+        "training_pairs": 380396,
+        "unique_feature_rows": 4698,
+        "model_trained": true,
+        "training_pair_sha256": "562d1bad4402f81a2366f562f737991273fa5132a7b28ed0046657ce1b4b1d6c",
+        "training_candidate_recall": 0.998935717326522,
+        "pair_selection_and_fit_seconds": 17.746672961002332,
+        "timing_scope": "subset pair selection, concatenate, LightGBM fit and model write; shared feature cache excluded",
+        "model_bytes": 1242665,
+        "model_sha256": "9a286edf42a71160710b2b4d08be0e37a12af2dba609af3afe6e6328bbef30ef"
+      },
+      "vessel_holdout": {
+        "pure": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "aa33785ccd472307b6160e66223e32092cd1c23fdafb6ebf33533e5a14dc5314",
+          "errors": 5,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 1,
+            "selection": 4
+          },
+          "cached_evaluation_seconds": 4.664151712997409,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 98.97208333333333,
+            "p95": 298.0,
+            "max": 462
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.9804878048780488,
+            "candidate_recall": 1.0
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9995444191343964,
+            "candidate_recall": 0.9995444191343964
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9979166666666667,
+            "candidate_recall": 0.9995833333333334
+          },
+          "weighted_accuracy": 0.986204789154953
+        },
+        "production": {
+          "rows": 2400,
+          "seen_vessel_fraction": 0.0,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "aa33785ccd472307b6160e66223e32092cd1c23fdafb6ebf33533e5a14dc5314",
+          "errors": 5,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 1,
+            "selection": 4
+          },
+          "cached_evaluation_seconds": 4.56960387199797,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 98.97208333333333,
+            "p95": 298.0,
+            "max": 462
+          },
+          "hangul": {
+            "rows": 205,
+            "unique_vessels": 71,
+            "accuracy": 0.9804878048780488,
+            "candidate_recall": 1.0
+          },
+          "non_hangul": {
+            "rows": 2195,
+            "unique_vessels": 1101,
+            "accuracy": 0.9995444191343964,
+            "candidate_recall": 0.9995444191343964
+          },
+          "seen": {
+            "rows": 0,
+            "unique_vessels": 0,
+            "accuracy": null,
+            "candidate_recall": null
+          },
+          "unseen": {
+            "rows": 2400,
+            "unique_vessels": 1171,
+            "accuracy": 0.9979166666666667,
+            "candidate_recall": 0.9995833333333334
+          },
+          "weighted_accuracy": 0.986204789154953
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "row_holdout": {
+        "pure": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 0,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "ecc7708d519dcabd6d96a9242e57ce0d4a6db67438a85c8283115cee29cd55be",
+          "errors": 5,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 1,
+            "selection": 4
+          },
+          "cached_evaluation_seconds": 4.057028604998777,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 103.04223918575063,
+            "p95": 309.0,
+            "max": 444
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9847715736040609,
+            "candidate_recall": 0.9949238578680203
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.998868778280543,
+            "candidate_recall": 1.0
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 0.9992821249102656,
+            "candidate_recall": 0.9992821249102656
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.993006993006993,
+            "candidate_recall": 1.0
+          },
+          "weighted_accuracy": 0.9890007350070054
+        },
+        "production": {
+          "rows": 1965,
+          "seen_vessel_fraction": 0.7089058524173028,
+          "call_lookup_rows": 1393,
+          "empty_search_rows_nonlookup": 0,
+          "candidate_sha256": "219b41ec0d249ccd1c52c7cfc2990df1cf24487c6c70558fcd14f3eb0e29525f",
+          "errors": 4,
+          "error_stages": {
+            "lookup": 0,
+            "empty_fallback": 0,
+            "retrieval": 0,
+            "selection": 4
+          },
+          "cached_evaluation_seconds": 1.0200784059998114,
+          "timing_scope": "cached feature selection, batched model scoring and diagnostics; excludes retrieval, feature generation and CSV writes",
+          "candidate_count_nonlookup": {
+            "mean": 86.5472027972028,
+            "p95": 92.0,
+            "max": 399
+          },
+          "hangul": {
+            "rows": 197,
+            "unique_vessels": 154,
+            "accuracy": 0.9898477157360406,
+            "candidate_recall": 1.0
+          },
+          "non_hangul": {
+            "rows": 1768,
+            "unique_vessels": 1488,
+            "accuracy": 0.998868778280543,
+            "candidate_recall": 1.0
+          },
+          "seen": {
+            "rows": 1393,
+            "unique_vessels": 1108,
+            "accuracy": 1.0,
+            "candidate_recall": 1.0
+          },
+          "unseen": {
+            "rows": 572,
+            "unique_vessels": 534,
+            "accuracy": 0.993006993006993,
+            "candidate_recall": 1.0
+          },
+          "weighted_accuracy": 0.9925540344993913
+        },
+        "row_independence": {
+          "passed": true,
+          "rows": 6,
+          "checks": [
+            "cached-vs-runtime",
+            "full",
+            "shuffled",
+            "single",
+            "subset"
+          ]
+        }
+      },
+      "artifact_sha256": {
+        "assets.json": "0137aa7fd93c2ed36ab5a6893d4b56f38f062cfcc1cd96c07077d6850b752eea",
+        "ranker.txt": "9a286edf42a71160710b2b4d08be0e37a12af2dba609af3afe6e6328bbef30ef"
+      }
+    }
+  },
+  "index_build_seconds": 5.039702811998723,
+  "ngram_index": {
+    "fit_source": "official catalog only",
+    "n_documents": 78595,
+    "vocabulary_size": 89536,
+    "nonzero_entries": 1869600,
+    "ngram_range": [
+      2,
+      4
+    ],
+    "analyzer": "char",
+    "dtype": "float32",
+    "sublinear_tf": true,
+    "query_state": "no fit, no query aggregation"
+  },
+  "cache": {
+    "fit": {
+      "rows": 4698,
+      "pairs_in_union": 471216,
+      "channel_search_seconds": {
+        "S": 24.626094304847356,
+        "N": 22.524844870262314,
+        "P": 36.8064748061297,
+        "T": 3.48156641703099
+      },
+      "all_union_feature_seconds": 73.05227864802146,
+      "wall_seconds": 160.91926357099874,
+      "timing_scope": "one pass: all four channels, union features, bookkeeping; no model fitting/scoring",
+      "positive_injection": true
+    },
+    "vessel_holdout": {
+      "rows": 2400,
+      "pairs_in_union": 239929,
+      "channel_search_seconds": {
+        "S": 12.706182041794818,
+        "N": 11.756979086865613,
+        "P": 18.724611810888746,
+        "T": 1.8135047797622974
+      },
+      "all_union_feature_seconds": 37.710721050112625,
+      "wall_seconds": 82.9246695030015,
+      "timing_scope": "one pass: all four channels, union features, bookkeeping; no model fitting/scoring",
+      "positive_injection": false
+    },
+    "row_holdout": {
+      "rows": 1965,
+      "pairs_in_union": 204437,
+      "channel_search_seconds": {
+        "S": 8.194717164973554,
+        "N": 7.677529731081449,
+        "P": 12.49483141906967,
+        "T": 1.1481078139331657
+      },
+      "all_union_feature_seconds": 26.04832738494588,
+      "wall_seconds": 55.69663026800117,
+      "timing_scope": "one pass: all four channels, union features, bookkeeping; no model fitting/scoring",
+      "positive_injection": false
+    }
+  },
+  "peak_process_rss_bytes": 650391552,
+  "record_enriched_at_kst": "2026-10-19T08:55:00.605118+09:00"
+}

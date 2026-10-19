@@ -1,5 +1,9 @@
 # Local Python environment and caches
 .venv/
+.venv-server/
+.venv*/
+venv*/
+.cache/
 venv/
 __pycache__/
 *.py[cod]
@@ -9,6 +13,14 @@ __pycache__/
 # Competition input data and original downloaded baseline
 /data/
 /official_baseline/
+# Local datasets at any depth; aggregate analysis CSVs remain versioned.
+data/
+open_data/
+open/
+train.csv
+vessel_catalog.csv
+test.csv
+sample_submission.csv
 
 # Generated model assets and submission archives
 /model/assets.json
@@ -16,12 +28,43 @@ __pycache__/
 /validation_model/
 /output/
 *.zip
+*.7z
+*.tar.gz
+artifacts/
+**/model/assets.json
+**/model/ranker.txt
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.pkl
+*.pickle
+*.joblib
+*.cbm
+*.h5
+*.hdf5
+*.npy
+*.npz
 
 # Row-level data and diagnostics; aggregate reports remain versioned
 /reports/*_predictions.csv
 /reports/split.csv
 /analysis/output/*_head.csv
 /analysis/output/target_counts.csv
+oof*.csv
+*_oof.csv
+*predictions*.csv
+submission.csv
+folds_*.csv
+split.csv
+*_head.csv
+*errors.csv
+*errors.json
+
+# Per-PC environment reports and resolved Windows lock (not server evidence).
+/reports/local_environment.*.json
+/environment/windows-freeze.local.txt
 
 # Local workspace IPC sockets
 kernel-ipc-*

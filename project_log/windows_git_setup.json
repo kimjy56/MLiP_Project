@@ -1,0 +1,55 @@
+{
+  "recorded_at_kst": "2026-10-19T15:27:54.191997+09:00",
+  "task": "Git artifact exclusions and Windows multi-PC setup",
+  "status": "completed",
+  "git": {
+    "head": "b5e9b1e16928d2a76d4e83e8abdd0618d4daa0bb",
+    "tracked_files": 61,
+    "local_history_commits": 1,
+    "tracked_exclusion_targets": [],
+    "removed_from_index": [],
+    "reason_no_removal": "No raw datasets, OOF/fold outputs, environments, model weights or ZIPs were tracked; tracked CSVs inspected as aggregate tables.",
+    "local_files_deleted": false,
+    "history_rewritten": false,
+    "commit_or_push_performed": false,
+    "scope": "Current local index and available refs; not unobserved remote refs or other PCs"
+  },
+  "checks": {
+    "gitignore_exclusion_cases": 16,
+    "source_aggregate_retention_cases": 7,
+    "windows_dependency_resolution": {
+      "python": "3.11.17",
+      "platform": "x86_64-pc-windows-msvc",
+      "binary_only": true,
+      "packages": 51,
+      "all_16_direct_pins_match": true
+    },
+    "powershell_parser": {
+      "version": "7.5.4",
+      "host": "Linux",
+      "passed": true
+    },
+    "windows_os_description_branch": "mocked platform passed; no Linux-only OS API called",
+    "linux_environment_recheck": true,
+    "prior_zip_hashes_unchanged": true
+  },
+  "limitations": [
+    "PowerShell 5.1 and actual Windows installation/import/GPU execution not tested on this Linux host.",
+    "User Windows PC and data directory were not changed; data path remains unspecified.",
+    "No new ZIP was created and no data/model training was performed."
+  ],
+  "resolved_artifacts": "/workspace/vessel_matching/portability_checks",
+  "file_sha256": {
+    ".gitignore": "c1693eefe6b73af3ed347467e10fab435db1f83c28c8ae751f9615840c854666",
+    "AGENTS.md": "48a03be986b6e394fe78b37a2b1160e397b7c6d3d2059c43429e9b1ab969d899",
+    "environment/windows-requirements.txt": "d1d74762f38f5abcd29cbd4f01c37e9787cfc12d16e368022e351f5a58e9aa52",
+    "environment/setup_windows.ps1": "4c899a3be3496176775b7d9f9f01b200c674c4db2419e627e5ba94600ac1a340",
+    "environment/check_environment.py": "3d23cf5ee70b8384359ad1191c12c3b90526f6e61bd4c9f012ec542899e85e13",
+    "environment/README.md": "ea4ff66eb7ac0c81f6bec68ef7f4bf28ee1ba1ffe9da85d84e70f2becb9b9261",
+    "docs/MULTI_PC_SETUP.md": "8f6f97b798fc753846cefc1217a3f8d8cf2d8385ef3e0ef396fa9de2a9834853"
+  },
+  "retry_notes": [
+    "PowerShell parser initially failed because HOME cache is read-only; succeeded with writable XDG cache/config/data paths.",
+    "Initial cross-target resolver used a fallback build interpreter; reran with explicit Python 3.11.17 and managed install directory, no warnings."
+  ]
+}

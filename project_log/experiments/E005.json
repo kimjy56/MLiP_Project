@@ -1,0 +1,1022 @@
+{
+  "experiment_id": "E005",
+  "plan_id": "P03 robustness",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-18T23:12:27.516371+09:00",
+  "started_at_kst": "2026-10-18T23:12:29.051605+09:00",
+  "finished_at_kst": "2026-10-18T23:19:20.616703+09:00",
+  "purpose": "Check whether E004 improvements persist on a second vessel grouping; resolve selection/cost tradeoff.",
+  "hypothesis": "Name features should improve new-vessel matching beyond the inspected original split.",
+  "baseline_experiment_id": "E004 baseline",
+  "changed_factors": [
+    "Split seed 20261017; same four variants as E004"
+  ],
+  "fixed_conditions": [
+    "Same model seed and hyperparameters",
+    "Same feature algorithms and retrieval budgets",
+    "No retuning individual rules from E004 errors"
+  ],
+  "code": {
+    "git_revision_at_run": "b5e9b1e16928d2a76d4e83e8abdd0618d4daa0bb",
+    "dirty": true,
+    "file_sha256": {
+      "model/matcher.py": "25a0be43ddf88b0d8115fb6f6bc23e72c046aebc77100cb704693beeea620d3d",
+      "model/name_processing.py": "2979db4eef2d4cb00a8d1e4da52e34867cd89ae784bfc555b543e234d4d04f3f",
+      "train.py": "bec1e2c1f93316cb3a9f9044d79c5007391e6c69531583202759bf6a3dee8648",
+      "experiments/name_ablation.py": "4fbd5b3bee77cbabbd24daa42a0dbd0f9a54d349f90d2f93229ea463d26cbe6d"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "seed": 20261017,
+    "split_file_sha256": "b74caa7224b5b5cdb10ca1755056169de82330ef424de30ef31e183a91eba198",
+    "training_rows": 7842,
+    "validation_rows": {
+      "vessel_holdout": 2419,
+      "row_holdout": 1961
+    }
+  },
+  "retrieval": {
+    "baseline": "E001 unchanged",
+    "structure": "same candidates as baseline",
+    "all": "same candidates as baseline",
+    "search": "baseline union extra top24 simplified vowel-preserving phonetic-key matches; variable union size"
+  },
+  "features": {
+    "baseline": [
+      "exact",
+      "ratio",
+      "partial",
+      "roman_ratio",
+      "phonetic_ratio",
+      "phonetic_partial",
+      "length_ratio",
+      "digits_equal",
+      "digits_missing",
+      "gross_gap",
+      "international_gap",
+      "best_gap",
+      "gross_exact",
+      "international_exact",
+      "gross_missing",
+      "international_missing",
+      "catalog_gross_missing",
+      "type_probability",
+      "flag_probability",
+      "flag_missing",
+      "is_hangul",
+      "name_length",
+      "catalog_name_length"
+    ],
+    "structure": [
+      "exact",
+      "ratio",
+      "partial",
+      "roman_ratio",
+      "phonetic_ratio",
+      "phonetic_partial",
+      "length_ratio",
+      "digits_equal",
+      "digits_missing",
+      "gross_gap",
+      "international_gap",
+      "best_gap",
+      "gross_exact",
+      "international_exact",
+      "gross_missing",
+      "international_missing",
+      "catalog_gross_missing",
+      "type_probability",
+      "flag_probability",
+      "flag_missing",
+      "is_hangul",
+      "name_length",
+      "catalog_name_length",
+      "number_sequence_equal",
+      "number_conflict",
+      "catalog_number_missing",
+      "number_count_gap",
+      "token_count_gap",
+      "token_roman_idf",
+      "token_roman_min",
+      "token_roman_last"
+    ],
+    "all": [
+      "exact",
+      "ratio",
+      "partial",
+      "roman_ratio",
+      "phonetic_ratio",
+      "phonetic_partial",
+      "length_ratio",
+      "digits_equal",
+      "digits_missing",
+      "gross_gap",
+      "international_gap",
+      "best_gap",
+      "gross_exact",
+      "international_exact",
+      "gross_missing",
+      "international_missing",
+      "catalog_gross_missing",
+      "type_probability",
+      "flag_probability",
+      "flag_missing",
+      "is_hangul",
+      "name_length",
+      "catalog_name_length",
+      "number_sequence_equal",
+      "number_conflict",
+      "catalog_number_missing",
+      "number_count_gap",
+      "token_count_gap",
+      "token_roman_idf",
+      "token_roman_min",
+      "token_roman_last",
+      "weighted_phone_full",
+      "weighted_phone_token_idf",
+      "weighted_phone_token_min",
+      "weighted_phone_last",
+      "weighted_phone_residual",
+      "phone_shared_edge"
+    ],
+    "search": [
+      "exact",
+      "ratio",
+      "partial",
+      "roman_ratio",
+      "phonetic_ratio",
+      "phonetic_partial",
+      "length_ratio",
+      "digits_equal",
+      "digits_missing",
+      "gross_gap",
+      "international_gap",
+      "best_gap",
+      "gross_exact",
+      "international_exact",
+      "gross_missing",
+      "international_missing",
+      "catalog_gross_missing",
+      "type_probability",
+      "flag_probability",
+      "flag_missing",
+      "is_hangul",
+      "name_length",
+      "catalog_name_length",
+      "number_sequence_equal",
+      "number_conflict",
+      "catalog_number_missing",
+      "number_count_gap",
+      "token_count_gap",
+      "token_roman_idf",
+      "token_roman_min",
+      "token_roman_last",
+      "weighted_phone_full",
+      "weighted_phone_token_idf",
+      "weighted_phone_token_min",
+      "weighted_phone_last",
+      "weighted_phone_residual",
+      "phone_shared_edge"
+    ]
+  },
+  "preprocessing": {
+    "statistics_source": "fixed official catalog for token IDF; training fold only for call/alias/category maps",
+    "romanization": "Unidecode per original token, NFKC uppercase",
+    "phonetic_costs": {
+      "ordinary_edit": 4,
+      "vowel_insertion_deletion": 2,
+      "similar_consonant_or_vowel_substitution": 1
+    },
+    "shared_edge_threshold": 0.8,
+    "original_features_preserved": true
+  },
+  "training_pairs": {
+    "positive_rule": "same target vessel=1; positive injected in training only",
+    "negative_rule": "original top80 hardness union top20 tonnage plus true candidate when pool>100",
+    "aliases_used_during_pair_training": false,
+    "language_weight": ".7/p_H or .3/p_N on deduplicated training rows; applied per candidate pair",
+    "count_by_variant": {
+      "baseline": 233770,
+      "structure": 233770,
+      "all": 233770,
+      "search": 314364
+    },
+    "baseline_count_note": "E004 baseline is reused E001 artifact; E005 baseline refit"
+  },
+  "model": {
+    "type": "LGBMClassifier",
+    "parameters": {
+      "n_estimators": 350,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "max_depth": -1,
+      "min_child_samples": 40,
+      "colsample_bytree": 0.9,
+      "reg_lambda": 2,
+      "random_state": 20261016,
+      "n_jobs": 4,
+      "verbosity": -1,
+      "deterministic": true,
+      "force_col_wise": true
+    },
+    "loss": "binary_logloss"
+  },
+  "commands": [
+    "experiments/name_ablation.py --data-dir /workspace/vessel_matching/data --output-dir /workspace/vessel_matching/name_e005 --record project_log/experiments/E005.json --seed 20261017"
+  ],
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "packages": {
+      "numpy": "2.3.5",
+      "pandas": "2.2.3",
+      "lightgbm": "4.6.0",
+      "rapidfuzz": "3.14.3",
+      "Unidecode": "1.4.0",
+      "scikit-learn": "1.8.0"
+    }
+  },
+  "metrics": {
+    "metric_source": "local development holdouts; detailed measurements in variants",
+    "official_score": null
+  },
+  "cost": {
+    "timing_scope": {
+      "fit_wall": "assets/index + features + fit + model writes, excludes CSV load",
+      "predict_seconds": "candidate lookup, features, prediction, diagnostics; excludes index and CSV I/O",
+      "peak_process_rss": "whole ablation process, not standalone submission inference"
+    },
+    "peak_memory_bytes": 507899904,
+    "per_variant": "variants[*].fit_wall_seconds, index_load_seconds, vessel_holdout/row_holdout.predict_seconds, artifact_bytes",
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "/workspace/vessel_matching/name_e005",
+    "/workspace/MLiP_Project/docs/NAME_IMPROVEMENT_RESULTS.md"
+  ],
+  "error_cases_file": "/workspace/vessel_matching/name_e005/<variant>/<holdout>_errors.json",
+  "observations": [
+    "Feature-only candidate hashes match baseline on both holdouts; training-pair hashes match across retrained feature-only variants.",
+    "All four variants passed row independence probes."
+  ],
+  "interpretations": [],
+  "limitations": [
+    "Two development splits are overlapping, not independent folds or untouched test",
+    "Names and earlier whole-data EDA have already been inspected",
+    "Search variant changes candidate budget and training negatives as well as retrieval view; not an isolated classifier effect.",
+    "Absolute speed depends on local scheduling; neither official server score nor official latency."
+  ],
+  "failure": null,
+  "decision": "search selected by the pre-recorded two-split criterion; see reports/name_improvement.json. all alone not selected because E005 vessel score regressed.",
+  "next_actions": [],
+  "variants": {
+    "baseline": {
+      "name_mode": "baseline",
+      "phonetic_search": 0,
+      "features": [
+        "exact",
+        "ratio",
+        "partial",
+        "roman_ratio",
+        "phonetic_ratio",
+        "phonetic_partial",
+        "length_ratio",
+        "digits_equal",
+        "digits_missing",
+        "gross_gap",
+        "international_gap",
+        "best_gap",
+        "gross_exact",
+        "international_exact",
+        "gross_missing",
+        "international_missing",
+        "catalog_gross_missing",
+        "type_probability",
+        "flag_probability",
+        "flag_missing",
+        "is_hangul",
+        "name_length",
+        "catalog_name_length"
+      ],
+      "fit": {
+        "training_rows": 7842,
+        "unique_feature_rows": 4689,
+        "training_pair_sha256": "99ad89c6c7d8e0b491ed63382d30a4958a82eba855f9cfe05b0b761605eefda9",
+        "training_pairs": 233770,
+        "training_candidate_recall": 0.99914693964598,
+        "fit_seconds": 32.76475221800138,
+        "feature_importance_gain": {
+          "exact": 0.0,
+          "ratio": 12303.463079705834,
+          "partial": 960.9025478214025,
+          "roman_ratio": 183433.7680631131,
+          "phonetic_ratio": 127629.56472595036,
+          "phonetic_partial": 6867.494588032365,
+          "length_ratio": 7974.99361692369,
+          "digits_equal": 2576.695774435997,
+          "digits_missing": 1088.920337319374,
+          "gross_gap": 6217.7844474464655,
+          "international_gap": 104166.14774142206,
+          "best_gap": 10561.732257694006,
+          "gross_exact": 2.1217200756073,
+          "international_exact": 6418.783163011074,
+          "gross_missing": 1911.365749925375,
+          "international_missing": 123.35227274894714,
+          "catalog_gross_missing": 0.0,
+          "type_probability": 20706.863551318645,
+          "flag_probability": 15853.069158315659,
+          "flag_missing": 552.2568536698818,
+          "is_hangul": 8698.654138416052,
+          "name_length": 2445.9125942736864,
+          "catalog_name_length": 3118.443352729082
+        }
+      },
+      "fit_wall_seconds": 34.80718014499871,
+      "index_load_seconds": 1.9212324190011714,
+      "vessel_holdout": {
+        "rows": 2419,
+        "predict_seconds": 15.988233137999487,
+        "seen_vessel_fraction": 0.0,
+        "candidate_sha256": "10f11df47893fba28fab2460aae9e038cfc56ab72f48f8522f5fe781568a4210",
+        "candidate_count_nonlookup": {
+          "mean": 62.995452666391074,
+          "p95": 238.0,
+          "max": 361
+        },
+        "errors": 13,
+        "error_stages": {
+          "lookup": 0,
+          "retrieval": 2,
+          "selection": 11
+        },
+        "hangul": {
+          "rows": 208,
+          "unique_vessels": 69,
+          "accuracy": 0.9567307692307693,
+          "candidate_recall": 0.9951923076923077
+        },
+        "non_hangul": {
+          "rows": 2211,
+          "unique_vessels": 1102,
+          "accuracy": 0.9981908638625057,
+          "candidate_recall": 0.9995477159656264
+        },
+        "seen": {
+          "rows": 0,
+          "unique_vessels": 0,
+          "accuracy": null,
+          "candidate_recall": null
+        },
+        "unseen": {
+          "rows": 2419,
+          "unique_vessels": 1171,
+          "accuracy": 0.9946258784621744,
+          "candidate_recall": 0.9991732120711038
+        },
+        "weighted_accuracy": 0.9691687976202901
+      },
+      "row_holdout": {
+        "rows": 1961,
+        "predict_seconds": 3.379275477000192,
+        "seen_vessel_fraction": 0.7144314125446201,
+        "candidate_sha256": "7b8f026c795c5e6994bf7fd0b93f75b9f02e71484f13e2d0512afd67ff538712",
+        "candidate_count_nonlookup": {
+          "mean": 49.642857142857146,
+          "p95": 48.0,
+          "max": 254
+        },
+        "errors": 1,
+        "error_stages": {
+          "lookup": 0,
+          "retrieval": 0,
+          "selection": 1
+        },
+        "hangul": {
+          "rows": 197,
+          "unique_vessels": 147,
+          "accuracy": 1.0,
+          "candidate_recall": 1.0
+        },
+        "non_hangul": {
+          "rows": 1764,
+          "unique_vessels": 1478,
+          "accuracy": 0.9994331065759637,
+          "candidate_recall": 1.0
+        },
+        "seen": {
+          "rows": 1401,
+          "unique_vessels": 1085,
+          "accuracy": 1.0,
+          "candidate_recall": 1.0
+        },
+        "unseen": {
+          "rows": 560,
+          "unique_vessels": 540,
+          "accuracy": 0.9982142857142857,
+          "candidate_recall": 1.0
+        },
+        "weighted_accuracy": 0.999829931972789
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 24,
+        "checks": [
+          "full",
+          "permutation",
+          "single",
+          "subset"
+        ]
+      },
+      "artifact_bytes": {
+        "ranker.txt": 1234404,
+        "assets.json": 330526
+      },
+      "artifact_sha256": {
+        "ranker.txt": "ffec35f4e68568fedf388599cc620b8870edc0ecb99c0378f7c1f556e728b44b",
+        "assets.json": "b9b05c39037ce19322b8549632be32f897f0eae445e34221a55a8d902e360450"
+      }
+    },
+    "structure": {
+      "name_mode": "structure",
+      "phonetic_search": 0,
+      "features": [
+        "exact",
+        "ratio",
+        "partial",
+        "roman_ratio",
+        "phonetic_ratio",
+        "phonetic_partial",
+        "length_ratio",
+        "digits_equal",
+        "digits_missing",
+        "gross_gap",
+        "international_gap",
+        "best_gap",
+        "gross_exact",
+        "international_exact",
+        "gross_missing",
+        "international_missing",
+        "catalog_gross_missing",
+        "type_probability",
+        "flag_probability",
+        "flag_missing",
+        "is_hangul",
+        "name_length",
+        "catalog_name_length",
+        "number_sequence_equal",
+        "number_conflict",
+        "catalog_number_missing",
+        "number_count_gap",
+        "token_count_gap",
+        "token_roman_idf",
+        "token_roman_min",
+        "token_roman_last"
+      ],
+      "fit": {
+        "training_rows": 7842,
+        "unique_feature_rows": 4689,
+        "training_pair_sha256": "99ad89c6c7d8e0b491ed63382d30a4958a82eba855f9cfe05b0b761605eefda9",
+        "training_pairs": 233770,
+        "training_candidate_recall": 0.99914693964598,
+        "fit_seconds": 38.41887471500013,
+        "feature_importance_gain": {
+          "exact": 0.0,
+          "ratio": 22728.933942243457,
+          "partial": 638.0413870513439,
+          "roman_ratio": 91494.33784894645,
+          "phonetic_ratio": 47895.532160535455,
+          "phonetic_partial": 14609.346511751413,
+          "length_ratio": 5213.565853357315,
+          "digits_equal": 1415.274697870016,
+          "digits_missing": 56.56951154768467,
+          "gross_gap": 9656.029553830624,
+          "international_gap": 90088.49210634828,
+          "best_gap": 12408.256013199687,
+          "gross_exact": 10.51333075761795,
+          "international_exact": 1333.2831811755896,
+          "gross_missing": 1060.0214398503304,
+          "international_missing": 247.5680557191372,
+          "catalog_gross_missing": 0.0,
+          "type_probability": 26322.134321197867,
+          "flag_probability": 11262.157074987888,
+          "flag_missing": 381.4162107408047,
+          "is_hangul": 1928.0377547293901,
+          "name_length": 3267.255063459277,
+          "catalog_name_length": 1982.1754153221846,
+          "number_sequence_equal": 2467.1697504222393,
+          "number_conflict": 0.0,
+          "catalog_number_missing": 45.07170104980469,
+          "number_count_gap": 0.0,
+          "token_count_gap": 730.7457140684128,
+          "token_roman_idf": 139813.70243373513,
+          "token_roman_min": 26215.00884413719,
+          "token_roman_last": 11321.398852601647
+        }
+      },
+      "fit_wall_seconds": 41.49828670200077,
+      "index_load_seconds": 3.389041383001313,
+      "vessel_holdout": {
+        "rows": 2419,
+        "predict_seconds": 20.786994750000304,
+        "seen_vessel_fraction": 0.0,
+        "candidate_sha256": "10f11df47893fba28fab2460aae9e038cfc56ab72f48f8522f5fe781568a4210",
+        "candidate_count_nonlookup": {
+          "mean": 62.995452666391074,
+          "p95": 238.0,
+          "max": 361
+        },
+        "errors": 12,
+        "error_stages": {
+          "lookup": 0,
+          "retrieval": 2,
+          "selection": 10
+        },
+        "hangul": {
+          "rows": 208,
+          "unique_vessels": 69,
+          "accuracy": 0.9567307692307693,
+          "candidate_recall": 0.9951923076923077
+        },
+        "non_hangul": {
+          "rows": 2211,
+          "unique_vessels": 1102,
+          "accuracy": 0.9986431478968792,
+          "candidate_recall": 0.9995477159656264
+        },
+        "seen": {
+          "rows": 0,
+          "unique_vessels": 0,
+          "accuracy": null,
+          "candidate_recall": null
+        },
+        "unseen": {
+          "rows": 2419,
+          "unique_vessels": 1171,
+          "accuracy": 0.9950392724266226,
+          "candidate_recall": 0.9991732120711038
+        },
+        "weighted_accuracy": 0.9693044828306021
+      },
+      "row_holdout": {
+        "rows": 1961,
+        "predict_seconds": 4.231581562999054,
+        "seen_vessel_fraction": 0.7144314125446201,
+        "candidate_sha256": "7b8f026c795c5e6994bf7fd0b93f75b9f02e71484f13e2d0512afd67ff538712",
+        "candidate_count_nonlookup": {
+          "mean": 49.642857142857146,
+          "p95": 48.0,
+          "max": 254
+        },
+        "errors": 2,
+        "error_stages": {
+          "lookup": 0,
+          "retrieval": 0,
+          "selection": 2
+        },
+        "hangul": {
+          "rows": 197,
+          "unique_vessels": 147,
+          "accuracy": 0.9949238578680203,
+          "candidate_recall": 1.0
+        },
+        "non_hangul": {
+          "rows": 1764,
+          "unique_vessels": 1478,
+          "accuracy": 0.9994331065759637,
+          "candidate_recall": 1.0
+        },
+        "seen": {
+          "rows": 1401,
+          "unique_vessels": 1085,
+          "accuracy": 1.0,
+          "candidate_recall": 1.0
+        },
+        "unseen": {
+          "rows": 560,
+          "unique_vessels": 540,
+          "accuracy": 0.9964285714285714,
+          "candidate_recall": 1.0
+        },
+        "weighted_accuracy": 0.9962766324804033
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 24,
+        "checks": [
+          "full",
+          "permutation",
+          "single",
+          "subset"
+        ]
+      },
+      "artifact_bytes": {
+        "ranker.txt": 1237237,
+        "assets.json": 330694
+      },
+      "artifact_sha256": {
+        "ranker.txt": "a5ad9dc8b9f1c19768da187b3cd5d05281c1345b31424a2a41077f5c0a01f62c",
+        "assets.json": "ff1819458482930c72b792826c013d81cfa8b2e09b5aa3fce4a0b8b4f9bab8ba"
+      }
+    },
+    "all": {
+      "name_mode": "all",
+      "phonetic_search": 0,
+      "features": [
+        "exact",
+        "ratio",
+        "partial",
+        "roman_ratio",
+        "phonetic_ratio",
+        "phonetic_partial",
+        "length_ratio",
+        "digits_equal",
+        "digits_missing",
+        "gross_gap",
+        "international_gap",
+        "best_gap",
+        "gross_exact",
+        "international_exact",
+        "gross_missing",
+        "international_missing",
+        "catalog_gross_missing",
+        "type_probability",
+        "flag_probability",
+        "flag_missing",
+        "is_hangul",
+        "name_length",
+        "catalog_name_length",
+        "number_sequence_equal",
+        "number_conflict",
+        "catalog_number_missing",
+        "number_count_gap",
+        "token_count_gap",
+        "token_roman_idf",
+        "token_roman_min",
+        "token_roman_last",
+        "weighted_phone_full",
+        "weighted_phone_token_idf",
+        "weighted_phone_token_min",
+        "weighted_phone_last",
+        "weighted_phone_residual",
+        "phone_shared_edge"
+      ],
+      "fit": {
+        "training_rows": 7842,
+        "unique_feature_rows": 4689,
+        "training_pair_sha256": "99ad89c6c7d8e0b491ed63382d30a4958a82eba855f9cfe05b0b761605eefda9",
+        "training_pairs": 233770,
+        "training_candidate_recall": 0.99914693964598,
+        "fit_seconds": 63.86272155500046,
+        "feature_importance_gain": {
+          "exact": 0.368552602827549,
+          "ratio": 6783.099565133452,
+          "partial": 451.5653755068779,
+          "roman_ratio": 4064.6657112538815,
+          "phonetic_ratio": 16213.325852960348,
+          "phonetic_partial": 1679.2112714126706,
+          "length_ratio": 3498.1392888128757,
+          "digits_equal": 669.4976122528315,
+          "digits_missing": 17.951249599456787,
+          "gross_gap": 5460.536699324846,
+          "international_gap": 65036.483671963215,
+          "best_gap": 52117.51448184997,
+          "gross_exact": 1.9086859822273254,
+          "international_exact": 1008.6314005553722,
+          "gross_missing": 395.34305642545223,
+          "international_missing": 35.905590154230595,
+          "catalog_gross_missing": 0.0,
+          "type_probability": 15019.255509607494,
+          "flag_probability": 4576.210976824164,
+          "flag_missing": 57.00333672761917,
+          "is_hangul": 15435.47626632452,
+          "name_length": 1262.8829925954342,
+          "catalog_name_length": 766.4692159667611,
+          "number_sequence_equal": 1181.1555667594075,
+          "number_conflict": 112.11307218670845,
+          "catalog_number_missing": 2.040469989180565,
+          "number_count_gap": 0.0,
+          "token_count_gap": 270.16703908890486,
+          "token_roman_idf": 107639.20610207319,
+          "token_roman_min": 8249.625591278076,
+          "token_roman_last": 2137.337097145617,
+          "weighted_phone_full": 125963.17815250531,
+          "weighted_phone_token_idf": 5456.278883822262,
+          "weighted_phone_token_min": 5099.491925500333,
+          "weighted_phone_last": 7788.109204784036,
+          "weighted_phone_residual": 66005.55681140721,
+          "phone_shared_edge": 1187.63148252666
+        }
+      },
+      "fit_wall_seconds": 67.36180622299798,
+      "index_load_seconds": 3.16337608199683,
+      "vessel_holdout": {
+        "rows": 2419,
+        "predict_seconds": 36.149355384000955,
+        "seen_vessel_fraction": 0.0,
+        "candidate_sha256": "10f11df47893fba28fab2460aae9e038cfc56ab72f48f8522f5fe781568a4210",
+        "candidate_count_nonlookup": {
+          "mean": 62.995452666391074,
+          "p95": 238.0,
+          "max": 361
+        },
+        "errors": 14,
+        "error_stages": {
+          "lookup": 0,
+          "retrieval": 2,
+          "selection": 12
+        },
+        "hangul": {
+          "rows": 208,
+          "unique_vessels": 69,
+          "accuracy": 0.9519230769230769,
+          "candidate_recall": 0.9951923076923077
+        },
+        "non_hangul": {
+          "rows": 2211,
+          "unique_vessels": 1102,
+          "accuracy": 0.9981908638625057,
+          "candidate_recall": 0.9995477159656264
+        },
+        "seen": {
+          "rows": 0,
+          "unique_vessels": 0,
+          "accuracy": null,
+          "candidate_recall": null
+        },
+        "unseen": {
+          "rows": 2419,
+          "unique_vessels": 1171,
+          "accuracy": 0.9942124844977264,
+          "candidate_recall": 0.9991732120711038
+        },
+        "weighted_accuracy": 0.9658034130049056
+      },
+      "row_holdout": {
+        "rows": 1961,
+        "predict_seconds": 6.737366311997903,
+        "seen_vessel_fraction": 0.7144314125446201,
+        "candidate_sha256": "7b8f026c795c5e6994bf7fd0b93f75b9f02e71484f13e2d0512afd67ff538712",
+        "candidate_count_nonlookup": {
+          "mean": 49.642857142857146,
+          "p95": 48.0,
+          "max": 254
+        },
+        "errors": 2,
+        "error_stages": {
+          "lookup": 0,
+          "retrieval": 0,
+          "selection": 2
+        },
+        "hangul": {
+          "rows": 197,
+          "unique_vessels": 147,
+          "accuracy": 0.9949238578680203,
+          "candidate_recall": 1.0
+        },
+        "non_hangul": {
+          "rows": 1764,
+          "unique_vessels": 1478,
+          "accuracy": 0.9994331065759637,
+          "candidate_recall": 1.0
+        },
+        "seen": {
+          "rows": 1401,
+          "unique_vessels": 1085,
+          "accuracy": 1.0,
+          "candidate_recall": 1.0
+        },
+        "unseen": {
+          "rows": 560,
+          "unique_vessels": 540,
+          "accuracy": 0.9964285714285714,
+          "candidate_recall": 1.0
+        },
+        "weighted_accuracy": 0.9962766324804033
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 24,
+        "checks": [
+          "full",
+          "permutation",
+          "single",
+          "subset"
+        ]
+      },
+      "artifact_bytes": {
+        "ranker.txt": 1238916,
+        "assets.json": 330838
+      },
+      "artifact_sha256": {
+        "ranker.txt": "dc1a0704b5e65d8b70997f66ee8a0496c9efd5f2b9322bc31eaaf23f3e36c6ba",
+        "assets.json": "67e5edbbee8f6f3396f1db86d148780ee0316b2d9393a92570d8c2a03e332c1b"
+      }
+    },
+    "search": {
+      "name_mode": "all",
+      "phonetic_search": 24,
+      "features": [
+        "exact",
+        "ratio",
+        "partial",
+        "roman_ratio",
+        "phonetic_ratio",
+        "phonetic_partial",
+        "length_ratio",
+        "digits_equal",
+        "digits_missing",
+        "gross_gap",
+        "international_gap",
+        "best_gap",
+        "gross_exact",
+        "international_exact",
+        "gross_missing",
+        "international_missing",
+        "catalog_gross_missing",
+        "type_probability",
+        "flag_probability",
+        "flag_missing",
+        "is_hangul",
+        "name_length",
+        "catalog_name_length",
+        "number_sequence_equal",
+        "number_conflict",
+        "catalog_number_missing",
+        "number_count_gap",
+        "token_count_gap",
+        "token_roman_idf",
+        "token_roman_min",
+        "token_roman_last",
+        "weighted_phone_full",
+        "weighted_phone_token_idf",
+        "weighted_phone_token_min",
+        "weighted_phone_last",
+        "weighted_phone_residual",
+        "phone_shared_edge"
+      ],
+      "fit": {
+        "training_rows": 7842,
+        "unique_feature_rows": 4689,
+        "training_pair_sha256": "46a5f394e8888e23501e7333913c5d353c7c6d02d17d7069916a0cf1886532ea",
+        "training_pairs": 314364,
+        "training_candidate_recall": 0.99914693964598,
+        "fit_seconds": 98.55465512500086,
+        "feature_importance_gain": {
+          "exact": 0.0,
+          "ratio": 14937.554315626621,
+          "partial": 179.9458692446351,
+          "roman_ratio": 3971.092851921916,
+          "phonetic_ratio": 12943.853944577277,
+          "phonetic_partial": 2109.197831220925,
+          "length_ratio": 3922.9026508033276,
+          "digits_equal": 1807.7617181241512,
+          "digits_missing": 234.04179334640503,
+          "gross_gap": 5480.528048433363,
+          "international_gap": 84933.23284462094,
+          "best_gap": 3093.285002231598,
+          "gross_exact": 7.27597975730896,
+          "international_exact": 841.0672124624252,
+          "gross_missing": 422.2760388478637,
+          "international_missing": 72.13201987743378,
+          "catalog_gross_missing": 0.0,
+          "type_probability": 16145.717715606093,
+          "flag_probability": 5621.793253980577,
+          "flag_missing": 52.69864881038666,
+          "is_hangul": 1711.9954787939787,
+          "name_length": 1206.3632792383432,
+          "catalog_name_length": 1114.531868584454,
+          "number_sequence_equal": 1040.5720640718937,
+          "number_conflict": 126.78715974092484,
+          "catalog_number_missing": 0.0,
+          "number_count_gap": 0.0,
+          "token_count_gap": 227.6922288760543,
+          "token_roman_idf": 114421.02262408286,
+          "token_roman_min": 9159.813844643533,
+          "token_roman_last": 2539.0388007834554,
+          "weighted_phone_full": 98085.62829713523,
+          "weighted_phone_token_idf": 15987.495701663196,
+          "weighted_phone_token_min": 8537.812638632953,
+          "weighted_phone_last": 9764.310236297548,
+          "weighted_phone_residual": 113833.04207014292,
+          "phone_shared_edge": 511.51993829756975
+        }
+      },
+      "fit_wall_seconds": 101.68282549200012,
+      "index_load_seconds": 2.8506595190010557,
+      "vessel_holdout": {
+        "rows": 2419,
+        "predict_seconds": 51.1812321819998,
+        "seen_vessel_fraction": 0.0,
+        "candidate_sha256": "f073d7a2b1f2f1e47072c76fe63a7b6f9f7dbff91548ef13a1012a641196e385",
+        "candidate_count_nonlookup": {
+          "mean": 81.57379082265399,
+          "p95": 254.0,
+          "max": 378
+        },
+        "errors": 11,
+        "error_stages": {
+          "lookup": 0,
+          "retrieval": 1,
+          "selection": 10
+        },
+        "hangul": {
+          "rows": 208,
+          "unique_vessels": 69,
+          "accuracy": 0.9663461538461539,
+          "candidate_recall": 1.0
+        },
+        "non_hangul": {
+          "rows": 2211,
+          "unique_vessels": 1102,
+          "accuracy": 0.9981908638625057,
+          "candidate_recall": 0.9995477159656264
+        },
+        "seen": {
+          "rows": 0,
+          "unique_vessels": 0,
+          "accuracy": null,
+          "candidate_recall": null
+        },
+        "unseen": {
+          "rows": 2419,
+          "unique_vessels": 1171,
+          "accuracy": 0.9954526663910707,
+          "candidate_recall": 0.9995866060355518
+        },
+        "weighted_accuracy": 0.9758995668510593
+      },
+      "row_holdout": {
+        "rows": 1961,
+        "predict_seconds": 10.676100964999932,
+        "seen_vessel_fraction": 0.7144314125446201,
+        "candidate_sha256": "c8595e1e9489445ae0acdedd5e7f8cb239504759d64d39a4cc19c813a405945e",
+        "candidate_count_nonlookup": {
+          "mean": 68.30535714285715,
+          "p95": 71.0,
+          "max": 271
+        },
+        "errors": 1,
+        "error_stages": {
+          "lookup": 0,
+          "retrieval": 0,
+          "selection": 1
+        },
+        "hangul": {
+          "rows": 197,
+          "unique_vessels": 147,
+          "accuracy": 1.0,
+          "candidate_recall": 1.0
+        },
+        "non_hangul": {
+          "rows": 1764,
+          "unique_vessels": 1478,
+          "accuracy": 0.9994331065759637,
+          "candidate_recall": 1.0
+        },
+        "seen": {
+          "rows": 1401,
+          "unique_vessels": 1085,
+          "accuracy": 1.0,
+          "candidate_recall": 1.0
+        },
+        "unseen": {
+          "rows": 560,
+          "unique_vessels": 540,
+          "accuracy": 0.9982142857142857,
+          "candidate_recall": 1.0
+        },
+        "weighted_accuracy": 0.999829931972789
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 24,
+        "checks": [
+          "full",
+          "permutation",
+          "single",
+          "subset"
+        ]
+      },
+      "artifact_bytes": {
+        "ranker.txt": 1240723,
+        "assets.json": 330839
+      },
+      "artifact_sha256": {
+        "ranker.txt": "2c4eb8ec97d47f293dfa61e13ffd6768198f969af8929b0eed66fa72f3796147",
+        "assets.json": "e8508093c7ee009685cfa679e4055b4f4ad325b8a1acbfead66dbc7d4da8c019"
+      }
+    }
+  },
+  "peak_process_rss_bytes": 507899904,
+  "timing_scope": {
+    "fit_wall": "assets/index + features + fit + model writes, excludes CSV load",
+    "predict_seconds": "candidate lookup, features, prediction, diagnostics; excludes index and CSV I/O",
+    "peak_process_rss": "whole ablation process, not standalone submission inference"
+  },
+  "setup_issues": [],
+  "record_enriched_at_kst": "2026-10-18T23:21:19.866492+09:00"
+}

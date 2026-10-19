@@ -1,0 +1,22 @@
+{
+  "recorded_at_kst": "2026-10-19T09:36:33.474705+09:00",
+  "source": {
+    "file_name": "TEAM_RULES.md",
+    "version": "v3",
+    "sha256": "bd99bcff598b6bbd65dcdeafce63282589b8dc1dcb070146f2b706d979bb7086"
+  },
+  "revision": "v4",
+  "authorization": "User requested all reviewed edits",
+  "files": {
+    "TEAM_RULES.md": "115185bd5832d0af760c367dbdba95d925dbcd5df75eb0a1d6901b35675ce61c",
+    "docs/DATA_FINDINGS.md": "76bdadad03acfb4ff694bbd9b0c6d8a2243ca96171c9eead1cbfca0f60379f2c",
+    "docs/TEAM_RULES_CHANGES.md": "445629f3fde763badf1ba4a6fd5bf79e50b9bdad57b1d2b48aaafbc22b1adab1"
+  },
+  "checks": [
+    "all relative links exist",
+    "12 numbered sections retained",
+    "reviewed obsolete instructions removed",
+    "ZIP-on-request and qualified AI upload restriction retained"
+  ],
+  "scope": "Documentation only; no code/model/data/ZIP changes or team messages"
+}

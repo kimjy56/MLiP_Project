@@ -1,0 +1,140 @@
+{
+  "recorded_on_kst": "2026-10-18",
+  "record_type": "backfilled_from_existing_artifacts",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "git_revision_at_run": null,
+  "git_revision_at_recording": "b5e9b1e16928d2a76d4e83e8abdd0618d4daa0bb",
+  "note": "Original run timestamps and Git revision were not recorded; recording date is not the execution date.",
+  "experiment_id": "E002",
+  "status": "completed_local_checks",
+  "kind": "full_data_fit_and_packaging",
+  "purpose": "Refit final assets on all official training records and verify a submission archive.",
+  "model": {
+    "type": "LGBMClassifier",
+    "objective": "binary",
+    "parameters": {
+      "n_estimators": 350,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "max_depth": -1,
+      "min_child_samples": 40,
+      "colsample_bytree": 0.9,
+      "reg_lambda": 2,
+      "random_state": 20261016,
+      "n_jobs": 4,
+      "deterministic": true,
+      "force_col_wise": true
+    }
+  },
+  "training": {
+    "training_rows": 12222,
+    "unique_feature_rows": 6683,
+    "training_pairs": 330132,
+    "training_candidate_recall": 0.9989525662127787,
+    "fit_seconds": 55.188017083999966,
+    "feature_importance_gain": {
+      "exact": 0.0,
+      "ratio": 16134.250381886959,
+      "partial": 1801.1773901879787,
+      "roman_ratio": 267523.53818041086,
+      "phonetic_ratio": 181125.88702479005,
+      "phonetic_partial": 8987.519417643547,
+      "length_ratio": 12302.624230891466,
+      "digits_equal": 3841.2428254187107,
+      "digits_missing": 1500.8307391107082,
+      "gross_gap": 8507.593071609735,
+      "international_gap": 146690.7414843142,
+      "best_gap": 15540.359732836485,
+      "gross_exact": 51.39949929714203,
+      "international_exact": 8898.417231857777,
+      "gross_missing": 2760.81190726161,
+      "international_missing": 127.55856496095657,
+      "catalog_gross_missing": 0.0,
+      "type_probability": 28761.71927419305,
+      "flag_probability": 20158.2911452353,
+      "flag_missing": 1079.950036227703,
+      "is_hangul": 12378.133785009384,
+      "name_length": 5035.773360580206,
+      "catalog_name_length": 4071.503464460373
+    }
+  },
+  "cost": {
+    "model_bytes": 1233450,
+    "assets_bytes": 462593,
+    "submission_zip_bytes": 657921,
+    "uncompressed_bytes": 1707986,
+    "peak_memory_bytes": null,
+    "official_runtime_seconds": null,
+    "full_test_end_to_end_seconds": null
+  },
+  "timing_scope": "fit_seconds starts after initial asset/index construction; clean archive timings in checks include process startup and 60/15/1/0 public probes, not full hidden evaluation.",
+  "commands": [
+    "python train.py --final-only",
+    "python verify_submission.py"
+  ],
+  "checks": {
+    "passed": true,
+    "files": [
+      "script.py",
+      "requirements.txt",
+      "model/matcher.py",
+      "model/ranker.txt",
+      "model/assets.json"
+    ],
+    "zip_bytes": 657921,
+    "uncompressed_bytes": 1707986,
+    "sha256": "fee02079a32221c8a6c0f43462a3e61e02b577193a2423e0562e4873f5828319",
+    "checks": [
+      "clean extraction",
+      "offline entry point",
+      "read-only inputs",
+      "output schema",
+      "catalog membership",
+      "input order preserved",
+      "full/shuffled/subset/single/empty consistency"
+    ],
+    "runs": [
+      {
+        "mode": "full",
+        "rows": 60,
+        "seconds": 4.544192113999998
+      },
+      {
+        "mode": "shuffled",
+        "rows": 60,
+        "seconds": 4.075592023000013
+      },
+      {
+        "mode": "subset",
+        "rows": 15,
+        "seconds": 3.9878471179999906
+      },
+      {
+        "mode": "single",
+        "rows": 1,
+        "seconds": 3.775690902000065
+      },
+      {
+        "mode": "empty",
+        "rows": 0,
+        "seconds": 3.706612696000093
+      }
+    ],
+    "limitation": "Local Python 3.12 environment; not the official evaluation server."
+  },
+  "artifact_original_location": "/workspace/vessel_matching/submit.zip",
+  "artifact_sha256": "fee02079a32221c8a6c0f43462a3e61e02b577193a2423e0562e4873f5828319",
+  "official_submission_status": "not_verified",
+  "official_public_score": null,
+  "official_private_score": null,
+  "evidence_files": [
+    "reports/final_training.json",
+    "reports/submission_checks.json"
+  ],
+  "limitations": [
+    "No official server evaluation confirmed",
+    "Local Python 3.12 versus server Python 3.11",
+    "Full-data training has no new held-out score"
+  ]
+}

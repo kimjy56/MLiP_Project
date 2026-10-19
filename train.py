@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import sys
@@ -17,9 +18,15 @@ sys.path.insert(0, str(ROOT / 'model'))
 from matcher import CatalogIndex, FEATURES, Matcher, hangul, make_assets
 
 
-def fit(train, catalog, destination):
+MODEL_PARAMETERS = dict(n_estimators=350, learning_rate=.05, num_leaves=31,
+                        max_depth=-1, min_child_samples=40, colsample_bytree=.9,
+                        reg_lambda=2, random_state=20261016, n_jobs=4,
+                        verbosity=-1, deterministic=True, force_col_wise=True)
+
+
+def fit(train, catalog, destination, name_mode='baseline', phonetic_search=0, retrieval_channels=None):
     destination.mkdir(parents=True, exist_ok=True)
-    assets = make_assets(train, catalog)
+    assets = make_assets(train, catalog, name_mode, phonetic_search, retrieval_channels)
     index = CatalogIndex(catalog, assets)
     # Calls and aliases are used only at inference; the pair model must learn
     # catalog similarity without seeing its own label as an alias feature.
@@ -29,6 +36,7 @@ def fit(train, catalog, destination):
     kh = unique.vessel_name.map(hangul).mean()
     matrices, labels, weights = [], [], []
     retrieved = []
+    pair_hash = hashlib.sha256()
     start = time.monotonic()
     for n, row in enumerate(unique.to_dict('records')):
         truth = index.lookup[row['target_vessel_id']]
@@ -36,7 +44,7 @@ def fit(train, catalog, destination):
         retrieved.append(truth in candidates)
         if truth not in candidates:
             candidates = sorted(candidates + [truth])
-        features = index.features(row, candidates)
+        features = index.features(row, candidates, include_name_features=False)
         # Preserve the most plausible negatives from both name and tonnage.
         if len(candidates) > 100:
             hardness = np.maximum(features[:, 1], features[:, 4]) - features[:, 11]*0.5
@@ -46,6 +54,11 @@ def fit(train, catalog, destination):
             selected = sorted(selected)
             features = features[selected]
             candidates = [candidates[i] for i in selected]
+        pair_hash.update(json.dumps([row['sample_id'], [index.ids[i] for i in candidates]],
+                                   ensure_ascii=False).encode('utf-8'))
+        if name_mode != 'baseline':
+            features = np.column_stack([features, index.name_index.features(
+                row.get('vessel_name'), candidates, name_mode)])
         matrices.append(features)
         labels.extend(int(i == truth) for i in candidates)
         weight = .7/max(kh, 1e-9) if hangul(row['vessel_name']) else .3/max(1-kh, 1e-9)
@@ -53,18 +66,15 @@ def fit(train, catalog, destination):
         if (n+1) % 500 == 0:
             print(f'Feature rows {n+1}/{len(unique)}; seconds={time.monotonic()-start:.1f}', flush=True)
     x = np.concatenate(matrices)
-    model = lgb.LGBMClassifier(n_estimators=350, learning_rate=.05,
-                              num_leaves=31, max_depth=-1, min_child_samples=40,
-                              colsample_bytree=.9, reg_lambda=2,
-                              random_state=20261016, n_jobs=4, verbosity=-1,
-                              deterministic=True, force_col_wise=True)
-    model.fit(x, np.asarray(labels), sample_weight=np.asarray(weights), feature_name=FEATURES)
+    model = lgb.LGBMClassifier(**MODEL_PARAMETERS)
+    model.fit(x, np.asarray(labels), sample_weight=np.asarray(weights), feature_name=index.feature_names)
     model.booster_.save_model(str(destination / 'ranker.txt'))
     (destination / 'assets.json').write_text(json.dumps(assets, ensure_ascii=False), encoding='utf-8')
     return {'training_rows': len(train), 'unique_feature_rows': len(unique),
+            'training_pair_sha256': pair_hash.hexdigest(),
             'training_pairs': len(labels), 'training_candidate_recall': float(np.mean(retrieved)),
             'fit_seconds': time.monotonic()-start,
-            'feature_importance_gain': dict(zip(FEATURES, model.booster_.feature_importance('gain').tolist()))}
+            'feature_importance_gain': dict(zip(index.feature_names, model.booster_.feature_importance('gain').tolist()))}
 
 
 def evaluate(matcher, validation, training_ids):
@@ -88,11 +98,16 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--final-only', action='store_true')
     parser.add_argument('--validate-only', action='store_true')
+    parser.add_argument('--name-mode', choices=['baseline', 'structure', 'all'], default='baseline')
+    parser.add_argument('--phonetic-search', type=int, default=0)
+    parser.add_argument('--retrieval-channels', nargs='*', choices=['S','N','P','T'], default=None)
+    parser.add_argument('--data-dir', type=Path, default=ROOT / 'data')
+    parser.add_argument('--output-root', type=Path, default=ROOT)
     args = parser.parse_args()
-    train = pd.read_csv(ROOT / 'data/train.csv')
-    catalog = pd.read_csv(ROOT / 'data/vessel_catalog.csv')
-    reports = ROOT / 'reports'
-    reports.mkdir(exist_ok=True)
+    train = pd.read_csv(args.data_dir / 'train.csv')
+    catalog = pd.read_csv(args.data_dir / 'vessel_catalog.csv')
+    reports = args.output_root / 'reports'
+    reports.mkdir(parents=True, exist_ok=True)
     if not args.final_only:
         a, b = next(GroupShuffleSplit(n_splits=1, test_size=.2, random_state=20261016).split(
             train, groups=train.target_vessel_id))
@@ -100,8 +115,8 @@ def main():
         fitted, mixed = train_test_split(pool, test_size=.2, random_state=20261016,
                                         stratify=pool.vessel_name.map(hangul))
         assert not set(fitted.target_vessel_id) & set(unseen.target_vessel_id)
-        dest = ROOT / 'validation_model'
-        results = {'seed': 20261016, 'fit': fit(fitted, catalog, dest)}
+        dest = args.output_root / 'validation_model'
+        results = {'seed': 20261016, 'fit': fit(fitted, catalog, dest, args.name_mode, args.phonetic_search, args.retrieval_channels)}
         matcher = Matcher(catalog, dest)
         for label, data in [('vessel_holdout', unseen), ('row_holdout', mixed)]:
             result, pred = evaluate(matcher, data, set(fitted.target_vessel_id))
@@ -127,7 +142,7 @@ def main():
                                         np.where(train.index.isin(unseen.index), 'vessel_holdout', 'row_holdout'))
                       }).to_csv(reports / 'split.csv', index=False)
     if not args.validate_only:
-        result = fit(train, catalog, ROOT / 'model')
+        result = fit(train, catalog, args.output_root / 'model', args.name_mode, args.phonetic_search, args.retrieval_channels)
         (reports / 'final_training.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
         print('Final training complete', flush=True)
 

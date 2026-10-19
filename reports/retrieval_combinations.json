@@ -1,0 +1,162 @@
+{
+  "selected_variant": "SNPT",
+  "selected_channels": [
+    "S",
+    "N",
+    "P",
+    "T"
+  ],
+  "unrestricted_best": "SNPT",
+  "selection_rule": "Best N-enabled combination to implement requested n-gram. Mean pure vessel score, mean production mixed score, then fewer candidates; report unrestricted best separately.",
+  "summary": {
+    "NONE": {
+      "channels": [],
+      "mean_vessel_weighted_accuracy": 0.0,
+      "mean_mixed_production_weighted_accuracy": 0.853099605714992,
+      "mean_vessel_candidates": 1.0
+    },
+    "S": {
+      "channels": [
+        "S"
+      ],
+      "mean_vessel_weighted_accuracy": 0.29959195531969474,
+      "mean_mixed_production_weighted_accuracy": 0.9461910730711651,
+      "mean_vessel_candidates": 22.02886997037343
+    },
+    "N": {
+      "channels": [
+        "N"
+      ],
+      "mean_vessel_weighted_accuracy": 0.6618244806074447,
+      "mean_mixed_production_weighted_accuracy": 0.971991441051235,
+      "mean_vessel_candidates": 27.08524700289376
+    },
+    "SN": {
+      "channels": [
+        "S",
+        "N"
+      ],
+      "mean_vessel_weighted_accuracy": 0.6655652198600325,
+      "mean_mixed_production_weighted_accuracy": 0.9730955365355826,
+      "mean_vessel_candidates": 41.5404529247623
+    },
+    "P": {
+      "channels": [
+        "P"
+      ],
+      "mean_vessel_weighted_accuracy": 0.9670457565705487,
+      "mean_mixed_production_weighted_accuracy": 0.9910251537163087,
+      "mean_vessel_candidates": 33.176530160534654
+    },
+    "SP": {
+      "channels": [
+        "S",
+        "P"
+      ],
+      "mean_vessel_weighted_accuracy": 0.9673006795223213,
+      "mean_mixed_production_weighted_accuracy": 0.9923839664721803,
+      "mean_vessel_candidates": 50.42268619953148
+    },
+    "NP": {
+      "channels": [
+        "N",
+        "P"
+      ],
+      "mean_vessel_weighted_accuracy": 0.9681486893952039,
+      "mean_mixed_production_weighted_accuracy": 0.9942456502319788,
+      "mean_vessel_candidates": 56.20153618919664
+    },
+    "SNP": {
+      "channels": [
+        "S",
+        "N",
+        "P"
+      ],
+      "mean_vessel_weighted_accuracy": 0.9724226307418335,
+      "mean_mixed_production_weighted_accuracy": 0.9926386837437043,
+      "mean_vessel_candidates": 68.74358266156814
+    },
+    "T": {
+      "channels": [
+        "T"
+      ],
+      "mean_vessel_weighted_accuracy": 0.6782992756010711,
+      "mean_mixed_production_weighted_accuracy": 0.9462609018617207,
+      "mean_vessel_candidates": 31.647646151991182
+    },
+    "ST": {
+      "channels": [
+        "S",
+        "T"
+      ],
+      "mean_vessel_weighted_accuracy": 0.8283540072712989,
+      "mean_mixed_production_weighted_accuracy": 0.9926386837437043,
+      "mean_vessel_candidates": 52.819218943778424
+    },
+    "NT": {
+      "channels": [
+        "N",
+        "T"
+      ],
+      "mean_vessel_weighted_accuracy": 0.9141459657278737,
+      "mean_mixed_production_weighted_accuracy": 0.9935661476617198,
+      "mean_vessel_candidates": 57.91951340085434
+    },
+    "SNT": {
+      "channels": [
+        "S",
+        "N",
+        "T"
+      ],
+      "mean_vessel_weighted_accuracy": 0.9234220185283346,
+      "mean_mixed_production_weighted_accuracy": 0.9944153334898973,
+      "mean_vessel_candidates": 72.2597411981535
+    },
+    "PT": {
+      "channels": [
+        "P",
+        "T"
+      ],
+      "mean_vessel_weighted_accuracy": 0.9614292695037696,
+      "mean_mixed_production_weighted_accuracy": 0.9935665324310121,
+      "mean_vessel_candidates": 64.02774571103762
+    },
+    "SPT": {
+      "channels": [
+        "S",
+        "P",
+        "T"
+      ],
+      "mean_vessel_weighted_accuracy": 0.975930226783494,
+      "mean_mixed_production_weighted_accuracy": 0.997968632982283,
+      "mean_vessel_candidates": 81.110645411327
+    },
+    "NPT": {
+      "channels": [
+        "N",
+        "P",
+        "T"
+      ],
+      "mean_vessel_weighted_accuracy": 0.9769757327805655,
+      "mean_mixed_production_weighted_accuracy": 0.9960222999781716,
+      "mean_vessel_candidates": 86.88726427931653
+    },
+    "SNPT": {
+      "channels": [
+        "S",
+        "N",
+        "P",
+        "T"
+      ],
+      "mean_vessel_weighted_accuracy": 0.9811200206081622,
+      "mean_mixed_production_weighted_accuracy": 0.9961919832360902,
+      "mean_vessel_candidates": 99.35210202218548
+    }
+  },
+  "limitations": [
+    "Two overlapping development splits, not OOF or an untouched final test.",
+    "All 37 reranking features are fixed; only retrieval channels and training negatives change.",
+    "Variable union size; channel additions are not equal-budget comparisons.",
+    "Cached evaluation time excludes retrieval/features and is not end-to-end inference latency."
+  ]
+}

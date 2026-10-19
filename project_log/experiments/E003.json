@@ -1,0 +1,58 @@
+{
+  "recorded_on_kst": "2026-10-18",
+  "record_type": "backfilled_from_existing_artifacts",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "git_revision_at_run": null,
+  "git_revision_at_recording": "b5e9b1e16928d2a76d4e83e8abdd0618d4daa0bb",
+  "note": "Original run timestamps and Git revision were not recorded; recording date is not the execution date.",
+  "experiment_id": "E003",
+  "status": "execution_check_passed",
+  "kind": "pipeline_smoke_only",
+  "purpose": "Verify sklearn pair preprocessing, missing/unknown inputs and independent predictions.",
+  "model": {
+    "type": "LogisticRegression",
+    "parameters": {
+      "C": 1.0,
+      "class_weight": "balanced",
+      "solver": "liblinear",
+      "max_iter": 1000,
+      "random_state": 42
+    }
+  },
+  "commands": [
+    "python analysis/pair_pipeline.py --smoke"
+  ],
+  "checks": {
+    "passed": true,
+    "purpose": "execution check only, not a model performance estimate",
+    "training_queries": 300,
+    "validation_queries": 80,
+    "training_pairs": 17192,
+    "validation_pairs": 4704,
+    "training_positive_pair_fraction": 0.017449976733364354,
+    "transformed_columns": 1159,
+    "checks": [
+      "vessel-disjoint split",
+      "no forced validation positive",
+      "fit only on train",
+      "single-query prediction equality",
+      "shuffled-pair prediction equality",
+      "missing and unseen categories"
+    ]
+  },
+  "metrics": {
+    "weighted_accuracy": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null
+  },
+  "evidence_files": [
+    "analysis/output/pipeline_smoke.json",
+    "analysis/pair_pipeline.py"
+  ],
+  "limitations": [
+    "300 training queries and 80 validation queries used for execution checks",
+    "Different retrieval/features from E001",
+    "Not a controlled performance comparison"
+  ]
+}

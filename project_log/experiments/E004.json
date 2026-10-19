@@ -1,0 +1,998 @@
+{
+  "experiment_id": "E004",
+  "plan_id": "P03-A/C/B",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-18T21:20:29.065088+09:00",
+  "started_at_kst": "2026-10-18T21:23:52.597770+09:00",
+  "finished_at_kst": "2026-10-18T21:30:13.261716+09:00",
+  "purpose": "Implement conservative phonetic and token/number name features; controlled validation before adoption.",
+  "hypothesis": "Vowel-preserving weighted phonetic alignment and discriminative token scores improve selection over consonant-only matching.",
+  "baseline_experiment_id": "E001",
+  "changed_factors": [
+    "Additional name representations and comparison features",
+    "Separate optional phonetic retrieval channel"
+  ],
+  "fixed_conditions": [
+    "Original split.csv and seed 20261016",
+    "Original LightGBM parameters and baseline negative mining",
+    "No external data, no held-out aliases",
+    "Same candidates for feature-only ablation"
+  ],
+  "code": {
+    "git_revision_at_run": "b5e9b1e16928d2a76d4e83e8abdd0618d4daa0bb",
+    "dirty": true,
+    "file_sha256": {
+      "model/matcher.py": "25a0be43ddf88b0d8115fb6f6bc23e72c046aebc77100cb704693beeea620d3d",
+      "model/name_processing.py": "2979db4eef2d4cb00a8d1e4da52e34867cd89ae784bfc555b543e234d4d04f3f",
+      "train.py": "bec1e2c1f93316cb3a9f9044d79c5007391e6c69531583202759bf6a3dee8648",
+      "experiments/name_ablation.py": "4fbd5b3bee77cbabbd24daa42a0dbd0f9a54d349f90d2f93229ea463d26cbe6d"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "seed": 20261016,
+    "split_file_sha256": "0ca283d104f889b4caf59bebc9441a9030bdcbaeb290919fdfe863fd78564fa6",
+    "training_rows": 7857,
+    "validation_rows": {
+      "vessel_holdout": 2400,
+      "row_holdout": 1965
+    }
+  },
+  "retrieval": {
+    "baseline": "E001 unchanged",
+    "structure": "same candidates as baseline",
+    "all": "same candidates as baseline",
+    "search": "baseline union extra top24 simplified vowel-preserving phonetic-key matches; variable union size"
+  },
+  "features": {
+    "baseline": [
+      "exact",
+      "ratio",
+      "partial",
+      "roman_ratio",
+      "phonetic_ratio",
+      "phonetic_partial",
+      "length_ratio",
+      "digits_equal",
+      "digits_missing",
+      "gross_gap",
+      "international_gap",
+      "best_gap",
+      "gross_exact",
+      "international_exact",
+      "gross_missing",
+      "international_missing",
+      "catalog_gross_missing",
+      "type_probability",
+      "flag_probability",
+      "flag_missing",
+      "is_hangul",
+      "name_length",
+      "catalog_name_length"
+    ],
+    "structure": [
+      "exact",
+      "ratio",
+      "partial",
+      "roman_ratio",
+      "phonetic_ratio",
+      "phonetic_partial",
+      "length_ratio",
+      "digits_equal",
+      "digits_missing",
+      "gross_gap",
+      "international_gap",
+      "best_gap",
+      "gross_exact",
+      "international_exact",
+      "gross_missing",
+      "international_missing",
+      "catalog_gross_missing",
+      "type_probability",
+      "flag_probability",
+      "flag_missing",
+      "is_hangul",
+      "name_length",
+      "catalog_name_length",
+      "number_sequence_equal",
+      "number_conflict",
+      "catalog_number_missing",
+      "number_count_gap",
+      "token_count_gap",
+      "token_roman_idf",
+      "token_roman_min",
+      "token_roman_last"
+    ],
+    "all": [
+      "exact",
+      "ratio",
+      "partial",
+      "roman_ratio",
+      "phonetic_ratio",
+      "phonetic_partial",
+      "length_ratio",
+      "digits_equal",
+      "digits_missing",
+      "gross_gap",
+      "international_gap",
+      "best_gap",
+      "gross_exact",
+      "international_exact",
+      "gross_missing",
+      "international_missing",
+      "catalog_gross_missing",
+      "type_probability",
+      "flag_probability",
+      "flag_missing",
+      "is_hangul",
+      "name_length",
+      "catalog_name_length",
+      "number_sequence_equal",
+      "number_conflict",
+      "catalog_number_missing",
+      "number_count_gap",
+      "token_count_gap",
+      "token_roman_idf",
+      "token_roman_min",
+      "token_roman_last",
+      "weighted_phone_full",
+      "weighted_phone_token_idf",
+      "weighted_phone_token_min",
+      "weighted_phone_last",
+      "weighted_phone_residual",
+      "phone_shared_edge"
+    ],
+    "search": [
+      "exact",
+      "ratio",
+      "partial",
+      "roman_ratio",
+      "phonetic_ratio",
+      "phonetic_partial",
+      "length_ratio",
+      "digits_equal",
+      "digits_missing",
+      "gross_gap",
+      "international_gap",
+      "best_gap",
+      "gross_exact",
+      "international_exact",
+      "gross_missing",
+      "international_missing",
+      "catalog_gross_missing",
+      "type_probability",
+      "flag_probability",
+      "flag_missing",
+      "is_hangul",
+      "name_length",
+      "catalog_name_length",
+      "number_sequence_equal",
+      "number_conflict",
+      "catalog_number_missing",
+      "number_count_gap",
+      "token_count_gap",
+      "token_roman_idf",
+      "token_roman_min",
+      "token_roman_last",
+      "weighted_phone_full",
+      "weighted_phone_token_idf",
+      "weighted_phone_token_min",
+      "weighted_phone_last",
+      "weighted_phone_residual",
+      "phone_shared_edge"
+    ]
+  },
+  "preprocessing": {
+    "statistics_source": "fixed official catalog for token IDF; training fold only for call/alias/category maps",
+    "romanization": "Unidecode per original token, NFKC uppercase",
+    "phonetic_costs": {
+      "ordinary_edit": 4,
+      "vowel_insertion_deletion": 2,
+      "similar_consonant_or_vowel_substitution": 1
+    },
+    "shared_edge_threshold": 0.8,
+    "original_features_preserved": true
+  },
+  "training_pairs": {
+    "positive_rule": "same target vessel=1; positive injected in training only",
+    "negative_rule": "original top80 hardness union top20 tonnage plus true candidate when pool>100",
+    "aliases_used_during_pair_training": false,
+    "language_weight": ".7/p_H or .3/p_N on deduplicated training rows; applied per candidate pair",
+    "count_by_variant": {
+      "baseline": 233783,
+      "structure": 233783,
+      "all": 233783,
+      "search": 314716
+    },
+    "baseline_count_note": "E004 baseline is reused E001 artifact; E005 baseline refit"
+  },
+  "model": {
+    "type": "LGBMClassifier",
+    "parameters": {
+      "n_estimators": 350,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "max_depth": -1,
+      "min_child_samples": 40,
+      "colsample_bytree": 0.9,
+      "reg_lambda": 2,
+      "random_state": 20261016,
+      "n_jobs": 4,
+      "verbosity": -1,
+      "deterministic": true,
+      "force_col_wise": true
+    },
+    "loss": "binary_logloss"
+  },
+  "commands": [
+    "experiments/name_ablation.py --data-dir /workspace/vessel_matching/data --output-dir /workspace/vessel_matching/name_e004 --record project_log/experiments/E004.json --split-file /workspace/vessel_matching/reports/split.csv --baseline-model /workspace/vessel_matching/validation_model"
+  ],
+  "environment": {
+    "python": "3.12.14",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "packages": {
+      "numpy": "2.3.5",
+      "pandas": "2.2.3",
+      "lightgbm": "4.6.0",
+      "rapidfuzz": "3.14.3",
+      "Unidecode": "1.4.0",
+      "scikit-learn": "1.8.0"
+    }
+  },
+  "metrics": {
+    "metric_source": "local development holdouts; detailed measurements in variants",
+    "official_score": null
+  },
+  "cost": {
+    "timing_scope": {
+      "fit_wall": "assets/index + features + fit + model writes, excludes CSV load",
+      "predict_seconds": "candidate lookup, features, prediction, diagnostics; excludes index and CSV I/O",
+      "peak_process_rss": "whole ablation process, not standalone submission inference"
+    },
+    "peak_memory_bytes": 506114048,
+    "per_variant": "variants[*].fit_wall_seconds, index_load_seconds, vessel_holdout/row_holdout.predict_seconds, artifact_bytes",
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "/workspace/vessel_matching/name_e004",
+    "/workspace/MLiP_Project/docs/NAME_IMPROVEMENT_RESULTS.md"
+  ],
+  "error_cases_file": "/workspace/vessel_matching/name_e004/<variant>/<holdout>_errors.json",
+  "observations": [
+    "Feature-only candidate hashes match baseline on both holdouts; training-pair hashes match across retrained feature-only variants.",
+    "All four variants passed row independence probes."
+  ],
+  "interpretations": [],
+  "limitations": [
+    "Development holdouts were inspected previously; not untouched final test",
+    "No G2P or multilingual model used in this stage",
+    "Search variant changes candidate budget and training negatives as well as retrieval view; not an isolated classifier effect.",
+    "Absolute speed depends on local scheduling; neither official server score nor official latency."
+  ],
+  "failure": null,
+  "decision": "search selected by the pre-recorded two-split criterion; see reports/name_improvement.json. all alone not selected because E005 vessel score regressed.",
+  "next_actions": [],
+  "variants": {
+    "baseline": {
+      "name_mode": "baseline",
+      "phonetic_search": 0,
+      "features": [
+        "exact",
+        "ratio",
+        "partial",
+        "roman_ratio",
+        "phonetic_ratio",
+        "phonetic_partial",
+        "length_ratio",
+        "digits_equal",
+        "digits_missing",
+        "gross_gap",
+        "international_gap",
+        "best_gap",
+        "gross_exact",
+        "international_exact",
+        "gross_missing",
+        "international_missing",
+        "catalog_gross_missing",
+        "type_probability",
+        "flag_probability",
+        "flag_missing",
+        "is_hangul",
+        "name_length",
+        "catalog_name_length"
+      ],
+      "fit": null,
+      "baseline_artifact_sha256": {
+        "ranker.txt": "bf9c18919c8ec317a7f849b2a1cd7bc7a11e2943879d17a2cc8c2471f508a1a9",
+        "assets.json": "409a7dd1723ec36612393edf0211c7dd025fc44014be2d660c509bceaa8918bd"
+      },
+      "fit_wall_seconds": 0.0026923240002361126,
+      "index_load_seconds": 1.986528127999918,
+      "vessel_holdout": {
+        "rows": 2400,
+        "predict_seconds": 16.51552599199931,
+        "seen_vessel_fraction": 0.0,
+        "candidate_sha256": "8083888679719defbb1f13c38434663ddbf18017e93c958ed64366532f3193de",
+        "candidate_count_nonlookup": {
+          "mean": 62.24625,
+          "p95": 234.0,
+          "max": 397
+        },
+        "errors": 16,
+        "error_stages": {
+          "lookup": 0,
+          "retrieval": 2,
+          "selection": 14
+        },
+        "hangul": {
+          "rows": 205,
+          "unique_vessels": 71,
+          "accuracy": 0.926829268292683,
+          "candidate_recall": 0.9951219512195122
+        },
+        "non_hangul": {
+          "rows": 2195,
+          "unique_vessels": 1101,
+          "accuracy": 0.9995444191343964,
+          "candidate_recall": 0.9995444191343964
+        },
+        "seen": {
+          "rows": 0,
+          "unique_vessels": 0,
+          "accuracy": null,
+          "candidate_recall": null
+        },
+        "unseen": {
+          "rows": 2400,
+          "unique_vessels": 1171,
+          "accuracy": 0.9933333333333333,
+          "candidate_recall": 0.9991666666666666
+        },
+        "weighted_accuracy": 0.948643813545197
+      },
+      "row_holdout": {
+        "rows": 1965,
+        "predict_seconds": 3.578524780999942,
+        "seen_vessel_fraction": 0.7089058524173028,
+        "candidate_sha256": "cce08030778a9463352f28ce969871d6c6ccc7a2934594df09bdb073b13ea401",
+        "candidate_count_nonlookup": {
+          "mean": 51.56643356643357,
+          "p95": 48.0,
+          "max": 326
+        },
+        "errors": 7,
+        "error_stages": {
+          "lookup": 0,
+          "retrieval": 0,
+          "selection": 7
+        },
+        "hangul": {
+          "rows": 197,
+          "unique_vessels": 154,
+          "accuracy": 0.9796954314720813,
+          "candidate_recall": 1.0
+        },
+        "non_hangul": {
+          "rows": 1768,
+          "unique_vessels": 1488,
+          "accuracy": 0.9983031674208145,
+          "candidate_recall": 1.0
+        },
+        "seen": {
+          "rows": 1393,
+          "unique_vessels": 1108,
+          "accuracy": 1.0,
+          "candidate_recall": 1.0
+        },
+        "unseen": {
+          "rows": 572,
+          "unique_vessels": 534,
+          "accuracy": 0.9877622377622378,
+          "candidate_recall": 1.0
+        },
+        "weighted_accuracy": 0.9852777522567011
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 23,
+        "checks": [
+          "full",
+          "permutation",
+          "single",
+          "subset"
+        ]
+      },
+      "artifact_bytes": {
+        "ranker.txt": 1233852,
+        "assets.json": 330605
+      },
+      "artifact_sha256": {
+        "ranker.txt": "bf9c18919c8ec317a7f849b2a1cd7bc7a11e2943879d17a2cc8c2471f508a1a9",
+        "assets.json": "409a7dd1723ec36612393edf0211c7dd025fc44014be2d660c509bceaa8918bd"
+      }
+    },
+    "structure": {
+      "name_mode": "structure",
+      "phonetic_search": 0,
+      "features": [
+        "exact",
+        "ratio",
+        "partial",
+        "roman_ratio",
+        "phonetic_ratio",
+        "phonetic_partial",
+        "length_ratio",
+        "digits_equal",
+        "digits_missing",
+        "gross_gap",
+        "international_gap",
+        "best_gap",
+        "gross_exact",
+        "international_exact",
+        "gross_missing",
+        "international_missing",
+        "catalog_gross_missing",
+        "type_probability",
+        "flag_probability",
+        "flag_missing",
+        "is_hangul",
+        "name_length",
+        "catalog_name_length",
+        "number_sequence_equal",
+        "number_conflict",
+        "catalog_number_missing",
+        "number_count_gap",
+        "token_count_gap",
+        "token_roman_idf",
+        "token_roman_min",
+        "token_roman_last"
+      ],
+      "fit": {
+        "training_rows": 7857,
+        "unique_feature_rows": 4698,
+        "training_pair_sha256": "34ddeee04970cb961d20ccf11dcbad53a28d0e902a752790ca3a1dc184064123",
+        "training_pairs": 233783,
+        "training_candidate_recall": 0.998935717326522,
+        "fit_seconds": 41.941385856000124,
+        "feature_importance_gain": {
+          "exact": 0.0,
+          "ratio": 20049.879927054048,
+          "partial": 384.093574218452,
+          "roman_ratio": 206909.5221206993,
+          "phonetic_ratio": 40851.61526091397,
+          "phonetic_partial": 11464.03515650332,
+          "length_ratio": 6897.863150924444,
+          "digits_equal": 2454.076048269868,
+          "digits_missing": 4.150670051574707,
+          "gross_gap": 5885.30218103528,
+          "international_gap": 91256.26754964888,
+          "best_gap": 15824.215647608042,
+          "gross_exact": 130.288099527359,
+          "international_exact": 358.88063502311707,
+          "gross_missing": 979.1853844821453,
+          "international_missing": 140.07670918107033,
+          "catalog_gross_missing": 0.0,
+          "type_probability": 20238.21657435596,
+          "flag_probability": 10923.873246490955,
+          "flag_missing": 513.5210911035538,
+          "is_hangul": 3728.065437719226,
+          "name_length": 2226.356969833374,
+          "catalog_name_length": 2498.17903008312,
+          "number_sequence_equal": 1302.2540006041527,
+          "number_conflict": 0.0,
+          "catalog_number_missing": 0.0,
+          "number_count_gap": 0.3231019973754883,
+          "token_count_gap": 650.7530097216368,
+          "token_roman_idf": 11968.904254630208,
+          "token_roman_min": 35010.01628810167,
+          "token_roman_last": 32775.5334404856
+        }
+      },
+      "fit_wall_seconds": 44.97365496599923,
+      "index_load_seconds": 2.998042324999915,
+      "vessel_holdout": {
+        "rows": 2400,
+        "predict_seconds": 21.842903935999857,
+        "seen_vessel_fraction": 0.0,
+        "candidate_sha256": "8083888679719defbb1f13c38434663ddbf18017e93c958ed64366532f3193de",
+        "candidate_count_nonlookup": {
+          "mean": 62.24625,
+          "p95": 234.0,
+          "max": 397
+        },
+        "errors": 8,
+        "error_stages": {
+          "lookup": 0,
+          "retrieval": 2,
+          "selection": 6
+        },
+        "hangul": {
+          "rows": 205,
+          "unique_vessels": 71,
+          "accuracy": 0.9658536585365853,
+          "candidate_recall": 0.9951219512195122
+        },
+        "non_hangul": {
+          "rows": 2195,
+          "unique_vessels": 1101,
+          "accuracy": 0.9995444191343964,
+          "candidate_recall": 0.9995444191343964
+        },
+        "seen": {
+          "rows": 0,
+          "unique_vessels": 0,
+          "accuracy": null,
+          "candidate_recall": null
+        },
+        "unseen": {
+          "rows": 2400,
+          "unique_vessels": 1171,
+          "accuracy": 0.9966666666666667,
+          "candidate_recall": 0.9991666666666666
+        },
+        "weighted_accuracy": 0.9759608867159286
+      },
+      "row_holdout": {
+        "rows": 1965,
+        "predict_seconds": 4.632737170999462,
+        "seen_vessel_fraction": 0.7089058524173028,
+        "candidate_sha256": "cce08030778a9463352f28ce969871d6c6ccc7a2934594df09bdb073b13ea401",
+        "candidate_count_nonlookup": {
+          "mean": 51.56643356643357,
+          "p95": 48.0,
+          "max": 326
+        },
+        "errors": 5,
+        "error_stages": {
+          "lookup": 0,
+          "retrieval": 0,
+          "selection": 5
+        },
+        "hangul": {
+          "rows": 197,
+          "unique_vessels": 154,
+          "accuracy": 0.9847715736040609,
+          "candidate_recall": 1.0
+        },
+        "non_hangul": {
+          "rows": 1768,
+          "unique_vessels": 1488,
+          "accuracy": 0.998868778280543,
+          "candidate_recall": 1.0
+        },
+        "seen": {
+          "rows": 1393,
+          "unique_vessels": 1108,
+          "accuracy": 1.0,
+          "candidate_recall": 1.0
+        },
+        "unseen": {
+          "rows": 572,
+          "unique_vessels": 534,
+          "accuracy": 0.9912587412587412,
+          "candidate_recall": 1.0
+        },
+        "weighted_accuracy": 0.9890007350070054
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 23,
+        "checks": [
+          "full",
+          "permutation",
+          "single",
+          "subset"
+        ]
+      },
+      "artifact_bytes": {
+        "ranker.txt": 1238495,
+        "assets.json": 330820
+      },
+      "artifact_sha256": {
+        "ranker.txt": "45fc98e7cd4dd851bd9b68a7689a4d0f309734b5be4dc4e8d2ec8870db4c4539",
+        "assets.json": "413654d88ea40bd5d600a9bf6b75cac383fd600d5ce7cbc5c75e0e3ce3e75961"
+      }
+    },
+    "all": {
+      "name_mode": "all",
+      "phonetic_search": 0,
+      "features": [
+        "exact",
+        "ratio",
+        "partial",
+        "roman_ratio",
+        "phonetic_ratio",
+        "phonetic_partial",
+        "length_ratio",
+        "digits_equal",
+        "digits_missing",
+        "gross_gap",
+        "international_gap",
+        "best_gap",
+        "gross_exact",
+        "international_exact",
+        "gross_missing",
+        "international_missing",
+        "catalog_gross_missing",
+        "type_probability",
+        "flag_probability",
+        "flag_missing",
+        "is_hangul",
+        "name_length",
+        "catalog_name_length",
+        "number_sequence_equal",
+        "number_conflict",
+        "catalog_number_missing",
+        "number_count_gap",
+        "token_count_gap",
+        "token_roman_idf",
+        "token_roman_min",
+        "token_roman_last",
+        "weighted_phone_full",
+        "weighted_phone_token_idf",
+        "weighted_phone_token_min",
+        "weighted_phone_last",
+        "weighted_phone_residual",
+        "phone_shared_edge"
+      ],
+      "fit": {
+        "training_rows": 7857,
+        "unique_feature_rows": 4698,
+        "training_pair_sha256": "34ddeee04970cb961d20ccf11dcbad53a28d0e902a752790ca3a1dc184064123",
+        "training_pairs": 233783,
+        "training_candidate_recall": 0.998935717326522,
+        "fit_seconds": 67.65175091899982,
+        "feature_importance_gain": {
+          "exact": 0.08237659931182861,
+          "ratio": 10188.667515419424,
+          "partial": 346.67640656232834,
+          "roman_ratio": 109509.50954839587,
+          "phonetic_ratio": 20131.7549097836,
+          "phonetic_partial": 1307.9694087728858,
+          "length_ratio": 3531.155172675848,
+          "digits_equal": 3000.1290313899517,
+          "digits_missing": 0.0,
+          "gross_gap": 10098.979542911053,
+          "international_gap": 61650.61567299068,
+          "best_gap": 35136.80355385691,
+          "gross_exact": 9.558345094323158,
+          "international_exact": 381.2606403082609,
+          "gross_missing": 1597.1547487825155,
+          "international_missing": 61.225654900074005,
+          "catalog_gross_missing": 0.0,
+          "type_probability": 8567.549927428365,
+          "flag_probability": 5805.583452425897,
+          "flag_missing": 52.629350274801254,
+          "is_hangul": 1844.112116932869,
+          "name_length": 1469.830262556672,
+          "catalog_name_length": 1173.6581890508533,
+          "number_sequence_equal": 262.16458135843277,
+          "number_conflict": 304.85307425260544,
+          "catalog_number_missing": 0.0,
+          "number_count_gap": 0.0,
+          "token_count_gap": 151.84264340996742,
+          "token_roman_idf": 5508.615999922156,
+          "token_roman_min": 7019.413158513606,
+          "token_roman_last": 3854.0026908889413,
+          "weighted_phone_full": 133702.30830720812,
+          "weighted_phone_token_idf": 5155.551656372845,
+          "weighted_phone_token_min": 7985.063370585442,
+          "weighted_phone_last": 6171.275479383767,
+          "weighted_phone_residual": 79885.4059459567,
+          "phone_shared_edge": 589.2258777245879
+        }
+      },
+      "fit_wall_seconds": 71.38877812499959,
+      "index_load_seconds": 3.1326206930007174,
+      "vessel_holdout": {
+        "rows": 2400,
+        "predict_seconds": 33.16105647999939,
+        "seen_vessel_fraction": 0.0,
+        "candidate_sha256": "8083888679719defbb1f13c38434663ddbf18017e93c958ed64366532f3193de",
+        "candidate_count_nonlookup": {
+          "mean": 62.24625,
+          "p95": 234.0,
+          "max": 397
+        },
+        "errors": 10,
+        "error_stages": {
+          "lookup": 0,
+          "retrieval": 2,
+          "selection": 8
+        },
+        "hangul": {
+          "rows": 205,
+          "unique_vessels": 71,
+          "accuracy": 0.9560975609756097,
+          "candidate_recall": 0.9951219512195122
+        },
+        "non_hangul": {
+          "rows": 2195,
+          "unique_vessels": 1101,
+          "accuracy": 0.9995444191343964,
+          "candidate_recall": 0.9995444191343964
+        },
+        "seen": {
+          "rows": 0,
+          "unique_vessels": 0,
+          "accuracy": null,
+          "candidate_recall": null
+        },
+        "unseen": {
+          "rows": 2400,
+          "unique_vessels": 1171,
+          "accuracy": 0.9958333333333333,
+          "candidate_recall": 0.9991666666666666
+        },
+        "weighted_accuracy": 0.9691316184232457
+      },
+      "row_holdout": {
+        "rows": 1965,
+        "predict_seconds": 7.074784804999581,
+        "seen_vessel_fraction": 0.7089058524173028,
+        "candidate_sha256": "cce08030778a9463352f28ce969871d6c6ccc7a2934594df09bdb073b13ea401",
+        "candidate_count_nonlookup": {
+          "mean": 51.56643356643357,
+          "p95": 48.0,
+          "max": 326
+        },
+        "errors": 4,
+        "error_stages": {
+          "lookup": 0,
+          "retrieval": 0,
+          "selection": 4
+        },
+        "hangul": {
+          "rows": 197,
+          "unique_vessels": 154,
+          "accuracy": 0.9949238578680203,
+          "candidate_recall": 1.0
+        },
+        "non_hangul": {
+          "rows": 1768,
+          "unique_vessels": 1488,
+          "accuracy": 0.9983031674208145,
+          "candidate_recall": 1.0
+        },
+        "seen": {
+          "rows": 1393,
+          "unique_vessels": 1108,
+          "accuracy": 1.0,
+          "candidate_recall": 1.0
+        },
+        "unseen": {
+          "rows": 572,
+          "unique_vessels": 534,
+          "accuracy": 0.993006993006993,
+          "candidate_recall": 1.0
+        },
+        "weighted_accuracy": 0.9959376507338584
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 23,
+        "checks": [
+          "full",
+          "permutation",
+          "single",
+          "subset"
+        ]
+      },
+      "artifact_bytes": {
+        "ranker.txt": 1240299,
+        "assets.json": 330964
+      },
+      "artifact_sha256": {
+        "ranker.txt": "12f50f5f1ac7ec597693a70b498fae9221d039357b87d2bb6821f26ad1f975b8",
+        "assets.json": "e293cd42a29eacd74371346c8d95a5b6b62299d7af5cdf9838f3ddd1df51ad8a"
+      }
+    },
+    "search": {
+      "name_mode": "all",
+      "phonetic_search": 24,
+      "features": [
+        "exact",
+        "ratio",
+        "partial",
+        "roman_ratio",
+        "phonetic_ratio",
+        "phonetic_partial",
+        "length_ratio",
+        "digits_equal",
+        "digits_missing",
+        "gross_gap",
+        "international_gap",
+        "best_gap",
+        "gross_exact",
+        "international_exact",
+        "gross_missing",
+        "international_missing",
+        "catalog_gross_missing",
+        "type_probability",
+        "flag_probability",
+        "flag_missing",
+        "is_hangul",
+        "name_length",
+        "catalog_name_length",
+        "number_sequence_equal",
+        "number_conflict",
+        "catalog_number_missing",
+        "number_count_gap",
+        "token_count_gap",
+        "token_roman_idf",
+        "token_roman_min",
+        "token_roman_last",
+        "weighted_phone_full",
+        "weighted_phone_token_idf",
+        "weighted_phone_token_min",
+        "weighted_phone_last",
+        "weighted_phone_residual",
+        "phone_shared_edge"
+      ],
+      "fit": {
+        "training_rows": 7857,
+        "unique_feature_rows": 4698,
+        "training_pair_sha256": "10fec366f0b5bc5e620e12b1737a66dddc15f17b24e3818a58f4148ab24d3fa7",
+        "training_pairs": 314716,
+        "training_candidate_recall": 0.998935717326522,
+        "fit_seconds": 95.17003507000118,
+        "feature_importance_gain": {
+          "exact": 0.0,
+          "ratio": 6415.8257352001965,
+          "partial": 265.7259931266308,
+          "roman_ratio": 116490.88535722345,
+          "phonetic_ratio": 20611.99033921212,
+          "phonetic_partial": 1464.2643196061254,
+          "length_ratio": 3844.720867536962,
+          "digits_equal": 2707.3221354708076,
+          "digits_missing": 0.0,
+          "gross_gap": 8643.320119075477,
+          "international_gap": 89795.67259485275,
+          "best_gap": 18974.914554789662,
+          "gross_exact": 17.030872344970703,
+          "international_exact": 375.57774621248245,
+          "gross_missing": 1192.2192684784532,
+          "international_missing": 49.4465057849884,
+          "catalog_gross_missing": 0.0,
+          "type_probability": 10292.579485669732,
+          "flag_probability": 6034.9748953431845,
+          "flag_missing": 47.15364933013916,
+          "is_hangul": 8829.709125742316,
+          "name_length": 1574.632007881999,
+          "catalog_name_length": 1175.4070968925953,
+          "number_sequence_equal": 412.2317818105221,
+          "number_conflict": 175.4409942626953,
+          "catalog_number_missing": 12.686599731445312,
+          "number_count_gap": 0.0,
+          "token_count_gap": 120.64637106657028,
+          "token_roman_idf": 5456.307763807476,
+          "token_roman_min": 8601.547626204789,
+          "token_roman_last": 3722.164680995047,
+          "weighted_phone_full": 117007.73667304963,
+          "weighted_phone_token_idf": 5471.428547233343,
+          "weighted_phone_token_min": 17277.984039008617,
+          "weighted_phone_last": 5785.476707994938,
+          "weighted_phone_residual": 72220.16585766524,
+          "phone_shared_edge": 595.766693264246
+        }
+      },
+      "fit_wall_seconds": 98.29086702600034,
+      "index_load_seconds": 2.941649227999733,
+      "vessel_holdout": {
+        "rows": 2400,
+        "predict_seconds": 52.3292385980003,
+        "seen_vessel_fraction": 0.0,
+        "candidate_sha256": "57d6342cc71f6b407da5194a5c44aed64530e1d6fafd0313d1c899688e1d55ad",
+        "candidate_count_nonlookup": {
+          "mean": 80.6475,
+          "p95": 247.0,
+          "max": 407
+        },
+        "errors": 8,
+        "error_stages": {
+          "lookup": 0,
+          "retrieval": 1,
+          "selection": 7
+        },
+        "hangul": {
+          "rows": 205,
+          "unique_vessels": 71,
+          "accuracy": 0.9658536585365853,
+          "candidate_recall": 1.0
+        },
+        "non_hangul": {
+          "rows": 2195,
+          "unique_vessels": 1101,
+          "accuracy": 0.9995444191343964,
+          "candidate_recall": 0.9995444191343964
+        },
+        "seen": {
+          "rows": 0,
+          "unique_vessels": 0,
+          "accuracy": null,
+          "candidate_recall": null
+        },
+        "unseen": {
+          "rows": 2400,
+          "unique_vessels": 1171,
+          "accuracy": 0.9966666666666667,
+          "candidate_recall": 0.9995833333333334
+        },
+        "weighted_accuracy": 0.9759608867159286
+      },
+      "row_holdout": {
+        "rows": 1965,
+        "predict_seconds": 11.208639708000192,
+        "seen_vessel_fraction": 0.7089058524173028,
+        "candidate_sha256": "a96c84ce030b87ff6e92f68047545ff55482717ceec3265e38e798b9835cf279",
+        "candidate_count_nonlookup": {
+          "mean": 70.18706293706293,
+          "p95": 71.0,
+          "max": 346
+        },
+        "errors": 3,
+        "error_stages": {
+          "lookup": 0,
+          "retrieval": 0,
+          "selection": 3
+        },
+        "hangul": {
+          "rows": 197,
+          "unique_vessels": 154,
+          "accuracy": 0.9949238578680203,
+          "candidate_recall": 1.0
+        },
+        "non_hangul": {
+          "rows": 1768,
+          "unique_vessels": 1488,
+          "accuracy": 0.998868778280543,
+          "candidate_recall": 1.0
+        },
+        "seen": {
+          "rows": 1393,
+          "unique_vessels": 1108,
+          "accuracy": 1.0,
+          "candidate_recall": 1.0
+        },
+        "unseen": {
+          "rows": 572,
+          "unique_vessels": 534,
+          "accuracy": 0.9947552447552448,
+          "candidate_recall": 1.0
+        },
+        "weighted_accuracy": 0.996107333991777
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 23,
+        "checks": [
+          "full",
+          "permutation",
+          "single",
+          "subset"
+        ]
+      },
+      "artifact_bytes": {
+        "ranker.txt": 1241977,
+        "assets.json": 330965
+      },
+      "artifact_sha256": {
+        "ranker.txt": "bd9e419b5f3e6299cd0193e31af26cecdc8fabfd3c6d85a534993a0c526ad0c8",
+        "assets.json": "0916b4cc210dede8688143f3f5795bb8f6c738f0548e95890cbf8470788581d1"
+      }
+    }
+  },
+  "peak_process_rss_bytes": 506114048,
+  "timing_scope": {
+    "fit_wall": "assets/index + features + fit + model writes, excludes CSV load",
+    "predict_seconds": "candidate lookup, features, prediction, diagnostics; excludes index and CSV I/O",
+    "peak_process_rss": "whole ablation process, not standalone submission inference"
+  },
+  "setup_issues": [
+    "Initial unit-test attempt in default Python lacked rapidfuzz; rerun successfully in existing /workspace/vessel_matching/.venv. No model training failed."
+  ],
+  "record_enriched_at_kst": "2026-10-18T23:21:19.861786+09:00"
+}

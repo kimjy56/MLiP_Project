@@ -1,0 +1,21 @@
+{
+  "recorded_at_kst": "2026-10-19T09:48:21.754509+09:00",
+  "source_file": "uploaded eval_kit README.md v1.0",
+  "source_sha256": "2163cb0b7b06f891fe2b96335eca2780cb12473e24a8b837c5b6e6b9a2768983",
+  "revised_file": "eval_kit/README.md",
+  "revised_sha256": "ecbb58ee21c076d5ef5443b20f49624a7aea6810af38bca6fdcfcd693773ca8d",
+  "document_version": "1.1",
+  "checks": [
+    "relative links exist",
+    "Python example parses",
+    "synthetic valid 5-fold OOF; no gold/fold to predictor; group separation; 12222 output rows",
+    "rejected duplicate fold ID",
+    "rejected mismatched ID sets",
+    "rejected mismatched target mapping",
+    "rejected vessel spans folds",
+    "rejected missing fold",
+    "rejected missing row",
+    "rejected duplicate catalog ID"
+  ],
+  "scope": "Synthetic in-memory checks only; actual train/catalog/folds not read, no OOF saved, no model trained, no ZIP created. Evaluation and submission checker code not supplied."
+}

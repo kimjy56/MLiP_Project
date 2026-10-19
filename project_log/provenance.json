@@ -1,0 +1,32 @@
+{
+  "recorded_on_kst": "2026-10-18",
+  "project_description": {
+    "filename": "프로젝트설명서.pdf",
+    "pages": 24,
+    "sha256": "43370367bf7c0219749a6211d6bc39b4ae75c6a8c7234fc9cef0847cba0eb543",
+    "source": "User-uploaded PDF; official website notices not independently checked"
+  },
+  "git_revision_at_recording": "b5e9b1e16928d2a76d4e83e8abdd0618d4daa0bb",
+  "evidence_sha256": {
+    "reports/validation.json": "bd00604f05b27020c3a56ddd80b8c034bb840ecbcaff2710243707dd09bb7e0e",
+    "reports/final_training.json": "59b355dab3edadbfd663296abe1481ecefcc5c7f06258965a37d71e2d0eea219",
+    "reports/environment.json": "0663d73437ed207831ab524d5a67823d6414931c38bf39d0841fcdb3c6e7b653",
+    "reports/submission_checks.json": "c18b172929383fc4161ee261fb67acb9817d17104fefa6c5c4c1a8e1e1f569ce",
+    "analysis/output/pipeline_smoke.json": "dd2a488a2392b0ae02b011a3cfb080081d23f9af045adb65bdcee316a1eed01c",
+    "model/matcher.py": "a30c364a36d95e1a5637c8e5b0eac38c076d4c51bc0e9c6523f247093079b7c2",
+    "train.py": "d068704aa1c99e086a605549da003d09f6751a3dcabf757c97994c8b2edabf62",
+    "script.py": "95eba81b5af7530e5c21a06832598e2aab6c4a724673196fbde98cfa78f351ac",
+    "analysis/pair_pipeline.py": "530d3f41d9da70a49b9afd01cc6d42df886c61664a1e4c1c04d04f69426b6a37"
+  },
+  "original_error_artifacts_sha256": {
+    "reports/vessel_holdout_predictions.csv": "6845e72b61790622a1a6333a3fad30f84526000cb549965fa87a2b0a7a499693",
+    "validation_model/assets.json": "409a7dd1723ec36612393edf0211c7dd025fc44014be2d660c509bceaa8918bd",
+    "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+  },
+  "recording_notes": [
+    "Past results backfilled from evidence; not new training runs",
+    "Unknown run timestamps left null",
+    "Original row-level predictions and model assets remain outside version control"
+  ]
+}

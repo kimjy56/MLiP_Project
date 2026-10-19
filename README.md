@@ -1,4 +1,53 @@
-# 선박 정보 매칭 베이스라인
+# 선박 정보 매칭 프로젝트
+
+여러 컴퓨터에서의 코드·데이터 분리와 동기화 절차는
+[다중 PC 작업 안내](docs/MULTI_PC_SETUP.md)를 참고하세요.
+Windows 설치는 `environment/setup_windows.ps1`을 사용합니다.
+
+팀 운영·공통 검증 기준은 [TEAM_RULES.md](TEAM_RULES.md), 이번 정리 내역은
+[팀 규칙 변경 기록](docs/TEAM_RULES_CHANGES.md)에서 확인합니다.
+공통 평가 묶음 안내는 [eval_kit/README.md](eval_kit/README.md)에 정리했습니다.
+현재는 안내 문서만 있으며 평가기·고정 fold 등은 별도로 받아야 합니다.
+
+로컬 Python·패키지는 평가 서버 버전에 맞춘 `.venv-server`를 사용합니다.
+활성화·설치·호환성 검사는 [환경 안내](environment/README.md)를 참고하세요.
+제출 ZIP은 사용자가 요청할 때만 생성·갱신합니다.
+
+프로젝트 진행 기록은 [project_log/README.md](project_log/README.md)에서 확인합니다.
+수업 평가 기준, 실험대장, 선택 이유, 대표 오답, 보고서·발표 구성과 기록 양식을 관리합니다.
+
+## 최신 선박명 개선 결과
+
+문자 n-gram TF-IDF 검색을 구현하고, 문자열(S)·n-gram(N)·발음(P)·제원(T)의
+모든 16개 조합을 기존 두 개발 분할에서 비교했습니다(E007/E008).
+30개 조합별 모델을 학습했고, 모두 끈 NONE은 두 분할에서 고정 기준선으로 평가했습니다.
+37개 비교 특징과 LightGBM 설정은 고정했습니다.
+
+네 경로 모두 사용한 **SNPT**가 두 분할 평균으로 가장 높았습니다.
+기존 SPT→SNPT의 새 선박 가중 정확도는 분할1 97.596%→98.620%,
+분할2 97.590%→97.604%, 단순 평균 97.593%→98.112%입니다.
+혼합 검증 분할1은 99.611%→99.255%로 하락했습니다. 두 분할은 일부 관측이
+겹치는 개발 검증이며 공식 점수나 독립 최종 테스트 결과가 아닙니다.
+
+전체 16조합·n-gram 추가 8쌍·오류 변화·한계는
+[네 검색 경로 모든 조합 결과](docs/RETRIEVAL_COMBINATIONS.md)에 기록했습니다.
+[이전 선박명 개선 결과](docs/NAME_IMPROVEMENT_RESULTS.md)는 E004~E006의 역사적 기록입니다.
+이전 `reports/validation.json`과 `docs/MODEL_DETAILS.md`는 23개 특징 베이스라인의
+역사적 기록입니다. 최신 전체 학습·ZIP 검사는 `project_log/experiments/E009.json`을 확인합니다.
+
+현재 작업공간의 개선 제출 파일 경로는
+`/workspace/vessel_matching/ngram_submission/submit.zip`입니다.
+E009 전체 학습·오프라인·행 독립성·공개 12,222행 실행 비용 검사를 완료했습니다. 기존
+`/workspace/vessel_matching/submit.zip`과 `name_improved_submission/submit.zip`은 보존합니다.
+
+최신 구성을 재현하려면 공식 CSV를 `data/`에 놓고 다음을 실행합니다.
+
+```bash
+python train.py --name-mode all --phonetic-search 24 --retrieval-channels S N P T
+python verify_submission.py
+```
+
+기본 `python train.py`는 비교를 위한 기존 baseline 구성을 유지합니다.
 
 공식 `train.csv`와 `vessel_catalog.csv`만 사용한 Python 제출 프로젝트입니다.
 실제 `test.csv`는 제공되지 않았으며, 테스트 예측 파일은 평가 서버에서 생성합니다.
@@ -22,7 +71,7 @@
 2. 그 외에는 정규화 이름·로마자 표기·간단한 발음 유사 키·톤수로 후보를 검색합니다.
    한글 로마자 변환은 서버에 제공된 범용 Unidecode 라이브러리를 사용합니다.
    학습 데이터의 별칭도 후보에 추가합니다.
-3. 이름 유사도, 숫자 일치, 톤수 상대 오차와 결측, 학습 데이터에서 추정한
+3. 기존 baseline은 이름 유사도, 숫자 일치, 톤수 상대 오차와 결측, 학습 데이터에서 추정한
    선종·국적 대응 확률 등 23개 특징으로 LightGBM 이진 분류 모델이 후보를 평가합니다.
    점수가 가장 높은 후보를 선택하며, 동점은 고정된 카탈로그 ID 정렬 순서로 처리합니다.
 
@@ -51,6 +100,11 @@
 - `submit.zip`: 평가 서버에 제출할 파일. 최상위는 `script.py`, `requirements.txt`, `model/`입니다.
 - `script.py`: `data/test.csv`, `data/vessel_catalog.csv`를 읽고 `output/submission.csv`를 생성합니다.
 - `model/matcher.py`, `model/ranker.txt`, `model/assets.json`: 추론 구현·모델·고정 학습 자산.
+- `model/name_processing.py`: 원래 표기 보존을 전제로 한 단어·숫자·가중 발음 비교와 보조 검색 키.
+- `model/ngram_retrieval.py`: 공식 카탈로그에만 fit하는 문자 2~4gram TF-IDF 검색.
+- `experiments/name_ablation.py`: 고정된 조건의 비교와 두 번째 그룹 분할 재검증.
+- `experiments/retrieval_factorial.py`: 네 검색 경로의 모든 조합별 학습·평가.
+- `reports/retrieval_combinations.csv`: 조합·분할·검증 집단·조회 조건별 전체 128행 집계.
 - `train.py`: 검증 및 전체 데이터 재학습.
 - `verify_submission.py`: 제출 ZIP 생성과 독립 실행 검사.
 - `reports/`: 데이터 분석, 로컬 검증, 제출 검사 결과.

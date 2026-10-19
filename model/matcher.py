@@ -12,6 +12,18 @@ import numpy as np
 import pandas as pd
 from rapidfuzz import fuzz, process
 from unidecode import unidecode
+from name_processing import NameFeatureIndex, STRUCTURE_FEATURES, PHONETIC_FEATURES, name_view
+from ngram_retrieval import CharacterNgramIndex
+
+CHANNELS = ('S', 'N', 'P', 'T')
+
+
+def validate_channels(channels):
+    if channels is None:
+        return None
+    if len(set(channels)) != len(channels) or not set(channels).issubset(CHANNELS):
+        raise ValueError('Retrieval channels must be a unique subset of S/N/P/T')
+    return [c for c in CHANNELS if c in channels]
 
 FEATURES = [
     'exact', 'ratio', 'partial', 'roman_ratio', 'phonetic_ratio',
@@ -23,6 +35,13 @@ FEATURES = [
 ]
 QUERY_COLUMNS = ['sample_id', 'vessel_name', 'call_sign', 'gross_tonnage',
                  'international_gross_tonnage', 'flag_name', 'vessel_type']
+
+
+def feature_names(mode='baseline'):
+    if mode not in {'baseline', 'structure', 'all'}:
+        raise ValueError(f'Unknown name feature mode: {mode}')
+    return FEATURES + (STRUCTURE_FEATURES if mode != 'baseline' else []) + (
+        PHONETIC_FEATURES if mode == 'all' else [])
 
 
 def norm(value):
@@ -63,7 +82,7 @@ def text(value):
     return value if isinstance(value, str) else ''
 
 
-def make_assets(train, catalog):
+def make_assets(train, catalog, name_mode='baseline', phonetic_search=0, retrieval_channels=None):
     """Must be called on a training fold only during validation."""
     c = catalog.set_index('vessel_id')
     calls, names = defaultdict(set), defaultdict(set)
@@ -82,7 +101,9 @@ def make_assets(train, catalog):
                 counts[q][text(c.loc[row['target_vessel_id'], col])] += 1
         tables[col] = {q: {k: n / sum(v.values()) for k, n in v.items()}
                        for q, v in counts.items()}
-    return {'version': 1, 'features': FEATURES,
+    return {'version': 3, 'features': feature_names(name_mode),
+            'name_mode': name_mode, 'phonetic_search': int(phonetic_search),
+            'retrieval_channels': validate_channels(retrieval_channels),
             'calls': {k: next(iter(v)) for k, v in calls.items() if len(v) == 1},
             'aliases': {k: sorted(v) for k, v in names.items()}, 'tables': tables}
 
@@ -97,11 +118,21 @@ class CatalogIndex:
         # Explicit ordering gives deterministic score ties and retrieval ties.
         self.catalog = catalog.sort_values('vessel_id', kind='stable').reset_index(drop=True)
         self.assets = assets
+        self.name_mode = assets.get('name_mode', 'baseline')
+        self.phonetic_search = assets.get('phonetic_search', 0)
+        self.retrieval_channels = validate_channels(assets.get('retrieval_channels'))
+        if not isinstance(self.phonetic_search, int) or self.phonetic_search < 0:
+            raise ValueError('phonetic_search must be a nonnegative integer')
+        self.feature_names = feature_names(self.name_mode)
         self.ids = self.catalog.vessel_id.astype(str).tolist()
         self.lookup = {v: i for i, v in enumerate(self.ids)}
         self.names = [norm(x) for x in self.catalog.vessel_name]
         self.romans = [roman(x) for x in self.catalog.vessel_name]
         self.phones = [phonetic(x) for x in self.catalog.vessel_name]
+        self.name_index = (NameFeatureIndex(self.catalog.vessel_name)
+                           if self.name_mode != 'baseline' or self.phonetic_search else None)
+        self.ngram_index = (CharacterNgramIndex(self.catalog.vessel_name)
+                            if self.retrieval_channels and 'N' in self.retrieval_channels else None)
         self.digits = [re.sub(r'\D', '', x) for x in self.names]
         self.gt = np.array([number(x) for x in self.catalog.gross_tonnage])
         self.types = self.catalog.vessel_type.fillna('').tolist()
@@ -125,23 +156,34 @@ class CatalogIndex:
         order = np.lexsort((subset, np.nan_to_num(gaps, nan=np.inf)))[:count]
         return subset[order].tolist()
 
-    def candidates(self, row, use_aliases=True):
+    def channel_candidates(self, row, channel):
+        if channel not in CHANNELS:
+            raise ValueError(f'Unknown retrieval channel: {channel}')
         q = norm(row.get('vessel_name'))
         ko = hangul(row.get('vessel_name'))
         result = set()
-        if q:
-            if use_aliases:
-                result.update(self.lookup[v] for v in self.assets['aliases'].get(q, [])
-                              if v in self.lookup)
+        if channel == 'N':
+            if self.ngram_index is None:
+                raise ValueError('N-gram index not configured')
+            return self.ngram_index.search(row.get('vessel_name'), 60 if ko else 24)
+        if channel == 'S':
+            if q and not ko:
+                result.update(i for _, _, i in process.extract(q, self.names, scorer=fuzz.ratio, limit=24))
+            return sorted(result)
+        if channel == 'P':
             if ko:
-                for query, choices in [(roman(row['vessel_name']), self.romans),
-                                       (phonetic(row['vessel_name']), self.phones)]:
+                for query, choices in [(roman(row.get('vessel_name')), self.romans),
+                                       (phonetic(row.get('vessel_name')), self.phones)]:
                     if query:
                         result.update(i for _, _, i in process.extract(
                             query, choices, scorer=fuzz.ratio, limit=60))
-            else:
-                result.update(i for _, _, i in process.extract(
-                    q, self.names, scorer=fuzz.ratio, limit=24))
+            if q and self.phonetic_search:
+                key = name_view(row['vessel_name']).search_key
+                if key:
+                    result.update(i for _, _, i in process.extract(
+                        key, self.name_index.search_keys, scorer=fuzz.ratio,
+                        limit=self.phonetic_search))
+            return sorted(result)
         probs = self.assets['tables']['vessel_type'].get(text(row.get('vessel_type')), {})
         likely_types = sorted(probs, key=lambda x: (-probs[x], x))[:2]
         for col in ['gross_tonnage', 'international_gross_tonnage']:
@@ -150,9 +192,19 @@ class CatalogIndex:
             if ko:
                 for typ in likely_types:
                     result.update(self.nearest(value, 40, self.type_indices.get(typ, np.array([], dtype=int))))
+        return sorted(result)
+
+    def candidates(self, row, use_aliases=True):
+        result = set()
+        channels = ('S', 'P', 'T') if self.retrieval_channels is None else self.retrieval_channels
+        for channel in channels:
+            result.update(self.channel_candidates(row, channel))
+        if use_aliases:
+            result.update(self.lookup[v] for v in self.assets['aliases'].get(norm(row.get('vessel_name')), [])
+                          if v in self.lookup)
         return sorted(result) if result else [0]
 
-    def features(self, row, candidates):
+    def features(self, row, candidates, include_name_features=True):
         name = row.get('vessel_name')
         q, r, p = norm(name), roman(name), phonetic(name)
         names = [self.names[i] for i in candidates]
@@ -171,7 +223,7 @@ class CatalogIndex:
         fp = self.assets['tables']['flag_name'].get(text(row.get('flag_name')), {})
         digits = re.sub(r'\D', '', q)
         n = len(candidates)
-        return np.column_stack([
+        base = np.column_stack([
             [float(bool(q) and q == s) for s in names],
             similarity(q, names, fuzz.ratio), similarity(q, names, fuzz.partial_ratio),
             similarity(r, romans, fuzz.ratio), similarity(p, phones, fuzz.ratio),
@@ -186,16 +238,21 @@ class CatalogIndex:
             np.full(n, not text(row.get('flag_name'))), np.full(n, hangul(name)),
             np.full(n, len(q)), [len(s) for s in names],
         ]).astype(np.float32)
+        if self.name_mode == 'baseline' or not include_name_features:
+            return base
+        return np.column_stack([base, self.name_index.features(name, candidates, self.name_mode)])
 
 
 class Matcher:
     def __init__(self, catalog, model_dir):
         model_dir = Path(model_dir)
         assets = json.loads((model_dir / 'assets.json').read_text(encoding='utf-8'))
-        if assets['features'] != FEATURES:
+        if assets['features'] != feature_names(assets.get('name_mode', 'baseline')):
             raise ValueError('Feature version mismatch')
         self.index = CatalogIndex(catalog, assets)
         self.model = lgb.Booster(model_file=str(model_dir / 'ranker.txt'))
+        if self.model.feature_name() != assets['features']:
+            raise ValueError('Model and assets feature names differ')
 
     def predict(self, queries, use_direct=True, diagnostics=False):
         missing = set(QUERY_COLUMNS) - set(queries.columns)

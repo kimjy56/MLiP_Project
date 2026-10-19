@@ -1,0 +1,31 @@
+{
+  "selection_rule": "Improve vessel-weighted score over baseline in both splits, then mean vessel score, mixed score, cost.",
+  "selected_variant": "search",
+  "summary": {
+    "baseline": {
+      "mean_vessel_weighted_accuracy": 0.9589063055827436,
+      "mean_mixed_weighted_accuracy": 0.9925538421147451,
+      "mean_vessel_predict_seconds": 16.2518795649994,
+      "improves_baseline_on_both": false
+    },
+    "structure": {
+      "mean_vessel_weighted_accuracy": 0.9726326847732654,
+      "mean_mixed_weighted_accuracy": 0.9926386837437043,
+      "mean_vessel_predict_seconds": 21.31494934300008,
+      "improves_baseline_on_both": true
+    },
+    "all": {
+      "mean_vessel_weighted_accuracy": 0.9674675157140756,
+      "mean_mixed_weighted_accuracy": 0.9961071416071309,
+      "mean_vessel_predict_seconds": 34.65520593200017,
+      "improves_baseline_on_both": false
+    },
+    "search": {
+      "mean_vessel_weighted_accuracy": 0.975930226783494,
+      "mean_mixed_weighted_accuracy": 0.997968632982283,
+      "mean_vessel_predict_seconds": 51.75523539000005,
+      "improves_baseline_on_both": true
+    }
+  },
+  "limitation": "Two overlapping development holdouts; means are not pooled OOF, untouched test, or significance tests."
+}

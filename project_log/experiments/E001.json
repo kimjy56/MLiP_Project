@@ -1,0 +1,218 @@
+{
+  "recorded_on_kst": "2026-10-18",
+  "record_type": "backfilled_from_existing_artifacts",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "git_revision_at_run": null,
+  "git_revision_at_recording": "b5e9b1e16928d2a76d4e83e8abdd0618d4daa0bb",
+  "note": "Original run timestamps and Git revision were not recorded; recording date is not the execution date.",
+  "experiment_id": "E001",
+  "status": "completed",
+  "kind": "local_validation",
+  "purpose": "Evaluate fixed-call-sign lookup and LightGBM matching on unseen vessels and mixed held-out records.",
+  "hypothesis": "Name/phonetic, tonnage and category comparison features can distinguish catalog candidates; this experiment alone does not prove superiority to other models.",
+  "model": {
+    "type": "LGBMClassifier",
+    "objective": "binary",
+    "parameters": {
+      "n_estimators": 350,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "max_depth": -1,
+      "min_child_samples": 40,
+      "colsample_bytree": 0.9,
+      "reg_lambda": 2,
+      "random_state": 20261016,
+      "n_jobs": 4,
+      "deterministic": true,
+      "force_col_wise": true
+    }
+  },
+  "features": [
+    "exact",
+    "ratio",
+    "partial",
+    "roman_ratio",
+    "phonetic_ratio",
+    "phonetic_partial",
+    "length_ratio",
+    "digits_equal",
+    "digits_missing",
+    "gross_gap",
+    "international_gap",
+    "best_gap",
+    "gross_exact",
+    "international_exact",
+    "gross_missing",
+    "international_missing",
+    "catalog_gross_missing",
+    "type_probability",
+    "flag_probability",
+    "flag_missing",
+    "is_hangul",
+    "name_length",
+    "catalog_name_length"
+  ],
+  "retrieval": {
+    "name_nonhangul": 24,
+    "roman_hangul": 60,
+    "phonetic_hangul": 60,
+    "tonnage_per_field_nonhangul": 24,
+    "tonnage_per_field_hangul": 60,
+    "top_types_hangul": 2,
+    "tonnage_per_type_per_field_hangul": 40,
+    "deduplicate_candidates": true,
+    "fixed_candidate_count": false,
+    "aliases_during_pair_training": false
+  },
+  "data": {
+    "hashes": {
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "sample_submission.csv": "85a6be7541485083903dbf4d465f38a5c621b135c613dd0cef20c5b3614a46a9"
+    },
+    "seed": 20261016,
+    "split_method": "20% vessel GroupShuffleSplit; 20% language-stratified row holdout from the remainder",
+    "training_rows": 7857,
+    "split_file_original_location": "/workspace/vessel_matching/reports/split.csv",
+    "split_file_sha256": "0ca283d104f889b4caf59bebc9441a9030bdcbaeb290919fdfe863fd78564fa6"
+  },
+  "training": {
+    "training_rows": 7857,
+    "unique_feature_rows": 4698,
+    "training_pairs": 233783,
+    "training_candidate_recall": 0.998935717326522,
+    "fit_seconds": 89.50115671800006,
+    "feature_importance_gain": {
+      "exact": 0.0,
+      "ratio": 13287.907641366124,
+      "partial": 648.8809463232756,
+      "roman_ratio": 203481.79882392287,
+      "phonetic_ratio": 116771.01671245694,
+      "phonetic_partial": 6855.817700043321,
+      "length_ratio": 8466.922032818198,
+      "digits_equal": 3545.948722437024,
+      "digits_missing": 457.05381059646606,
+      "gross_gap": 5764.773972809315,
+      "international_gap": 95673.2426777184,
+      "best_gap": 16966.84791660309,
+      "gross_exact": 61.53266814351082,
+      "international_exact": 789.6457785665989,
+      "gross_missing": 1702.0297713279724,
+      "international_missing": 166.78943157196045,
+      "catalog_gross_missing": 0.0,
+      "type_probability": 20967.76001881063,
+      "flag_probability": 12775.997162759304,
+      "flag_missing": 456.7959343791008,
+      "is_hangul": 9275.506970345974,
+      "name_length": 3410.4608735889196,
+      "catalog_name_length": 3587.0259530842304
+    }
+  },
+  "training_pair_policy": {
+    "label": "same vessel=1, other=0",
+    "positive_injection": "training only",
+    "negative_selection": "if >100 candidates: union of top80 hardness, top20 tonnage, and positive",
+    "language_weight": "0.7/p_H or 0.3/p_N using deduplicated training records; applied per pair"
+  },
+  "metrics": {
+    "vessel_holdout": {
+      "rows": 2400,
+      "seconds": 37.45477747199993,
+      "known_call_sign_fraction": 0.0,
+      "seen_vessel_fraction": 0.0,
+      "hangul_rows": 205,
+      "hangul_accuracy": 0.926829268292683,
+      "hangul_candidate_recall": 0.9951219512195122,
+      "non_hangul_rows": 2195,
+      "non_hangul_accuracy": 0.9995444191343964,
+      "non_hangul_candidate_recall": 0.9995444191343964,
+      "seen_rows": 0,
+      "seen_accuracy": null,
+      "seen_candidate_recall": null,
+      "unseen_rows": 2400,
+      "unseen_accuracy": 0.9933333333333333,
+      "unseen_candidate_recall": 0.9991666666666666,
+      "weighted_accuracy": 0.948643813545197,
+      "unique_vessels": 1171,
+      "hangul_unique_vessels": 71
+    },
+    "row_holdout": {
+      "rows": 1965,
+      "seconds": 8.75075128100002,
+      "known_call_sign_fraction": 0.7089058524173028,
+      "seen_vessel_fraction": 0.7089058524173028,
+      "hangul_rows": 197,
+      "hangul_accuracy": 0.9796954314720813,
+      "hangul_candidate_recall": 1.0,
+      "non_hangul_rows": 1768,
+      "non_hangul_accuracy": 0.9983031674208145,
+      "non_hangul_candidate_recall": 1.0,
+      "seen_rows": 1393,
+      "seen_accuracy": 1.0,
+      "seen_candidate_recall": 1.0,
+      "unseen_rows": 572,
+      "unseen_accuracy": 0.9877622377622378,
+      "unseen_candidate_recall": 1.0,
+      "weighted_accuracy": 0.9852777522567011,
+      "unique_vessels": 1642,
+      "hangul_unique_vessels": 154
+    }
+  },
+  "timing_scope": {
+    "fit_seconds": "feature generation, classifier fit and asset writes; excludes initial asset and catalog-index construction",
+    "validation_seconds": "Matcher.predict; excludes file loading, index construction and result CSV writing"
+  },
+  "environment": {
+    "python": "3.12.14",
+    "packages": {
+      "numpy": "2.3.5",
+      "pandas": "2.2.3",
+      "scipy": "1.17.0",
+      "scikit-learn": "1.8.0",
+      "lightgbm": "4.6.0",
+      "rapidfuzz": "3.14.3",
+      "Unidecode": "1.4.0"
+    },
+    "input_sha256": {
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "sample_submission.csv": "85a6be7541485083903dbf4d465f38a5c621b135c613dd0cef20c5b3614a46a9"
+    }
+  },
+  "commands": [
+    "python train.py --validate-only"
+  ],
+  "row_independence": {
+    "passed": true,
+    "rows": 32,
+    "checks": [
+      "full",
+      "shuffled",
+      "single",
+      "subset"
+    ]
+  },
+  "error_evidence": "project_log/baseline_errors.json",
+  "error_counts": {
+    "candidate_retrieval": 2,
+    "candidate_selection": 14
+  },
+  "limitations": [
+    "Single split, not 5-fold",
+    "Mixed holdout contains 70.89% seen vessels",
+    "Unseen Hangul support:205 records/71 vessels",
+    "No official server score",
+    "No controlled model/feature ablation comparison"
+  ],
+  "evidence_files": [
+    "reports/validation.json",
+    "reports/environment.json",
+    "project_log/ERROR_ANALYSIS.md"
+  ],
+  "interpretation": "Candidate inclusion is high; remaining Hangul errors include candidate selection failures.",
+  "next_actions": [
+    "Freeze folds and candidate configurations",
+    "Run controlled model and feature comparisons"
+  ]
+}

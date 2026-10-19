@@ -1,5 +1,6 @@
 """Exercise a clean ZIP on public TRAIN probes, with socket networking disabled."""
 import hashlib
+import argparse
 import json
 import os
 from pathlib import Path
@@ -13,10 +14,19 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
 FILES = ['script.py', 'requirements.txt', 'model/matcher.py',
-         'model/ranker.txt', 'model/assets.json']
+         'model/name_processing.py', 'model/ngram_retrieval.py', 'model/ranker.txt', 'model/assets.json']
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--root', type=Path, default=ROOT,
+                        help='Standalone bundle root containing code/model and data/')
+    args = parser.parse_args()
+    verify(args.root.resolve())
+
+
+def verify(ROOT):
+    (ROOT/'reports').mkdir(parents=True, exist_ok=True)
     archive = ROOT / 'submit.zip'
     with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED) as z:
         for file in FILES:

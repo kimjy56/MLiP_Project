@@ -1,0 +1,21 @@
+{
+  "submission_id": null,
+  "submitted_at_kst": null,
+  "experiment_id": null,
+  "code_revision": null,
+  "zip_sha256": null,
+  "zip_bytes": null,
+  "evaluation_rules_source": null,
+  "evaluation_rules_checked_at_kst": null,
+  "status": "not_submitted",
+  "official_public_score": null,
+  "official_private_score": null,
+  "official_rank": null,
+  "official_runtime_seconds": null,
+  "score_observed_at_kst": null,
+  "evidence_reference": null,
+  "failure_stage": null,
+  "sanitized_error_summary": null,
+  "selected_as_final": null,
+  "note": "서버 결과를 확인한 뒤 입력한다. 비공개 입력 행·개별 예측을 저장하지 않는다."
+}
