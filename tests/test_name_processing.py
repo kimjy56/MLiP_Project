@@ -1,3 +1,8 @@
+try:
+    import torch
+except Exception:
+    pass
+
 """Contract checks for identity-sensitive names and backwards compatibility."""
 import sys
 from pathlib import Path

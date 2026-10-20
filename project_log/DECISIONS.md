@@ -1,5 +1,17 @@
 # 선택 이유와 다음 실험
 
+## AS-01 — 팀 기준 5-Fold OOF 베이스라인 측정 및 팀 공유 패키지 생성 (2026-10-19 KST)
+
+팀 기준 `folds_group5_seed42.csv` (G5-s42)를 적용하여 전체 12,222행의 5-fold OOF를 생성하고 공식 평가기(`eval_kit/evaluate.py`)로 검증했다.
+- 설정: `name_mode='all'`, `phonetic_search=24`, `use_train_lookup=True`, `retrieval_channels=('S', 'P', 'T')`.
+- 공식 검증 결과:
+  - 가중 정확도: **0.97918** [95% CI: 0.96547, 0.99069]
+  - 한글 정확도: **97.061%** (1,191행 중 35행 오답)
+  - 비한글 정확도: **99.918%** (11,031행 중 9행 오답)
+- 산출물: `artifacts/oof/AS-01/oof_AS-01.csv` (SHA-256: `1eb6beb0eff062bd28eb2836d257f1768c6a2a0291bb3bcf814e60a5ab5ab3eb`), `project_log/experiments/AS-01.json`, `leaderboard_AS.csv`.
+- 팀 공유 패키지: `share/AS-01/` 폴더에 OOF CSV, 요약 리더보드, 실험 세부 JSON, 재현 안내 README를 패키징했다. 사용자 요청에 따라 제출 ZIP은 별도 생성하지 않았다.
+
+
 ## P08 — 팀 규칙 v4 코드 반영 (2026-10-19 KST, 구현·합성 검사 완료)
 
 조회 통합 스위치, 정답과 추론 입력의 분리, 고정 5-fold OOF 생성·입력 검사, data/open 경로 우선순위 및 CPU 예산을 구현한다. 기존 특징·LightGBM 설정은 유지한다. 합성 데이터로 누수 방지·행 독립성·저장/로딩·파일 경로를 검사한다. 공식 CSV와 배포 fold·평가기는 현재 없으므로 실제 OOF 점수·E00 재현·성능 개선은 미측정으로 남긴다. 기존 실험 기록과 ZIP은 보존한다.

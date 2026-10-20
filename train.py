@@ -7,10 +7,14 @@ import json
 from pathlib import Path
 import sys
 import time
+try:
+    import torch
+except Exception:
+    pass
 
 import lightgbm as lgb
 import numpy as np
-import pandas as pdS
+import pandas as pd
 from sklearn.model_selection import GroupShuffleSplit, train_test_split
 from threadpoolctl import threadpool_limits
 

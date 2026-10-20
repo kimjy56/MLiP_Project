@@ -7,12 +7,20 @@ from pathlib import Path
 import re
 import unicodedata
 
+try:
+    import torch
+    from torch_indexer import TorchNgramIndexer
+    HAS_TORCH = True
+except Exception:
+    HAS_TORCH = False
+
 import lightgbm as lgb
 import numpy as np
 import pandas as pd
 from rapidfuzz import fuzz, process
 from unidecode import unidecode
 from threadpoolctl import threadpool_limits
+
 from name_processing import NameFeatureIndex, STRUCTURE_FEATURES, PHONETIC_FEATURES, name_view
 from ngram_retrieval import CharacterNgramIndex
 
@@ -143,6 +151,23 @@ class CatalogIndex:
                            if self.name_mode != 'baseline' or self.phonetic_search else None)
         self.ngram_index = (CharacterNgramIndex(self.catalog.vessel_name)
                             if self.retrieval_channels and 'N' in self.retrieval_channels else None)
+        if HAS_TORCH:
+            try:
+                self.torch_names = TorchNgramIndexer(self.names)
+                self.torch_romans = TorchNgramIndexer(self.romans)
+                self.torch_phones = TorchNgramIndexer(self.phones)
+                self.torch_keys = (TorchNgramIndexer(self.name_index.search_keys)
+                                   if self.name_index is not None and self.phonetic_search else None)
+            except Exception:
+                self.torch_names = None
+                self.torch_romans = None
+                self.torch_phones = None
+                self.torch_keys = None
+        else:
+            self.torch_names = None
+            self.torch_romans = None
+            self.torch_phones = None
+            self.torch_keys = None
         self.digits = [re.sub(r'\D', '', x) for x in self.names]
         self.gt = np.array([number(x) for x in self.catalog.gross_tonnage])
         self.types = self.catalog.vessel_type.fillna('').tolist()
@@ -180,21 +205,34 @@ class CatalogIndex:
             return self.ngram_index.search(row.get('vessel_name'), 60 if ko else 24)
         if channel == 'S':
             if q and not ko:
-                result.update(i for _, _, i in process.extract(q, self.names, scorer=fuzz.ratio, limit=24))
+                if self.torch_names is not None:
+                    result.update(self.torch_names.search(q, count=24))
+                else:
+                    result.update(i for _, _, i in process.extract(q, self.names, scorer=fuzz.ratio, limit=24))
             return sorted(result)
         if channel == 'P':
             if ko:
-                for query, choices in [(roman(row.get('vessel_name')), self.romans),
-                                       (phonetic(row.get('vessel_name')), self.phones)]:
-                    if query:
-                        result.update(i for _, _, i in process.extract(
-                            query, choices, scorer=fuzz.ratio, limit=60))
+                r_q = roman(row.get('vessel_name'))
+                p_q = phonetic(row.get('vessel_name'))
+                if r_q:
+                    if self.torch_romans is not None:
+                        result.update(self.torch_romans.search(r_q, count=60))
+                    else:
+                        result.update(i for _, _, i in process.extract(r_q, self.romans, scorer=fuzz.ratio, limit=60))
+                if p_q:
+                    if self.torch_phones is not None:
+                        result.update(self.torch_phones.search(p_q, count=60))
+                    else:
+                        result.update(i for _, _, i in process.extract(p_q, self.phones, scorer=fuzz.ratio, limit=60))
             if q and self.phonetic_search:
                 key = name_view(row['vessel_name']).search_key
                 if key:
-                    result.update(i for _, _, i in process.extract(
-                        key, self.name_index.search_keys, scorer=fuzz.ratio,
-                        limit=self.phonetic_search))
+                    if self.torch_keys is not None:
+                        result.update(self.torch_keys.search(key, count=self.phonetic_search))
+                    else:
+                        result.update(i for _, _, i in process.extract(
+                            key, self.name_index.search_keys, scorer=fuzz.ratio,
+                            limit=self.phonetic_search))
             return sorted(result)
         probs = self.assets['tables']['vessel_type'].get(text(row.get('vessel_type')), {})
         likely_types = sorted(probs, key=lambda x: (-probs[x], x))[:2]

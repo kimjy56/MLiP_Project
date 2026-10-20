@@ -1,3 +1,8 @@
+try:
+    import torch
+except Exception:
+    pass
+
 import itertools
 import sys
 from pathlib import Path

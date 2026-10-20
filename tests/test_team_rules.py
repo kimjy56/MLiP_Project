@@ -1,3 +1,8 @@
+try:
+    import torch
+except Exception:
+    pass
+
 """Synthetic contract tests, not competition performance evidence."""
 import json
 import os

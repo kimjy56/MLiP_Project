@@ -30,6 +30,9 @@ def _sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+sha256 = _sha256
+
+
 def now_kst():
     return datetime.now(timezone(timedelta(hours=9))).isoformat()
 
@@ -131,7 +134,7 @@ def generate_oof(train, catalog, folds, output_dir, *, name_mode='baseline',
         parts.append(pd.DataFrame({'sample_id': validation.sample_id.to_numpy(),
                                    'pred_vessel_id': predictions, 'fold': k}))
         artifacts = {name: {'path': str(destination / name),
-                             'sha256': sha256(destination / name),
+                             'sha256': _sha256(destination / name),
                              'bytes': (destination / name).stat().st_size}
                      for name in ('assets.json', 'ranker.txt')}
         summary = {'fold': k, 'fit': fit_result, 'validation': metrics,
@@ -154,10 +157,10 @@ def main():
     parser.add_argument('--data-dir', type=Path, default=ROOT / 'data')
     parser.add_argument('--folds', type=Path, default=ROOT / 'eval_kit/folds_group5_seed42.csv',
                         help='Default: <data-dir>/eval_kit/folds_group5_seed42.csv')
-    parser.add_argument('--folds-sha256', default="61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c", help='Expected hash from the team distribution')
+    parser.add_argument('--folds-sha256', required=True, help='Expected hash from the team distribution')
     parser.add_argument('--output-root', type=Path, default=ROOT / 'artifacts/oof')
-    parser.add_argument('--name-mode', choices=['baseline', 'structure', 'all'], default='baseline')
-    parser.add_argument('--phonetic-search', type=int, default=0)
+    parser.add_argument('--name-mode', choices=['baseline', 'structure', 'all'], default='all')
+    parser.add_argument('--phonetic-search', type=int, default=24)
     parser.add_argument('--retrieval-channels', nargs='*', choices=['S', 'N', 'P', 'T'], default=None)
     parser.add_argument('--use-train-lookup', action=argparse.BooleanOptionalAction, default=True)
     args = parser.parse_args()
@@ -183,7 +186,7 @@ def main():
         'hypothesis': 'Not a performance-improvement claim; evaluate the specified configuration',
         'code': {'git_revision': revision.stdout.strip() if revision.returncode == 0 else None,
                  'dirty': bool(status.stdout.strip()) if status.returncode == 0 else None,
-                 'sha256': {name: sha256(ROOT / name) for name in code_files}},
+                 'sha256': {name: _sha256(ROOT / name) for name in code_files}},
         'configuration': {'name_mode': args.name_mode, 'phonetic_search': args.phonetic_search,
                           'retrieval_channels': args.retrieval_channels,
                           'use_train_lookup': args.use_train_lookup, 'model': MODEL_PARAMETERS},
@@ -213,7 +216,7 @@ def main():
         save_record()
         for name, path in [('train', args.data_dir / 'train.csv'),
                             ('catalog', args.data_dir / 'vessel_catalog.csv'), ('folds', args.folds)]:
-            record['data'][name] = {'path': str(path), 'sha256': sha256(path)}
+            record['data'][name] = {'path': str(path), 'sha256': _sha256(path)}
         if record['data']['folds']['sha256'] != args.folds_sha256.lower():
             raise ValueError('Fold hash differs from the supplied team hash')
         record['data']['expected_folds_sha256'] = args.folds_sha256.lower()
@@ -228,7 +231,7 @@ def main():
         oof.to_csv(oof_path, index=False, encoding='utf-8')
         record.update(status='completed', local_diagnostics=summarize_folds(summaries),
                       oof={'path': str(oof_path), 'rows': len(oof),
-                                               'sha256': sha256(oof_path)})
+                                               'sha256': _sha256(oof_path)})
     except BaseException as exc:
         record.update(status='interrupted' if isinstance(exc, KeyboardInterrupt) else 'failed',
                       failure={'type': type(exc).__name__, 'message': str(exc)})
