@@ -69,7 +69,7 @@ def verify(ROOT):
             test_path.chmod(0o444)
             before = hashlib.sha256(test_path.read_bytes()).hexdigest()
             start = time.monotonic()
-            result = subprocess.run([sys.executable, '-c', runner], cwd='/tmp',
+            result = subprocess.run([sys.executable, '-c', runner], cwd=tempfile.gettempdir(),
                                     capture_output=True, text=True, check=True,
                                     env={**os.environ, 'MPLCONFIGDIR': str(tmp/'mpl')}, timeout=120)
             durations.append({'mode': label, 'rows': len(rows), 'seconds': time.monotonic()-start})

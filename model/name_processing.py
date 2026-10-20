@@ -5,17 +5,21 @@ Raw names stay in the catalog; lossy views are only additional features.
 """
 from collections import Counter
 from dataclasses import dataclass
+import functools
 import math
 import re
 import unicodedata
 
+import os
+
 import numpy as np
 from rapidfuzz import fuzz
+from rapidfuzz.distance import OSA
 from unidecode import unidecode
 
 STRUCTURE_FEATURES = [
-    'number_sequence_equal', 'number_conflict', 'catalog_number_missing',
-    'number_count_gap', 'token_count_gap', 'token_roman_idf',
+    'number_sequence_equal', 'number_conflict',
+    'token_count_gap', 'token_roman_idf',
     'token_roman_min', 'token_roman_last',
 ]
 PHONETIC_FEATURES = [
@@ -70,10 +74,23 @@ def name_view(value):
 
 VOWELS = frozenset('AEIOUY')
 SIMILAR_PAIRS = {frozenset(p) for p in ['RL', 'BV', 'FV', 'FP', 'PB', 'CG', 'CK', 'GK', 'DT', 'SZ', 'IJ', 'JZ']}
+SIMILAR_TUPLES = {(p[0], p[1]) for p in ['RL', 'BV', 'FV', 'FP', 'PB', 'CG', 'CK', 'GK', 'DT', 'SZ', 'IJ', 'JZ']} | \
+                 {(p[1], p[0]) for p in ['RL', 'BV', 'FV', 'FP', 'PB', 'CG', 'CK', 'GK', 'DT', 'SZ', 'IJ', 'JZ']}
 
 
+@functools.lru_cache(maxsize=262144)
+def rapidfuzz_phone_similarity(a, b):
+    """Ultra-fast phonetic similarity using rapidfuzz C-engine (OSA normalized similarity)."""
+    if not a or not b:
+        return 0.0
+    if a == b:
+        return 1.0
+    return OSA.normalized_similarity(a, b)
+
+
+@functools.lru_cache(maxsize=262144)
 def weighted_similarity(a, b):
-    """Weighted Levenshtein on phone_spellings, normalized to [0, 1].
+    """Weighted Levenshtein on phone_spellings, normalized to [0, 1]. (Preserved for comparison/baseline)
 
     Units: ordinary insertion/deletion/substitution=4, vowel insertion or
     deletion=2, vowel-vowel/similar-consonant substitution=1. Digraphs are
@@ -95,11 +112,19 @@ def weighted_similarity(a, b):
         for j, cb in enumerate(b):
             substitution = (0 if ca == cb else
                             1 if ((ca in VOWELS and cb in VOWELS) or
-                                  frozenset((ca, cb)) in SIMILAR_PAIRS) else 4)
+                                  (ca, cb) in SIMILAR_TUPLES) else 4)
             current.append(min(previous[j+1] + deletion,
                                current[j] + insertion[j], previous[j] + substitution))
         previous = current
     return max(0.0, 1.0 - previous[-1] / (4 * max(len(a), len(b))))
+
+
+def get_phone_similarity_fn():
+    """Select phonetic similarity function. Defaults to rapidfuzz; set VESSEL_PHONE_SIMILARITY='legacy' for original DP."""
+    mode = os.environ.get('VESSEL_PHONE_SIMILARITY', 'rapidfuzz').strip().lower()
+    if mode in ('legacy', 'dp', 'weighted'):
+        return weighted_similarity
+    return rapidfuzz_phone_similarity
 
 
 class NameFeatureIndex:
@@ -110,41 +135,49 @@ class NameFeatureIndex:
                     for t, count in frequency.items()}
         self.unknown_idf = 1 + math.log(len(self.views)+1)
         self.search_keys = [v.search_key for v in self.views]
+        self.candidate_cw = [[self.idf.get(t, self.unknown_idf) for t in v.tokens] for v in self.views]
 
     def features(self, name, candidates, mode, query=None):
         query = name_view(name) if query is None else query
         output = []
-        # Local to this input row; no cross-test-row fitted state/cache.
         distances = {}
+        phone_sim_fn = get_phone_similarity_fn()
+        is_hangul = bool(re.search(r'[가-힣]', name)) if isinstance(name, str) else False
 
         def phone_score(a, b):
             key = (a, b)
             if key not in distances:
-                distances[key] = weighted_similarity(a, b)
+                distances[key] = phone_sim_fn(a, b)
             return distances[key]
 
-        def tokens_score(q, c, scorer):
+        query_qw = [self.idf.get(t, self.unknown_idf) for t in query.tokens]
+
+        def tokens_score(q, c, scorer, cw):
             if not q or not c:
                 return 0., 0.
+            if q == c:
+                return 1., 1.
+            # 방안 3: 단어 개수가 같으면 1:1 순서 매칭 (선박명 단어 역전 0건)
+            if len(q) == len(c):
+                sims = np.array([scorer(a, b) for a, b in zip(q, c)])
+                return ((np.average(sims, weights=query_qw) + np.average(sims, weights=cw)) / 2,
+                        float(sims.min()))
             scores = np.array([[scorer(a, b) for b in c] for a in q])
             # Both directions penalize extra unmatched words. Frequency comes
             # exclusively from the fixed official catalog, never from test.
-            qw = [self.idf.get(t, self.unknown_idf) for t in query.tokens]
-            cw = [self.idf.get(t, self.unknown_idf) for t in candidate.tokens]
             qbest, cbest = scores.max(axis=1), scores.max(axis=0)
-            return ((np.average(qbest, weights=qw) + np.average(cbest, weights=cw))/2,
+            return ((np.average(qbest, weights=query_qw) + np.average(cbest, weights=cw))/2,
                     min(qbest.min(), cbest.min()))
 
         for i in candidates:
             candidate = self.views[i]
+            cw = self.candidate_cw[i]
             lexical_mean, lexical_min = tokens_score(
-                query.tokens, candidate.tokens, lambda a, b: fuzz.ratio(a, b)/100)
+                query.tokens, candidate.tokens, lambda a, b: fuzz.ratio(a, b)/100, cw)
             both_numbers = bool(query.numbers and candidate.numbers)
             structure = [
                 float(both_numbers and query.numbers == candidate.numbers),
                 float(both_numbers and query.numbers != candidate.numbers),
-                float(not candidate.numbers),
-                abs(len(query.numbers)-len(candidate.numbers)),
                 abs(len(query.tokens)-len(candidate.tokens)), lexical_mean, lexical_min,
                 fuzz.ratio(query.tokens[-1], candidate.tokens[-1])/100
                 if query.tokens and candidate.tokens else 0.,
@@ -152,16 +185,30 @@ class NameFeatureIndex:
             if mode == 'structure':
                 output.append(structure)
                 continue
+
+            # 방안 1: 비한글 선박은 발음과 철자가 사실상 동일하므로, 무거운 발음 루프 대신
+            # 이미 계산된 고속 철자 점수(lexical)로 채워 0초 만에 완료
+            if not is_hangul:
+                phone_full = (fuzz.ratio(query.roman, candidate.roman)/100
+                              if query.roman and candidate.roman else 0.)
+                output.append(structure + [
+                    phone_full, lexical_mean, lexical_min,
+                    fuzz.ratio(query.tokens[-1], candidate.tokens[-1])/100 if query.tokens and candidate.tokens else 0.,
+                    lexical_mean, 0.0
+                ])
+                continue
+
+            # 한글 선박 전용 정밀 발음 연산
             phonetic_mean, phonetic_min = tokens_score(
-                query.phone_tokens, candidate.phone_tokens, phone_score)
+                query.phone_tokens, candidate.phone_tokens, phone_score, cw)
             qleft, cleft = list(query.phone_tokens), list(candidate.phone_tokens)
             shared = 0
-            # Drop matching edges only in this extra comparison, never in the
-            # original name, and always leave at least one word on each side.
             while len(qleft) > 1 and len(cleft) > 1 and phone_score(qleft[0], cleft[0]) >= .8:
-                qleft.pop(0); cleft.pop(0); shared += 1
+                qleft.pop(0); shared += 1
             while len(qleft) > 1 and len(cleft) > 1 and phone_score(qleft[-1], cleft[-1]) >= .8:
                 qleft.pop(); cleft.pop(); shared += 1
+
+            # phone_shared_edge 복구
             output.append(structure + [
                 phone_score(query.phone, candidate.phone), phonetic_mean, phonetic_min,
                 phone_score(query.phone_tokens[-1], candidate.phone_tokens[-1])

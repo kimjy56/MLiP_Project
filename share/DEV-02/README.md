@@ -1,6 +1,6 @@
-# 팀 공유 패키지: 실험 AS-02
+# 팀 공유 패키지: 실험 DEV-02
 
-- **실험 ID**: `AS-02`
+- **실험 ID**: `DEV-02`
 - **기준 fold**: `eval_kit/folds_group5_seed42.csv` (G5-s42, SHA-256: `9d09ede0...`)
 - **설정**:
   - `name_mode`: `all` (한글 음차 및 구조어 정규화 적용)
@@ -28,7 +28,7 @@
 
 ---
 
-## 2. 분석 및 비교 (AS-01 vs AS-02)
+## 2. 분석 및 비교 (AS-01 vs DEV-02)
 
 문자 n-gram(N) 채널을 추가함으로써 비한글 선박명에서는 오답이 9건에서 8건으로 줄어들었으나, 한글 선박명에서는 후보군 풀이 지나치게 넓어져 랭커 혼선으로 오답이 35건에서 37건으로 2건 증가했습니다. 한글 비중이 70%인 평가 산식 특성상, 전체 가중 점수는 0.97918에서 0.97804로 소폭 하락했습니다. 따라서 현재 데이터셋에서는 SPT 3채널 구성이 한글 매칭에 더 집중된 우수한 성능을 보입니다.
 
@@ -36,11 +36,11 @@
 
 ## 3. 파일 목록 및 SHA-256 해시
 
-- `oof_AS-02.csv` (12,222행)
+- `oof_DEV-02.csv` (12,222행)
   - SHA-256: `d847008b11e722c1778411556d6f05e4abe7d4518a721d6d214a22454dc77443`
 - `leaderboard_AS.csv`
   - 팀 리더가 공통 `leaderboard.csv`에 병합할 수 있는 표준 요약 줄
-- `AS-02.json`
+- `DEV-02.json`
   - 코드 커밋 해시, 환경 정보, fold별 진단 메트릭 상세 기록
 
 ---
@@ -49,10 +49,10 @@
 
 ### 평가 점수 검증
 ```bash
-python eval_kit/evaluate.py --oof share/AS-02/oof_AS-02.csv --train data/train.csv
+python eval_kit/evaluate.py --oof share/DEV-02/oof_DEV-02.csv --train data/train.csv
 ```
 
 ### 전체 5-fold OOF 재현 실행
 ```bash
-python train_oof.py --experiment-id AS-02 --folds-sha256 9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51 --retrieval-channels S N P T
+python train_oof.py --experiment-id DEV-02 --folds-sha256 9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51 --retrieval-channels S N P T
 ```

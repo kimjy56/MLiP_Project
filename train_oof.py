@@ -166,7 +166,7 @@ def main():
     parser.add_argument('--output-root', type=Path, default=ROOT / 'artifacts/oof')
     parser.add_argument('--name-mode', choices=['baseline', 'structure', 'all'], default='all')
     parser.add_argument('--phonetic-search', type=int, default=24)
-    parser.add_argument('--retrieval-channels', nargs='*', choices=['S', 'N', 'P', 'T'], default=None)
+    parser.add_argument('--retrieval-channels', nargs='*', choices=['S', 'N', 'P', 'T'], default=['S', 'N', 'P', 'T'])
     parser.add_argument('--use-train-lookup', action=argparse.BooleanOptionalAction, default=True)
     args = parser.parse_args()
     if args.folds is None:

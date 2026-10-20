@@ -4,12 +4,14 @@
     "script.py",
     "requirements.txt",
     "model/matcher.py",
+    "model/name_processing.py",
+    "model/ngram_retrieval.py",
     "model/ranker.txt",
     "model/assets.json"
   ],
-  "zip_bytes": 657921,
-  "uncompressed_bytes": 1707986,
-  "sha256": "fee02079a32221c8a6c0f43462a3e61e02b577193a2423e0562e4873f5828319",
+  "zip_bytes": 667005,
+  "uncompressed_bytes": 1757402,
+  "sha256": "8be1b6f90b3997e49984b1fd0e01856403facdac0422911ae16f9a1b725c0c15",
   "checks": [
     "clean extraction",
     "offline entry point",
@@ -23,27 +25,27 @@
     {
       "mode": "full",
       "rows": 60,
-      "seconds": 4.544192113999998
+      "seconds": 5.469000000040978
     },
     {
       "mode": "shuffled",
       "rows": 60,
-      "seconds": 4.075592023000013
+      "seconds": 5.452999999979511
     },
     {
       "mode": "subset",
       "rows": 15,
-      "seconds": 3.9878471179999906
+      "seconds": 5.10899999999674
     },
     {
       "mode": "single",
       "rows": 1,
-      "seconds": 3.775690902000065
+      "seconds": 4.875
     },
     {
       "mode": "empty",
       "rows": 0,
-      "seconds": 3.706612696000093
+      "seconds": 4.85899999999674
     }
   ],
   "limitation": "Local Python 3.12 environment; not the official evaluation server."

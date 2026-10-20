@@ -1,0 +1,98 @@
+{
+  "experiment_id": "ENV-TORCH-20261020-01",
+  "plan_id": null,
+  "status": "completed",
+  "recorded_at_kst": "2026-10-20T22:41:51.9953640+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "Change existing .venv to server torch version and check dependencies and CUDA",
+  "hypothesis": "Official CUDA 12.8 compatible package set imports and runs on local RTX 5080",
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "torch 2.11.0+cu128",
+    "torch 2.7.1+cu128, torchvision 0.22.1+cu128, torchaudio 2.7.1+cu128"
+  ],
+  "fixed_conditions": [
+    "Existing user-approved .venv Python 3.11.15; saved data/model unchanged"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": null,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    "uv pip install --python .venv\\Scripts\\python.exe torch==2.7.1+cu128 torchvision==0.22.1+cu128 torchaudio==2.7.1+cu128 --index-url https://download.pytorch.org/whl/cu128",
+    "uv pip check --python .venv\\Scripts\\python.exe",
+    "python -m unittest tests.test_torch_indexer -v"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "torch": "2.7.1+cu128",
+    "torchvision": "0.22.1+cu128",
+    "torchaudio": "2.7.1+cu128",
+    "cuda_build": "12.8",
+    "cuda_available": true,
+    "gpu": "NVIDIA GeForce RTX 5080",
+    "fp16_gpu_matmul_passed": true
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "project_log/torch_server_version_change.json",
+    "reports/torch_server_version_check.json",
+    "reports/torch_before_change.local.txt"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "uv pip check: 53 packages compatible",
+    "tests.test_torch_indexer: 4 passed on CUDA",
+    "FP16 CUDA matrix multiplication passed"
+  ],
+  "interpretations": [],
+  "limitations": [
+    "Python remains 3.11.15; remaining packages not aligned to full server requirements",
+    "Prior 256-row batch comparison used torch 2.11; it is not a 2.7.1 validation"
+  ],
+  "failure": "Sandbox DNS lookup failed; retried with approved network access and succeeded",
+  "decision": null,
+  "next_actions": []
+}

@@ -61,10 +61,13 @@ def fit(train, catalog, destination, name_mode='baseline', phonetic_search=0, re
         if not was_retrieved:
             candidates = sorted(candidates + [truth])
         features = index.features(row, candidates, include_name_features=False)
-        if len(candidates) > 100:
+        cand_limit = runtime_int('VESSEL_TRAIN_CANDIDATES', 50)
+        if len(candidates) > cand_limit:
+            n_hard = int(cand_limit * 0.8)
+            n_ton = max(1, cand_limit - n_hard)
             hardness = np.maximum(features[:, 1], features[:, 4]) - features[:, 11]*0.5
-            selected = set(np.argsort(-hardness, kind='stable')[:80].tolist())
-            selected.update(np.argsort(features[:, 11], kind='stable')[:20].tolist())
+            selected = set(np.argsort(-hardness, kind='stable')[:n_hard].tolist())
+            selected.update(np.argsort(features[:, 11], kind='stable')[:n_ton].tolist())
             selected.add(candidates.index(truth))
             selected = sorted(selected)
             features = features[selected]

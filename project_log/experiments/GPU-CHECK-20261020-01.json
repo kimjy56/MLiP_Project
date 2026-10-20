@@ -1,0 +1,460 @@
+{
+  "experiment_id": "GPU-CHECK-20261020-01",
+  "plan_id": null,
+  "status": "completed",
+  "recorded_at_kst": "2026-10-20T22:33:15.9625078+09:00",
+  "started_at_kst": "2026-10-20T22:35:40.080185+09:00",
+  "finished_at_kst": "2026-10-20T22:36:21.053645+09:00",
+  "purpose": "Compare local CUDA single-query and batch retrieval, candidate unions and final predictions without retraining.",
+  "hypothesis": "FP16 scores or topk ties may differ with batch size; test rather than assume equality.",
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "query batch size/order; existing local GPU environment explicitly approved by user"
+  ],
+  "fixed_conditions": [
+    "current local code and saved model",
+    "official catalog only for TF-IDF fit",
+    "public train sample; no labels in prediction",
+    "lookup disabled to exercise retrieval"
+  ],
+  "code": {
+    "git_revision_at_run": "20f348ca439fb6fa3c812cb3b30694d0120c3473",
+    "dirty": true,
+    "file_sha256": {
+      "model/matcher.py": "b214f63d0e5fffb6fe58e3277d3880e3fab9c70999567b8e1bacecc7d8eb291e",
+      "model/torch_indexer.py": "5f184a58d247ea214fe6bb359d49ce13140ee62cae7a5f8d68977f543e9cd9f5",
+      "model/name_processing.py": "6f7dbd9f6c0689b5c6fa7c3f0002e213b0c760cc161ddeb5fcbe6e5a6fde2848",
+      "environment/compare_gpu_batch.py": "8cf99ba63528a4d168e44fc34909093b439ac2c35c33d01013a201c38fbea82e"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "split_id": "Public train stratified diagnostic sample; not holdout accuracy",
+    "split_file_sha256": null,
+    "seed": 42,
+    "training_rows": null,
+    "validation_rows": 256
+  },
+  "retrieval": {
+    "catalog_rows": 78595,
+    "dtype": "float16",
+    "batch_sizes": [
+      2,
+      16,
+      64,
+      256
+    ],
+    "lookup": false,
+    "comparisons": {
+      "torch_names": {
+        "index_seconds": 1.458887799992226,
+        "tensor_shape": [
+          78595,
+          12615
+        ],
+        "dtype": "torch.float16",
+        "count": 24,
+        "comparisons": {
+          "batch_2": {
+            "rows": 256,
+            "rank_mismatch_rows": 0,
+            "set_mismatch_rows": 0,
+            "search_seconds": 0.358712499961257
+          },
+          "batch_16": {
+            "rows": 256,
+            "rank_mismatch_rows": 0,
+            "set_mismatch_rows": 0,
+            "search_seconds": 0.05270549998385832
+          },
+          "batch_64": {
+            "rows": 256,
+            "rank_mismatch_rows": 14,
+            "set_mismatch_rows": 1,
+            "search_seconds": 0.023975700023584068
+          },
+          "batch_256": {
+            "rows": 256,
+            "rank_mismatch_rows": 11,
+            "set_mismatch_rows": 1,
+            "search_seconds": 0.020055499975569546
+          },
+          "reverse_64": {
+            "rows": 256,
+            "rank_mismatch_rows": 14,
+            "set_mismatch_rows": 1,
+            "search_seconds": 0.026795800018589944
+          },
+          "repeat_64": {
+            "rows": 256,
+            "rank_mismatch_rows": 14,
+            "set_mismatch_rows": 1,
+            "search_seconds": 0.025217399990651757
+          },
+          "subset_64": {
+            "rows": 128,
+            "rank_mismatch_rows": 6,
+            "set_mismatch_rows": 1,
+            "search_seconds": 0.011993799998890609
+          }
+        },
+        "single_search_seconds": 0.934554899984505,
+        "score_probe": {
+          "rows": 32,
+          "non_bitwise_equal_rows": 0,
+          "max_absolute_difference": 0.0
+        }
+      },
+      "torch_romans": {
+        "index_seconds": 1.390027799992822,
+        "tensor_shape": [
+          78595,
+          12615
+        ],
+        "dtype": "torch.float16",
+        "count": 60,
+        "comparisons": {
+          "batch_2": {
+            "rows": 256,
+            "rank_mismatch_rows": 0,
+            "set_mismatch_rows": 0,
+            "search_seconds": 0.351370099990163
+          },
+          "batch_16": {
+            "rows": 256,
+            "rank_mismatch_rows": 0,
+            "set_mismatch_rows": 0,
+            "search_seconds": 0.05002590001095086
+          },
+          "batch_64": {
+            "rows": 256,
+            "rank_mismatch_rows": 150,
+            "set_mismatch_rows": 0,
+            "search_seconds": 0.018218300014268607
+          },
+          "batch_256": {
+            "rows": 256,
+            "rank_mismatch_rows": 122,
+            "set_mismatch_rows": 0,
+            "search_seconds": 0.016024600015953183
+          },
+          "reverse_64": {
+            "rows": 256,
+            "rank_mismatch_rows": 150,
+            "set_mismatch_rows": 0,
+            "search_seconds": 0.019052599964197725
+          },
+          "repeat_64": {
+            "rows": 256,
+            "rank_mismatch_rows": 150,
+            "set_mismatch_rows": 0,
+            "search_seconds": 0.018970999983139336
+          },
+          "subset_64": {
+            "rows": 128,
+            "rank_mismatch_rows": 76,
+            "set_mismatch_rows": 0,
+            "search_seconds": 0.009927100036293268
+          }
+        },
+        "single_search_seconds": 0.7203157999902032,
+        "score_probe": {
+          "rows": 32,
+          "non_bitwise_equal_rows": 0,
+          "max_absolute_difference": 0.0
+        }
+      },
+      "torch_phones": {
+        "index_seconds": 0.4409620999940671,
+        "tensor_shape": [
+          78595,
+          2959
+        ],
+        "dtype": "torch.float16",
+        "count": 60,
+        "comparisons": {
+          "batch_2": {
+            "rows": 256,
+            "rank_mismatch_rows": 0,
+            "set_mismatch_rows": 0,
+            "search_seconds": 0.16707670001778752
+          },
+          "batch_16": {
+            "rows": 256,
+            "rank_mismatch_rows": 0,
+            "set_mismatch_rows": 0,
+            "search_seconds": 0.02052020002156496
+          },
+          "batch_64": {
+            "rows": 256,
+            "rank_mismatch_rows": 31,
+            "set_mismatch_rows": 4,
+            "search_seconds": 0.008598800050094724
+          },
+          "batch_256": {
+            "rows": 256,
+            "rank_mismatch_rows": 0,
+            "set_mismatch_rows": 0,
+            "search_seconds": 0.007519500039052218
+          },
+          "reverse_64": {
+            "rows": 256,
+            "rank_mismatch_rows": 31,
+            "set_mismatch_rows": 4,
+            "search_seconds": 0.008327099960297346
+          },
+          "repeat_64": {
+            "rows": 256,
+            "rank_mismatch_rows": 31,
+            "set_mismatch_rows": 4,
+            "search_seconds": 0.008019400003831834
+          },
+          "subset_64": {
+            "rows": 128,
+            "rank_mismatch_rows": 20,
+            "set_mismatch_rows": 1,
+            "search_seconds": 0.004107800021301955
+          }
+        },
+        "single_search_seconds": 0.33210639999015257,
+        "score_probe": {
+          "rows": 32,
+          "non_bitwise_equal_rows": 1,
+          "max_absolute_difference": 0.00048828125
+        }
+      },
+      "torch_keys": {
+        "index_seconds": 0.6482131999800913,
+        "tensor_shape": [
+          78595,
+          3576
+        ],
+        "dtype": "torch.float16",
+        "count": 24,
+        "comparisons": {
+          "batch_2": {
+            "rows": 256,
+            "rank_mismatch_rows": 0,
+            "set_mismatch_rows": 0,
+            "search_seconds": 0.19723280001198873
+          },
+          "batch_16": {
+            "rows": 256,
+            "rank_mismatch_rows": 0,
+            "set_mismatch_rows": 0,
+            "search_seconds": 0.029837600013706833
+          },
+          "batch_64": {
+            "rows": 256,
+            "rank_mismatch_rows": 49,
+            "set_mismatch_rows": 5,
+            "search_seconds": 0.013646800012793392
+          },
+          "batch_256": {
+            "rows": 256,
+            "rank_mismatch_rows": 0,
+            "set_mismatch_rows": 0,
+            "search_seconds": 0.01080530002946034
+          },
+          "reverse_64": {
+            "rows": 256,
+            "rank_mismatch_rows": 49,
+            "set_mismatch_rows": 5,
+            "search_seconds": 0.011055099952500314
+          },
+          "repeat_64": {
+            "rows": 256,
+            "rank_mismatch_rows": 49,
+            "set_mismatch_rows": 5,
+            "search_seconds": 0.011411499988753349
+          },
+          "subset_64": {
+            "rows": 128,
+            "rank_mismatch_rows": 25,
+            "set_mismatch_rows": 4,
+            "search_seconds": 0.006540800037328154
+          }
+        },
+        "single_search_seconds": 0.34886939998250455,
+        "score_probe": {
+          "rows": 32,
+          "non_bitwise_equal_rows": 11,
+          "max_absolute_difference": 0.00048828125
+        }
+      }
+    }
+  },
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "existing LightGBM ranker; no training",
+    "parameters": {
+      "name_mode": "all",
+      "phonetic_search": 24,
+      "retrieval_channels": [
+        "S",
+        "P",
+        "T"
+      ]
+    },
+    "loss": null,
+    "asset_sha256": {
+      "model/assets.json": "5e67b541bc0d010f145424638a283741d45b00ffca0adbc04626910354c2e6c4",
+      "model/ranker.txt": "24b53237899116f96e8c7ab074e2a991de055c05868346bc349594604f94ea17"
+    }
+  },
+  "commands": [
+    ".\\.venv\\Scripts\\python.exe environment/compare_gpu_batch.py"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "executable": "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe",
+    "packages": {
+      "torch": "2.11.0+cu128",
+      "numpy": "1.26.4",
+      "pandas": "2.0.3",
+      "scikit-learn": "1.5.2",
+      "lightgbm": "4.6.0"
+    },
+    "gpu": "NVIDIA GeForce RTX 5080",
+    "cuda_build": "12.8",
+    "allow_tf32": false,
+    "fp16_reduced_precision_reduction": true
+  },
+  "metrics": {
+    "metric_source": "execution equivalence only",
+    "hangul_rows": 128,
+    "non_hangul_rows": 128,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": "Data/model loading, index construction, repeated retrieval and feature/ranker comparison; not production latency",
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "reports/gpu_batch_comparison.json",
+    "reports/gpu_batch_comparison_draft.json",
+    "environment/compare_gpu_batch.py"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Final prediction mismatches: zero for all sampled comparisons.",
+    "64-row batches: candidate unions differed in 8/256 rows; 256-row batches: 1/256.",
+    "Separate numerical probe on first 32 sampled rows observed FP16 score differences up to 0.00048828125."
+  ],
+  "interpretations": [
+    "Execution succeeds on the approved local GPU environment.",
+    "Single and batched candidate retrieval are not identical; sampled final prediction agreement does not establish equivalence for all inputs.",
+    "Differences observed within one PyTorch version; not evidence that a version upgrade caused them."
+  ],
+  "limitations": [
+    "Local code differs from unpushed cloud changes",
+    "Python 3.11.15 / torch 2.11.0+cu128 differs from required server",
+    "eval_kit README is locally v1.0 despite user-applied v1.1; no OOF scoring in this diagnostic",
+    "No PyTorch 2.7.1 comparison, no Ubuntu/L4 test.",
+    "Cached replay checks candidate union/features/ranker, not a fully integrated batched production pipeline.",
+    "Sample comes from previously used public train and saved full-training model; no accuracy improvement claim.",
+    "Score-probe size is 32, separate from batch-size retrieval comparisons."
+  ],
+  "failure": null,
+  "decision": "Keep production code and model unchanged; do not certify batch substitution or server equivalence.",
+  "next_actions": [
+    "Before deploying a batched path, define deterministic tie selection and resolve numerical differences, then validate target environment."
+  ],
+  "equivalence_results": {
+    "single": {
+      "rows": 256,
+      "candidate_union_mismatch_rows": 0,
+      "prediction_mismatch_rows": 0,
+      "hangul_prediction_mismatch_rows": 0,
+      "non_hangul_prediction_mismatch_rows": 0
+    },
+    "batch_2": {
+      "rows": 256,
+      "candidate_union_mismatch_rows": 0,
+      "prediction_mismatch_rows": 0,
+      "hangul_prediction_mismatch_rows": 0,
+      "non_hangul_prediction_mismatch_rows": 0
+    },
+    "batch_16": {
+      "rows": 256,
+      "candidate_union_mismatch_rows": 0,
+      "prediction_mismatch_rows": 0,
+      "hangul_prediction_mismatch_rows": 0,
+      "non_hangul_prediction_mismatch_rows": 0
+    },
+    "batch_64": {
+      "rows": 256,
+      "candidate_union_mismatch_rows": 8,
+      "prediction_mismatch_rows": 0,
+      "hangul_prediction_mismatch_rows": 0,
+      "non_hangul_prediction_mismatch_rows": 0
+    },
+    "batch_256": {
+      "rows": 256,
+      "candidate_union_mismatch_rows": 1,
+      "prediction_mismatch_rows": 0,
+      "hangul_prediction_mismatch_rows": 0,
+      "non_hangul_prediction_mismatch_rows": 0
+    },
+    "reverse_64": {
+      "rows": 256,
+      "candidate_union_mismatch_rows": 8,
+      "prediction_mismatch_rows": 0,
+      "hangul_prediction_mismatch_rows": 0,
+      "non_hangul_prediction_mismatch_rows": 0
+    },
+    "repeat_64": {
+      "rows": 256,
+      "candidate_union_mismatch_rows": 8,
+      "prediction_mismatch_rows": 0,
+      "hangul_prediction_mismatch_rows": 0,
+      "non_hangul_prediction_mismatch_rows": 0
+    },
+    "subset_64": {
+      "rows": 128,
+      "candidate_union_mismatch_rows": 6,
+      "prediction_mismatch_rows": 0,
+      "hangul_prediction_mismatch_rows": 0,
+      "non_hangul_prediction_mismatch_rows": 0
+    }
+  },
+  "diagnostic_total_seconds": 40.90134250000119,
+  "attempts": [
+    {
+      "stage": "environment discovery",
+      "result": "Specified .venv-server absent; setup attempt failed because installed uv 0.10.9 had no Python 3.11.17 download; no new venv created. Existing .venv found; user approved its different versions."
+    },
+    {
+      "stage": "first diagnostic launch",
+      "result": "WinError 1114 c10.dll when pandas/numpy imported before torch; retried with torch first and import succeeded; version causation not established."
+    },
+    {
+      "stage": "second diagnostic launch",
+      "result": "ModuleNotFoundError name_processing; added model directory to diagnostic sys.path as production entry point does; retry succeeded."
+    },
+    {
+      "stage": "draft diagnostic",
+      "result": "Completed, but duplicate query strings were collapsed in replay cache. Preserved draft separately and repeated with row-indexed replay; only final report used for conclusions."
+    }
+  ]
+}

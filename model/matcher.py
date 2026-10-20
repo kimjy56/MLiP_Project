@@ -29,19 +29,19 @@ from unidecode import unidecode
 from threadpoolctl import threadpool_limits
 
 try:
-    from model.name_processing import NameFeatureIndex, STRUCTURE_FEATURES, PHONETIC_FEATURES, name_view
+    from model.name_processing import NameFeatureIndex, STRUCTURE_FEATURES, PHONETIC_FEATURES, name_view, rapidfuzz_phone_similarity
     from model.ngram_retrieval import CharacterNgramIndex
 except ImportError:
-    from name_processing import NameFeatureIndex, STRUCTURE_FEATURES, PHONETIC_FEATURES, name_view
+    from name_processing import NameFeatureIndex, STRUCTURE_FEATURES, PHONETIC_FEATURES, name_view, rapidfuzz_phone_similarity
     from ngram_retrieval import CharacterNgramIndex
 
 CHANNELS = ('S', 'N', 'P', 'T')
 
 
-def runtime_int(name, default, maximum=None):
+def runtime_int(name, default, maximum=None, minimum=1):
     value = int(os.environ.get(name, default))
-    if value < 1:
-        raise ValueError(f'{name} must be positive')
+    if minimum is not None and value < minimum:
+        raise ValueError(f'{name} must be >= {minimum}')
     return min(value, maximum) if maximum else value
 
 
@@ -73,11 +73,11 @@ def validate_channels(channels):
     return [c for c in CHANNELS if c in channels]
 
 FEATURES = [
-    'exact', 'ratio', 'partial', 'roman_ratio', 'phonetic_ratio',
+    'ratio', 'roman_ratio', 'phonetic_ratio',
     'phonetic_partial', 'length_ratio', 'digits_equal', 'digits_missing',
     'gross_gap', 'international_gap', 'best_gap', 'gross_exact',
     'international_exact', 'gross_missing', 'international_missing',
-    'catalog_gross_missing', 'type_probability', 'flag_probability',
+    'type_probability', 'flag_probability',
     'flag_missing', 'is_hangul', 'name_length', 'catalog_name_length',
 ]
 QUERY_COLUMNS = ['sample_id', 'vessel_name', 'call_sign', 'gross_tonnage',
@@ -295,7 +295,53 @@ class CatalogIndex:
             for row, result in zip(selected, index.batch_search(queries, count)):
                 row['_retrieval'][field] = result
 
-    def candidates(self, row, use_aliases=True):
+    def prune_candidates_by_tonnage(self, row, candidates, max_candidates=30):
+        if len(candidates) <= max_candidates:
+            return sorted(candidates)
+        gross, inter = row['_tons'] if '_tons' in row else (number(row.get('gross_tonnage')), number(row.get('international_gross_tonnage')))
+        ton = inter if inter > 0 else (gross if gross > 0 else -1.0)
+        alt_ton = gross if (gross > 0 and gross != ton) else -1.0
+        q, r_q, p_q, ko = row['_name'] if '_name' in row else prepare_row(row)['_name']
+
+        alias_cands = set()
+        if self.use_train_lookup:
+            for v in self.assets.get('aliases', {}).get(norm(row.get('vessel_name')), []):
+                if v in self.lookup:
+                    alias_cands.add(self.lookup[v])
+
+        scored = []
+        for c_i in candidates:
+            if c_i in alias_cands:
+                scored.append((-999.0, c_i))
+                continue
+            c_gt = self.gt[c_i]
+            if ton > 0 and c_gt > 0:
+                diff = abs(c_gt - ton)
+                if alt_ton > 0:
+                    diff = min(diff, abs(c_gt - alt_ton))
+                rel = diff / max(1.0, c_gt)
+                # 한글 선박의 경우 9.8% 초과 시 페널티 대폭 부여 (AR-02 기준)
+                ton_pen = rel if rel <= 0.098 else rel * 3.5
+            elif ton > 0 and c_gt <= 0:
+                ton_pen = 0.25
+            else:
+                ton_pen = 0.0
+
+            if ko:
+                c_p = self.phones[c_i]
+                sim = rapidfuzz_phone_similarity(p_q, c_p) if (p_q and c_p) else 0.0
+            else:
+                c_n = self.names[c_i]
+                sim = (fuzz.ratio(q, c_n) / 100.0) if (q and c_n) else 0.0
+
+            priority = sim - 1.5 * ton_pen
+            scored.append((-priority, c_i))
+
+        scored.sort()
+        chosen = [c_i for _, c_i in scored[:max_candidates]]
+        return sorted(chosen)
+
+    def candidates(self, row, use_aliases=True, max_candidates=None):
         result = set()
         channels = ('S', 'P', 'T') if self.retrieval_channels is None else self.retrieval_channels
         for channel in channels:
@@ -303,7 +349,13 @@ class CatalogIndex:
         if self.use_train_lookup and use_aliases:
             result.update(self.lookup[v] for v in self.assets['aliases'].get(norm(row.get('vessel_name')), [])
                           if v in self.lookup)
-        return sorted(result) if result else [0]
+        if not result:
+            return [0]
+        if max_candidates is None:
+            max_candidates = runtime_int('VESSEL_MAX_CANDIDATES', 0, minimum=0)
+        if max_candidates > 0 and len(result) > max_candidates:
+            return self.prune_candidates_by_tonnage(row, result, max_candidates)
+        return sorted(result)
 
     def features(self, row, candidates, include_name_features=True):
         row = row if '_name' in row else prepare_row(row)
@@ -326,15 +378,14 @@ class CatalogIndex:
         digits = re.sub(r'\D', '', q)
         n = len(candidates)
         base = np.column_stack([
-            [float(bool(q) and q == s) for s in names],
-            similarity(q, names, fuzz.ratio), similarity(q, names, fuzz.partial_ratio),
+            similarity(q, names, fuzz.ratio),
             similarity(r, romans, fuzz.ratio), similarity(p, phones, fuzz.ratio),
             similarity(p, phones, fuzz.partial_ratio),
             [min(len(q), len(s))/max(len(q), len(s), 1) for s in names],
             [float(digits == self.digits[i]) for i in candidates],
             np.full(n, not digits), g1, g2, np.minimum(g1, g2),
             (g1 < 1e-6), (g2 < 1e-6), np.full(n, not np.isfinite(gross)),
-            np.full(n, not np.isfinite(inter)), ~np.isfinite(gt),
+            np.full(n, not np.isfinite(inter)),
             [tp.get(self.types[i], 0) for i in candidates],
             [fp.get(self.flags[i], 0) for i in candidates],
             np.full(n, not text(row.get('flag_name'))), np.full(n, hangul(name)),
@@ -393,11 +444,12 @@ class Matcher:
         workers = worker_count('VESSEL_PREDICT_WORKERS')
         predictions, candidate_ids, direct_flags = [], [], []
         timings = {'prepare_seconds': 0., 'feature_seconds': 0., 'score_seconds': 0.}
+        pred_max_cands = runtime_int('VESSEL_PREDICT_CANDIDATES', 30, minimum=0)
         def build(row):
             direct = self.index.direct(row) if use_direct else None
             if direct:
                 return direct, None, None
-            candidates = self.index.candidates(row)
+            candidates = self.index.candidates(row, max_candidates=pred_max_cands)
             return None, candidates, self.index.features(row, candidates)
         with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
             for start in range(0, n_records, batch_size):

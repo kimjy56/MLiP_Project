@@ -1,0 +1,29 @@
+{
+  "before": "torch 2.11.0+cu128",
+  "environment": ".venv Python 3.11.15 retained by user approval",
+  "status": "completed",
+  "baseline": "reports/torch_before_change.local.txt",
+  "recorded_at_kst": "2026-10-20T22:39:55.4640287+09:00",
+  "zip_created": false,
+  "target": "torch 2.7.1+cu128, torchvision 0.22.1+cu128, torchaudio 2.7.1+cu128",
+  "purpose": "Change existing .venv to server torch version and check dependencies and CUDA",
+  "comparison": "import, uv pip check, CUDA tensor operations",
+  "finished_at_kst": "2026-10-20T22:41:51.9731526+09:00",
+  "checks": {
+    "python": "3.11.15",
+    "torch": "2.7.1+cu128",
+    "torchvision": "0.22.1+cu128",
+    "torchaudio": "2.7.1+cu128",
+    "cuda_build": "12.8",
+    "cuda_available": true,
+    "gpu": "NVIDIA GeForce RTX 5080",
+    "fp16_gpu_matmul_passed": true
+  },
+  "dependency_check": "uv pip check: 53 packages compatible",
+  "unit_tests": "tests.test_torch_indexer: 4 passed on CUDA",
+  "initial_failure": "Sandbox DNS lookup failed; retried with approved network access and succeeded",
+  "limitations": [
+    "Python remains 3.11.15; remaining packages not aligned to full server requirements",
+    "Prior 256-row batch comparison used torch 2.11; it is not a 2.7.1 validation"
+  ]
+}

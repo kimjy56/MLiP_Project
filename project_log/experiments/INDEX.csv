@@ -54,3 +54,8 @@ E008,retrieval combination NPT,completed,vessel_holdout pure,0.9819519100302682,
 E008,retrieval combination SNPT,completed,vessel_holdout pure,0.9760352520613713,experiments/E008.json
 E009,SNPT full-data fit and offline benchmark,completed,execution only; no holdout accuracy,,experiments/E009.json
 E010,Python 3.11.17 and server package compatibility,completed,environment and execution only; no accuracy,,experiments/E010.json
+AS-01,team 5-fold OOF baseline (SPT),completed,5-fold group OOF,0.9791842864635889,experiments/AS-01.json
+DEV-02,team 5-fold OOF 4-channel (SNPT),completed,5-fold group OOF,0.9780359997597794,experiments/DEV-02.json
+DEV-03,team 5-fold OOF parallel 4-channel (SNPT),completed,5-fold group OOF,0.9780359997597794,experiments/DEV-03.json
+OPT-01,candidate limit 30 tuning test (SNPT),completed,5-fold group OOF,0.974509551397059,experiments/OPT-01.json
+OPT-02,candidate limit 50 and rapidfuzz OSA test (SPT),completed,5-fold group OOF,0.9762455794946552,experiments/OPT-02.json

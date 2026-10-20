@@ -1,0 +1,350 @@
+{
+  "status": "completed",
+  "started_at_kst": "2026-10-20T22:34:47.369144+09:00",
+  "seed": 42,
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "executable": "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe",
+    "packages": {
+      "torch": "2.11.0+cu128",
+      "numpy": "1.26.4",
+      "pandas": "2.0.3",
+      "scikit-learn": "1.5.2",
+      "lightgbm": "4.6.0"
+    },
+    "gpu": "NVIDIA GeForce RTX 5080",
+    "cuda_build": "12.8",
+    "allow_tf32": false,
+    "fp16_reduced_precision_reduction": true
+  },
+  "git_revision": "20f348ca439fb6fa3c812cb3b30694d0120c3473",
+  "sha256": {
+    "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+    "model/assets.json": "5e67b541bc0d010f145424638a283741d45b00ffca0adbc04626910354c2e6c4",
+    "model/ranker.txt": "24b53237899116f96e8c7ab074e2a991de055c05868346bc349594604f94ea17",
+    "model/matcher.py": "b214f63d0e5fffb6fe58e3277d3880e3fab9c70999567b8e1bacecc7d8eb291e",
+    "model/torch_indexer.py": "5f184a58d247ea214fe6bb359d49ce13140ee62cae7a5f8d68977f543e9cd9f5",
+    "model/name_processing.py": "6f7dbd9f6c0689b5c6fa7c3f0002e213b0c760cc161ddeb5fcbe6e5a6fde2848",
+    "environment/compare_gpu_batch.py": "b4bd6d1c0aa85fd8af5585ff17e199cc1c4db2421c5d24ec1b64704b5e895ae8"
+  },
+  "retrieval": {
+    "torch_names": {
+      "index_seconds": 1.5359472999698482,
+      "tensor_shape": [
+        78595,
+        12615
+      ],
+      "dtype": "torch.float16",
+      "count": 24,
+      "comparisons": {
+        "batch_2": {
+          "rows": 256,
+          "rank_mismatch_rows": 0,
+          "set_mismatch_rows": 0,
+          "search_seconds": 0.4090032000094652
+        },
+        "batch_16": {
+          "rows": 256,
+          "rank_mismatch_rows": 0,
+          "set_mismatch_rows": 0,
+          "search_seconds": 0.048164800042286515
+        },
+        "batch_64": {
+          "rows": 256,
+          "rank_mismatch_rows": 14,
+          "set_mismatch_rows": 1,
+          "search_seconds": 0.018772799987345934
+        },
+        "batch_256": {
+          "rows": 256,
+          "rank_mismatch_rows": 11,
+          "set_mismatch_rows": 1,
+          "search_seconds": 0.013806000002659857
+        },
+        "reverse_64": {
+          "rows": 256,
+          "rank_mismatch_rows": 14,
+          "set_mismatch_rows": 1,
+          "search_seconds": 0.016122100001666695
+        },
+        "repeat_64": {
+          "rows": 256,
+          "rank_mismatch_rows": 14,
+          "set_mismatch_rows": 1,
+          "search_seconds": 0.0159599999897182
+        },
+        "subset_64": {
+          "rows": 128,
+          "rank_mismatch_rows": 6,
+          "set_mismatch_rows": 1,
+          "search_seconds": 0.008256500004790723
+        }
+      },
+      "single_search_seconds": 0.8338109999895096,
+      "score_probe": {
+        "rows": 32,
+        "non_bitwise_equal_rows": 0,
+        "max_absolute_difference": 0.0
+      }
+    },
+    "torch_romans": {
+      "index_seconds": 1.434010200027842,
+      "tensor_shape": [
+        78595,
+        12615
+      ],
+      "dtype": "torch.float16",
+      "count": 60,
+      "comparisons": {
+        "batch_2": {
+          "rows": 256,
+          "rank_mismatch_rows": 0,
+          "set_mismatch_rows": 0,
+          "search_seconds": 0.38031859998591244
+        },
+        "batch_16": {
+          "rows": 256,
+          "rank_mismatch_rows": 0,
+          "set_mismatch_rows": 0,
+          "search_seconds": 0.0484821000136435
+        },
+        "batch_64": {
+          "rows": 256,
+          "rank_mismatch_rows": 150,
+          "set_mismatch_rows": 0,
+          "search_seconds": 0.018714299949351698
+        },
+        "batch_256": {
+          "rows": 256,
+          "rank_mismatch_rows": 122,
+          "set_mismatch_rows": 0,
+          "search_seconds": 0.016099400003440678
+        },
+        "reverse_64": {
+          "rows": 256,
+          "rank_mismatch_rows": 150,
+          "set_mismatch_rows": 0,
+          "search_seconds": 0.018039399990811944
+        },
+        "repeat_64": {
+          "rows": 256,
+          "rank_mismatch_rows": 150,
+          "set_mismatch_rows": 0,
+          "search_seconds": 0.01777779997792095
+        },
+        "subset_64": {
+          "rows": 128,
+          "rank_mismatch_rows": 76,
+          "set_mismatch_rows": 0,
+          "search_seconds": 0.009137800021562725
+        }
+      },
+      "single_search_seconds": 0.7588970000506379,
+      "score_probe": {
+        "rows": 32,
+        "non_bitwise_equal_rows": 0,
+        "max_absolute_difference": 0.0
+      }
+    },
+    "torch_phones": {
+      "index_seconds": 0.4387386000016704,
+      "tensor_shape": [
+        78595,
+        2959
+      ],
+      "dtype": "torch.float16",
+      "count": 60,
+      "comparisons": {
+        "batch_2": {
+          "rows": 256,
+          "rank_mismatch_rows": 0,
+          "set_mismatch_rows": 0,
+          "search_seconds": 0.12902709998888895
+        },
+        "batch_16": {
+          "rows": 256,
+          "rank_mismatch_rows": 0,
+          "set_mismatch_rows": 0,
+          "search_seconds": 0.01819279999472201
+        },
+        "batch_64": {
+          "rows": 256,
+          "rank_mismatch_rows": 31,
+          "set_mismatch_rows": 4,
+          "search_seconds": 0.007204400026239455
+        },
+        "batch_256": {
+          "rows": 256,
+          "rank_mismatch_rows": 0,
+          "set_mismatch_rows": 0,
+          "search_seconds": 0.006229799997527152
+        },
+        "reverse_64": {
+          "rows": 256,
+          "rank_mismatch_rows": 31,
+          "set_mismatch_rows": 4,
+          "search_seconds": 0.007195800018962473
+        },
+        "repeat_64": {
+          "rows": 256,
+          "rank_mismatch_rows": 31,
+          "set_mismatch_rows": 4,
+          "search_seconds": 0.00687609997112304
+        },
+        "subset_64": {
+          "rows": 128,
+          "rank_mismatch_rows": 20,
+          "set_mismatch_rows": 1,
+          "search_seconds": 0.003485499997623265
+        }
+      },
+      "single_search_seconds": 0.2932740999967791,
+      "score_probe": {
+        "rows": 32,
+        "non_bitwise_equal_rows": 1,
+        "max_absolute_difference": 0.00048828125
+      }
+    },
+    "torch_keys": {
+      "index_seconds": 0.6508497000322677,
+      "tensor_shape": [
+        78595,
+        3576
+      ],
+      "dtype": "torch.float16",
+      "count": 24,
+      "comparisons": {
+        "batch_2": {
+          "rows": 256,
+          "rank_mismatch_rows": 0,
+          "set_mismatch_rows": 0,
+          "search_seconds": 0.1454420000081882
+        },
+        "batch_16": {
+          "rows": 256,
+          "rank_mismatch_rows": 0,
+          "set_mismatch_rows": 0,
+          "search_seconds": 0.022339899966027588
+        },
+        "batch_64": {
+          "rows": 256,
+          "rank_mismatch_rows": 49,
+          "set_mismatch_rows": 5,
+          "search_seconds": 0.008528000034857541
+        },
+        "batch_256": {
+          "rows": 256,
+          "rank_mismatch_rows": 0,
+          "set_mismatch_rows": 0,
+          "search_seconds": 0.008688499976415187
+        },
+        "reverse_64": {
+          "rows": 256,
+          "rank_mismatch_rows": 49,
+          "set_mismatch_rows": 5,
+          "search_seconds": 0.007874300004914403
+        },
+        "repeat_64": {
+          "rows": 256,
+          "rank_mismatch_rows": 49,
+          "set_mismatch_rows": 5,
+          "search_seconds": 0.007797800004482269
+        },
+        "subset_64": {
+          "rows": 128,
+          "rank_mismatch_rows": 25,
+          "set_mismatch_rows": 4,
+          "search_seconds": 0.00394989998312667
+        }
+      },
+      "single_search_seconds": 0.3218534999759868,
+      "score_probe": {
+        "rows": 32,
+        "non_bitwise_equal_rows": 11,
+        "max_absolute_difference": 0.00048828125
+      }
+    }
+  },
+  "predictions": {
+    "single": {
+      "rows": 256,
+      "candidate_union_mismatch_rows": 0,
+      "prediction_mismatch_rows": 0,
+      "hangul_prediction_mismatch_rows": 0,
+      "non_hangul_prediction_mismatch_rows": 0
+    },
+    "batch_2": {
+      "rows": 256,
+      "candidate_union_mismatch_rows": 0,
+      "prediction_mismatch_rows": 0,
+      "hangul_prediction_mismatch_rows": 0,
+      "non_hangul_prediction_mismatch_rows": 0
+    },
+    "batch_16": {
+      "rows": 256,
+      "candidate_union_mismatch_rows": 0,
+      "prediction_mismatch_rows": 0,
+      "hangul_prediction_mismatch_rows": 0,
+      "non_hangul_prediction_mismatch_rows": 0
+    },
+    "batch_64": {
+      "rows": 256,
+      "candidate_union_mismatch_rows": 8,
+      "prediction_mismatch_rows": 0,
+      "hangul_prediction_mismatch_rows": 0,
+      "non_hangul_prediction_mismatch_rows": 0
+    },
+    "batch_256": {
+      "rows": 256,
+      "candidate_union_mismatch_rows": 1,
+      "prediction_mismatch_rows": 0,
+      "hangul_prediction_mismatch_rows": 0,
+      "non_hangul_prediction_mismatch_rows": 0
+    },
+    "reverse_64": {
+      "rows": 256,
+      "candidate_union_mismatch_rows": 8,
+      "prediction_mismatch_rows": 0,
+      "hangul_prediction_mismatch_rows": 0,
+      "non_hangul_prediction_mismatch_rows": 0
+    },
+    "repeat_64": {
+      "rows": 256,
+      "candidate_union_mismatch_rows": 8,
+      "prediction_mismatch_rows": 0,
+      "hangul_prediction_mismatch_rows": 0,
+      "non_hangul_prediction_mismatch_rows": 0
+    },
+    "subset_64": {
+      "rows": 128,
+      "candidate_union_mismatch_rows": 6,
+      "prediction_mismatch_rows": 0,
+      "hangul_prediction_mismatch_rows": 0,
+      "non_hangul_prediction_mismatch_rows": 0
+    }
+  },
+  "scope": "Local saved-model execution equivalence, not accuracy or server validation",
+  "sample": {
+    "rows": 256,
+    "hangul": 128,
+    "non_hangul": 128,
+    "sample_id_sha256": "eabace0c8e7cbad2b1e1a539e9ad0adecb85a3effdd47358cc8c8bbf357c3808",
+    "catalog_rows": 78595,
+    "split": null,
+    "seen_unseen": "not measured; saved full-training assets; not holdout accuracy"
+  },
+  "model": {
+    "name_mode": "all",
+    "phonetic_search": 24,
+    "retrieval_channels": [
+      "S",
+      "P",
+      "T"
+    ]
+  },
+  "finished_at_kst": "2026-10-20T22:35:28.942508+09:00",
+  "total_seconds": 41.44688349997159,
+  "timing_scope": "Data/model loading, index construction, repeated retrieval and feature/ranker comparison; not production latency"
+}

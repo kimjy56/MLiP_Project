@@ -36,11 +36,11 @@ class NameContracts(unittest.TestCase):
     def test_discriminative_tokens_and_empty_names(self):
         idx = NameFeatureIndex(['MORNING COMPOSER', 'MORNING CELLO', 'OCEAN 7', 'OCEAN 8'])
         x = idx.features('MORNING COMPOSER', [0,1], 'all')
-        self.assertGreater(x[0, 12], x[1, 12])  # residual phonetic score
+        self.assertGreater(x[0, 10], x[1, 10])  # residual phonetic score
         n = idx.features('OCEAN 7', [2,3], 'all')
         self.assertEqual(n[:,1].tolist(), [0,1])
         self.assertTrue(np.isfinite(idx.features(None, [0], 'all')).all())
-        self.assertEqual(idx.features(None, [], 'all').shape, (0,14))
+        self.assertEqual(idx.features(None, [], 'all').shape, (0,12))
 
     def test_baseline_features_and_candidates_unchanged(self):
         catalog = pd.DataFrame({'vessel_id':['A','B'], 'vessel_name':['OCEAN 7','OCEAN 8'],
