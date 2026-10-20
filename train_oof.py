@@ -9,6 +9,7 @@ import argparse
 from datetime import datetime, timedelta, timezone
 import hashlib
 import json
+import os
 from pathlib import Path
 import platform
 import re
@@ -181,7 +182,7 @@ def main():
     if record_path.exists() or output_dir.exists():
         parser.error('Experiment ID already exists; use a new ID and preserve previous results')
     code_files = ['train_oof.py', 'train.py', 'model/matcher.py', 'model/name_processing.py',
-                  'model/ngram_retrieval.py', 'script.py']
+                  'model/ngram_retrieval.py', 'model/torch_indexer.py', 'script.py']
     revision = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=ROOT, capture_output=True, text=True)
     status = subprocess.run(['git', 'status', '--porcelain'], cwd=ROOT, capture_output=True, text=True)
     record = {
@@ -193,7 +194,9 @@ def main():
                  'sha256': {name: _sha256(ROOT / name) for name in code_files}},
         'configuration': {'name_mode': args.name_mode, 'phonetic_search': args.phonetic_search,
                           'retrieval_channels': args.retrieval_channels,
-                          'use_train_lookup': args.use_train_lookup, 'model': MODEL_PARAMETERS},
+                          'use_train_lookup': args.use_train_lookup, 'model': MODEL_PARAMETERS,
+                          'runtime_overrides': {k: v for k, v in os.environ.items() if k.startswith('VESSEL_')},
+                          'search_algorithm': os.environ.get('VESSEL_SEARCH_ALGORITHM', 'rapidfuzz')},
         'command': [sys.executable, *sys.argv],
         'environment': {'python': platform.python_version(), 'platform': platform.platform(),
                         'executable': sys.executable},

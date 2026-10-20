@@ -149,3 +149,9 @@ SNPT 전체 학습은 12,222행/539,925쌍, 자산·인덱스·특징·모델·�
 ## 2026-10-19 KST — data/eval_kit 수령
 
 사용자가 배치한 평가 묶음 10개 파일을 확인했다. fold 5개 모두 배포 평가기 내부의 SHA-256과 일치하며 12,222행·ID 유일성·fold 범위 검사를 통과했다. 그룹 fold 4개의 선박 분리와 E00 OOF의 기준 fold ID·분할 일치도 확인했다. 이는 같은 배포본 내부 대조이며 외부 진위 인증은 아니다. 기본 OOF fold 경로를 data/eval_kit로 변경했다. 원본 train.csv와 vessel_catalog.csv는 아직 없으므로 원본과의 대조·평가기 자체 시험·E00 점수 재현은 미실시다. 원본 평가기는 수정하지 않았다. 근거: project_log/eval_kit_received.json.
+
+## 2026-10-20 KST — 실행 경로 명시 및 제한된 성능 개선 검증
+
+사용자 요청으로 전처리 재사용·묶음 예측·학습 결과 스트리밍·스레드 설정·희소 TF-IDF를 적용했다. RapidFuzz를 TF-IDF로 대체하는 것은 단순 가속이 아니므로 새 자산에 알고리즘을 저장한다. 이력이 불명확한 구형 자산은 사용자가 재현할 알고리즘을 명시해야 하며 자동 fallback은 제거한다. 새 학습 기본값 RapidFuzz는 AS-02 설정과 다를 수 있어 새 OOF 평가가 필요하다. CUDA float16에서 sparse float32로 변경된 결과의 동일성도 주장하지 않는다.
+
+검증은 기존 및 추가 합성 테스트 22개와 400행 비용 비교 1회로 제한했다. 배치·순서·작업자 수별 CPU 예측 일치 확인. GPU 미보유로 CUDA 및 Windows는 미검증. 전체 OOF·모델 갱신·ZIP·commit·push는 수행하지 않았다. 상세: performance_revision.json 및 docs/PERFORMANCE_RUNTIME.md.

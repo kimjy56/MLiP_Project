@@ -1,0 +1,46 @@
+{
+  "status": "completed",
+  "purpose": "Bound memory, reuse per-row transformations, batch model calls, make search semantics explicit",
+  "base_commit": "20f348c",
+  "hypothesis": "Less repeated preprocessing and model-call overhead; bounded sparse storage reduces peak memory",
+  "comparison": "Same algorithm, features, model and rows; changes to search algorithm require a separate OOF experiment",
+  "validation_plan": "Existing unit tests plus small synthetic batched/serial equivalence and timing checks",
+  "full_oof_planned": false,
+  "zip_requested": false,
+  "gpu_validation": "unavailable",
+  "recorded_at_kst": "2026-10-20T22:19:56.098223+09:00",
+  "tests": {
+    "passed": 22,
+    "scope": "synthetic contracts; real small booster; CPU rapidfuzz/tfidf batch/serial/reverse/single equivalence"
+  },
+  "synthetic_benchmark": {
+    "reference_row_calls_seconds": 0.42329973800042353,
+    "batch64_workers1_seconds": 0.3452957310000784,
+    "batch64_workers2_seconds": 0.5767735409999659,
+    "rows": 400,
+    "catalog_rows": 5,
+    "algorithm": "rapidfuzz",
+    "predictions_equal": true,
+    "trials": 1
+  },
+  "environment": {
+    "python": "3.11.17",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "cuda_available": false
+  },
+  "limitations": [
+    "No full-data speed or OOF claim",
+    "No Windows execution or CUDA validation",
+    "Legacy assets require explicit algorithm selection",
+    "Sparse float32 TF-IDF is not bitwise equivalent to historical dense float16 GPU search"
+  ],
+  "code_sha256": {
+    "train.py": "1e13479df2597cf5a62f572e0a349700e9cce7ee20df7a2197b0aa3ff87a2dae",
+    "train_oof.py": "9c763d05586f25484b2dd7ed0a0bc8460c19f9a92fff2ebdaa5f562f1fbd4bff",
+    "script.py": "d8b97891ca393d1190d74bfe3a908ce85394e2adef66bc3c82a51b5add6126a7",
+    "model/matcher.py": "b9b7e4ec96fefff8074f9c3e2120d3b6a42c7945bfc87d0afabb9066862f9646",
+    "model/name_processing.py": "05715cda100af6df382d8b9b4a0a69acbb7d9d1c06f5e27a2e6e7928b4b14007",
+    "model/torch_indexer.py": "92b7855b797568c6a226e9f8a99ccb40a442609becfbe63e0b7232c160f19c6d"
+  },
+  "validation_note": "Initial failures: leakage contract rejected new input-derived fields; tiny TF-IDF fixture had no shared vocabulary. Contract retained target/fold exclusion; fixture given shared suffix. Final 22 tests passed."
+}

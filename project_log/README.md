@@ -32,6 +32,8 @@
 
 ## 현재까지 확보한 근거
 
+- 2026-10-20 실행 최적화: 명시적 검색 알고리즘, 희소 인덱스, 행 전처리 재사용, 묶음 LightGBM 예측 및 학습 중간 결과 메모리 축소. 관련 테스트 22개 및 소규모 합성 비교만 실행. 새 OOF·전체 데이터 가속률은 미측정. `performance_revision.json`, `../docs/PERFORMANCE_RUNTIME.md` 참조.
+
 - 다중 PC 준비: `.gitignore`를 데이터·OOF·fold·가상환경·가중치·ZIP·행 단위 오류 파일에 확장했다. 현재 추적 파일과 접근 가능한 로컬 이력에 제거 대상은 없어 실제 파일/인덱스 삭제는 없었다. Windows 전용 requirements/PowerShell 설치 스크립트와 OS 호환 검사 분기를 추가했다. Windows 대상 의존성 51개 해결, PowerShell 7.5.4 구문 검사, 제외 규칙 16사례·집계 유지 7사례 및 Linux 환경 재검사 통과. 실제 Windows 설치는 미검증이다. `docs/MULTI_PC_SETUP.md`, `environment/README.md`, `windows_git_setup.json` 참조.
 
 - 공통 평가 README 문서 1.1: 첨부 v1.0의 정답 포함 추론 예제·불안전한 병합·CI/환경 표현을 수정하고 재귀 ZIP 생성 예제를 삭제했다. `eval_kit/README.md` 참조. 메모리 내 합성 데이터로 OOF 예제 정상 흐름과 잘못된 입력 7종의 거부를 확인했다. 실제 평가 코드·fold는 미수령이며 점수 재현 검사가 아니다. 원본/수정본 해시와 확인 범위는 `eval_kit_readme_revision.json`에 보존한다.

@@ -110,7 +110,9 @@ class TeamRules(unittest.TestCase):
         matcher.model = ConstantModel()
         original = matcher.index.candidates
         def checked(row, **kwargs):
-            self.assertEqual(set(row), set(QUERY_COLUMNS))
+            self.assertEqual(set(row) - {'_name', '_tons', '_view', '_retrieval'}, set(QUERY_COLUMNS))
+            self.assertNotIn('target_vessel_id', row)
+            self.assertNotIn('fold', row)
             return original(row, **kwargs)
         with patch.object(matcher.index, 'candidates', side_effect=checked):
             expected = matcher.predict(train)

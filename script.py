@@ -3,11 +3,10 @@ from pathlib import Path
 import os
 import sys
 
-import pandas as pd
-
 ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT / 'model'))
 from matcher import Matcher
+import pandas as pd
 
 
 def input_path(filename, explicit=None):

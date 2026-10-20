@@ -27,9 +27,9 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 try:
-    from model.matcher import CatalogIndex, FEATURES, QUERY_COLUMNS, Matcher, hangul, make_assets
+    from model.matcher import CatalogIndex, FEATURES, QUERY_COLUMNS, Matcher, hangul, make_assets, prepare_row, worker_count, runtime_int
 except ImportError:
-    from matcher import CatalogIndex, FEATURES, QUERY_COLUMNS, Matcher, hangul, make_assets
+    from matcher import CatalogIndex, FEATURES, QUERY_COLUMNS, Matcher, hangul, make_assets, prepare_row, worker_count, runtime_int
 
 
 MODEL_PARAMETERS = dict(n_estimators=350, learning_rate=.05, num_leaves=31,
@@ -38,13 +38,14 @@ MODEL_PARAMETERS = dict(n_estimators=350, learning_rate=.05, num_leaves=31,
                         verbosity=-1, deterministic=True, force_col_wise=True)
 
 
-@threadpool_limits.wrap(limits=4)
+@threadpool_limits.wrap(limits=1)
 def fit(train, catalog, destination, name_mode='baseline', phonetic_search=0, retrieval_channels=None,
         use_train_lookup=True):
     start = time.monotonic()
     destination.mkdir(parents=True, exist_ok=True)
     assets = make_assets(train, catalog, name_mode, phonetic_search, retrieval_channels, use_train_lookup)
     index = CatalogIndex(catalog, assets)
+    index_seconds = time.monotonic() - start
     # Calls and aliases are used only at inference; the pair model must learn
     # catalog similarity without seeing its own label as an alias feature.
     cols = ['vessel_name', 'gross_tonnage', 'international_gross_tonnage',
@@ -70,33 +71,46 @@ def fit(train, catalog, destination, name_mode='baseline', phonetic_search=0, re
             candidates = [candidates[i] for i in selected]
         if name_mode != 'baseline':
             features = np.column_stack([features, index.name_index.features(
-                row.get('vessel_name'), candidates, name_mode)])
+                row.get('vessel_name'), candidates, name_mode, query=row['_view'])])
         row_labels = [int(i == truth) for i in candidates]
         weight = .7/max(kh, 1e-9) if hangul(row['vessel_name']) else .3/max(1-kh, 1e-9)
         row_weights = [weight] * len(candidates)
         cand_ids = [index.ids[i] for i in candidates]
         return features, row_labels, row_weights, was_retrieved, row['sample_id'], cand_ids
 
-    workers = min(8, os.cpu_count() or 4)
-    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
-        row_results = list(executor.map(_process_train_row, records))
-
     matrices, labels, weights = [], [], []
     retrieved = []
     pair_hash = hashlib.sha256()
-    for features, row_labels, row_weights, was_retrieved, sample_id, cand_ids in row_results:
-        matrices.append(features)
-        labels.extend(row_labels)
-        weights.extend(row_weights)
-        retrieved.append(was_retrieved)
-        pair_hash.update(json.dumps([sample_id, cand_ids], ensure_ascii=False).encode('utf-8'))
+    workers = worker_count('VESSEL_FEATURE_WORKERS')
+    batch_size = runtime_int('VESSEL_TRAIN_BATCH', 64)
+    feature_start = time.monotonic()
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
+        for start_row in range(0, len(records), batch_size):
+            batch = [prepare_row(r) for r in records[start_row:start_row + batch_size]]
+            index.prepare_retrieval(batch)
+            for features, row_labels, row_weights, was_retrieved, sample_id, cand_ids in executor.map(_process_train_row, batch):
+                matrices.append(features)
+                labels.extend(row_labels)
+                weights.extend(row_weights)
+                retrieved.append(was_retrieved)
+                pair_hash.update(json.dumps([sample_id, cand_ids], ensure_ascii=False).encode('utf-8'))
+    feature_seconds = time.monotonic() - feature_start
     x = np.concatenate(matrices)
-    model = lgb.LGBMClassifier(**MODEL_PARAMETERS)
-    model.fit(x, np.asarray(labels), sample_weight=np.asarray(weights), feature_name=index.feature_names)
+    matrices.clear()
+    parameters = dict(MODEL_PARAMETERS, n_jobs=runtime_int('VESSEL_TRAIN_THREADS', 4, 6))
+    model = lgb.LGBMClassifier(**parameters)
+    fit_start = time.monotonic()
+    with threadpool_limits(limits=parameters['n_jobs']):
+        model.fit(x, np.asarray(labels), sample_weight=np.asarray(weights), feature_name=index.feature_names)
+    model_fit_seconds = time.monotonic() - fit_start
     # Python handles Unicode Windows paths; native LightGBM fopen does not.
     (destination / 'ranker.txt').write_text(model.booster_.model_to_string(), encoding='utf-8')
     (destination / 'assets.json').write_text(json.dumps(assets, ensure_ascii=False), encoding='utf-8')
-    return {'training_rows': len(train), 'unique_feature_rows': len(unique),
+    return {'search_algorithm': index.search_algorithm, 'feature_workers': workers,
+            'model_threads': parameters['n_jobs'], 'batch_size': batch_size,
+            'index_seconds': index_seconds, 'feature_seconds': feature_seconds,
+            'model_fit_seconds': model_fit_seconds,
+            'training_rows': len(train), 'unique_feature_rows': len(unique),
             'training_pair_sha256': pair_hash.hexdigest(),
             'training_pairs': len(labels), 'training_candidate_recall': float(np.mean(retrieved)),
             'fit_seconds': time.monotonic()-start,

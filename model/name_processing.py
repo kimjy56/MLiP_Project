@@ -111,8 +111,8 @@ class NameFeatureIndex:
         self.unknown_idf = 1 + math.log(len(self.views)+1)
         self.search_keys = [v.search_key for v in self.views]
 
-    def features(self, name, candidates, mode):
-        query = name_view(name)
+    def features(self, name, candidates, mode, query=None):
+        query = name_view(name) if query is None else query
         output = []
         # Local to this input row; no cross-test-row fitted state/cache.
         distances = {}
