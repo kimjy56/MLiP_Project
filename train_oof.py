@@ -15,6 +15,10 @@ import re
 import subprocess
 import sys
 import time
+try:
+    import torch
+except Exception:
+    pass
 
 import numpy as np
 import pandas as pd

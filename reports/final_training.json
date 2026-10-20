@@ -4,7 +4,7 @@
   "training_pair_sha256": "3223a8414efe673e4686538156803434c1fb56ef2a54738336a2478a7388269a",
   "training_pairs": 446743,
   "training_candidate_recall": 0.9901241957204848,
-  "fit_seconds": 76.25,
+  "fit_seconds": 66.90599999995902,
   "timing_scope": "assets, catalog index, candidate/features, training and model save; excludes CSV load",
   "feature_importance_gain": {
     "exact": 0.0,

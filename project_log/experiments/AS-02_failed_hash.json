@@ -1,0 +1,98 @@
+{
+  "experiment_id": "AS-02",
+  "status": "failed",
+  "recorded_at_kst": "2026-10-20T21:12:29.090093+09:00",
+  "purpose": "Generate full OOF using supplied fixed group folds; no model selection or tuning",
+  "hypothesis": "Not a performance-improvement claim; evaluate the specified configuration",
+  "code": {
+    "git_revision": "d9a9163310f45836d7be23172931a4b142e1700a",
+    "dirty": false,
+    "sha256": {
+      "train_oof.py": "b1a2e6697bbac1ffb553fa84c8e9c2dc4dbe8690233179c53139e697f8551667",
+      "train.py": "ca4da6029ad3d0fe398922b4eab2e37481340c37005ba4bbc907c94c17838e6b",
+      "model/matcher.py": "2d45e7bfa77b83ef4ffdda50a5e4fe301a634be7b15fc1c9e5f489a57413f397",
+      "model/name_processing.py": "6f7dbd9f6c0689b5c6fa7c3f0002e213b0c760cc161ddeb5fcbe6e5a6fde2848",
+      "model/ngram_retrieval.py": "9c1e0e73a4b35c2723a30dd261bfc6561e9b465d9f4f3041e196c45f3e3ed59a",
+      "script.py": "88219370d5ceeabd61449affceef38fc032265caefd14c89533c117507251df1"
+    }
+  },
+  "configuration": {
+    "name_mode": "all",
+    "phonetic_search": 24,
+    "retrieval_channels": [
+      "S",
+      "N",
+      "P",
+      "T"
+    ],
+    "use_train_lookup": true,
+    "model": {
+      "n_estimators": 350,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "max_depth": -1,
+      "min_child_samples": 40,
+      "colsample_bytree": 0.9,
+      "reg_lambda": 2,
+      "random_state": 20261016,
+      "n_jobs": 4,
+      "verbosity": -1,
+      "deterministic": true,
+      "force_col_wise": true
+    }
+  },
+  "command": [
+    "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe",
+    "train_oof.py",
+    "--experiment-id",
+    "AS-02",
+    "--folds",
+    "eval_kit/folds_group5_seed42.csv",
+    "--folds-sha256",
+    "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "--name-mode",
+    "all",
+    "--phonetic-search",
+    "24",
+    "--retrieval-channels",
+    "S",
+    "N",
+    "P",
+    "T",
+    "--use-train-lookup"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "executable": "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe"
+  },
+  "data": {
+    "train": {
+      "path": "C:\\Projects\\ML_midterm\\data\\train.csv",
+      "sha256": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c"
+    },
+    "catalog": {
+      "path": "C:\\Projects\\ML_midterm\\data\\vessel_catalog.csv",
+      "sha256": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "folds": {
+      "path": "eval_kit\\folds_group5_seed42.csv",
+      "sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    }
+  },
+  "fold_results": [],
+  "team_evaluation": null,
+  "limitations": [
+    "Local diagnostics are not the distributed team evaluator result",
+    "E00/selftest, CI comparison and auxiliary folds require the team evaluation kit",
+    "No final fit, submission ZIP or hidden-test result"
+  ],
+  "started_at_kst": "2026-10-20T21:12:29.118499+09:00",
+  "failure": {
+    "type": "ValueError",
+    "message": "Fold hash differs from the supplied team hash"
+  },
+  "finished_at_kst": "2026-10-20T21:12:29.141499+09:00",
+  "elapsed_seconds": 0.031000000017229468,
+  "timing_scope": "input hashes/loading, five sequential folds, probes and output save"
+}

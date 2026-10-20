@@ -7,9 +7,15 @@ from pathlib import Path
 import re
 import unicodedata
 
+import concurrent.futures
+import os
+
 try:
     import torch
-    from torch_indexer import TorchNgramIndexer
+    try:
+        from model.torch_indexer import TorchNgramIndexer
+    except ImportError:
+        from torch_indexer import TorchNgramIndexer
     HAS_TORCH = True
 except Exception:
     HAS_TORCH = False
@@ -21,8 +27,12 @@ from rapidfuzz import fuzz, process
 from unidecode import unidecode
 from threadpoolctl import threadpool_limits
 
-from name_processing import NameFeatureIndex, STRUCTURE_FEATURES, PHONETIC_FEATURES, name_view
-from ngram_retrieval import CharacterNgramIndex
+try:
+    from model.name_processing import NameFeatureIndex, STRUCTURE_FEATURES, PHONETIC_FEATURES, name_view
+    from model.ngram_retrieval import CharacterNgramIndex
+except ImportError:
+    from name_processing import NameFeatureIndex, STRUCTURE_FEATURES, PHONETIC_FEATURES, name_view
+    from ngram_retrieval import CharacterNgramIndex
 
 CHANNELS = ('S', 'N', 'P', 'T')
 
@@ -332,21 +342,30 @@ class Matcher:
         missing = set(QUERY_COLUMNS) - set(queries.columns)
         if missing:
             raise ValueError(f'Missing input columns: {sorted(missing)}')
-        predictions, candidate_ids, direct_flags = [], [], []
-        # No fitting, accumulated aliases, query aggregation, or mutable cache.
-        for row in queries.loc[:, QUERY_COLUMNS].to_dict('records'):
+        records = queries.loc[:, QUERY_COLUMNS].to_dict('records')
+        n_records = len(records)
+        if n_records == 0:
+            return [], [], []
+
+        def _predict_row(row):
             direct = self.index.direct(row) if use_direct else None
             if direct:
-                predictions.append(direct)
-                if details:
-                    candidate_ids.append([direct])
-                    direct_flags.append(True)
-                continue
+                return direct, [direct] if details else None, True
             candidates = self.index.candidates(row)
             features = self.index.features(row, candidates)
             scores = self.model.predict(features, num_threads=1)
-            predictions.append(self.index.ids[candidates[int(np.argmax(scores))]])
-            if details:
-                candidate_ids.append([self.index.ids[i] for i in candidates])
-                direct_flags.append(False)
+            pred = self.index.ids[candidates[int(np.argmax(scores))]]
+            c_ids = [self.index.ids[i] for i in candidates] if details else None
+            return pred, c_ids, False
+
+        if n_records <= 10:
+            results = [_predict_row(r) for r in records]
+        else:
+            workers = min(8, os.cpu_count() or 4)
+            with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
+                results = list(executor.map(_predict_row, records))
+
+        predictions = [r[0] for r in results]
+        candidate_ids = [r[1] for r in results] if details else []
+        direct_flags = [r[2] for r in results] if details else []
         return predictions, candidate_ids, direct_flags

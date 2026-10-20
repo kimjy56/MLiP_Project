@@ -7,6 +7,8 @@ import json
 from pathlib import Path
 import sys
 import time
+import concurrent.futures
+import os
 try:
     import torch
 except Exception:
@@ -19,8 +21,15 @@ from sklearn.model_selection import GroupShuffleSplit, train_test_split
 from threadpoolctl import threadpool_limits
 
 ROOT = Path(__file__).resolve().parent
-sys.path.insert(0, str(ROOT / 'model'))
-from matcher import CatalogIndex, FEATURES, QUERY_COLUMNS, Matcher, hangul, make_assets
+if str(ROOT / 'model') not in sys.path:
+    sys.path.insert(0, str(ROOT / 'model'))
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+try:
+    from model.matcher import CatalogIndex, FEATURES, QUERY_COLUMNS, Matcher, hangul, make_assets
+except ImportError:
+    from matcher import CatalogIndex, FEATURES, QUERY_COLUMNS, Matcher, hangul, make_assets
 
 
 MODEL_PARAMETERS = dict(n_estimators=350, learning_rate=.05, num_leaves=31,
@@ -41,18 +50,16 @@ def fit(train, catalog, destination, name_mode='baseline', phonetic_search=0, re
     cols = ['vessel_name', 'gross_tonnage', 'international_gross_tonnage',
             'flag_name', 'vessel_type', 'target_vessel_id']
     unique = train.drop_duplicates(cols)
+    records = unique.to_dict('records')
     kh = unique.vessel_name.map(hangul).mean()
-    matrices, labels, weights = [], [], []
-    retrieved = []
-    pair_hash = hashlib.sha256()
-    for n, row in enumerate(unique.to_dict('records')):
+
+    def _process_train_row(row):
         truth = index.lookup[row['target_vessel_id']]
         candidates = index.candidates(row, use_aliases=False)
-        retrieved.append(truth in candidates)
-        if truth not in candidates:
+        was_retrieved = truth in candidates
+        if not was_retrieved:
             candidates = sorted(candidates + [truth])
         features = index.features(row, candidates, include_name_features=False)
-        # Preserve the most plausible negatives from both name and tonnage.
         if len(candidates) > 100:
             hardness = np.maximum(features[:, 1], features[:, 4]) - features[:, 11]*0.5
             selected = set(np.argsort(-hardness, kind='stable')[:80].tolist())
@@ -61,17 +68,28 @@ def fit(train, catalog, destination, name_mode='baseline', phonetic_search=0, re
             selected = sorted(selected)
             features = features[selected]
             candidates = [candidates[i] for i in selected]
-        pair_hash.update(json.dumps([row['sample_id'], [index.ids[i] for i in candidates]],
-                                   ensure_ascii=False).encode('utf-8'))
         if name_mode != 'baseline':
             features = np.column_stack([features, index.name_index.features(
                 row.get('vessel_name'), candidates, name_mode)])
-        matrices.append(features)
-        labels.extend(int(i == truth) for i in candidates)
+        row_labels = [int(i == truth) for i in candidates]
         weight = .7/max(kh, 1e-9) if hangul(row['vessel_name']) else .3/max(1-kh, 1e-9)
-        weights.extend([weight] * len(candidates))
-        if (n+1) % 500 == 0:
-            print(f'Feature rows {n+1}/{len(unique)}; seconds={time.monotonic()-start:.1f}', flush=True)
+        row_weights = [weight] * len(candidates)
+        cand_ids = [index.ids[i] for i in candidates]
+        return features, row_labels, row_weights, was_retrieved, row['sample_id'], cand_ids
+
+    workers = min(8, os.cpu_count() or 4)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
+        row_results = list(executor.map(_process_train_row, records))
+
+    matrices, labels, weights = [], [], []
+    retrieved = []
+    pair_hash = hashlib.sha256()
+    for features, row_labels, row_weights, was_retrieved, sample_id, cand_ids in row_results:
+        matrices.append(features)
+        labels.extend(row_labels)
+        weights.extend(row_weights)
+        retrieved.append(was_retrieved)
+        pair_hash.update(json.dumps([sample_id, cand_ids], ensure_ascii=False).encode('utf-8'))
     x = np.concatenate(matrices)
     model = lgb.LGBMClassifier(**MODEL_PARAMETERS)
     model.fit(x, np.asarray(labels), sample_weight=np.asarray(weights), feature_name=index.feature_names)

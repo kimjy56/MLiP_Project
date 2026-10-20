@@ -17,6 +17,7 @@
 | experiments/E008.json | 두 번째 개발 분할: 동일 16개 조합 평가 및 기존 SPT 재현 확인 |
 | experiments/E009.json | n-gram 포함 채택 조합의 전체 학습·새 ZIP·실행 비용 검사 |
 | experiments/AS-01.json | 팀 기준 5-fold OOF 베이스라인 검증 (가중 0.97918) |
+| experiments/AS-02.json | 문자 N-gram 추가 4채널 전체(SNPT) 5-fold OOF 검증 (가중 0.97804) |
 | experiments/INDEX.csv | 완료 기록의 요약 목록 |
 | baseline_errors.json | 공개 train의 기존 보류 오답 16행, 오류 단계 재확인 |
 | ERROR_ANALYSIS.md | 대표 오답과 개선 가설 |
