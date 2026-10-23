@@ -1,0 +1,16 @@
+{
+  "limitations": [
+    "Actual total row count unknown",
+    "Runtime coverage and hardware differences unknown",
+    "Do not use to claim official throughput or guaranteed runtime"
+  ],
+  "public_rows": 5000,
+  "status": "planning_assumption_not_official",
+  "private_rows": 10000,
+  "recorded_at_kst": "2026-10-21T12:23:58.2895075+09:00",
+  "total_rows_source": "User approved rough planning estimate based on local 500-row timing and reported 140-second runtime",
+  "public_fraction": 0.5,
+  "scope": "Runtime and capacity planning only; never limit actual input rows or predictions",
+  "public_fraction_source": "User relayed organizer answer: evaluated on 50 percent of total test data",
+  "total_test_rows": 10000
+}

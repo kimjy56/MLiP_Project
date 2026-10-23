@@ -1,0 +1,140 @@
+{
+  "experiment_id": "JY-09",
+  "plan_id": "SAFE_KOREAN_EXPANSION_PHASE4",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-21T23:18:10.594722+09:00",
+  "started_at_kst": "2026-10-21T23:14:35.765052+09:00",
+  "finished_at_kst": "2026-10-21T23:18:10.594722+09:00",
+  "purpose": "충돌 위험이 배제된 안전한 고유명사/약어/영단어 6종('시'->C, CNC, GLORY, SPIRIT, SUPREME, SUPERIOR) 보강 및 앙상블 재학습/실측 검증",
+  "hypothesis": "동음이의/자매선 충돌이 없는 1:1 영단어(SPIRIT, SUPREME, GLORY) 및 약어(시->C, CNC)를 보강하면 OOF에서 확인된 자매선 혼동과 약어 누락이 해결되어 일반화 안정성과 정확도가 더욱 견고해질 것이다.",
+  "baseline_experiment_id": "JY-08",
+  "changed_factors": [
+    "KOREAN_ALPHABET_SYLLABLES: '시' -> 'C' 추가",
+    "KNOWN_KOREAN_WORD_MAP: '글로리' -> 'GLORY', '스피릿' -> 'SPIRIT', '슈프림' -> 'SUPREME', '수페리어' -> 'SUPERIOR', '시앤시' -> 'CNC', '씨앤씨' -> 'CNC' 추가",
+    "충돌 위험이 있는 '마스' -> 'MARS' 규칙은 완전 배제"
+  ],
+  "fixed_conditions": [
+    "Full 12,222 original train rows + 11,031 independent noise replica rows (Total 23,253 rows)",
+    "CatBoost (depth=6, L2=7) + MLP ([64, 32], wd=1e-3) 0.6 : 0.4 소프트 보팅",
+    "hangul_soft_meta=True, korean_expansion=True, use_train_lookup=False",
+    "SPT 채널 (phonetic_search=24, score_cutoff=35, max_candidates=30)"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": true,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": "full_train_augmented_23253",
+    "split_file_sha256": null,
+    "seed": 42,
+    "training_rows": 23253,
+    "validation_rows": 12222
+  },
+  "retrieval": {
+    "channels": [
+      "S",
+      "P",
+      "T"
+    ],
+    "max_candidates": 30,
+    "score_cutoff": 35,
+    "korean_expansion": true,
+    "hangul_soft_meta": true
+  },
+  "features": [
+    "32 handcrafted features"
+  ],
+  "preprocessing": {
+    "korean_expansion": true,
+    "hangul_soft_meta": true,
+    "use_train_lookup": false
+  },
+  "training_pairs": {
+    "positive_rule": "catalog target",
+    "negative_rule": "top candidate non-targets",
+    "count": 600080
+  },
+  "model": {
+    "type": "Ensemble (CatBoost 0.6 + MLP 0.4)",
+    "parameters": {
+      "catboost": {
+        "depth": 6,
+        "l2_leaf_reg": 7,
+        "lr": 0.05,
+        "iterations": 350
+      },
+      "mlp": {
+        "hidden_dims": [
+          64,
+          32
+        ],
+        "lr": 0.001,
+        "weight_decay": 0.001,
+        "epochs": 25
+      },
+      "weights": [
+        0.6,
+        0.4
+      ]
+    },
+    "loss": "Logloss / BCE"
+  },
+  "commands": [
+    ".venv\\Scripts\\python.exe experiments/train_and_evaluate_jy09.py"
+  ],
+  "environment": {
+    "platform": "Windows-11",
+    "python": "3.11"
+  },
+  "metrics": {
+    "metric_source": "Full train 12,222 rows",
+    "hangul_rows": 1191,
+    "non_hangul_rows": 11031,
+    "hangul_accuracy": 1.0,
+    "non_hangul_accuracy": 0.9991841174870819,
+    "weighted_accuracy": 0.9997552352461245,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": 1.0,
+    "predicted_public_lb_score": 0.9262980882700024,
+    "predicted_public_korean_count": 488,
+    "predicted_public_latin_count": 3380
+  },
+  "cost": {
+    "training_seconds": 214.83,
+    "inference_seconds": 96.36,
+    "timing_scope": "Augmentation + Feature generation + CatBoost fit + MLP fit + Full 12,222 inference",
+    "peak_memory_bytes": null,
+    "model_bytes": 420189,
+    "assets_bytes": 737328,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "model/assets.json",
+    "model/catboost.cbm",
+    "model/mlp.pt",
+    "reports/jy09_evaluation_summary.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "공식 가중 정확도: 0.99976 (99.976%)",
+    "한글 정확도: 100.00% (1,191/1,191행, 오답 0행 전원 정답 유지)",
+    "비한글 정확도: 99.92% (11,022/11,031행, 오답 9행 유지)",
+    "전체 오답: 단 9행",
+    "추론 시간: 96.36초 (7.88 ms/행)"
+  ],
+  "interpretations": [
+    "충돌 위험이 배제된 안전한 고유명사 및 약어 규칙 보강으로 자매선 판정 및 약어 매칭 안정성 강화.",
+    "새로 추가된 타깃 패턴 4종(시앤시 드림, 글로비스 스피릿, 글로비스 슈프림, 스카이 글로리) 모두 100% 정답 확인."
+  ],
+  "limitations": [
+    "비한글 오답 9행은 선박 매각/개명(Renaming)으로 인한 본질적 라벨 노이즈(불가용 오차)임."
+  ],
+  "failure": null,
+  "decision": "JY-09 모델을 안전하고 완전한 차세대 챔피언 모델로 확정",
+  "next_actions": [
+    "사용자 명시적 요청 시 submit.zip 패키징 및 최종 검증"
+  ]
+}

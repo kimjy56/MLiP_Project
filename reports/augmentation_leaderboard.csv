@@ -1,0 +1,3 @@
+﻿date,id,scheme,oof,oof_sha8,rows,hangul,hangul_lo,hangul_hi,non_hangul,non_hangul_lo,non_hangul_hi,weighted,weighted_lo,weighted_hi,recall_h,recall_nh,compare_to,d_weighted,d_lo,d_hi,verdict,train_sec,infer_sec,zip_mb,note,checks,eval_ver
+2026-10-21 12:55,AUG-02,G5-s42,oof_AUG-02.csv,919975b2,12222,0.90092,0.86768,0.93201,0.99855,0.99753,0.99936,0.93021,0.90697,0.95191,,,,,,,,,,,,train=ok;folds=G5-s42;foldcol=ok,1.0
+2026-10-21 12:55,AUG-03,G5-s42,oof_AUG-03.csv,f788fbc5,12222,0.89001,0.85482,0.92199,0.99937,0.99889,0.99982,0.92282,0.89813,0.94514,,,oof_AUG-02.csv,-0.00740,-0.02583,0.00949,동등,,,,,train=ok;folds=G5-s42;foldcol=ok,1.0

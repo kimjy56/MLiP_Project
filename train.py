@@ -38,12 +38,49 @@ MODEL_PARAMETERS = dict(n_estimators=350, learning_rate=.05, num_leaves=31,
                         verbosity=-1, deterministic=True, force_col_wise=True)
 
 
+def training_pair_for_row(row, index, kh):
+    name_mode = index.name_mode
+    truth = index.lookup[row['target_vessel_id']]
+    candidates = index.candidates(row, use_aliases=False)
+    was_retrieved = truth in candidates
+    if not was_retrieved:
+        candidates = sorted(candidates + [truth])
+    features = index.features(row, candidates, include_name_features=False)
+    cand_limit = runtime_int('VESSEL_TRAIN_CANDIDATES', 50)
+    if len(candidates) > cand_limit:
+        n_hard = int(cand_limit * 0.8)
+        n_ton = max(1, cand_limit - n_hard)
+        # Use feature names: dropping columns must not silently change this heuristic.
+        ratio_i = FEATURES.index('ratio')
+        phone_i = FEATURES.index('phonetic_ratio')
+        gap_i = FEATURES.index('best_gap')
+        hardness = np.maximum(features[:, ratio_i], features[:, phone_i]) - features[:, gap_i]*0.5
+        selected = set(np.argsort(-hardness, kind='stable')[:n_hard].tolist())
+        selected.update(np.argsort(features[:, gap_i], kind='stable')[:n_ton].tolist())
+        selected.add(candidates.index(truth))
+        selected = sorted(selected)
+        features = features[selected]
+        candidates = [candidates[i] for i in selected]
+    if name_mode != 'baseline':
+        features = np.column_stack([features, index.name_index.features(
+            row.get('vessel_name'), candidates, name_mode, query=row['_view'])])
+    row_labels = [int(i == truth) for i in candidates]
+    weight = .7/max(kh, 1e-9) if hangul(row['vessel_name']) else .3/max(1-kh, 1e-9)
+    row_weights = [weight] * len(candidates)
+    cand_ids = [index.ids[i] for i in candidates]
+    return features, row_labels, row_weights, was_retrieved, row['sample_id'], cand_ids
+
+
 @threadpool_limits.wrap(limits=1)
 def fit(train, catalog, destination, name_mode='baseline', phonetic_search=0, retrieval_channels=None,
-        use_train_lookup=True):
+        use_train_lookup=True, pair_observer=None, relax_tonnage_penalty=False, hangul_ignore_type_flag=False,
+        korean_expansion=False):
     start = time.monotonic()
     destination.mkdir(parents=True, exist_ok=True)
-    assets = make_assets(train, catalog, name_mode, phonetic_search, retrieval_channels, use_train_lookup)
+    assets = make_assets(train, catalog, name_mode, phonetic_search, retrieval_channels,
+                         use_train_lookup, relax_tonnage_penalty=relax_tonnage_penalty,
+                         hangul_ignore_type_flag=hangul_ignore_type_flag,
+                         korean_expansion=korean_expansion)
     index = CatalogIndex(catalog, assets)
     index_seconds = time.monotonic() - start
     # Calls and aliases are used only at inference; the pair model must learn
@@ -55,31 +92,7 @@ def fit(train, catalog, destination, name_mode='baseline', phonetic_search=0, re
     kh = unique.vessel_name.map(hangul).mean()
 
     def _process_train_row(row):
-        truth = index.lookup[row['target_vessel_id']]
-        candidates = index.candidates(row, use_aliases=False)
-        was_retrieved = truth in candidates
-        if not was_retrieved:
-            candidates = sorted(candidates + [truth])
-        features = index.features(row, candidates, include_name_features=False)
-        cand_limit = runtime_int('VESSEL_TRAIN_CANDIDATES', 50)
-        if len(candidates) > cand_limit:
-            n_hard = int(cand_limit * 0.8)
-            n_ton = max(1, cand_limit - n_hard)
-            hardness = np.maximum(features[:, 1], features[:, 4]) - features[:, 11]*0.5
-            selected = set(np.argsort(-hardness, kind='stable')[:n_hard].tolist())
-            selected.update(np.argsort(features[:, 11], kind='stable')[:n_ton].tolist())
-            selected.add(candidates.index(truth))
-            selected = sorted(selected)
-            features = features[selected]
-            candidates = [candidates[i] for i in selected]
-        if name_mode != 'baseline':
-            features = np.column_stack([features, index.name_index.features(
-                row.get('vessel_name'), candidates, name_mode, query=row['_view'])])
-        row_labels = [int(i == truth) for i in candidates]
-        weight = .7/max(kh, 1e-9) if hangul(row['vessel_name']) else .3/max(1-kh, 1e-9)
-        row_weights = [weight] * len(candidates)
-        cand_ids = [index.ids[i] for i in candidates]
-        return features, row_labels, row_weights, was_retrieved, row['sample_id'], cand_ids
+        return training_pair_for_row(row, index, kh)
 
     matrices, labels, weights = [], [], []
     retrieved = []
@@ -106,9 +119,17 @@ def fit(train, catalog, destination, name_mode='baseline', phonetic_search=0, re
     with threadpool_limits(limits=parameters['n_jobs']):
         model.fit(x, np.asarray(labels), sample_weight=np.asarray(weights), feature_name=index.feature_names)
     model_fit_seconds = time.monotonic() - fit_start
-    # Python handles Unicode Windows paths; native LightGBM fopen does not.
     (destination / 'ranker.txt').write_text(model.booster_.model_to_string(), encoding='utf-8')
     (destination / 'assets.json').write_text(json.dumps(assets, ensure_ascii=False), encoding='utf-8')
+    try:
+        from decision_models.catboost_model import CatBoostDecisionModel
+        cb = CatBoostDecisionModel(task_type='CPU', thread_count=parameters['n_jobs'])
+        cb.fit(x, np.asarray(labels), np.asarray(weights), index.feature_names)
+        cb.save(destination)
+    except Exception as e:
+        print(f"CatBoost training skipped: {e}")
+    if pair_observer is not None:
+        pair_observer(x, np.asarray(labels), np.asarray(weights), index, unique, kh)
     return {'search_algorithm': index.search_algorithm, 'feature_workers': workers,
             'model_threads': parameters['n_jobs'], 'batch_size': batch_size,
             'index_seconds': index_seconds, 'feature_seconds': feature_seconds,
@@ -159,6 +180,9 @@ def main():
     parser.add_argument('--name-mode', choices=['baseline', 'structure', 'all'], default='baseline')
     parser.add_argument('--phonetic-search', type=int, default=0)
     parser.add_argument('--retrieval-channels', nargs='*', choices=['S','N','P','T'], default=None)
+    parser.add_argument('--relax-tonnage-penalty', action=argparse.BooleanOptionalAction, default=False)
+    parser.add_argument('--hangul-ignore-type-flag', action=argparse.BooleanOptionalAction, default=False)
+    parser.add_argument('--korean-expansion', action=argparse.BooleanOptionalAction, default=False)
     parser.add_argument('--data-dir', type=Path, default=ROOT / 'data')
     parser.add_argument('--output-root', type=Path, default=ROOT)
     args = parser.parse_args()
@@ -175,7 +199,10 @@ def main():
         dest = args.output_root / 'validation_model'
         results = {'scope': 'legacy development holdouts, not team 5-fold OOF',
                    'seed': 20261016, 'fit': fit(fitted, catalog, dest, args.name_mode,
-                       args.phonetic_search, args.retrieval_channels, args.use_train_lookup)}
+                       args.phonetic_search, args.retrieval_channels, args.use_train_lookup,
+                       relax_tonnage_penalty=args.relax_tonnage_penalty,
+                       hangul_ignore_type_flag=args.hangul_ignore_type_flag,
+                       korean_expansion=args.korean_expansion)}
         matcher = Matcher(catalog, dest)
         for label, data in [('vessel_holdout', unseen), ('row_holdout', mixed)]:
             result, pred = evaluate(matcher, data, set(fitted.target_vessel_id))
@@ -202,7 +229,10 @@ def main():
                       }).to_csv(reports / 'split.csv', index=False)
     if not args.validate_only:
         result = fit(train, catalog, args.output_root / 'model', args.name_mode,
-                     args.phonetic_search, args.retrieval_channels, args.use_train_lookup)
+                     args.phonetic_search, args.retrieval_channels, args.use_train_lookup,
+                     relax_tonnage_penalty=args.relax_tonnage_penalty,
+                     hangul_ignore_type_flag=args.hangul_ignore_type_flag,
+                     korean_expansion=args.korean_expansion)
         (reports / 'final_training.json').write_text(json.dumps(result, indent=2), encoding='utf-8')
         print('Final training complete', flush=True)
 

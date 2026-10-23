@@ -1,0 +1,25 @@
+{
+  "submission_label": "AS-02",
+  "submission_id": null,
+  "reported_submission_date_kst": "2026-10-21",
+  "submitted_at_kst": null,
+  "recorded_date_kst": "2026-10-22",
+  "status": "scored_team_document_reported",
+  "reported_public_score": 0.8694329714,
+  "baseline": "AR-02",
+  "baseline_reported_public_score": 0.8865382346,
+  "score_difference": -0.0171052632,
+  "official_runtime_seconds": null,
+  "uploaded_zip_identity_verified": false,
+  "evidence_reference": "docs/team_records/2026-10-21_facts_original.md section 4",
+  "conditional_team_counts": {
+    "assumed_hangul_rows": 532,
+    "assumed_non_hangul_rows": 3568,
+    "reported_hangul_correct": 449,
+    "reported_non_hangul_correct": 3314,
+    "reported_hangul_difference": -13,
+    "official_denominators_verified": false
+  },
+  "local_oof_changes": {"hangul": 22, "non_hangul": 0, "fixed_hangul": 6, "broken_hangul": 7, "wrong_to_other_wrong_hangul": 9},
+  "decision": "Do not adopt Korean nationality/type simultaneous removal as an improvement; individual effects unmeasured"
+}

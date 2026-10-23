@@ -11,6 +11,7 @@
 | `evaluate.py` | 공통 평가 함수. 고치지 않는다(버그가 의심되면 리더에게) |
 | `selftest_evaluate.py` | evaluate.py 자체 시험 33개. 처음 한 번 돌려 환경을 확인한다 |
 | `check_submission.py` | 제출 zip 점검(구조·패키지·실행·행 독립·시간). 올리기 전에 각자, 제출 전에 리더가 돌린다(§5) |
+| `robustness.py` | 재사용 가능한 노이즈 스트레스 및 모델 강건성 평가 도구(철자/톤수/국적 노이즈 주입 및 방어율 측정) |
 | `folds_group5_seed42.csv` | **기준 fold.** 선박 그룹 5-fold(처음 보는 선박 시험). 모든 실험은 이것으로 |
 | `oof_E00_baseline.csv` | 기준점 OOF(주최 baseline을 위 fold로 다시 학습). evaluate.py가 0.47750을 내는지 확인용 |
 | `aux/folds_group5_seed{0,1,2}.csv` | 보조 시드 fold(같은 생성 방식). 최종 후보 재확인 때만 |

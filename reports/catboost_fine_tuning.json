@@ -1,0 +1,232 @@
+[
+  {
+    "desc": "기준 1차 최적 (Depth=6, L2=7, lr=0.05, it=350)",
+    "params": {
+      "depth": 6,
+      "l2_leaf_reg": 7,
+      "learning_rate": 0.05,
+      "iterations": 350
+    },
+    "weighted_score": 0.98215,
+    "ko_acc": 0.9749,
+    "ko_correct": "233/239",
+    "latin_acc": 0.99906,
+    "latin_correct": "2131/2133",
+    "total_errors": 8,
+    "predicted_lb_score": 0.8536434978,
+    "estimated_public_korean": 437,
+    "fit_seconds": 4.84,
+    "pred_seconds": 0.02
+  },
+  {
+    "desc": "L2 미세조정 (Depth=6, L2=5, lr=0.05, it=350)",
+    "params": {
+      "depth": 6,
+      "l2_leaf_reg": 5,
+      "learning_rate": 0.05,
+      "iterations": 350
+    },
+    "weighted_score": 0.97336,
+    "ko_acc": 0.96234,
+    "ko_correct": "230/239",
+    "latin_acc": 0.99906,
+    "latin_correct": "2131/2133",
+    "total_errors": 11,
+    "predicted_lb_score": 0.8418013925,
+    "estimated_public_korean": 428,
+    "fit_seconds": 4.8,
+    "pred_seconds": 0.02
+  },
+  {
+    "desc": "L2 미세조정 (Depth=6, L2=6, lr=0.05, it=350)",
+    "params": {
+      "depth": 6,
+      "l2_leaf_reg": 6,
+      "learning_rate": 0.05,
+      "iterations": 350
+    },
+    "weighted_score": 0.97336,
+    "ko_acc": 0.96234,
+    "ko_correct": "230/239",
+    "latin_acc": 0.99906,
+    "latin_correct": "2131/2133",
+    "total_errors": 11,
+    "predicted_lb_score": 0.8418013925,
+    "estimated_public_korean": 428,
+    "fit_seconds": 4.86,
+    "pred_seconds": 0.02
+  },
+  {
+    "desc": "L2 미세조정 (Depth=6, L2=8, lr=0.05, it=350)",
+    "params": {
+      "depth": 6,
+      "l2_leaf_reg": 8,
+      "learning_rate": 0.05,
+      "iterations": 350
+    },
+    "weighted_score": 0.97336,
+    "ko_acc": 0.96234,
+    "ko_correct": "230/239",
+    "latin_acc": 0.99906,
+    "latin_correct": "2131/2133",
+    "total_errors": 11,
+    "predicted_lb_score": 0.8418013925,
+    "estimated_public_korean": 428,
+    "fit_seconds": 4.17,
+    "pred_seconds": 0.02
+  },
+  {
+    "desc": "L2 미세조정 (Depth=6, L2=9, lr=0.05, it=350)",
+    "params": {
+      "depth": 6,
+      "l2_leaf_reg": 9,
+      "learning_rate": 0.05,
+      "iterations": 350
+    },
+    "weighted_score": 0.97336,
+    "ko_acc": 0.96234,
+    "ko_correct": "230/239",
+    "latin_acc": 0.99906,
+    "latin_correct": "2131/2133",
+    "total_errors": 11,
+    "predicted_lb_score": 0.8418013925,
+    "estimated_public_korean": 428,
+    "fit_seconds": 4.42,
+    "pred_seconds": 0.02
+  },
+  {
+    "desc": "L2 미세조정 (Depth=6, L2=10, lr=0.05, it=350)",
+    "params": {
+      "depth": 6,
+      "l2_leaf_reg": 10,
+      "learning_rate": 0.05,
+      "iterations": 350
+    },
+    "weighted_score": 0.97336,
+    "ko_acc": 0.96234,
+    "ko_correct": "230/239",
+    "latin_acc": 0.99906,
+    "latin_correct": "2131/2133",
+    "total_errors": 11,
+    "predicted_lb_score": 0.8418013925,
+    "estimated_public_korean": 428,
+    "fit_seconds": 4.86,
+    "pred_seconds": 0.02
+  },
+  {
+    "desc": "L2=7 + 학습률 0.04 (Depth=6, L2=7, lr=0.04, it=400)",
+    "params": {
+      "depth": 6,
+      "l2_leaf_reg": 7,
+      "learning_rate": 0.04,
+      "iterations": 400
+    },
+    "weighted_score": 0.97336,
+    "ko_acc": 0.96234,
+    "ko_correct": "230/239",
+    "latin_acc": 0.99906,
+    "latin_correct": "2131/2133",
+    "total_errors": 11,
+    "predicted_lb_score": 0.8418013925,
+    "estimated_public_korean": 428,
+    "fit_seconds": 5.55,
+    "pred_seconds": 0.02
+  },
+  {
+    "desc": "L2=7 + 학습률 0.03 (Depth=6, L2=7, lr=0.03, it=450)",
+    "params": {
+      "depth": 6,
+      "l2_leaf_reg": 7,
+      "learning_rate": 0.03,
+      "iterations": 450
+    },
+    "weighted_score": 0.97336,
+    "ko_acc": 0.96234,
+    "ko_correct": "230/239",
+    "latin_acc": 0.99906,
+    "latin_correct": "2131/2133",
+    "total_errors": 11,
+    "predicted_lb_score": 0.8418013925,
+    "estimated_public_korean": 428,
+    "fit_seconds": 6.2,
+    "pred_seconds": 0.02
+  },
+  {
+    "desc": "L2=6 + 학습률 0.04 (Depth=6, L2=6, lr=0.04, it=400)",
+    "params": {
+      "depth": 6,
+      "l2_leaf_reg": 6,
+      "learning_rate": 0.04,
+      "iterations": 400
+    },
+    "weighted_score": 0.97336,
+    "ko_acc": 0.96234,
+    "ko_correct": "230/239",
+    "latin_acc": 0.99906,
+    "latin_correct": "2131/2133",
+    "total_errors": 11,
+    "predicted_lb_score": 0.8418013925,
+    "estimated_public_korean": 428,
+    "fit_seconds": 5.59,
+    "pred_seconds": 0.0
+  },
+  {
+    "desc": "L2=8 + 학습률 0.04 (Depth=6, L2=8, lr=0.04, it=400)",
+    "params": {
+      "depth": 6,
+      "l2_leaf_reg": 8,
+      "learning_rate": 0.04,
+      "iterations": 400
+    },
+    "weighted_score": 0.97336,
+    "ko_acc": 0.96234,
+    "ko_correct": "230/239",
+    "latin_acc": 0.99906,
+    "latin_correct": "2131/2133",
+    "total_errors": 11,
+    "predicted_lb_score": 0.8418013925,
+    "estimated_public_korean": 428,
+    "fit_seconds": 5.5,
+    "pred_seconds": 0.0
+  },
+  {
+    "desc": "L2=7 + 수치분할 축소 (Depth=6, L2=7, border_count=128)",
+    "params": {
+      "depth": 6,
+      "l2_leaf_reg": 7,
+      "learning_rate": 0.05,
+      "iterations": 350,
+      "border_count": 128
+    },
+    "weighted_score": 0.97336,
+    "ko_acc": 0.96234,
+    "ko_correct": "230/239",
+    "latin_acc": 0.99906,
+    "latin_correct": "2131/2133",
+    "total_errors": 11,
+    "predicted_lb_score": 0.8418013925,
+    "estimated_public_korean": 428,
+    "fit_seconds": 4.75,
+    "pred_seconds": 0.02
+  },
+  {
+    "desc": "L2=7 + 무작위 강도 강화 (Depth=6, L2=7, random_strength=2)",
+    "params": {
+      "depth": 6,
+      "l2_leaf_reg": 7,
+      "learning_rate": 0.05,
+      "iterations": 350,
+      "random_strength": 2.0
+    },
+    "weighted_score": 0.97336,
+    "ko_acc": 0.96234,
+    "ko_correct": "230/239",
+    "latin_acc": 0.99906,
+    "latin_correct": "2131/2133",
+    "total_errors": 11,
+    "predicted_lb_score": 0.8418013925,
+    "estimated_public_korean": 428,
+    "fit_seconds": 4.84,
+    "pred_seconds": 0.02
+  }
+]

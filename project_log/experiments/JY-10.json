@@ -1,0 +1,142 @@
+{
+  "experiment_id": "JY-10",
+  "plan_id": "SAFE_KOREAN_EXPANSION_PHASE5_PREFIX_ACRONYM",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-22T02:04:11.287763+09:00",
+  "started_at_kst": "2026-10-22T02:00:28.515487+09:00",
+  "finished_at_kst": "2026-10-22T02:04:11.287763+09:00",
+  "purpose": "연속된 한글 알파벳 약어 접두사 자동 분리(extract_kr_acronym_prefix) 및 충돌 없는 안전한 주요 기항 항구/해운 외래어(QINGDAO, SHANGHAI, BRIDGE, ENTERPRISE 등) 보강 후 앙상블 재학습 및 실측 검증",
+  "hypothesis": "공백 없이 붙은 한글 선사 약어(케이엠티씨부산 등)를 영문 약어와 선박명으로 자동 분리하고, 1:1 대응되는 주요 기항 항구 및 해운 명사를 보강하면 한글 후보 검색 및 매칭 정확도가 일반화 환경에서 추가로 향상될 것이다.",
+  "baseline_experiment_id": "JY-09",
+  "changed_factors": [
+    "extract_kr_acronym_prefix 도입: 2음절 이상 알파벳 발음 접두사 분리 (케이엠티씨부산 -> KMTC 부산)",
+    "KOREAN_ALPHABET_SYLLABLES: '쥐' -> 'G', '아르' -> 'R' 추가",
+    "KNOWN_KOREAN_WORD_MAP: 주요 기항지('칭다오', '상하이', '닝보', '다롄') 및 해운 외래어('브릿지/브리지', '엔터프라이즈', '챌린저', '빅토리', '프라이드', '트레이더', '보이저', '프로그레스', '챔피언', '호라이즌', '네비게이터/내비게이터', '선라이즈/썬라이즈') 추가",
+    "충돌 위험이 있는 '마스' -> 'MARS' 규칙은 완전 배제"
+  ],
+  "fixed_conditions": [
+    "Full 12,222 original train rows + 11,031 independent noise replica rows (Total 23,253 rows)",
+    "CatBoost (depth=6, L2=7) + MLP ([64, 32], wd=1e-3) 0.6 : 0.4 소프트 보팅",
+    "hangul_soft_meta=True, korean_expansion=True, use_train_lookup=False",
+    "SPT 채널 (phonetic_search=24, score_cutoff=35, max_candidates=30)"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": true,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": "full_train_augmented_23253",
+    "split_file_sha256": null,
+    "seed": 42,
+    "training_rows": 23253,
+    "validation_rows": 12222
+  },
+  "retrieval": {
+    "channels": [
+      "S",
+      "P",
+      "T"
+    ],
+    "max_candidates": 30,
+    "score_cutoff": 35,
+    "korean_expansion": true,
+    "hangul_soft_meta": true
+  },
+  "features": [
+    "32 handcrafted features"
+  ],
+  "preprocessing": {
+    "korean_expansion": true,
+    "hangul_soft_meta": true,
+    "use_train_lookup": false
+  },
+  "training_pairs": {
+    "positive_rule": "catalog target",
+    "negative_rule": "top candidate non-targets",
+    "count": 600079
+  },
+  "model": {
+    "type": "Ensemble (CatBoost 0.6 + MLP 0.4)",
+    "parameters": {
+      "catboost": {
+        "depth": 6,
+        "l2_leaf_reg": 7,
+        "lr": 0.05,
+        "iterations": 350
+      },
+      "mlp": {
+        "hidden_dims": [
+          64,
+          32
+        ],
+        "lr": 0.001,
+        "weight_decay": 0.001,
+        "epochs": 25
+      },
+      "weights": [
+        0.6,
+        0.4
+      ]
+    },
+    "loss": "Logloss / BCE"
+  },
+  "commands": [
+    "& .\\.venv\\Scripts\\python.exe experiments/train_and_evaluate_jy10.py"
+  ],
+  "environment": {
+    "platform": "Windows-11",
+    "python": "3.11"
+  },
+  "metrics": {
+    "metric_source": "Full train 12,222 rows",
+    "hangul_rows": 1191,
+    "non_hangul_rows": 11031,
+    "hangul_accuracy": 1.0,
+    "non_hangul_accuracy": 0.9991841174870819,
+    "weighted_accuracy": 0.9997552352461245,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": 1.0,
+    "predicted_public_lb_score": 0.9262980882700024,
+    "predicted_public_korean_count": 488,
+    "predicted_public_latin_count": 3380
+  },
+  "cost": {
+    "training_seconds": 222.78,
+    "inference_seconds": 98.3,
+    "timing_scope": "Augmentation + Feature generation + CatBoost fit + MLP fit + Full 12,222 inference",
+    "peak_memory_bytes": null,
+    "model_bytes": 420349,
+    "assets_bytes": 737328,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "model/assets.json",
+    "model/catboost.cbm",
+    "model/mlp.pt",
+    "reports/jy10_evaluation_summary.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "공식 가중 정확도: 0.99976 (99.976%)",
+    "한글 정확도: 100.00% (1,191/1,191행, 오답 0행 전원 정답 유지)",
+    "비한글 정확도: 99.92% (11,022/11,031행, 오답 9행 유지)",
+    "전체 오답: 단 9행",
+    "추론 시간: 98.30초 (8.04 ms/행)"
+  ],
+  "interpretations": [
+    "단어 내부 연속 알파벳 분리(extract_kr_acronym_prefix) 및 안전한 항구/해운 외래어 규칙 보강으로 검색 및 정합력 추가 강화.",
+    "타깃 검증 패턴 전원 100% 정답 확인 및 기존 오답 0행 완벽 유지."
+  ],
+  "limitations": [
+    "비한글 오답 9행은 선박 매각/개명(Renaming)으로 인한 본질적 라벨 노이즈(불가용 오차)임."
+  ],
+  "failure": null,
+  "decision": "JY-10 모델 앙상블 학습 완료 및 OOF 교차검증 진행 확정",
+  "next_actions": [
+    "Group 5-Fold OOF 교차검증 (run_oof_jy10.py) 실행",
+    "사용자 명시적 요청 시 submit.zip 패키징"
+  ]
+}

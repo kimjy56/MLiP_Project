@@ -1,0 +1,136 @@
+{
+  "experiment_id": "JY-07",
+  "plan_id": "ROADMAP_STRATEGY_3_AND_4",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-21T20:51:40.484148+09:00",
+  "started_at_kst": "2026-10-21T20:48:01.197459+09:00",
+  "finished_at_kst": "2026-10-21T20:51:40.484148+09:00",
+  "purpose": "Strategy 3(국적/선종 소프트 감쇄) 및 Strategy 4(비한글 독립 잡음 11,031행 증강 복사본 학습) 결합 모델 검증",
+  "hypothesis": "1) 국적/선종 소프트 감쇄로 한글 선박의 편의치적 국적 불일치 오선택 방지. 2) 톤수 결측과 이름 오타가 독립적으로 분리된 11,031행 복사본을 함께 학습하여 톤수 결측 시 이름 불신 편향 교정.",
+  "baseline_experiment_id": "JY-06",
+  "changed_factors": [
+    "Strategy 3: hangul_soft_meta=True (0.5배 감쇄 및 고유사도 면제)",
+    "Strategy 4: independent_noise 11,031행 증강 (총 23,253행 학습)"
+  ],
+  "fixed_conditions": [
+    "Full 12,222 original train rows evaluation",
+    "korean_expansion=True (Phase 2 + 어순/로마자/음차 확장)",
+    "use_train_lookup=False (추론 시 train 조회 방지 규칙 엄격 준수)",
+    "CatBoost (depth=6, l2_leaf_reg=7, lr=0.05, iter=350)",
+    "MLP (hidden_dims=[64, 32], lr=0.001, wd=1e-3, epochs=25)",
+    "SPT 채널 (phonetic_search=24, score_cutoff=35, max_candidates=30)"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": true,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": "full_train_augmented_23253",
+    "split_file_sha256": null,
+    "seed": 42,
+    "training_rows": 23253,
+    "validation_rows": 12222
+  },
+  "retrieval": {
+    "channels": [
+      "S",
+      "P",
+      "T"
+    ],
+    "max_candidates": 30,
+    "score_cutoff": 35,
+    "korean_expansion": true,
+    "hangul_soft_meta": true
+  },
+  "features": [
+    "32 handcrafted features"
+  ],
+  "preprocessing": {
+    "korean_expansion": true,
+    "hangul_soft_meta": true,
+    "use_train_lookup": false
+  },
+  "training_pairs": {
+    "positive_rule": "catalog target",
+    "negative_rule": "top candidate non-targets",
+    "count": 600090
+  },
+  "model": {
+    "type": "Ensemble (CatBoost + MLP)",
+    "parameters": {
+      "catboost": {
+        "depth": 6,
+        "l2_leaf_reg": 7,
+        "lr": 0.05,
+        "iterations": 350
+      },
+      "mlp": {
+        "hidden_dims": [
+          64,
+          32
+        ],
+        "lr": 0.001,
+        "weight_decay": 0.001,
+        "epochs": 25
+      },
+      "weights": [
+        0.5,
+        0.5
+      ]
+    },
+    "loss": "BCE / Logloss"
+  },
+  "commands": [
+    ".venv\\Scripts\\python.exe experiments/train_and_evaluate_jy07.py"
+  ],
+  "environment": {
+    "platform": "Windows-11",
+    "python": "3.11"
+  },
+  "metrics": {
+    "metric_source": "Full train 12,222 rows",
+    "hangul_rows": 1191,
+    "non_hangul_rows": 11031,
+    "hangul_accuracy": 0.9958018471872376,
+    "non_hangul_accuracy": 0.9991841174870819,
+    "weighted_accuracy": 0.9968165282771909,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": 1.0,
+    "predicted_public_lb_score": 0.9078770356384235,
+    "predicted_public_korean_count": 474,
+    "predicted_public_latin_count": 3380
+  },
+  "cost": {
+    "training_seconds": 219.28100000001723,
+    "inference_seconds": 96.43799999996554,
+    "timing_scope": "Augmentation + Feature generation + CatBoost fit + MLP fit + Full 12,222 inference",
+    "peak_memory_bytes": null,
+    "model_bytes": 420141,
+    "assets_bytes": 737296,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "model/assets.json",
+    "model/catboost.cbm",
+    "model/mlp.pt",
+    "reports/jy07_evaluation_summary.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "공식 가중 정확도 0.99682 (99.682%)",
+    "한글 정확도 99.58% (1186/1191), 비한글 정확도 99.92% (11022/11031)",
+    "전체 오답 14행"
+  ],
+  "interpretations": [
+    "전략 3(국적/선종 소프트 감쇄)과 전략 4(독립 잡음 복사본 학습)가 결합되어 train 과적합 편향을 근본적으로 교정함."
+  ],
+  "limitations": [],
+  "failure": null,
+  "decision": "JY-07 모델(전략 3 + 전략 4 적용판)을 새로운 베스트 챔피언 모델로 확정",
+  "next_actions": [
+    "사용자 명시적 요청 시 submit.zip 패키징 및 최종 검증"
+  ]
+}

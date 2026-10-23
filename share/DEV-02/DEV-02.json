@@ -42,7 +42,7 @@
     }
   },
   "command": [
-    "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe",
+    ".venv\\Scripts\\python.exe",
     "train_oof.py",
     "--experiment-id",
     "DEV-02",
@@ -64,15 +64,15 @@
   "environment": {
     "python": "3.11.15",
     "platform": "Windows-10-10.0.26200-SP0",
-    "executable": "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe"
+    "executable": ".venv\\Scripts\\python.exe"
   },
   "data": {
     "train": {
-      "path": "C:\\Projects\\ML_midterm\\data\\train.csv",
+      "path": "data\\train.csv",
       "sha256": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c"
     },
     "catalog": {
-      "path": "C:\\Projects\\ML_midterm\\data\\vessel_catalog.csv",
+      "path": "data\\vessel_catalog.csv",
       "sha256": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
     },
     "folds": {
@@ -165,12 +165,12 @@
       },
       "artifacts": {
         "assets.json": {
-          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\DEV-02\\fold_0\\model\\assets.json",
+          "path": "artifacts\\oof\\DEV-02\\fold_0\\model\\assets.json",
           "sha256": "9b9e8472ec67c1d7a29d39a29067002cfd62f6c78489b6f950c768a3600d8c75",
           "bytes": 372635
         },
         "ranker.txt": {
-          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\DEV-02\\fold_0\\model\\ranker.txt",
+          "path": "artifacts\\oof\\DEV-02\\fold_0\\model\\ranker.txt",
           "sha256": "96d3717993812d9698780f8447323fc99704b8dcd2f554da857aec2f5542188f",
           "bytes": 1249079
         }
@@ -259,12 +259,12 @@
       },
       "artifacts": {
         "assets.json": {
-          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\DEV-02\\fold_1\\model\\assets.json",
+          "path": "artifacts\\oof\\DEV-02\\fold_1\\model\\assets.json",
           "sha256": "87265a85138925ac97abe2284ef0a59be30dd161051a09ce7040deac15be12a6",
           "bytes": 372517
         },
         "ranker.txt": {
-          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\DEV-02\\fold_1\\model\\ranker.txt",
+          "path": "artifacts\\oof\\DEV-02\\fold_1\\model\\ranker.txt",
           "sha256": "4ea9158358c18b0e8a2acee73dae3a42c85e8e931eae01189a567ab3dd9b7ce9",
           "bytes": 1249730
         }
@@ -353,12 +353,12 @@
       },
       "artifacts": {
         "assets.json": {
-          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\DEV-02\\fold_2\\model\\assets.json",
+          "path": "artifacts\\oof\\DEV-02\\fold_2\\model\\assets.json",
           "sha256": "5c93f0b149c95660fc2c5b129f3fe6459ab73592afddd0e72081fbc0c87a01eb",
           "bytes": 372559
         },
         "ranker.txt": {
-          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\DEV-02\\fold_2\\model\\ranker.txt",
+          "path": "artifacts\\oof\\DEV-02\\fold_2\\model\\ranker.txt",
           "sha256": "1cf0aa80f753218c6a5350a1bea3427fac22c3297043398f7dcf4ef32e98eda9",
           "bytes": 1248295
         }
@@ -447,12 +447,12 @@
       },
       "artifacts": {
         "assets.json": {
-          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\DEV-02\\fold_3\\model\\assets.json",
+          "path": "artifacts\\oof\\DEV-02\\fold_3\\model\\assets.json",
           "sha256": "d387f8a445f1245727b45c154efff92f2bc2bf5a4facdf47da7e2a0067bb1ac0",
           "bytes": 371548
         },
         "ranker.txt": {
-          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\DEV-02\\fold_3\\model\\ranker.txt",
+          "path": "artifacts\\oof\\DEV-02\\fold_3\\model\\ranker.txt",
           "sha256": "edc2364c6f64595c321d6c8e9270f9036fa164ee21fd65ea174cd5d6196acb76",
           "bytes": 1248214
         }
@@ -541,12 +541,12 @@
       },
       "artifacts": {
         "assets.json": {
-          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\DEV-02\\fold_4\\model\\assets.json",
+          "path": "artifacts\\oof\\DEV-02\\fold_4\\model\\assets.json",
           "sha256": "7f7e08ba6bdba8792f5c524d6aee5d7b2ebf2377ee139cb1ba6ec7b3dce964c0",
           "bytes": 371800
         },
         "ranker.txt": {
-          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\DEV-02\\fold_4\\model\\ranker.txt",
+          "path": "artifacts\\oof\\DEV-02\\fold_4\\model\\ranker.txt",
           "sha256": "25e0d0fd04a43995d1658883594e502bfe204a7f4a4c1c71c4f31f286ca20d74",
           "bytes": 1248942
         }
@@ -599,7 +599,7 @@
     "prediction_and_diagnostics_seconds": 300.68800000002375
   },
   "oof": {
-    "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\DEV-02\\oof_DEV-02.csv",
+    "path": "artifacts\\oof\\DEV-02\\oof_DEV-02.csv",
     "rows": 12222,
     "sha256": "d847008b11e722c1778411556d6f05e4abe7d4518a721d6d214a22454dc77443"
   },

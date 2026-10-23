@@ -1,0 +1,103 @@
+{
+  "experiment_id": "MLP-TUNE-01",
+  "plan_id": "MLP_HP_TUNING",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-21T17:39:45+09:00",
+  "started_at_kst": "2026-10-21T17:37:26+09:00",
+  "finished_at_kst": "2026-10-21T17:38:59+09:00",
+  "purpose": "MLP 의사결정 모델의 은닉층 구조, 활성화 함수, 정규화(드롭아웃, weight_decay), 학습률 및 에포크 최적화",
+  "hypothesis": "컴팩트한 은닉층([64, 32])과 적절한 weight_decay 정규화가 과적합을 방지하고 한글 및 비한글 일반화 정확도를 극대화할 것이다.",
+  "baseline_experiment_id": "DECISION-01",
+  "changed_factors": [
+    "hidden_dims: [64, 32], [128, 64], [128, 64, 32]",
+    "activation: relu, gelu, silu",
+    "dropout: 0.0, 0.1",
+    "weight_decay: 1e-4, 1e-3",
+    "lr: 0.0005, 0.001, 0.002",
+    "epochs: 15, 20, 25, 35"
+  ],
+  "fixed_conditions": [
+    "Fold 0 validation split (2,372 rows: 한글 239, 비한글 2,133)",
+    "korean_expansion=True",
+    "use_train_lookup=False",
+    "SPT 채널 (phonetic_search=24, score_cutoff=35, max_candidates=30)",
+    "CUDA GPU 학습 (PyTorch)"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": true,
+    "file_sha256": {}
+  },
+  "data": {
+    "split_id": "G5-s42 Fold 0",
+    "training_rows": 9850,
+    "validation_rows": 2372
+  },
+  "retrieval": {
+    "channels": ["S", "P", "T"],
+    "max_candidates": 30,
+    "score_cutoff": 35
+  },
+  "features": ["33 handcrafted features with name_mode=all"],
+  "model": {
+    "type": "MLPDecisionModel",
+    "parameters": {
+      "best_params": {
+        "hidden_dims": [64, 32],
+        "activation": "relu",
+        "dropout": 0.0,
+        "weight_decay": 0.001,
+        "lr": 0.001,
+        "epochs": 25,
+        "batch_size": 2048
+      }
+    },
+    "loss": "BCEWithLogitsLoss"
+  },
+  "commands": [
+    ".venv\\Scripts\\python.exe experiments/tune_mlp_params.py"
+  ],
+  "environment": {
+    "platform": "Windows-11",
+    "python": "3.11",
+    "device": "NVIDIA GeForce RTX 4070 Laptop GPU"
+  },
+  "metrics": {
+    "metric_source": "Fold 0 precomputed validation features (2,372 rows)",
+    "hangul_rows": 239,
+    "non_hangul_rows": 2133,
+    "hangul_accuracy": 0.98326,
+    "non_hangul_accuracy": 0.99859,
+    "weighted_accuracy": 0.98786,
+    "total_errors": 7,
+    "baseline_weighted_accuracy": 0.98730,
+    "delta_weighted_accuracy": 0.00056,
+    "predicted_public_score": 0.8615382346,
+    "predicted_public_korean": 443
+  },
+  "cost": {
+    "training_seconds": 2.39,
+    "inference_seconds": 0.0,
+    "timing_scope": "Feature precomputed evaluation",
+    "model_bytes": 10240
+  },
+  "artifacts": [
+    "reports/mlp_param_tuning.json",
+    "experiments/tune_mlp_params.py",
+    "decision_models/mlp_model.py"
+  ],
+  "observations": [
+    "hidden_dims=[64, 32] + weight_decay=1e-3 + ReLU 설정이 0.98786 (한글 235/239, 총 오답 단 7건)으로 최고 성능을 기록함.",
+    "은닉층을 [128, 64]로 확장 시 파라미터 증가로 인해 한글 정답이 231~232건으로 하락함.",
+    "GELU나 SiLU보다 ReLU 활성화 함수가 선박 특성의 단계적 특성에 가장 우수한 매칭을 보임.",
+    "CUDA GPU를 통해 전체 학습이 2.39초 만에 완료되며 가중치 용량도 10KB 미만으로 극도로 경량화됨."
+  ],
+  "interpretations": [
+    "MLP는 연속형 선박 유사도와 이산형 국적/선종 플래그를 결합할 때 컴팩트한 구조가 과적합을 강력히 방지함을 입증함.",
+    "CatBoost(최적 오답 8건)와 대등하거나 한글에서 2건 더 적은 오답(7건)을 기록하여, 앙상블 또는 독립 모델로서 매우 강력한 후보임을 확인."
+  ],
+  "decision": "MLP 최적 파라미터로 hidden_dims=[64, 32], activation='relu', weight_decay=0.001, lr=0.001, epochs=25 확정.",
+  "next_actions": [
+    "CatBoost와 MLP 최적 설정 간의 비교 및 앙상블 가능성 검토"
+  ]
+}

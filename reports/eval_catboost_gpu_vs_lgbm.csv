@@ -1,0 +1,2 @@
+﻿date,id,scheme,oof,oof_sha8,rows,hangul,hangul_lo,hangul_hi,non_hangul,non_hangul_lo,non_hangul_hi,weighted,weighted_lo,weighted_hi,recall_h,recall_nh,compare_to,d_weighted,d_lo,d_hi,verdict,train_sec,infer_sec,zip_mb,note,checks,eval_ver
+2026-10-21 14:44,CatBoost-GPU,G5-s42,oof_catboost_gpu.csv,89758369,12222,0.96725,0.94958,0.98404,0.99937,0.99890,0.99982,0.97689,0.96450,0.98864,,,oof_AUG-04.csv,-0.00112,-0.01105,0.00802,동등,,,,,train=ok;folds=G5-s42;foldcol=ok,1.0

@@ -1,0 +1,57 @@
+# 팀 공유 패키지: 실험 AS-03 (JY-10 기반)
+
+- **실험 ID**: `AS-03` 
+- **기준 fold**: `eval_kit/folds_group5_seed42.csv` (G5-s42, 12,222행)
+- **주요 특징 및 변경 사항**:
+  1. **연속 한글 알파벳 약어 접두사 자동 분리**: `extract_kr_acronym_prefix` (`케이엠티씨부산` $\rightarrow$ `KMTC 부산`)
+  2. **안전한 해운 외래어 및 기항 항구 16종 보강**: `보이저` $\rightarrow$ `VOYAGER`, `칭다오`, `상하이` 등
+  3. **한글 국적/선종 점수 소프트 메타 보정**: `hangul_soft_meta=True` (단순 차단 대신 0.5 감쇄 및 0.85 임계치 반영)
+  4. **비한글 독립 잡음 복제 증강**: `independent_noise.py`를 통한 23,253행 학습 데이터 구성
+  5. **결정 모델**: 고정밀 CatBoost 분류기 (CPU 정밀 모드) 및 최적화 검색기 (`use_train_lookup=False` 엄격 적용)
+- **검증 환경**: Python 3.11 / DACON 공식 서버 환경 호환
+
+---
+
+## 1. 공식 평가 성적 (`eval_kit/evaluate.py` 실측)
+
+| 지표 | AS-02 (기존 인계) | **AS-03 (JY-10)** | 차이 ($\Delta$) | 95% 신뢰구간 (부트스트랩 B=2000) | 판정 |
+|---|---|---|---|---|---|
+| **공식 가중 정확도** | 0.98215 | **0.99561** | **+0.01346** | [+0.00224, +0.02643] | **개선 (유의미)** |
+| **한글 정확도 (0.7)** | 97.481% (오답 30건) | **99.412%** (오답 7건) | **+1.93%p** | [+0.33%p, +3.79%p] | 고침 27 / 망침 4 |
+| **비한글 정확도 (0.3)** | 99.927% (오답 8건) | **99.909%** (오답 10건) | -0.02%p | [-0.05%p, +0.02%p] | 고침 1 / 망침 3 |
+
+- **Fold별 한글 성적**:
+  - Fold 0: 99.6% (238/239)
+  - Fold 1: **100.0%** (241/241 만점)
+  - Fold 2: **100.0%** (234/234 만점)
+  - Fold 3: 98.4% (240/244)
+  - Fold 4: 99.1% (231/233)
+
+---
+
+## 2. 제출 ZIP 무결성 검증 (`verify_submission.py`)
+
+- **제출 파일**: `submit_AS-03.zip` (동일 복사본: 루트 `submit.zip`)
+- **파일 크기**: 941,734 바이트 (~920 KB)
+- **SHA-256**: `3cff51f35ba96814187f0865d5732136f061f939329a8ffe8ec88e1a77382296`
+- **검증 항목 (7대 샌드박스 격리 시험 100% 통과)**:
+  - Clean extraction
+  - Offline entry point (소켓 통신 전면 차단)
+  - Read-only data inputs (0o444 읽기 전용)
+  - Output schema (`sample_id`, `target_vessel_id`)
+  - Catalog membership (카탈로그 ID 유효성 100%)
+  - Input order preserved (입력 순서 보존)
+  - Full / Shuffled / Subset / Single / Empty 일관성 보존
+
+---
+
+## 3. 폴더 구조 및 파일 목록
+
+```
+share/AS-03/
+├── README.md                 # 본 설명 문서
+├── submit_AS-03.zip          # DACON 제출용 ZIP 패키지
+└── results/
+    ├── oof_AS-03.csv         # 12,222행 5-fold OOF 예측 파일 (SHA-256: 91f275fe...)
+    └── eval_AS-03.txt        # 공식 evaluate.py 평가 및 AS-02 대비 개선 실측 리포트
+```

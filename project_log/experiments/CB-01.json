@@ -1,0 +1,164 @@
+{
+  "experiment_id": "CB-01",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-21T15:35:46.114704+09:00",
+  "purpose": "5-Fold OOF evaluation of CatBoost classifier with optimized candidate retrieval",
+  "hypothesis": "CatBoost with exact split binning and robust symmetric trees outperforms LightGBM without candidate recall penalty",
+  "model": {
+    "type": "CatBoostDecisionModel",
+    "task_type": "CPU",
+    "thread_count": 6,
+    "iterations": 350,
+    "depth": 6,
+    "learning_rate": 0.05
+  },
+  "retrieval": {
+    "channels": [
+      "S",
+      "P",
+      "T"
+    ],
+    "phonetic_search": 24,
+    "score_cutoff": 35,
+    "skip_non_hangul_phonetic": true
+  },
+  "oof": {
+    "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\CB-01\\oof_CB-01.csv",
+    "rows": 12222,
+    "sha256": "d403800b055e469f60fbc4bf7b56d82d104789898c1ee10b4691cadd04c7bdfc"
+  },
+  "fold_results": [
+    {
+      "fold": 0,
+      "metrics": {
+        "rows": 2372,
+        "seconds": 17.71899999998277,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 239,
+        "hangul_accuracy": 0.9707112970711297,
+        "hangul_candidate_recall": 1.0,
+        "non_hangul_rows": 2133,
+        "non_hangul_accuracy": 0.9990623534927332,
+        "non_hangul_candidate_recall": 0.9990623534927332,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 2372,
+        "unseen_accuracy": 0.9962057335581788,
+        "unseen_candidate_recall": 0.9991568296795953,
+        "weighted_accuracy": 0.9792166139976106,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "fit_seconds": 4.2810000000172295,
+      "pred_seconds": 19.875,
+      "total_seconds": 65.59399999998277
+    },
+    {
+      "fold": 1,
+      "metrics": {
+        "rows": 2472,
+        "seconds": 18.84399999998277,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 241,
+        "hangul_accuracy": 0.979253112033195,
+        "hangul_candidate_recall": 1.0,
+        "non_hangul_rows": 2231,
+        "non_hangul_accuracy": 0.9991035410129987,
+        "non_hangul_candidate_recall": 0.9995517705064993,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 2472,
+        "unseen_accuracy": 0.997168284789644,
+        "unseen_candidate_recall": 0.9995954692556634,
+        "weighted_accuracy": 0.9852082407271361,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "fit_seconds": 3.7660000000032596,
+      "pred_seconds": 21.07799999997951,
+      "total_seconds": 66.46899999998277
+    },
+    {
+      "fold": 2,
+      "metrics": {
+        "rows": 2516,
+        "seconds": 18.06300000002375,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 234,
+        "hangul_accuracy": 0.9658119658119658,
+        "hangul_candidate_recall": 0.9658119658119658,
+        "non_hangul_rows": 2282,
+        "non_hangul_accuracy": 1.0,
+        "non_hangul_candidate_recall": 1.0,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 2516,
+        "unseen_accuracy": 0.9968203497615262,
+        "unseen_candidate_recall": 0.9968203497615262,
+        "weighted_accuracy": 0.9760683760683759,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "fit_seconds": 3.735000000044238,
+      "pred_seconds": 20.125,
+      "total_seconds": 66.32800000003772
+    },
+    {
+      "fold": 3,
+      "metrics": {
+        "rows": 2433,
+        "seconds": 18.344000000040978,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 244,
+        "hangul_accuracy": 0.9877049180327869,
+        "hangul_candidate_recall": 1.0,
+        "non_hangul_rows": 2189,
+        "non_hangul_accuracy": 0.9995431703974418,
+        "non_hangul_candidate_recall": 1.0,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 2433,
+        "unseen_accuracy": 0.9983559391697493,
+        "unseen_candidate_recall": 1.0,
+        "weighted_accuracy": 0.9912563937421832,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "fit_seconds": 3.687000000034459,
+      "pred_seconds": 20.39100000000326,
+      "total_seconds": 66.375
+    },
+    {
+      "fold": 4,
+      "metrics": {
+        "rows": 2429,
+        "seconds": 18.60899999999674,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 233,
+        "hangul_accuracy": 0.9785407725321889,
+        "hangul_candidate_recall": 0.9914163090128756,
+        "non_hangul_rows": 2196,
+        "non_hangul_accuracy": 0.9990892531876139,
+        "non_hangul_candidate_recall": 1.0,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 2429,
+        "unseen_accuracy": 0.9971181556195965,
+        "unseen_candidate_recall": 0.9991766158913133,
+        "weighted_accuracy": 0.9847053167288163,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "fit_seconds": 3.672000000020489,
+      "pred_seconds": 20.95299999997951,
+      "total_seconds": 66.31199999997625
+    }
+  ],
+  "elapsed_seconds": 331.2029999999795,
+  "official_evaluation_stdout": null
+}

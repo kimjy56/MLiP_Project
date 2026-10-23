@@ -1,0 +1,103 @@
+{
+  "experiment_id": "JY-05",
+  "plan_id": "ENSEMBLE_CB_MLP_FULL",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-21T19:53:10+09:00",
+  "started_at_kst": "2026-10-21T19:49:30+09:00",
+  "finished_at_kst": "2026-10-21T19:52:17+09:00",
+  "purpose": "CatBoost(L2=7)와 MLP(wd=1e-3)의 이종 앙상블(5:5 소프트 보팅) 모델을 전체 train 12,222행으로 학습하고 전수 실측 성능 및 리더보드 예측 점수 평가",
+  "hypothesis": "트리 모델과 신경망 모델의 상호보완적 결정 경계를 결합하여 단일 모델의 한글 오답을 추가 구제하고 일반화 성능을 극대화할 것이다.",
+  "baseline_experiment_id": "JY-04",
+  "changed_factors": [
+    "결정 모델: CatBoost 단독 -> CatBoost (L2=7) + MLP (wd=1e-3) 5:5 앙상블 융합",
+    "Matcher 로더: cb와 mlp를 동시 로드하여 _EnsembleScorer로 소프트 보팅 추론"
+  ],
+  "fixed_conditions": [
+    "공개 train.csv 12,222행 + vessel_catalog.csv 전체 학습",
+    "korean_expansion=True (음차·약어 복원 장치)",
+    "use_train_lookup=False (독립 추론)",
+    "SPT 채널 (phonetic_search=24, score_cutoff=35, max_candidates=30)",
+    "32개 Full Features"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": true,
+    "file_sha256": {}
+  },
+  "data": {
+    "training_rows": 12222,
+    "evaluated_rows": 12222,
+    "catalog_vessels": 78595
+  },
+  "retrieval": {
+    "channels": ["S", "P", "T"],
+    "max_candidates": 30,
+    "score_cutoff": 35
+  },
+  "features": ["32 handcrafted features"],
+  "model": {
+    "type": "Ensemble (CatBoostClassifier + MLPDecisionModel)",
+    "weights": [0.5, 0.5],
+    "catboost_params": {
+      "depth": 6,
+      "l2_leaf_reg": 7,
+      "learning_rate": 0.05,
+      "iterations": 350
+    },
+    "mlp_params": {
+      "hidden_dims": [64, 32],
+      "activation": "relu",
+      "weight_decay": 0.001,
+      "lr": 0.001,
+      "epochs": 25
+    }
+  },
+  "commands": [
+    ".venv\\Scripts\\python.exe experiments/train_and_evaluate_jy05.py"
+  ],
+  "environment": {
+    "platform": "Windows-11",
+    "python": "3.11",
+    "device": "NVIDIA GeForce RTX 4070 Laptop GPU + 6 CPU threads"
+  },
+  "metrics": {
+    "metric_source": "Full train 12,222 rows real evaluation",
+    "hangul_rows": 1191,
+    "non_hangul_rows": 11031,
+    "hangul_accuracy": 0.99244,
+    "non_hangul_accuracy": 0.99909,
+    "weighted_accuracy": 0.99444,
+    "total_errors": 19,
+    "predicted_public_score": 0.8654856030,
+    "predicted_public_korean": 446
+  },
+  "cost": {
+    "catboost_training_seconds": 5.89,
+    "mlp_training_seconds": 4.92,
+    "inference_seconds": 93.83,
+    "latency_ms_per_row": 7.68,
+    "timing_scope": "Feature generation + 2 models fit + full 12,222 rows inference",
+    "model_bytes": 419840,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "reports/jy05_evaluation_summary.json",
+    "model/catboost.cbm",
+    "model/mlp.pt",
+    "model/scaler.npz",
+    "model/mlp_config.json",
+    "model/assets.json"
+  ],
+  "observations": [
+    "CatBoost와 MLP의 앙상블 추론이 Matcher 파이프라인에서 단일 모델처럼 완벽히 동작함.",
+    "전체 12,222행 중 오답 단 19행, 가중 정확도 99.444% 달성.",
+    "전체 12,222행 추론 소요 시간 93.83초 (행당 7.68 ms)로 대회 제한 30분 대비 5% 미만의 안정적인 추론 시간 기록."
+  ],
+  "interpretations": [
+    "Fold 0 검증에서 확인된 오답 축소 효과(단 6건)가 실질적인 일반화 성능 개선으로 이어지며, Public 리더보드 점수는 0.8654856030(한글 예상 446개)으로 상승할 것으로 예측됨."
+  ],
+  "decision": "JY-05 이종 앙상블 모델 자산을 model/ 에 성공적으로 배치 완료.",
+  "next_actions": [
+    "사용자 명시 요청 시 verify_submission.py 실행 및 submit.zip 패키징 진행"
+  ]
+}

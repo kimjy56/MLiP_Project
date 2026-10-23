@@ -2,6 +2,9 @@ import unittest
 import torch
 import numpy as np
 
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'model'))
 from torch_indexer import TorchNgramIndexer
 
 

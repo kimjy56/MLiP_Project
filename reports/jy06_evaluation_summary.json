@@ -1,0 +1,23 @@
+{
+  "model_id": "JY-06",
+  "description": "Step 2: CatBoost (L2=7) + MLP (wd=1e-3) 5:5 Ensemble with Phase 2 Korean Name Expansion (use_train_lookup=False)",
+  "evaluated_rows": 12222,
+  "weighted_accuracy": 0.99679,
+  "korean_accuracy": 0.9958,
+  "korean_correct": "1186/1191",
+  "korean_errors": 5,
+  "latin_accuracy": 0.99909,
+  "latin_correct": "11021/11031",
+  "latin_errors": 10,
+  "total_errors": 15,
+  "inference_seconds": 95.36,
+  "latency_ms_per_row": 7.8,
+  "predicted_lb_score": 0.8996961293,
+  "predicted_public_korean": 472,
+  "training_time": {
+    "feature_pairs_sec": 48.72,
+    "catboost_fit_sec": 4.86,
+    "mlp_fit_sec": 4.2,
+    "total_elapsed_sec": 158.11
+  }
+}

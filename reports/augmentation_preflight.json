@@ -1,0 +1,24 @@
+{
+  "zip_sha256": "8be1b6f90b3997e49984b1fd0e01856403facdac0422911ae16f9a1b725c0c15",
+  "retry_experiments": [
+    "AUG-02",
+    "AUG-03"
+  ],
+  "augmentation_tests_passed": 3,
+  "pair_helper": "AST equivalent to original nested body after binding name_mode from index",
+  "evaluator_selftest_skipped": "External baseline_lib cross-check; path not supplied",
+  "zip_runtime_code_match": [
+    "model/matcher.py",
+    "model/name_processing.py",
+    "model/ngram_retrieval.py"
+  ],
+  "failure_resolution": "Bind name_mode from index in extracted helper",
+  "recorded_at_kst": "2026-10-21T12:46:40.4361494+09:00",
+  "e00_weighted": 0.477501,
+  "evaluator_selftest_passed": 32,
+  "failed_experiments": [
+    "AUG-00",
+    "AUG-01"
+  ],
+  "temporary_directory_retry": "Evaluator selftest initially PermissionError; project .cache/augmentation_tmp succeeded"
+}

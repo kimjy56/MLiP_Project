@@ -1,0 +1,243 @@
+[
+  {
+    "desc": "기본값 (Baseline: [64, 32], ReLU, ep=20)",
+    "params": {
+      "hidden_dims": [
+        64,
+        32
+      ],
+      "lr": 0.001,
+      "weight_decay": 0.0001,
+      "dropout": 0.0,
+      "activation": "relu",
+      "epochs": 20
+    },
+    "weighted_score": 0.9873,
+    "ko_acc": 0.98326,
+    "ko_correct": "235/239",
+    "latin_acc": 0.99672,
+    "latin_correct": "2126/2133",
+    "total_errors": 11,
+    "predicted_lb_score": 0.8615382346,
+    "estimated_public_korean": 443,
+    "fit_seconds": 3.62,
+    "pred_seconds": 0.0
+  },
+  {
+    "desc": "와이드 구조 ([128, 64], ReLU, ep=20)",
+    "params": {
+      "hidden_dims": [
+        128,
+        64
+      ],
+      "lr": 0.001,
+      "weight_decay": 0.0001,
+      "dropout": 0.0,
+      "activation": "relu",
+      "epochs": 20
+    },
+    "weighted_score": 0.97851,
+    "ko_acc": 0.97071,
+    "ko_correct": "232/239",
+    "latin_acc": 0.99672,
+    "latin_correct": "2126/2133",
+    "total_errors": 14,
+    "predicted_lb_score": 0.8496961293,
+    "estimated_public_korean": 434,
+    "fit_seconds": 1.94,
+    "pred_seconds": 0.02
+  },
+  {
+    "desc": "심층 구조 ([128, 64, 32], ReLU, ep=25)",
+    "params": {
+      "hidden_dims": [
+        128,
+        64,
+        32
+      ],
+      "lr": 0.001,
+      "weight_decay": 0.0001,
+      "dropout": 0.0,
+      "activation": "relu",
+      "epochs": 25
+    },
+    "weighted_score": 0.97908,
+    "ko_acc": 0.97071,
+    "ko_correct": "232/239",
+    "latin_acc": 0.99859,
+    "latin_correct": "2130/2133",
+    "total_errors": 10,
+    "predicted_lb_score": 0.8496961293,
+    "estimated_public_korean": 434,
+    "fit_seconds": 2.62,
+    "pred_seconds": 0.02
+  },
+  {
+    "desc": "드롭아웃 규제 ([128, 64], drop=0.1, ep=25)",
+    "params": {
+      "hidden_dims": [
+        128,
+        64
+      ],
+      "lr": 0.001,
+      "weight_decay": 0.0001,
+      "dropout": 0.1,
+      "activation": "relu",
+      "epochs": 25
+    },
+    "weighted_score": 0.98144,
+    "ko_acc": 0.9749,
+    "ko_correct": "233/239",
+    "latin_acc": 0.99672,
+    "latin_correct": "2126/2133",
+    "total_errors": 13,
+    "predicted_lb_score": 0.8536434978,
+    "estimated_public_korean": 437,
+    "fit_seconds": 2.56,
+    "pred_seconds": 0.02
+  },
+  {
+    "desc": "GELU 활성화 ([128, 64], GELU, ep=25)",
+    "params": {
+      "hidden_dims": [
+        128,
+        64
+      ],
+      "lr": 0.001,
+      "weight_decay": 0.0001,
+      "dropout": 0.0,
+      "activation": "gelu",
+      "epochs": 25
+    },
+    "weighted_score": 0.97573,
+    "ko_acc": 0.96653,
+    "ko_correct": "231/239",
+    "latin_acc": 0.99719,
+    "latin_correct": "2127/2133",
+    "total_errors": 14,
+    "predicted_lb_score": 0.8457487609,
+    "estimated_public_korean": 431,
+    "fit_seconds": 2.38,
+    "pred_seconds": 0.02
+  },
+  {
+    "desc": "SiLU 활성화 ([128, 64], SiLU, ep=25)",
+    "params": {
+      "hidden_dims": [
+        128,
+        64
+      ],
+      "lr": 0.001,
+      "weight_decay": 0.0001,
+      "dropout": 0.0,
+      "activation": "silu",
+      "epochs": 25
+    },
+    "weighted_score": 0.97615,
+    "ko_acc": 0.96653,
+    "ko_correct": "231/239",
+    "latin_acc": 0.99859,
+    "latin_correct": "2130/2133",
+    "total_errors": 11,
+    "predicted_lb_score": 0.8457487609,
+    "estimated_public_korean": 431,
+    "fit_seconds": 2.39,
+    "pred_seconds": 0.0
+  },
+  {
+    "desc": "Weight Decay 강화 ([64, 32], wd=1e-3, ep=25)",
+    "params": {
+      "hidden_dims": [
+        64,
+        32
+      ],
+      "lr": 0.001,
+      "weight_decay": 0.001,
+      "dropout": 0.0,
+      "activation": "relu",
+      "epochs": 25
+    },
+    "weighted_score": 0.98786,
+    "ko_acc": 0.98326,
+    "ko_correct": "235/239",
+    "latin_acc": 0.99859,
+    "latin_correct": "2130/2133",
+    "total_errors": 7,
+    "predicted_lb_score": 0.8615382346,
+    "estimated_public_korean": 443,
+    "fit_seconds": 2.39,
+    "pred_seconds": 0.0
+  },
+  {
+    "desc": "GELU + 드롭아웃 ([128, 64], GELU, drop=0.1)",
+    "params": {
+      "hidden_dims": [
+        128,
+        64
+      ],
+      "lr": 0.001,
+      "weight_decay": 0.0001,
+      "dropout": 0.1,
+      "activation": "gelu",
+      "epochs": 25
+    },
+    "weighted_score": 0.98186,
+    "ko_acc": 0.9749,
+    "ko_correct": "233/239",
+    "latin_acc": 0.99812,
+    "latin_correct": "2129/2133",
+    "total_errors": 10,
+    "predicted_lb_score": 0.8536434978,
+    "estimated_public_korean": 437,
+    "fit_seconds": 2.55,
+    "pred_seconds": 0.02
+  },
+  {
+    "desc": "정밀 학습 ([128, 64], GELU, lr=0.0005, ep=35)",
+    "params": {
+      "hidden_dims": [
+        128,
+        64
+      ],
+      "lr": 0.0005,
+      "weight_decay": 0.0001,
+      "dropout": 0.0,
+      "activation": "gelu",
+      "epochs": 35
+    },
+    "weighted_score": 0.97851,
+    "ko_acc": 0.97071,
+    "ko_correct": "232/239",
+    "latin_acc": 0.99672,
+    "latin_correct": "2126/2133",
+    "total_errors": 14,
+    "predicted_lb_score": 0.8496961293,
+    "estimated_public_korean": 434,
+    "fit_seconds": 3.28,
+    "pred_seconds": 0.0
+  },
+  {
+    "desc": "경량 고속 ([64, 32], ReLU, lr=0.002, ep=15)",
+    "params": {
+      "hidden_dims": [
+        64,
+        32
+      ],
+      "lr": 0.002,
+      "weight_decay": 0.0001,
+      "dropout": 0.0,
+      "activation": "relu",
+      "epochs": 15
+    },
+    "weighted_score": 0.98786,
+    "ko_acc": 0.98326,
+    "ko_correct": "235/239",
+    "latin_acc": 0.99859,
+    "latin_correct": "2130/2133",
+    "total_errors": 7,
+    "predicted_lb_score": 0.8615382346,
+    "estimated_public_korean": 443,
+    "fit_seconds": 1.47,
+    "pred_seconds": 0.02
+  }
+]

@@ -141,12 +141,12 @@ class TeamRules(unittest.TestCase):
         params = {**training.MODEL_PARAMETERS, 'n_estimators': 4, 'min_child_samples': 1}
         real_fit = train_oof.fit
         fitted_targets = []
-        def checked_fit(frame, cat, destination, *args):
+        def checked_fit(frame, cat, destination, *args, **kwargs):
             k = int(destination.parent.name.split('_')[1])
             self.assertNotIn('fold', frame.columns)
             self.assertNotIn(f'{k:03}', set(frame.target_vessel_id))
             fitted_targets.append(set(frame.target_vessel_id))
-            return real_fit(frame, cat, destination, *args)
+            return real_fit(frame, cat, destination, *args, **kwargs)
         with tempfile.TemporaryDirectory() as directory, patch.dict(training.MODEL_PARAMETERS, params), \
                 patch.object(train_oof, 'fit', side_effect=checked_fit):
             root = Path(directory) / 'run'

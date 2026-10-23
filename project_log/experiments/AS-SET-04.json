@@ -1,0 +1,877 @@
+{
+  "experiment_id": "AS-SET-04",
+  "plan_id": "N2-true-candidate-alignment",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-22T22:04:40+09:00",
+  "started_at_kst": "2026-10-22T22:05:36.154841+09:00",
+  "finished_at_kst": "2026-10-22T22:14:43.823383+09:00",
+  "purpose": "True candidate generation alignment: replace train.py heuristic 80/20 hardness pruning with matcher.py index.candidates(max_candidates=30) prune_candidates_by_tonnage",
+  "hypothesis": "Training with the exact inference candidate pruning algorithm eliminates distribution shift in candidate-set pooling statistics (mean/max) for SetDecisionModel",
+  "baseline_experiment_id": "AS-SET-03",
+  "changed_factors": [
+    "training candidate generation uses exact index.candidates(row, max_candidates=30) instead of train.py hardness 80/20 heuristic",
+    "removed artificial Hard Negative Mining from training candidate extraction",
+    "minimal gold insertion only when gold is missing from top-30 candidates"
+  ],
+  "fixed_conditions": [
+    "same G5-s42 5-fold split (12,222 rows)",
+    "same SetDecisionModel architecture (32-dim encoder, mean/max pooling, 32-dim head, 4,193 parameters)",
+    "same Adam optimizer, lr=0.001, weight_decay=0.001, seed=20261016, 25 epochs",
+    "same 64-query training batch grouping",
+    "same frozen G5 validation candidate sets (max 30 candidates, 12,222 rows)",
+    "no lookup (use_train_lookup=False)"
+  ],
+  "code": {
+    "git_revision_at_run": "dbfe8fc8f6b5afc003af28fd94b50def49f36bed",
+    "dirty": true,
+    "file_sha256": {
+      "experiments/compare_set_true_alignment.py": "5036ffc66bd84d99a32f6d8ba61145460699f836f70b1b6c819c47e96079f69b",
+      "decision_models/set_model.py": "03d290928aa90443ded6c98da7e6b9bad01a24c0d657b010e1ad4fbdec2acc9f",
+      "decision_models/matcher_adapter.py": "4e8766a1912feab63b3b1526fad197922bc149adf1d9b8a6ad5dd7605e81f8e6",
+      "model/matcher.py": "42698789d77fb4c788e65d66c95663400d42af063a981c9e0a10c5f5ccda3c83",
+      "model/name_processing.py": "983d9c3b06c7271a8aad10176e0d1242f8add6393cc3295251d449f72aaf0071",
+      "model/torch_indexer.py": "416f71fae6019247a3d24e81762a45773aea3f2c459243b909d4342c461d1598",
+      "train.py": "df78777f2ad549e0090626d4de3521466ecdf0ee1ce1e366c5df3c1b03fbed8d",
+      "train_oof.py": "14da1f5f20360d4f362f961e7c23e0eefcb82b240239b0c27df4b1be87b35ab4",
+      "handoff/as02/independent_noise.py": "34461b010a6870aad79515eb194f94568dd3c94c165a159c977a7c9ea0884a7c",
+      "eval_kit/evaluate.py": "2c728b357727f8e3962128030dde3bcb6fc6b230fcde287e336d3e0eb6c9f38e"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "split_id": "G5-s42",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 20261016,
+    "training_rows": null,
+    "validation_rows": 12222
+  },
+  "retrieval": {
+    "channels": [
+      "S",
+      "P",
+      "T"
+    ],
+    "phonetic_search": 24,
+    "train_candidates": 30,
+    "predict_candidates": 30,
+    "algorithm_alignment": "prune_candidates_by_tonnage for both train and inference"
+  },
+  "features": [
+    "ratio",
+    "roman_ratio",
+    "phonetic_ratio",
+    "phonetic_partial",
+    "length_ratio",
+    "digits_equal",
+    "digits_missing",
+    "gross_gap",
+    "international_gap",
+    "best_gap",
+    "gross_exact",
+    "international_exact",
+    "gross_missing",
+    "international_missing",
+    "type_probability",
+    "flag_probability",
+    "flag_missing",
+    "is_hangul",
+    "name_length",
+    "catalog_name_length",
+    "number_sequence_equal",
+    "number_conflict",
+    "token_count_gap",
+    "token_roman_idf",
+    "token_roman_min",
+    "token_roman_last",
+    "weighted_phone_full",
+    "weighted_phone_token_idf",
+    "weighted_phone_token_min",
+    "weighted_phone_last",
+    "weighted_phone_residual",
+    "phone_shared_edge"
+  ],
+  "preprocessing": {
+    "name_mode": "all",
+    "korean_expansion": true,
+    "hangul_soft_meta": true,
+    "train_lookup": false,
+    "augmentation": "existing non-Hangul independent_noise, seed 42+fold"
+  },
+  "training_pairs": {
+    "positive_rule": "target_vessel_id match",
+    "negative_rule": "exact inference candidate set (prune_candidates_by_tonnage max 30)",
+    "count": null
+  },
+  "model": {
+    "type": "set",
+    "parameters": {
+      "embedding_dim": 32,
+      "hidden_dim": 32,
+      "epochs": 25,
+      "batch_size_queries": 64,
+      "lr": 0.001,
+      "weight_decay": 0.001,
+      "seed": 20261016,
+      "parameter_count": 4193
+    },
+    "loss": "weighted candidate-pair BCE"
+  },
+  "commands": [
+    ".venv/Scripts/python.exe -X utf8 experiments/compare_set_true_alignment.py --device cuda"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows",
+    "training_device": "cuda",
+    "inference_device": "cpu"
+  },
+  "metrics": {
+    "metric_source": "eval_kit/evaluate.py, local full G5",
+    "hangul_rows": 1191,
+    "non_hangul_rows": 11031,
+    "hangul_accuracy": 0.9907640638119227,
+    "non_hangul_accuracy": 0.9990934638745353,
+    "weighted_accuracy": 0.9932628838307065,
+    "candidate_recall_hangul": 1.0,
+    "candidate_recall_non_hangul": 0.9997280391623606,
+    "seen_vessel_fraction": 0.0
+  },
+  "cost": {
+    "training_seconds": 41.54161419975571,
+    "inference_seconds": 96.93108120013494,
+    "timing_scope": "Training is optimizer only; inference is candidate search/features/scoring over all 12,222 held-out rows across five folds. CSV load, model/index load and file save separate; not official-server time.",
+    "peak_memory_bytes": null,
+    "model_bytes": [
+      22176,
+      22175,
+      22168,
+      22174,
+      22176
+    ],
+    "assets_bytes": [
+      592510,
+      592306,
+      589771,
+      591778,
+      590437
+    ],
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    {
+      "path": "artifacts/AS-SET-04/oof_AS-SET-04.csv",
+      "sha256": "0340da6db049dac98a561c940ef7a8b8d0a03cfb5b244f06a4a205741161a34e",
+      "bytes": 366703
+    },
+    {
+      "path": "artifacts/AS-SET-04/evaluation_AS-SET-04.json",
+      "sha256": "9b7063143b74838fbb3173e2cc775f6a2f75a8162b93aab9963b8ef7070462d2",
+      "bytes": 2199
+    }
+  ],
+  "error_cases_file": "artifacts/AS-SET-04/changed_predictions_vs_AS_SET_02.csv",
+  "observations": [
+    "Weighted accuracy dropped from 0.997992 (AS-SET-03) to 0.993263 (AS-SET-04)",
+    "Hangul accuracy dropped from 99.748% to 99.076% (-0.67%p, 8 broken rows)",
+    "Non-Hangul accuracy slightly dropped from 99.918% to 99.909% (1 fixed, 2 broken)",
+    "All 8 broken Hangul rows belong to two sister-ship groups: '모닝 피스' (Fold 3, 4 rows) and '우찬' (Fold 4, 4 rows)"
+  ],
+  "interpretations": [
+    "train.py's 80% hardness heuristic (max(ratio, phone_ratio) - 0.5*gap) explicitly mines confusing sister-ships into the candidate pool.",
+    "Removing Hard Negative Mining caused the training candidate pool to be dominated by easy negatives (similar tonnage, but dissimilar names).",
+    "Without training on hard negative sister-ships, SetDecisionModel loses fine-grained discriminative power between sister vessels at inference.",
+    "Therefore, candidate alignment alone cannot omit Hard Negative Mining; maintaining hard negatives in training is structurally essential."
+  ],
+  "limitations": [
+    "Development G5 evaluation only; no Public test estimate",
+    "User-authorized Python 3.11.15 execution",
+    "Compares exact candidate selection algorithm alignment"
+  ],
+  "failure": null,
+  "decision": "rejected_true_alignment_without_hard_negatives: Hard Negative Mining is essential for sister-ship discrimination; retain AS-SET-03 candidate configuration",
+  "next_actions": [
+    "Proceed to Step 2: Leave-one-out context and competitor difference features using the AS-SET-03 candidate pool"
+  ],
+  "fold_results": [
+    {
+      "fold": 0,
+      "metrics": {
+        "rows": 2372,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 239,
+        "hangul_correct": 238,
+        "hangul_accuracy": 0.99581589958159,
+        "hangul_candidate_coverage": 1.0,
+        "hangul_candidate_misses": 0,
+        "hangul_selection_errors": 1,
+        "non_hangul_rows": 2133,
+        "non_hangul_correct": 2130,
+        "non_hangul_accuracy": 0.9985935302390999,
+        "non_hangul_candidate_coverage": 0.9990623534927332,
+        "non_hangul_candidate_misses": 2,
+        "non_hangul_selection_errors": 1,
+        "weighted_accuracy": 0.9966491887788429
+      },
+      "training_seconds": 9.610646099899895,
+      "save_reload_seconds": 0.020512600080110133,
+      "cached_score_seconds": 0.20659650000743568,
+      "index_load_seconds": 2.412376099964604,
+      "prediction_pipeline_seconds": 18.166679400019348,
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "cache_live_predictions_equal": true,
+      "loss_history": [
+        0.10036347830431275,
+        0.010077802567515599,
+        0.006567576755016539,
+        0.0053605519688217996,
+        0.004871874475377247,
+        0.004291938500705584,
+        0.004386130781128697,
+        0.004073056110869242,
+        0.003919025815115994,
+        0.00359807776748657,
+        0.0034575713069893814,
+        0.0036830443032272405,
+        0.003396654462509456,
+        0.003345739066062896,
+        0.003434784466592537,
+        0.003286934800911947,
+        0.0032433806172499583,
+        0.0032204172630737947,
+        0.0034033464042198948,
+        0.0032014433459065664,
+        0.0035315195187199744,
+        0.003285846779695362,
+        0.003029587328017733,
+        0.0031326028433885838,
+        0.003190773962909437
+      ],
+      "model_bytes": 22176,
+      "assets_bytes": 592510,
+      "artifacts": [
+        {
+          "path": "artifacts/AS-SET-04/fold_0/set/set_config.json",
+          "sha256": "f2761d0b94374c14662f4fdf84d980ccbbf2f33fffd8d8347597ea382896c954",
+          "bytes": 1811
+        },
+        {
+          "path": "artifacts/AS-SET-04/fold_0/set/set_model.pt",
+          "sha256": "bd3e36707faa23381fe22cee9c96d0e165c8d14ef99eeabe10dc35dba6776ceb",
+          "bytes": 19605
+        },
+        {
+          "path": "artifacts/AS-SET-04/fold_0/set/set_scaler.npz",
+          "sha256": "0bdc7fe004cf273378b9248a22477ed81a778337e8cd1523ddd4f2757519d788",
+          "bytes": 760
+        },
+        {
+          "path": "artifacts/AS-SET-04/fold_0/set/assets.json",
+          "sha256": "9e1ed18c7628acb0741a358d26ce0d10981aeded50c56dd83d7064c59a143d3b",
+          "bytes": 592510
+        }
+      ]
+    },
+    {
+      "fold": 1,
+      "metrics": {
+        "rows": 2472,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 241,
+        "hangul_correct": 241,
+        "hangul_accuracy": 1.0,
+        "hangul_candidate_coverage": 1.0,
+        "hangul_candidate_misses": 0,
+        "hangul_selection_errors": 0,
+        "non_hangul_rows": 2231,
+        "non_hangul_correct": 2228,
+        "non_hangul_accuracy": 0.9986553115194979,
+        "non_hangul_candidate_coverage": 0.9995517705064993,
+        "non_hangul_candidate_misses": 1,
+        "non_hangul_selection_errors": 2,
+        "weighted_accuracy": 0.9995965934558493
+      },
+      "training_seconds": 8.279359699925408,
+      "save_reload_seconds": 0.018323700060136616,
+      "cached_score_seconds": 0.2135359999956563,
+      "index_load_seconds": 2.39263330004178,
+      "prediction_pipeline_seconds": 19.36457390000578,
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "cache_live_predictions_equal": true,
+      "loss_history": [
+        0.09902336325135995,
+        0.01059200196708707,
+        0.006683818571982965,
+        0.005742138574335617,
+        0.005077648738587538,
+        0.005223013023680256,
+        0.004504444807326336,
+        0.0042936859107367215,
+        0.004349439611010514,
+        0.00413798833998611,
+        0.0039841034081778285,
+        0.0040254518202096174,
+        0.003902016027930792,
+        0.003926936795590139,
+        0.003931951356986613,
+        0.0037502471106089378,
+        0.0036314669691910354,
+        0.003499645565210291,
+        0.003692465594184936,
+        0.0036412369639075215,
+        0.0037487672217059132,
+        0.003812021213310593,
+        0.0034608162062881344,
+        0.003668350161160242,
+        0.0036575086254642362
+      ],
+      "model_bytes": 22175,
+      "assets_bytes": 592306,
+      "artifacts": [
+        {
+          "path": "artifacts/AS-SET-04/fold_1/set/set_config.json",
+          "sha256": "9341651c1ceaf8b3f716565a70e70e25f7b5eb44ff90e1681c290b4b17658dd7",
+          "bytes": 1810
+        },
+        {
+          "path": "artifacts/AS-SET-04/fold_1/set/set_model.pt",
+          "sha256": "a194e8a906d149c30947ca781d8f1a4ac7815b797371621dd5d347363ff4213c",
+          "bytes": 19605
+        },
+        {
+          "path": "artifacts/AS-SET-04/fold_1/set/set_scaler.npz",
+          "sha256": "897e2d1446887f5f18b7b3e108dab7fb8f12a8497eb0c536cb03dd42b4569fcd",
+          "bytes": 760
+        },
+        {
+          "path": "artifacts/AS-SET-04/fold_1/set/assets.json",
+          "sha256": "e3321ff3da70ca26c855d1140b21ebe0702c178c7cbec20d959f3cd631a3c4de",
+          "bytes": 592306
+        }
+      ]
+    },
+    {
+      "fold": 2,
+      "metrics": {
+        "rows": 2516,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 234,
+        "hangul_correct": 234,
+        "hangul_accuracy": 1.0,
+        "hangul_candidate_coverage": 1.0,
+        "hangul_candidate_misses": 0,
+        "hangul_selection_errors": 0,
+        "non_hangul_rows": 2282,
+        "non_hangul_correct": 2281,
+        "non_hangul_accuracy": 0.9995617879053462,
+        "non_hangul_candidate_coverage": 1.0,
+        "non_hangul_candidate_misses": 0,
+        "non_hangul_selection_errors": 1,
+        "weighted_accuracy": 0.9998685363716038
+      },
+      "training_seconds": 7.709604799980298,
+      "save_reload_seconds": 0.0192136000841856,
+      "cached_score_seconds": 0.21354699996300042,
+      "index_load_seconds": 2.4165803999640048,
+      "prediction_pipeline_seconds": 19.608713900088333,
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "cache_live_predictions_equal": true,
+      "loss_history": [
+        0.11106367571040543,
+        0.011356207787652613,
+        0.007225126692299456,
+        0.005953917702655288,
+        0.005572638232306273,
+        0.004865274836330538,
+        0.004582140853139487,
+        0.00450815155282264,
+        0.004266046871678653,
+        0.004155670730854535,
+        0.00408845571544693,
+        0.003972332885971989,
+        0.0038811064901177277,
+        0.0038401808167467175,
+        0.003847683026246016,
+        0.003694066171511533,
+        0.003598979974183344,
+        0.003727127853057494,
+        0.00354080138176751,
+        0.003473134408867749,
+        0.003563592127346326,
+        0.003483666920241223,
+        0.0036752676221470304,
+        0.003469536480903748,
+        0.003483232688598538
+      ],
+      "model_bytes": 22168,
+      "assets_bytes": 589771,
+      "artifacts": [
+        {
+          "path": "artifacts/AS-SET-04/fold_2/set/set_config.json",
+          "sha256": "7a6c8eb49141fa5e5b982473d227c77cfad665a3afc6d71f97f54ea331fd2965",
+          "bytes": 1803
+        },
+        {
+          "path": "artifacts/AS-SET-04/fold_2/set/set_model.pt",
+          "sha256": "8ba7879db6f2b25f594865daca1c35aa3a6d56d8282b8b33548ea14129ce0e78",
+          "bytes": 19605
+        },
+        {
+          "path": "artifacts/AS-SET-04/fold_2/set/set_scaler.npz",
+          "sha256": "cc80aa748ed4d14de3dbfeb670590a3614f87b468e5278434f685698b4e72cca",
+          "bytes": 760
+        },
+        {
+          "path": "artifacts/AS-SET-04/fold_2/set/assets.json",
+          "sha256": "1c0d3194bf5b02bc494b985487785631da0e15b17a9a2402df7545d17f53eae6",
+          "bytes": 589771
+        }
+      ]
+    },
+    {
+      "fold": 3,
+      "metrics": {
+        "rows": 2433,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 244,
+        "hangul_correct": 240,
+        "hangul_accuracy": 0.9836065573770492,
+        "hangul_candidate_coverage": 1.0,
+        "hangul_candidate_misses": 0,
+        "hangul_selection_errors": 4,
+        "non_hangul_rows": 2189,
+        "non_hangul_correct": 2188,
+        "non_hangul_accuracy": 0.9995431703974418,
+        "non_hangul_candidate_coverage": 1.0,
+        "non_hangul_candidate_misses": 0,
+        "non_hangul_selection_errors": 1,
+        "weighted_accuracy": 0.9883875412831669
+      },
+      "training_seconds": 8.019421899924055,
+      "save_reload_seconds": 0.017417400027625263,
+      "cached_score_seconds": 0.20564350008498877,
+      "index_load_seconds": 2.470327900024131,
+      "prediction_pipeline_seconds": 19.91785169998184,
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "cache_live_predictions_equal": true,
+      "loss_history": [
+        0.09777755938358762,
+        0.010679775345300287,
+        0.007078891224713717,
+        0.005718410162763336,
+        0.004892212821859492,
+        0.004855484692702952,
+        0.0045783744049342585,
+        0.004211711615296359,
+        0.004166929004254849,
+        0.0039468186477161285,
+        0.003820929598584752,
+        0.003784560731901522,
+        0.003992350767301606,
+        0.0037038883748280074,
+        0.0037399319487039276,
+        0.0035705754322130647,
+        0.0034300221382368335,
+        0.004063047904420118,
+        0.003402279815387976,
+        0.004006595058945409,
+        0.0037755946836988377,
+        0.003298809160953553,
+        0.003505796215776795,
+        0.00336739021596538,
+        0.003484107293651193
+      ],
+      "model_bytes": 22174,
+      "assets_bytes": 591778,
+      "artifacts": [
+        {
+          "path": "artifacts/AS-SET-04/fold_3/set/set_config.json",
+          "sha256": "9e4b448593c92cda43496e334a14994a4bdabfdc422e3fdb0b6c40665c1a12d9",
+          "bytes": 1809
+        },
+        {
+          "path": "artifacts/AS-SET-04/fold_3/set/set_model.pt",
+          "sha256": "e40f1bb393aae677cd89a7a4f20088f922718003a7beef44d1d5fc4ae227df1f",
+          "bytes": 19605
+        },
+        {
+          "path": "artifacts/AS-SET-04/fold_3/set/set_scaler.npz",
+          "sha256": "3b87636f52dc10e79785724f4b0f016b982a14c827f517bbd5b6670d5dad7443",
+          "bytes": 760
+        },
+        {
+          "path": "artifacts/AS-SET-04/fold_3/set/assets.json",
+          "sha256": "7e5572c7b813e2a41fca8ea3e9ec8458f3f106dce2cb19ca5d4c483d9f6d6e85",
+          "bytes": 591778
+        }
+      ]
+    },
+    {
+      "fold": 4,
+      "metrics": {
+        "rows": 2429,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 233,
+        "hangul_correct": 227,
+        "hangul_accuracy": 0.9742489270386266,
+        "hangul_candidate_coverage": 1.0,
+        "hangul_candidate_misses": 0,
+        "hangul_selection_errors": 6,
+        "non_hangul_rows": 2196,
+        "non_hangul_correct": 2194,
+        "non_hangul_accuracy": 0.9990892531876139,
+        "non_hangul_candidate_coverage": 1.0,
+        "non_hangul_candidate_misses": 0,
+        "non_hangul_selection_errors": 2,
+        "weighted_accuracy": 0.9817010248833228
+      },
+      "training_seconds": 7.922581700026058,
+      "save_reload_seconds": 0.01764309999998659,
+      "cached_score_seconds": 0.2208408999722451,
+      "index_load_seconds": 2.4871202999493107,
+      "prediction_pipeline_seconds": 19.87326230003964,
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "cache_live_predictions_equal": true,
+      "loss_history": [
+        0.0945118112562021,
+        0.009580747749081287,
+        0.005946430079120581,
+        0.0049604931343549055,
+        0.004762679784107697,
+        0.004100775767982271,
+        0.004070024831342316,
+        0.0038630295996971223,
+        0.0038393477756554543,
+        0.0038761404268942974,
+        0.003599019540952606,
+        0.0037597319583748757,
+        0.0039015483507806115,
+        0.0034054003240449196,
+        0.0033404627291100113,
+        0.003425901282790045,
+        0.00342762336188837,
+        0.003454079117235365,
+        0.003525440271018514,
+        0.003466277664435299,
+        0.003154258489589017,
+        0.003350541797658404,
+        0.0033160324443274668,
+        0.0036057811745000643,
+        0.003259851106452622
+      ],
+      "model_bytes": 22176,
+      "assets_bytes": 590437,
+      "artifacts": [
+        {
+          "path": "artifacts/AS-SET-04/fold_4/set/set_config.json",
+          "sha256": "628205f5629189dc511ac57e5bf6c0a538d0737c46e1c59199b9ee3d3a7b8bf2",
+          "bytes": 1811
+        },
+        {
+          "path": "artifacts/AS-SET-04/fold_4/set/set_model.pt",
+          "sha256": "f2672d313606d88c24b1ca8443943e3eb6607dcd6d81a7ba5a5996a6483873d4",
+          "bytes": 19605
+        },
+        {
+          "path": "artifacts/AS-SET-04/fold_4/set/set_scaler.npz",
+          "sha256": "7d18e822a57c5668c22fa3cc79a47c715ef14cb7fedb478fc03e782233378845",
+          "bytes": 760
+        },
+        {
+          "path": "artifacts/AS-SET-04/fold_4/set/assets.json",
+          "sha256": "cdf662220ddde4015fdadfe318903ef168dbfae0b6ba3214c611b8a64dcefee9",
+          "bytes": 590437
+        }
+      ]
+    }
+  ],
+  "official_evaluation": {
+    "score": {
+      "h": 0.9907640638119227,
+      "nh": 0.9990934638745353,
+      "w": 0.9932628838307065,
+      "n_h": 1191,
+      "n_nh": 11031
+    },
+    "boot": {
+      "h": {
+        "est": 0.9907640638119227,
+        "lo": 0.9794564137378353,
+        "hi": 0.9991638795986622,
+        "se": 0.005124100475009355
+      },
+      "nh": {
+        "est": 0.9990934638745353,
+        "lo": 0.998466534367671,
+        "hi": 0.999638630409251,
+        "se": 0.00029030049801671376
+      },
+      "w": {
+        "est": 0.9932628838307065,
+        "lo": 0.9853884880075944,
+        "hi": 0.9991738587134864,
+        "se": 0.003588335922298759
+      }
+    },
+    "compare": {
+      "d": {
+        "h": -0.0067170445004198776,
+        "nh": -9.065361254656512e-05,
+        "w": -0.004729127234057939
+      },
+      "boot": {
+        "h": {
+          "est": -0.0067170445004198776,
+          "lo": -0.016978650543409215,
+          "hi": 0.0,
+          "se": 0.004856806181155495
+        },
+        "nh": {
+          "est": -9.065361254656512e-05,
+          "lo": -0.0004487121959974872,
+          "hi": 0.00018223276138713455,
+          "se": 0.0001608081064142502
+        },
+        "w": {
+          "est": -0.004729127234057939,
+          "lo": -0.011915834419778355,
+          "hi": 0.0,
+          "se": 0.0033990496062908013
+        }
+      },
+      "verdict": "동등",
+      "n_common": 12222
+    },
+    "line": {
+      "date": "2026-10-22 22:14",
+      "id": "AS-SET-04",
+      "scheme": "G5-s42",
+      "oof": "oof_AS-SET-04.csv",
+      "oof_sha8": "0340da6d",
+      "rows": "12222",
+      "hangul": "0.99076",
+      "hangul_lo": "0.97946",
+      "hangul_hi": "0.99916",
+      "non_hangul": "0.99909",
+      "non_hangul_lo": "0.99847",
+      "non_hangul_hi": "0.99964",
+      "weighted": "0.99326",
+      "weighted_lo": "0.98539",
+      "weighted_hi": "0.99917",
+      "recall_h": "1.0000",
+      "recall_nh": "0.9997",
+      "compare_to": "oof_AS-SET-02.csv",
+      "d_weighted": "-0.00473",
+      "d_lo": "-0.01192",
+      "d_hi": "0.00000",
+      "verdict": "동등",
+      "train_sec": "",
+      "infer_sec": "",
+      "zip_mb": "",
+      "note": "",
+      "checks": "train=ok;folds=G5-s42;foldcol=ok",
+      "eval_ver": "1.0"
+    },
+    "warnings": [],
+    "folds": "G5-s42"
+  },
+  "shared_folds": [
+    {
+      "fold": 0,
+      "real_training_rows": 9850,
+      "augmented_training_rows": 18748,
+      "validation_rows": 2372,
+      "pairs": {
+        "queries": 10660,
+        "pairs": 313590,
+        "retrieved_before_gold_insertion_fraction": 0.9994371482176361,
+        "natural_queries": 10654,
+        "injected_queries": 6,
+        "avg_candidates_per_query": 29.417448405253282,
+        "max_candidates_per_query": 31,
+        "min_candidates_per_query": 24
+      },
+      "preparation_seconds": 2.682689500041306,
+      "training_candidate_feature_seconds": 70.17429890006315,
+      "validation_candidate_feature_seconds": 0.0,
+      "train_cache": {
+        "path": "artifacts/AS-SET-04/fold_0/train_pairs.npz",
+        "sha256": "97aecf67a96650228e09c3513dd92ce8da3c88b8558e416f4f6faa8e5c931b6e",
+        "bytes": 8034249
+      },
+      "validation_cache": {
+        "path": "artifacts/AS-SET-04/fold_0/validation_pairs.npz",
+        "sha256": "7e2928be59e7293511041458c4897278634feaa4330983bdf68076ed345c94db",
+        "bytes": 2152273
+      }
+    },
+    {
+      "fold": 1,
+      "real_training_rows": 9750,
+      "augmented_training_rows": 18550,
+      "validation_rows": 2472,
+      "pairs": {
+        "queries": 10574,
+        "pairs": 310961,
+        "retrieved_before_gold_insertion_fraction": 0.9995271420465293,
+        "natural_queries": 10569,
+        "injected_queries": 5,
+        "avg_candidates_per_query": 29.40807641384528,
+        "max_candidates_per_query": 31,
+        "min_candidates_per_query": 24
+      },
+      "preparation_seconds": 2.7897809999994934,
+      "training_candidate_feature_seconds": 73.54962910001632,
+      "validation_candidate_feature_seconds": 0.0,
+      "train_cache": {
+        "path": "artifacts/AS-SET-04/fold_1/train_pairs.npz",
+        "sha256": "54dc474d8252d21f9e7c50447a0f298846cf7ce44aea8bc1c6e8c70089966620",
+        "bytes": 7959860
+      },
+      "validation_cache": {
+        "path": "artifacts/AS-SET-04/fold_1/validation_pairs.npz",
+        "sha256": "b8b85a36956a65710f2f878026885713486d252c70cd1e8b1d0d73977379eec9",
+        "bytes": 2227150
+      }
+    },
+    {
+      "fold": 2,
+      "real_training_rows": 9706,
+      "augmented_training_rows": 18455,
+      "validation_rows": 2516,
+      "pairs": {
+        "queries": 10593,
+        "pairs": 311466,
+        "retrieved_before_gold_insertion_fraction": 0.9994335882186349,
+        "natural_queries": 10587,
+        "injected_queries": 6,
+        "avg_candidates_per_query": 29.403001982441236,
+        "max_candidates_per_query": 31,
+        "min_candidates_per_query": 24
+      },
+      "preparation_seconds": 2.8004745000507683,
+      "training_candidate_feature_seconds": 76.9379563999828,
+      "validation_candidate_feature_seconds": 0.0,
+      "train_cache": {
+        "path": "artifacts/AS-SET-04/fold_2/train_pairs.npz",
+        "sha256": "ea0bb727b93af0a8a93bcf6b23056569ca1b5e422fe5eda68390f8be8f2d3182",
+        "bytes": 7976421
+      },
+      "validation_cache": {
+        "path": "artifacts/AS-SET-04/fold_2/validation_pairs.npz",
+        "sha256": "3f03bd32fd0fcb484578096e51c5de66fcd1e8c3ffa4361ac8c7dd431417ad62",
+        "bytes": 2273628
+      }
+    },
+    {
+      "fold": 3,
+      "real_training_rows": 9789,
+      "augmented_training_rows": 18631,
+      "validation_rows": 2433,
+      "pairs": {
+        "queries": 10630,
+        "pairs": 312440,
+        "retrieved_before_gold_insertion_fraction": 0.999247412982126,
+        "natural_queries": 10622,
+        "injected_queries": 8,
+        "avg_candidates_per_query": 29.39228598306679,
+        "max_candidates_per_query": 31,
+        "min_candidates_per_query": 24
+      },
+      "preparation_seconds": 2.8284302999963984,
+      "training_candidate_feature_seconds": 75.82201450003777,
+      "validation_candidate_feature_seconds": 0.0,
+      "train_cache": {
+        "path": "artifacts/AS-SET-04/fold_3/train_pairs.npz",
+        "sha256": "bd39a3147c7fa9bf8914929bad5a204d10eb80a3c7890188ace44b2fbffe2d37",
+        "bytes": 7990772
+      },
+      "validation_cache": {
+        "path": "artifacts/AS-SET-04/fold_3/validation_pairs.npz",
+        "sha256": "ead8c04dd76a4a886283b31b69296d236a63c82a47197f16870e26796f4a6be5",
+        "bytes": 2200111
+      }
+    },
+    {
+      "fold": 4,
+      "real_training_rows": 9793,
+      "augmented_training_rows": 18628,
+      "validation_rows": 2429,
+      "pairs": {
+        "queries": 10683,
+        "pairs": 313904,
+        "retrieved_before_gold_insertion_fraction": 0.9992511466816437,
+        "natural_queries": 10675,
+        "injected_queries": 8,
+        "avg_candidates_per_query": 29.383506505663203,
+        "max_candidates_per_query": 31,
+        "min_candidates_per_query": 24
+      },
+      "preparation_seconds": 2.8482685000635684,
+      "training_candidate_feature_seconds": 76.59123000002,
+      "validation_candidate_feature_seconds": 0.0,
+      "train_cache": {
+        "path": "artifacts/AS-SET-04/fold_4/train_pairs.npz",
+        "sha256": "ea403d602b5dbee9327798a6cbded9102a28777cd097a2b61e99e1dd2758aef9",
+        "bytes": 8031456
+      },
+      "validation_cache": {
+        "path": "artifacts/AS-SET-04/fold_4/validation_pairs.npz",
+        "sha256": "d1fac39a252ee5b7c45ed6b477426858b721b7ba852e517efb97e4194b00a129",
+        "bytes": 2197564
+      }
+    }
+  ]
+}

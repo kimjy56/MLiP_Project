@@ -1,0 +1,723 @@
+{
+  "experiment_id": "AUG-02",
+  "plan_id": null,
+  "status": "completed",
+  "recorded_at_kst": "2026-10-21T12:38:54.767710+09:00",
+  "started_at_kst": "2026-10-21T12:38:54.970746+09:00",
+  "finished_at_kst": "2026-10-21T12:55:24.436032+09:00",
+  "purpose": "Paired actual-query group OOF: JY-01 configuration with/without weak train-only augmentation",
+  "hypothesis": "Weak name deletion and metadata masking may improve unseen-vessel generalization",
+  "baseline_experiment_id": null,
+  "changed_factors": [],
+  "fixed_conditions": [
+    "same folds, real-row lookup assets, features, search, candidate selection, model hyperparameters"
+  ],
+  "code": {
+    "git_revision_at_run": "dbfe8fc8f6b5afc003af28fd94b50def49f36bed",
+    "dirty": true,
+    "file_sha256": {
+      "train.py": "134d992f37daa342c9705253c866ced83cdea80ac2d3af9284f8e9b3809a22ee",
+      "train_oof.py": "932b2470b93b3498960de5d0fa06d106c56f54e30656acfa63da9d4f5dc30ead",
+      "model/matcher.py": "e73b217432d24933f58b78c14a926ad22bf6fdd963ea66b6a1e31a833fb87f1f",
+      "model/name_processing.py": "c2b1e4170a33a757ca9fbf5ebe7578a76bdceb335f9906a45dddd16f8273910f",
+      "model/ngram_retrieval.py": "9c1e0e73a4b35c2723a30dd261bfc6561e9b465d9f4f3041e196c45f3e3ed59a",
+      "experiments/weak_augmentation.py": "affc438a389a312420e5256c6b3eaaa017ac2f95d667e7c741e974cfc6f45911",
+      "experiments/run_weak_augmentation.py": "4f490b5c4fe618d3d6719fe55e7eb11de4b1e40217ff040b0ce37ff3a49bf2d5",
+      "eval_kit/evaluate.py": "2c728b357727f8e3962128030dde3bcb6fc6b230fcde287e336d3e0eb6c9f38e"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "eval_kit/folds_group5_seed42.csv": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    },
+    "split_id": "G5-s42",
+    "seed": 42,
+    "validation_rows": 12222,
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+  },
+  "retrieval": {},
+  "features": [
+    "ratio",
+    "roman_ratio",
+    "phonetic_ratio",
+    "phonetic_partial",
+    "length_ratio",
+    "digits_equal",
+    "digits_missing",
+    "gross_gap",
+    "international_gap",
+    "best_gap",
+    "gross_exact",
+    "international_exact",
+    "gross_missing",
+    "international_missing",
+    "type_probability",
+    "flag_probability",
+    "flag_missing",
+    "is_hangul",
+    "name_length",
+    "catalog_name_length",
+    "number_sequence_equal",
+    "number_conflict",
+    "token_count_gap",
+    "token_roman_idf",
+    "token_roman_min",
+    "token_roman_last",
+    "weighted_phone_full",
+    "weighted_phone_token_idf",
+    "weighted_phone_token_min",
+    "weighted_phone_last",
+    "weighted_phone_residual",
+    "phone_shared_edge"
+  ],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "LightGBM binary candidate classifier",
+    "parameters": {
+      "n_estimators": 350,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "max_depth": -1,
+      "min_child_samples": 40,
+      "colsample_bytree": 0.9,
+      "reg_lambda": 2,
+      "random_state": 20261016,
+      "n_jobs": 4,
+      "verbosity": -1,
+      "deterministic": true,
+      "force_col_wise": true
+    }
+  },
+  "commands": [
+    "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe",
+    "experiments/run_weak_augmentation.py"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "executable": "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "numpy": "1.26.4",
+      "pandas": "2.0.3",
+      "scikit-learn": "1.5.2",
+      "lightgbm": "4.6.0",
+      "rapidfuzz": "3.14.3",
+      "Unidecode": "1.4.0"
+    }
+  },
+  "metrics": {
+    "metric_source": "Official eval_kit/evaluate.py G5-s42 OOF; diagnostics from same predictions",
+    "hangul_rows": 1191,
+    "non_hangul_rows": 11031,
+    "hangul_accuracy": 0.9009235936188077,
+    "non_hangul_accuracy": 0.9985495421992566,
+    "weighted_accuracy": 0.9302113781929423,
+    "candidate_recall_hangul": 0.9916036943744753,
+    "candidate_recall_non_hangul": 0.9997280391623606,
+    "seen_vessel_fraction": 0.0
+  },
+  "cost": {
+    "training_seconds": 398.1400000000722,
+    "inference_seconds": 181.5470000000205,
+    "timing_scope": "Sum over five folds: fit includes index/features/model save (augmented cost attributes reused base preparation); inference includes predict_details only, excludes Matcher construction/CSV and independence probes",
+    "peak_memory_bytes": null,
+    "model_bytes": 6286620,
+    "assets_bytes": 1860744,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-02\\oof_AUG-02.csv",
+      "sha256": "919975b2f62b68d9800a35d5a5542866455f92c809f04485c59a0d8ede100519",
+      "rows": 12222
+    },
+    {
+      "command": [
+        "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "eval_kit/evaluate.py",
+        "--train",
+        "data/train.csv",
+        "--oof",
+        "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-02\\oof_AUG-02.csv",
+        "--id",
+        "AUG-02",
+        "--leaderboard",
+        "C:\\Projects\\ML_midterm\\reports\\augmentation_leaderboard.csv"
+      ],
+      "output": "C:\\Projects\\ML_midterm\\reports\\AUG-02_official_evaluation.txt",
+      "sha256": "15c857ee8194656b510613b00ff327571342d2586f932a458698c7e33bdf6c35",
+      "exit_code": 0
+    },
+    {
+      "path": "C:\\Projects\\ML_midterm\\reports\\augmentation_leaderboard.csv",
+      "sha256": "19097c01a1f879fc23753a70f6d765e1b31e400e89e4a9e14561663a69a6b047"
+    }
+  ],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "Previously used public train; development OOF, not independent final test.",
+    "Local .venv explicitly approved; Python differs from server.",
+    "Fixed weak corruption hypotheses, not learned test-distribution alignment.",
+    "Preserve existing positional negative-mining heuristic for paired comparability; no independent correction.",
+    "Official evaluator README locally v1.0; stricter project v1.1 requirements govern validation.",
+    "No catalog-only synthetic new IDs in this initial experiment.",
+    "Name deletion and masking are combined; individual contributions not identified.",
+    "Old positional hard-negative selection uses current roman_ratio/length_ratio/international_exact columns; preserved in both arms, should be fixed in a separately identified experiment."
+  ],
+  "failure": null,
+  "decision": "Baseline retained; augmentation adoption requires improvement evidence",
+  "next_actions": [],
+  "runtime": {
+    "VESSEL_SEARCH_ALGORITHM": "rapidfuzz",
+    "VESSEL_PHONE_SIMILARITY": "rapidfuzz",
+    "VESSEL_FEATURE_WORKERS": "4",
+    "VESSEL_TRAIN_THREADS": "4",
+    "VESSEL_PREDICT_WORKERS": "4",
+    "VESSEL_SCORE_THREADS": "1",
+    "VESSEL_TRAIN_CANDIDATES": "50",
+    "VESSEL_MAX_CANDIDATES": "0",
+    "VESSEL_PREDICT_CANDIDATES": "30",
+    "VESSEL_TRAIN_BATCH": "64",
+    "VESSEL_PREDICT_BATCH": "64",
+    "VESSEL_SEARCH_DEVICE": "cpu"
+  },
+  "fold_results": [
+    {
+      "fold": 0,
+      "fit": {
+        "search_algorithm": "rapidfuzz",
+        "feature_workers": 4,
+        "model_threads": 4,
+        "batch_size": 64,
+        "index_seconds": 2.547000000020489,
+        "feature_seconds": 70.57900000002701,
+        "model_fit_seconds": 1.3900000000139698,
+        "training_rows": 9850,
+        "unique_feature_rows": 5353,
+        "training_pair_sha256": "26c0bd9749a449cd4db7867b6d3e126f0c8e4cd4e5918786ef89654689a72e35",
+        "training_pairs": 234438,
+        "training_candidate_recall": 0.9990659443302821,
+        "fit_seconds": 74.56199999997625,
+        "timing_scope": "assets, catalog index, candidate/features, training and model save; excludes CSV load",
+        "feature_importance_gain": {
+          "ratio": 3369.7028408520855,
+          "roman_ratio": 8635.241534203291,
+          "phonetic_ratio": 31749.473885341547,
+          "phonetic_partial": 2472.9154322342947,
+          "length_ratio": 2364.8713600849733,
+          "digits_equal": 593.7523833885789,
+          "digits_missing": 0.0,
+          "gross_gap": 7485.277313068509,
+          "international_gap": 338912.88263883675,
+          "best_gap": 11694.31783079449,
+          "gross_exact": 2.473820984363556,
+          "international_exact": 1866.0579034909606,
+          "gross_missing": 843.5612141601741,
+          "international_missing": 44.372842414304614,
+          "type_probability": 4739.197540619876,
+          "flag_probability": 17176.64023469668,
+          "flag_missing": 43.79961286112666,
+          "is_hangul": 3691.6487622056156,
+          "name_length": 1263.7639734186232,
+          "catalog_name_length": 731.2367339273915,
+          "number_sequence_equal": 74.01665657106787,
+          "number_conflict": 0.4549636021256447,
+          "token_count_gap": 27.97582913096994,
+          "token_roman_idf": 42831.29051619535,
+          "token_roman_min": 4407.632112552412,
+          "token_roman_last": 2521.2061628671363,
+          "weighted_phone_full": 1326.0531298117712,
+          "weighted_phone_token_idf": 41957.374461499974,
+          "weighted_phone_token_min": 2963.592701931484,
+          "weighted_phone_last": 679.4694231888279,
+          "weighted_phone_residual": 638.6260896888562,
+          "phone_shared_edge": 993.07489966508
+        }
+      },
+      "validation": {
+        "rows": 2372,
+        "seconds": 33.28100000001723,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 239,
+        "hangul_accuracy": 0.8870292887029289,
+        "hangul_candidate_recall": 1.0,
+        "non_hangul_rows": 2133,
+        "non_hangul_accuracy": 0.9985935302390999,
+        "non_hangul_candidate_recall": 0.9990623534927332,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 2372,
+        "unseen_accuracy": 0.9873524451939292,
+        "unseen_candidate_recall": 0.9991568296795953,
+        "weighted_accuracy": 0.9204985611637801,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "artifacts": {
+        "assets.json": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-02\\fold_0\\model\\assets.json",
+          "sha256": "31efd4e30e8cfa1a278e8fab901e2cbd4d02d164979cf3a5d4205ec5d7dbe2eb",
+          "bytes": 372572
+        },
+        "ranker.txt": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-02\\fold_0\\model\\ranker.txt",
+          "sha256": "1c8de0f4cabd0b0c1373ac9fe081ffd09c12451029514a02928489004bddc9cf",
+          "bytes": 1254851
+        }
+      }
+    },
+    {
+      "fold": 1,
+      "fit": {
+        "search_algorithm": "rapidfuzz",
+        "feature_workers": 4,
+        "model_threads": 4,
+        "batch_size": 64,
+        "index_seconds": 2.8439999999827705,
+        "feature_seconds": 76.06300000002375,
+        "model_fit_seconds": 1.702999999979511,
+        "training_rows": 9750,
+        "unique_feature_rows": 5356,
+        "training_pair_sha256": "c2ae8da1134f549dc46540e6784302ad69b883b64d6b4f617ccd337025acac84",
+        "training_pairs": 234737,
+        "training_candidate_recall": 0.9990664675130695,
+        "fit_seconds": 80.65600000001723,
+        "timing_scope": "assets, catalog index, candidate/features, training and model save; excludes CSV load",
+        "feature_importance_gain": {
+          "ratio": 3335.3480459386483,
+          "roman_ratio": 51516.9907172136,
+          "phonetic_ratio": 27357.42489020666,
+          "phonetic_partial": 3141.7003432759084,
+          "length_ratio": 3542.791571982205,
+          "digits_equal": 1253.7417830433697,
+          "digits_missing": 0.0,
+          "gross_gap": 9087.11170328129,
+          "international_gap": 346755.8772090422,
+          "best_gap": 4914.899063860066,
+          "gross_exact": 0.0,
+          "international_exact": 1608.1093992535025,
+          "gross_missing": 525.6609261445701,
+          "international_missing": 96.70009053498507,
+          "type_probability": 4756.973550936207,
+          "flag_probability": 14098.583436084911,
+          "flag_missing": 33.92150893621147,
+          "is_hangul": 2965.690919712186,
+          "name_length": 757.51862962218,
+          "catalog_name_length": 1044.2374608945101,
+          "number_sequence_equal": 485.4264929215424,
+          "number_conflict": 297.6040600044653,
+          "token_count_gap": 33.28627264406532,
+          "token_roman_idf": 7481.267157130875,
+          "token_roman_min": 3516.301028489601,
+          "token_roman_last": 2535.349828421604,
+          "weighted_phone_full": 2987.1885480913334,
+          "weighted_phone_token_idf": 34220.40503586922,
+          "weighted_phone_token_min": 2941.370432032738,
+          "weighted_phone_last": 1087.8396352897398,
+          "weighted_phone_residual": 1503.5052010035142,
+          "phone_shared_edge": 2518.0542933177203
+        }
+      },
+      "validation": {
+        "rows": 2472,
+        "seconds": 37.26600000000326,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 241,
+        "hangul_accuracy": 0.9253112033195021,
+        "hangul_candidate_recall": 1.0,
+        "non_hangul_rows": 2231,
+        "non_hangul_accuracy": 0.9986553115194979,
+        "non_hangul_candidate_recall": 0.9995517705064993,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 2472,
+        "unseen_accuracy": 0.991504854368932,
+        "unseen_candidate_recall": 0.9995954692556634,
+        "weighted_accuracy": 0.9473144357795009,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "artifacts": {
+        "assets.json": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-02\\fold_1\\model\\assets.json",
+          "sha256": "68767b3bd8d46009e19cba8b183b68c49e5844f9bd9f3ebbce4f12eb08df8be6",
+          "bytes": 372454
+        },
+        "ranker.txt": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-02\\fold_1\\model\\ranker.txt",
+          "sha256": "56ee1817a33b5184390e5f0840156d8b75647316bc76f4dd62315f99abe6fa96",
+          "bytes": 1259025
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "fit": {
+        "search_algorithm": "rapidfuzz",
+        "feature_workers": 4,
+        "model_threads": 4,
+        "batch_size": 64,
+        "index_seconds": 2.89000000001397,
+        "feature_seconds": 77.67199999996228,
+        "model_fit_seconds": 1.672000000020489,
+        "training_rows": 9706,
+        "unique_feature_rows": 5346,
+        "training_pair_sha256": "ce22b46a3a73d7a1fa9e1a50b99457d266180c5f7e5a73151879be07bf230728",
+        "training_pairs": 234422,
+        "training_candidate_recall": 0.999438832772166,
+        "fit_seconds": 82.28100000001723,
+        "timing_scope": "assets, catalog index, candidate/features, training and model save; excludes CSV load",
+        "feature_importance_gain": {
+          "ratio": 4385.790593666956,
+          "roman_ratio": 36447.76659624837,
+          "phonetic_ratio": 43512.49726609234,
+          "phonetic_partial": 1582.8630899507552,
+          "length_ratio": 2646.0272926194593,
+          "digits_equal": 1098.642074484378,
+          "digits_missing": 0.0,
+          "gross_gap": 6928.724850133993,
+          "international_gap": 317246.4288507607,
+          "best_gap": 27803.199339278042,
+          "gross_exact": 0.0,
+          "international_exact": 1409.5717038623989,
+          "gross_missing": 595.5168696306646,
+          "international_missing": 68.65772771835327,
+          "type_probability": 5991.379532018676,
+          "flag_probability": 15056.275880129077,
+          "flag_missing": 73.4632523600012,
+          "is_hangul": 3098.1973808296025,
+          "name_length": 1270.0199145395309,
+          "catalog_name_length": 589.6604040116072,
+          "number_sequence_equal": 316.91212856955826,
+          "number_conflict": 199.815044503659,
+          "token_count_gap": 48.96881384216249,
+          "token_roman_idf": 43658.26628298499,
+          "token_roman_min": 3504.448705826886,
+          "token_roman_last": 3608.9407513001934,
+          "weighted_phone_full": 4710.148930773139,
+          "weighted_phone_token_idf": 2680.1760457837954,
+          "weighted_phone_token_min": 3443.3378845322877,
+          "weighted_phone_last": 933.3615001197904,
+          "weighted_phone_residual": 1196.4510590294376,
+          "phone_shared_edge": 1181.645910183899
+        }
+      },
+      "validation": {
+        "rows": 2516,
+        "seconds": 37.32799999997951,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 234,
+        "hangul_accuracy": 0.8589743589743589,
+        "hangul_candidate_recall": 0.9658119658119658,
+        "non_hangul_rows": 2282,
+        "non_hangul_accuracy": 0.9978089395267309,
+        "non_hangul_candidate_recall": 1.0,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 2516,
+        "unseen_accuracy": 0.9848966613672496,
+        "unseen_candidate_recall": 0.9968203497615262,
+        "weighted_accuracy": 0.9006247331400705,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "artifacts": {
+        "assets.json": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-02\\fold_2\\model\\assets.json",
+          "sha256": "b25c4e45851b5bd11bd6330751d9486ef1d9b8378b2fdaeef46051b24310ecb6",
+          "bytes": 372496
+        },
+        "ranker.txt": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-02\\fold_2\\model\\ranker.txt",
+          "sha256": "a509f0577821f252259d8d32d840b0e1f2b5fc79b29755ede4f68101cc7bfb31",
+          "bytes": 1256042
+        }
+      }
+    },
+    {
+      "fold": 3,
+      "fit": {
+        "search_algorithm": "rapidfuzz",
+        "feature_workers": 4,
+        "model_threads": 4,
+        "batch_size": 64,
+        "index_seconds": 2.875,
+        "feature_seconds": 73.04700000002049,
+        "model_fit_seconds": 1.75,
+        "training_rows": 9789,
+        "unique_feature_rows": 5340,
+        "training_pair_sha256": "441c1fc496ad444a9c0de42b771c860f1d1b1a9e455a98ae5785310095aba29b",
+        "training_pairs": 234117,
+        "training_candidate_recall": 0.998876404494382,
+        "fit_seconds": 77.71900000004098,
+        "timing_scope": "assets, catalog index, candidate/features, training and model save; excludes CSV load",
+        "feature_importance_gain": {
+          "ratio": 3145.804327344056,
+          "roman_ratio": 7605.563443409279,
+          "phonetic_ratio": 30954.1416984275,
+          "phonetic_partial": 1835.7872481348459,
+          "length_ratio": 4136.4237556285225,
+          "digits_equal": 946.3650581557304,
+          "digits_missing": 0.0717976987361908,
+          "gross_gap": 6375.534798396286,
+          "international_gap": 337097.01340108225,
+          "best_gap": 12186.242654925212,
+          "gross_exact": 14.831380367279053,
+          "international_exact": 2242.1477554719895,
+          "gross_missing": 335.63136012107134,
+          "international_missing": 44.478143125772476,
+          "type_probability": 7176.189973939676,
+          "flag_probability": 16209.566491992678,
+          "flag_missing": 17.19329521805048,
+          "is_hangul": 3770.616496903822,
+          "name_length": 742.9274176983163,
+          "catalog_name_length": 616.2833657227457,
+          "number_sequence_equal": 529.6722625466064,
+          "number_conflict": 47.635077140294015,
+          "token_count_gap": 38.080625974573195,
+          "token_roman_idf": 45622.240212823264,
+          "token_roman_min": 9244.82438376965,
+          "token_roman_last": 4971.366136836354,
+          "weighted_phone_full": 1676.0897507419577,
+          "weighted_phone_token_idf": 32315.55075262487,
+          "weighted_phone_token_min": 2112.3613808327354,
+          "weighted_phone_last": 504.65244859689847,
+          "weighted_phone_residual": 1043.3656130274758,
+          "phone_shared_edge": 1305.0054899305105
+        }
+      },
+      "validation": {
+        "rows": 2433,
+        "seconds": 36.17200000002049,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 244,
+        "hangul_accuracy": 0.9467213114754098,
+        "hangul_candidate_recall": 1.0,
+        "non_hangul_rows": 2189,
+        "non_hangul_accuracy": 0.9995431703974418,
+        "non_hangul_candidate_recall": 1.0,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 2433,
+        "unseen_accuracy": 0.9942457870941225,
+        "unseen_candidate_recall": 1.0,
+        "weighted_accuracy": 0.9625678691520194,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "artifacts": {
+        "assets.json": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-02\\fold_3\\model\\assets.json",
+          "sha256": "fcfef285980c4f776fafa6f94d63848d5f354a78bdf48e9c6688e47e9745dbf3",
+          "bytes": 371485
+        },
+        "ranker.txt": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-02\\fold_3\\model\\ranker.txt",
+          "sha256": "62e2ecb50ada06582b6109b6b4d32cd9e2c149b192bd7c448c3aee0c8d0f2fee",
+          "bytes": 1258346
+        }
+      }
+    },
+    {
+      "fold": 4,
+      "fit": {
+        "search_algorithm": "rapidfuzz",
+        "feature_workers": 4,
+        "model_threads": 4,
+        "batch_size": 64,
+        "index_seconds": 2.875,
+        "feature_seconds": 78.20299999997951,
+        "model_fit_seconds": 1.7810000000172295,
+        "training_rows": 9793,
+        "unique_feature_rows": 5337,
+        "training_pair_sha256": "ca7ad7d960cd11b2701ae371251c2eba3fb78a67f0e04d37e85cf4e2d9d5ecd6",
+        "training_pairs": 233893,
+        "training_candidate_recall": 0.9990631440884392,
+        "fit_seconds": 82.92200000002049,
+        "timing_scope": "assets, catalog index, candidate/features, training and model save; excludes CSV load",
+        "feature_importance_gain": {
+          "ratio": 3677.2479153471068,
+          "roman_ratio": 46729.30695166532,
+          "phonetic_ratio": 44030.4439237155,
+          "phonetic_partial": 951.8453352712095,
+          "length_ratio": 3222.405633419752,
+          "digits_equal": 1599.9430729746819,
+          "digits_missing": 44.30114018172026,
+          "gross_gap": 7905.525604682043,
+          "international_gap": 340217.69867563294,
+          "best_gap": 8429.389411761425,
+          "gross_exact": 0.0,
+          "international_exact": 1396.229694020003,
+          "gross_missing": 439.98240250349045,
+          "international_missing": 70.62438098341227,
+          "type_probability": 5575.205072670244,
+          "flag_probability": 13541.882194356062,
+          "flag_missing": 48.37308055348694,
+          "is_hangul": 3399.284466240555,
+          "name_length": 687.9524978937116,
+          "catalog_name_length": 1727.4403811683878,
+          "number_sequence_equal": 457.3143916502595,
+          "number_conflict": 164.41965523548424,
+          "token_count_gap": 15.317617510445416,
+          "token_roman_idf": 34369.725999970455,
+          "token_roman_min": 3314.8961804863065,
+          "token_roman_last": 2886.8327425462194,
+          "weighted_phone_full": 1054.2173286406323,
+          "weighted_phone_token_idf": 2768.806763366796,
+          "weighted_phone_token_min": 3318.8354647932574,
+          "weighted_phone_last": 630.6441911207512,
+          "weighted_phone_residual": 1098.7286040182225,
+          "phone_shared_edge": 554.4146445896477
+        }
+      },
+      "validation": {
+        "rows": 2429,
+        "seconds": 37.5,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 233,
+        "hangul_accuracy": 0.8841201716738197,
+        "hangul_candidate_recall": 0.9914163090128756,
+        "non_hangul_rows": 2196,
+        "non_hangul_accuracy": 0.9981785063752276,
+        "non_hangul_candidate_recall": 1.0,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 2429,
+        "unseen_accuracy": 0.9872375463153561,
+        "unseen_candidate_recall": 0.9991766158913133,
+        "weighted_accuracy": 0.9183376720842421,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "artifacts": {
+        "assets.json": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-02\\fold_4\\model\\assets.json",
+          "sha256": "b5a7cea82f7e159f16bd3ec4d444700b28eb644d18e3d0156a19d6b484a40991",
+          "bytes": 371737
+        },
+        "ranker.txt": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-02\\fold_4\\model\\ranker.txt",
+          "sha256": "e2800e928c5f9c75e12340bc929d0b18d0139b5c6e838568e89af76058726080",
+          "bytes": 1258356
+        }
+      }
+    }
+  ],
+  "local_diagnostics": {
+    "metric_source": "local diagnostic; distributed team evaluation pending",
+    "folds": 5,
+    "hangul_rows": 1191,
+    "hangul_accuracy": 0.9009235936188077,
+    "hangul_candidate_recall": 0.9916036943744753,
+    "non_hangul_rows": 11031,
+    "non_hangul_accuracy": 0.9985495421992566,
+    "non_hangul_candidate_recall": 0.9997280391623606,
+    "seen_rows": 0,
+    "seen_accuracy": null,
+    "seen_candidate_recall": null,
+    "unseen_rows": 12222,
+    "unseen_accuracy": 0.9890361642938963,
+    "unseen_candidate_recall": 0.998936344297169,
+    "weighted_accuracy": 0.9302113781929423,
+    "candidate_recall_definition": "variable candidate-set coverage, including direct lookup; not Recall@K",
+    "training_seconds": 398.1400000000722,
+    "prediction_and_diagnostics_seconds": 181.5470000000205
+  },
+  "oof": {
+    "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-02\\oof_AUG-02.csv",
+    "sha256": "919975b2f62b68d9800a35d5a5542866455f92c809f04485c59a0d8ede100519",
+    "rows": 12222
+  },
+  "paired_study_wall_seconds": 989.5582085999777,
+  "team_evaluation": {
+    "command": [
+      "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "eval_kit/evaluate.py",
+      "--train",
+      "data/train.csv",
+      "--oof",
+      "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-02\\oof_AUG-02.csv",
+      "--id",
+      "AUG-02",
+      "--leaderboard",
+      "C:\\Projects\\ML_midterm\\reports\\augmentation_leaderboard.csv"
+    ],
+    "output": "C:\\Projects\\ML_midterm\\reports\\AUG-02_official_evaluation.txt",
+    "sha256": "15c857ee8194656b510613b00ff327571342d2586f932a458698c7e33bdf6c35",
+    "exit_code": 0
+  }
+}

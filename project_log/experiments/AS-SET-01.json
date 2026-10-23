@@ -1,0 +1,512 @@
+{
+  "experiment_id": "AS-SET-01",
+  "plan_id": "N2",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-22T09:46:28.0724304+09:00",
+  "started_at_kst": "2026-10-22T09:51:40.389184+09:00",
+  "finished_at_kst": "2026-10-22T09:56:54.852639+09:00",
+  "purpose": "Implement standalone candidate-set scorer and validate group isolation, candidate permutation and persistence; not a performance comparison.",
+  "hypothesis": "Per-query mean/max candidate context can condition shared candidate scores without using other test rows.",
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "Candidate-set context in the scoring network"
+  ],
+  "fixed_conditions": [
+    "Existing retrieval and features reused",
+    "Weighted binary cross entropy retained",
+    "Existing production model files and ZIP preserved"
+  ],
+  "code": {
+    "git_revision_at_run": "dbfe8fc8f6b5afc003af28fd94b50def49f36bed",
+    "dirty": true,
+    "file_sha256": {
+      "decision_models/set_model.py": "85fb91bdf2bd9c4b4f5b3cf0c6b59e8ab1dafc1d113f84981a84fdac9365de75",
+      "experiments/train_set_model.py": "0fbd04ce05e63ca131803df53f28233229037f515e9fd5df501569dc9afc307d",
+      "model/matcher.py": "42698789d77fb4c788e65d66c95663400d42af063a981c9e0a10c5f5ccda3c83",
+      "train.py": "df78777f2ad549e0090626d4de3521466ecdf0ee1ce1e366c5df3c1b03fbed8d",
+      "model/name_processing.py": "983d9c3b06c7271a8aad10176e0d1242f8add6393cc3295251d449f72aaf0071",
+      "tests/test_set_model.py": "2bee63aa3e2a4f92854ca2a8f91357a1d244a7ed19e509cf007bfe8b36af3a83",
+      "handoff/as02/independent_noise.py": "34461b010a6870aad79515eb194f94568dd3c94c165a159c977a7c9ea0884a7c"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "split_id": "G5-s42 fold 0 execution subset",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 20261016,
+    "training_rows": 128,
+    "validation_rows": 32
+  },
+  "retrieval": {
+    "channels": [
+      "S",
+      "P",
+      "T"
+    ],
+    "phonetic_search": 24,
+    "prediction_candidate_cap": 30,
+    "training_candidate_heuristic_cap": 50,
+    "training_gold_insertion": true,
+    "validation_gold_insertion": false,
+    "use_train_lookup": false,
+    "settings": {
+      "VESSEL_SEARCH_ALGORITHM": "rapidfuzz",
+      "VESSEL_PHONE_SIMILARITY": "rapidfuzz",
+      "VESSEL_SEARCH_DEVICE": "cpu",
+      "VESSEL_FEATURE_WORKERS": "4",
+      "VESSEL_PREDICT_WORKERS": "4",
+      "VESSEL_SCORE_THREADS": "1",
+      "VESSEL_TRAIN_CANDIDATES": "50",
+      "VESSEL_MAX_CANDIDATES": "0",
+      "VESSEL_PREDICT_CANDIDATES": "30",
+      "VESSEL_PREDICT_BATCH": "64",
+      "VESSEL_RELAX_TONNAGE_PENALTY": "0",
+      "VESSEL_HANGUL_IGNORE_TYPE_FLAG": "0",
+      "VESSEL_HANGUL_SOFT_META": "1",
+      "VESSEL_KOREAN_EXPANSION": "1"
+    }
+  },
+  "features": [
+    "ratio",
+    "roman_ratio",
+    "phonetic_ratio",
+    "phonetic_partial",
+    "length_ratio",
+    "digits_equal",
+    "digits_missing",
+    "gross_gap",
+    "international_gap",
+    "best_gap",
+    "gross_exact",
+    "international_exact",
+    "gross_missing",
+    "international_missing",
+    "type_probability",
+    "flag_probability",
+    "flag_missing",
+    "is_hangul",
+    "name_length",
+    "catalog_name_length",
+    "number_sequence_equal",
+    "number_conflict",
+    "token_count_gap",
+    "token_roman_idf",
+    "token_roman_min",
+    "token_roman_last",
+    "weighted_phone_full",
+    "weighted_phone_token_idf",
+    "weighted_phone_token_min",
+    "weighted_phone_last",
+    "weighted_phone_residual",
+    "phone_shared_edge"
+  ],
+  "preprocessing": {
+    "name_mode": "all",
+    "korean_expansion": true,
+    "hangul_soft_meta": true,
+    "scaler": "training pairs only",
+    "augmentation": "existing non-Hangul independent_noise, seed 42, training fold only"
+  },
+  "training_pairs": {
+    "positive_rule": "one gold per query, training-only insertion if absent",
+    "negative_rule": "existing name/phone/tonnage sampler unchanged",
+    "count": 7467
+  },
+  "model": {
+    "type": "Deep Sets equivariant candidate scorer",
+    "parameters": {
+      "input_dim": 32,
+      "embedding_dim": 32,
+      "hidden_dim": 32,
+      "parameter_count": 4193,
+      "pooling": [
+        "mean",
+        "max"
+      ],
+      "lr": 0.001,
+      "weight_decay": 0.001,
+      "batch_size_queries": 64,
+      "smoke_epochs": [
+        3,
+        25
+      ]
+    },
+    "loss": "weighted binary cross entropy over valid candidate pairs"
+  },
+  "commands": [
+    ".venv/Scripts/python.exe -X utf8 -m unittest tests.test_set_model tests.test_decision_models tests.test_performance -v",
+    ".venv/Scripts/python.exe -X utf8 experiments/train_set_model.py train --data-dir data --output artifacts/AS-SET-01-smoke --holdout-fold 0 --max-train-rows 128 --max-valid-rows 32 --epochs 3 --device cpu --save-pairs",
+    ".venv/Scripts/python.exe -X utf8 -m decision_models.set_model train --pairs artifacts/AS-SET-01-smoke/pairs.npz --model artifacts/AS-SET-01-fitcheck --epochs 25 --device cpu",
+    ".venv/Scripts/python.exe -X utf8 -m decision_models.set_model predict --pairs artifacts/AS-SET-01-smoke/pairs.npz --model artifacts/AS-SET-01-fitcheck --output artifacts/AS-SET-01-fitcheck/cached_scores.npy",
+    ".venv/Scripts/python.exe -X utf8 experiments/train_set_model.py predict --model artifacts/AS-SET-01-fitcheck --test artifacts/AS-SET-01-fitcheck/queries.csv --catalog data/vessel_catalog.csv --output artifacts/AS-SET-01-fitcheck/submission.csv"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "torch": "2.7.1+cu128",
+    "numpy": "1.26.4",
+    "platform": "Windows",
+    "device": "cpu",
+    "user_authorized_python_exception": true,
+    "server_python_exact_match": false,
+    "cuda_unit_test_passed": true
+  },
+  "metrics": {
+    "metric_source": "No performance comparison or full OOF; small execution diagnostics are nested under checks",
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": "Small three-epoch end-to-end execution timings in checks; full-scale training/inference unmeasured",
+    "peak_memory_bytes": null,
+    "model_bytes": 22074,
+    "assets_bytes": 17631,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    {
+      "path": "artifacts/AS-SET-01-smoke/model/assets.json",
+      "sha256": "945a664c5b0294c8ed556c9a154b1204cde0ca583d9dd5fbf206fd7a4cda4238",
+      "bytes": 17631
+    },
+    {
+      "path": "artifacts/AS-SET-01-smoke/model/set_config.json",
+      "sha256": "8fa01290f94189c31b13fc9fc093ddd048b91ed5d7b0a0dbe909cc0925084572",
+      "bytes": 1204
+    },
+    {
+      "path": "artifacts/AS-SET-01-smoke/model/set_model.pt",
+      "sha256": "abd0393fd7c214d4ecc9b1ecff398d0fade1dab22b112ec20e4626b729289d53",
+      "bytes": 19541
+    },
+    {
+      "path": "artifacts/AS-SET-01-smoke/model/set_scaler.npz",
+      "sha256": "296b501c111168cdb22f136b1ef4244958a0b5b2b50634827fbe8ac2aadca9ad",
+      "bytes": 760
+    },
+    {
+      "path": "artifacts/AS-SET-01-smoke/pairs.npz",
+      "sha256": "580c1363f88890de6ec4e2835f98f96ec39eec68feada63656afaa4336b1a7ae",
+      "bytes": 201133
+    },
+    {
+      "path": "artifacts/AS-SET-01-smoke/run.json",
+      "sha256": "c336584a2dc8e8734777812fca84615f6558332c2c4af1a6ca17945b265f87fd",
+      "bytes": 4522
+    },
+    {
+      "path": "artifacts/AS-SET-01-fitcheck/assets.json",
+      "sha256": "945a664c5b0294c8ed556c9a154b1204cde0ca583d9dd5fbf206fd7a4cda4238",
+      "bytes": 17631
+    },
+    {
+      "path": "artifacts/AS-SET-01-fitcheck/cached_scores.npy",
+      "sha256": "bfd4fd6f864631a9b098203eae85deaf16d39839fafa68c0aa2fd0d74b5c1d99",
+      "bytes": 29996
+    },
+    {
+      "path": "artifacts/AS-SET-01-fitcheck/queries.csv",
+      "sha256": "5e31101f98f32f39ab460cd985c925f0f77cdd8272c3eed3b850b865e0469324",
+      "bytes": 3043
+    },
+    {
+      "path": "artifacts/AS-SET-01-fitcheck/set_config.json",
+      "sha256": "9ce6ca9137df6250726856edb73fb044a43fa05f557ee6d0f19860d7cd301be0",
+      "bytes": 1773
+    },
+    {
+      "path": "artifacts/AS-SET-01-fitcheck/set_model.pt",
+      "sha256": "3aae2d397f49a58c4d05eb6b5fd6c1b80014ee3fea699933fff75cd37c1ca3fa",
+      "bytes": 19541
+    },
+    {
+      "path": "artifacts/AS-SET-01-fitcheck/set_scaler.npz",
+      "sha256": "296b501c111168cdb22f136b1ef4244958a0b5b2b50634827fbe8ac2aadca9ad",
+      "bytes": 760
+    },
+    {
+      "path": "artifacts/AS-SET-01-fitcheck/submission.csv",
+      "sha256": "550b568cd07d0d44506a9df613d1602bf22e325c53b8e17e5508904fac083cf1",
+      "bytes": 860
+    },
+    {
+      "path": "artifacts/AS-SET-01-fitcheck/validation.json",
+      "sha256": "e5db39b1689f70ed6f425ae218fbb2d7f9030a4bc517f828bfa8b33c480f3468",
+      "bytes": 1682
+    }
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Existing production models and ZIP files were not overwritten.",
+    "3-epoch smoke loss decreased but validation was 0/32; preserved as a short-run result.",
+    "25-epoch learning probe on the same cached pairs reached 153/161 training query selections and 31/32 small holdout selections; not an accuracy comparison.",
+    "Candidate order and query batch/subset/reversal checks passed on tested inputs."
+  ],
+  "interpretations": [
+    "Training gradients, persistence, grouped inference and independent CLI paths are operational.",
+    "Small holdout results do not establish G5 or Public improvement."
+  ],
+  "limitations": [
+    "No full five-fold OOF or baseline comparison.",
+    "No Ubuntu/L4 or exact Python 3.11.17 validation.",
+    "Per-query canonical inference favors independence; full-scale cost is unmeasured.",
+    "Standalone model handles both languages; no automatic production ensemble or Hangul-only route replacement.",
+    "Repository was already dirty; unrelated edits were preserved."
+  ],
+  "failure": {
+    "command": "environment/setup_windows.ps1",
+    "retry": "Existing environment use pending user response",
+    "message": "No download found for request: cpython-3.11.17-windows-x86_64-none",
+    "stage": "environment_setup",
+    "resolved_by": "User explicitly authorized existing Python 3.11.15 for validation; no replacement of the existing environment"
+  },
+  "decision": "Implementation completed and functional checks passed; not selected as a competition submission model.",
+  "next_actions": [
+    "If requested, compare independent MLP and set scorer using identical fold data, candidate caches and training settings."
+  ],
+  "checks": {
+    "unit_and_regression_tests": 13,
+    "all_passed": true,
+    "cached_cli_scores_equal": true,
+    "csv_schema_order_rows_passed": true,
+    "three_epoch_smoke": {
+      "status": "completed",
+      "started_at_kst": "2026-10-22T09:51:40.389184+09:00",
+      "scope": "implementation smoke",
+      "environment": {
+        "python": "3.11.15",
+        "torch": "2.7.1+cu128",
+        "numpy": "1.26.4",
+        "platform": "Windows",
+        "device": "cpu"
+      },
+      "runtime_settings": {
+        "VESSEL_SEARCH_ALGORITHM": "rapidfuzz",
+        "VESSEL_PHONE_SIMILARITY": "rapidfuzz",
+        "VESSEL_SEARCH_DEVICE": "cpu",
+        "VESSEL_FEATURE_WORKERS": "4",
+        "VESSEL_PREDICT_WORKERS": "4",
+        "VESSEL_SCORE_THREADS": "1",
+        "VESSEL_TRAIN_CANDIDATES": "50",
+        "VESSEL_MAX_CANDIDATES": "0",
+        "VESSEL_PREDICT_CANDIDATES": "30",
+        "VESSEL_PREDICT_BATCH": "64",
+        "VESSEL_RELAX_TONNAGE_PENALTY": "0",
+        "VESSEL_HANGUL_IGNORE_TYPE_FLAG": "0",
+        "VESSEL_HANGUL_SOFT_META": "1",
+        "VESSEL_KOREAN_EXPANSION": "1"
+      },
+      "fold": 0,
+      "seed": 20261016,
+      "epochs": 3,
+      "independent_noise": true,
+      "metrics": {
+        "rows": 32,
+        "seconds": 0.515999999945052,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 16,
+        "hangul_accuracy": 0.0,
+        "hangul_candidate_recall": 1.0,
+        "non_hangul_rows": 16,
+        "non_hangul_accuracy": 0.0,
+        "non_hangul_candidate_recall": 1.0,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 32,
+        "unseen_accuracy": 0.0,
+        "unseen_candidate_recall": 1.0,
+        "weighted_accuracy": 0.0,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "submission_zip": null,
+      "timings": {
+        "load_seconds": 0.13758800004143268,
+        "augmentation_assets_index_seconds": 2.4029948000097647,
+        "candidate_features_seconds": 1.7943508999887854,
+        "fit_and_save_seconds": 1.6422799000283703,
+        "inference_reload_seconds": 2.26072529994417,
+        "total_seconds": 9.352186499978416
+      },
+      "data_sha256": {
+        "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+        "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+      },
+      "fold_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+      "training_real_rows": 128,
+      "training_vessels": 122,
+      "training_rows_with_augmentation": 192,
+      "training_pairs": {
+        "queries": 161,
+        "pairs": 7467,
+        "pair_order_sha256": "c2283d65464ec18133a046dba33e5786be44f412dda25262eaaa881849d6190b",
+        "retrieved_before_gold_insertion_fraction": 1.0
+      },
+      "features": [
+        "ratio",
+        "roman_ratio",
+        "phonetic_ratio",
+        "phonetic_partial",
+        "length_ratio",
+        "digits_equal",
+        "digits_missing",
+        "gross_gap",
+        "international_gap",
+        "best_gap",
+        "gross_exact",
+        "international_exact",
+        "gross_missing",
+        "international_missing",
+        "type_probability",
+        "flag_probability",
+        "flag_missing",
+        "is_hangul",
+        "name_length",
+        "catalog_name_length",
+        "number_sequence_equal",
+        "number_conflict",
+        "token_count_gap",
+        "token_roman_idf",
+        "token_roman_min",
+        "token_roman_last",
+        "weighted_phone_full",
+        "weighted_phone_token_idf",
+        "weighted_phone_token_min",
+        "weighted_phone_last",
+        "weighted_phone_residual",
+        "phone_shared_edge"
+      ],
+      "parameter_count": 4193,
+      "loss_history": [
+        0.5093744261861566,
+        0.42209787191245646,
+        0.3518197843950884
+      ],
+      "prediction_stage_seconds": {
+        "prepare_seconds": 0.0,
+        "feature_seconds": 0.515999999945052,
+        "score_seconds": 0.0
+      },
+      "independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "artifacts": {
+        "assets.json": {
+          "sha256": "945a664c5b0294c8ed556c9a154b1204cde0ca583d9dd5fbf206fd7a4cda4238",
+          "bytes": 17631
+        },
+        "set_config.json": {
+          "sha256": "8fa01290f94189c31b13fc9fc093ddd048b91ed5d7b0a0dbe909cc0925084572",
+          "bytes": 1204
+        },
+        "set_model.pt": {
+          "sha256": "abd0393fd7c214d4ecc9b1ecff398d0fade1dab22b112ec20e4626b729289d53",
+          "bytes": 19541
+        },
+        "set_scaler.npz": {
+          "sha256": "296b501c111168cdb22f136b1ef4244958a0b5b2b50634827fbe8ac2aadca9ad",
+          "bytes": 760
+        },
+        "pairs.npz": {
+          "sha256": "580c1363f88890de6ec4e2835f98f96ec39eec68feada63656afaa4336b1a7ae",
+          "bytes": 201133
+        }
+      },
+      "finished_at_kst": "2026-10-22T09:51:49.741541+09:00"
+    },
+    "twenty_five_epoch_learning_check": {
+      "scope": "learning and CLI integration smoke; not a performance comparison",
+      "recorded_at_kst": "2026-10-22T09:53:21.913812+09:00",
+      "epochs": 25,
+      "training_queries": 161,
+      "training_correct": 153,
+      "loss_first": 0.5093744261861566,
+      "loss_last": 0.08706084072981013,
+      "validation": {
+        "rows": 32,
+        "seconds": 0.40600000007543713,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 16,
+        "hangul_accuracy": 0.9375,
+        "hangul_candidate_recall": 1.0,
+        "non_hangul_rows": 16,
+        "non_hangul_accuracy": 1.0,
+        "non_hangul_candidate_recall": 1.0,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 32,
+        "unseen_accuracy": 0.96875,
+        "unseen_candidate_recall": 1.0,
+        "weighted_accuracy": 0.95625,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "artifacts": {
+        "assets.json": {
+          "sha256": "945a664c5b0294c8ed556c9a154b1204cde0ca583d9dd5fbf206fd7a4cda4238",
+          "bytes": 17631
+        },
+        "set_config.json": {
+          "sha256": "9ce6ca9137df6250726856edb73fb044a43fa05f557ee6d0f19860d7cd301be0",
+          "bytes": 1773
+        },
+        "set_model.pt": {
+          "sha256": "3aae2d397f49a58c4d05eb6b5fd6c1b80014ee3fea699933fff75cd37c1ca3fa",
+          "bytes": 19541
+        },
+        "set_scaler.npz": {
+          "sha256": "296b501c111168cdb22f136b1ef4244958a0b5b2b50634827fbe8ac2aadca9ad",
+          "bytes": 760
+        }
+      }
+    }
+  },
+  "test_attempts": [
+    {
+      "tests": 12,
+      "errors": 2,
+      "cause": "Sandbox temporary directory access prevented checkpoint save/cleanup",
+      "resolution": "Use project artifacts temporary directories; save torch checkpoint through Python file handle"
+    },
+    {
+      "tests": 12,
+      "passed": true
+    },
+    {
+      "tests": 13,
+      "passed": true,
+      "added": "CUDA fit and per-query isolation"
+    }
+  ]
+}

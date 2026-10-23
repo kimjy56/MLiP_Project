@@ -1,0 +1,104 @@
+{
+  "experiment_id": "REFACTOR-02",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-22T21:07:34.786916+09:00",
+  "purpose": "Behavior-preserving shared training preprocessing and MLP inference refactoring",
+  "hypothesis": "Extract duplicated arithmetic without changing numerical operation order, dtype, seeds or batches",
+  "baseline": "Working-tree snapshots in artifacts/REFACTOR-02/before",
+  "code_before_sha256": {
+    "decision_models/common.py": "d346d225a0a75fca0457494aed40109f9cea0bb1765aa31cbee768322501ce57",
+    "decision_models/mlp_model.py": "27500fe1c0f613666906cf4820a07082566cd6553a319d9be4b65a13ab177eab",
+    "decision_models/set_model.py": "85fb91bdf2bd9c4b4f5b3cf0c6b59e8ab1dafc1d113f84981a84fdac9365de75"
+  },
+  "changed_factors": [
+    "shared training scaler helper",
+    "single MLP batch scoring helper",
+    "readable internal names and comments"
+  ],
+  "fixed_conditions": [
+    "public APIs",
+    "checkpoint format and defaults",
+    "architecture, optimizer, seeds, batch boundaries",
+    "candidate retrieval and ranking"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "user_authorized_exception": true,
+    "platform": "Windows-10-10.0.26200-SP0"
+  },
+  "metrics": null,
+  "validation_plan": [
+    "Exact old/new trained parameters and predictions",
+    "Exact scores on all five frozen public G5 candidate caches",
+    "Existing model and row independence tests"
+  ],
+  "limits": [
+    "No new leaderboard score or speedup claim",
+    "Public development data only; no private test input"
+  ],
+  "finished_at_kst": "2026-10-22T21:12:22.402395+09:00",
+  "code_after_sha256": {
+    "decision_models/common.py": "4817fd45aeb398c4e66553bf9ac3e668cdbb91e2be049092dcab9f1ed84c7a68",
+    "decision_models/mlp_model.py": "1eb1c1cb024ed3b21f5eb1fe5912b6b827cb44b829ec15c4c7bca10b633c1822",
+    "decision_models/set_model.py": "03d290928aa90443ded6c98da7e6b9bad01a24c0d657b010e1ad4fbdec2acc9f"
+  },
+  "validation": {
+    "tests": 19,
+    "skipped": 0,
+    "exact_score_equality": true,
+    "public_oof_rows": 12222,
+    "folds": 5,
+    "models": [
+      "MLP",
+      "Set"
+    ],
+    "training_parameter_equality": "CPU two-epoch fixed synthetic input, both models",
+    "cuda_boundary_rows": [
+      0,
+      1,
+      16384,
+      16385
+    ],
+    "command": ".venv/Scripts/python.exe -X utf8 -m unittest tests.test_refactor_equivalence tests.test_set_model tests.test_decision_models tests.test_set_comparison tests.test_training_candidate_features -q"
+  },
+  "cost": {
+    "speedup": null,
+    "peak_memory_measured": null
+  },
+  "artifacts": [
+    "docs/REFACTOR-02_FULL_CODE.md",
+    "tests/test_refactor_equivalence.py",
+    "artifacts/REFACTOR-02/before"
+  ],
+  "data": {
+    "split_id": "G5-s42",
+    "fold_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "cache_hashes": [
+      {
+        "path": "artifacts/AS-SET-02/fold_0/validation_pairs.npz",
+        "sha256": "7e2928be59e7293511041458c4897278634feaa4330983bdf68076ed345c94db",
+        "bytes": 2152273
+      },
+      {
+        "path": "artifacts/AS-SET-02/fold_1/validation_pairs.npz",
+        "sha256": "b8b85a36956a65710f2f878026885713486d252c70cd1e8b1d0d73977379eec9",
+        "bytes": 2227150
+      },
+      {
+        "path": "artifacts/AS-SET-02/fold_2/validation_pairs.npz",
+        "sha256": "3f03bd32fd0fcb484578096e51c5de66fcd1e8c3ffa4361ac8c7dd431417ad62",
+        "bytes": 2273628
+      },
+      {
+        "path": "artifacts/AS-SET-02/fold_3/validation_pairs.npz",
+        "sha256": "ead8c04dd76a4a886283b31b69296d236a63c82a47197f16870e26796f4a6be5",
+        "bytes": 2200111
+      },
+      {
+        "path": "artifacts/AS-SET-02/fold_4/validation_pairs.npz",
+        "sha256": "d1fac39a252ee5b7c45ed6b477426858b721b7ba852e517efb97e4194b00a129",
+        "bytes": 2197564
+      }
+    ]
+  }
+}

@@ -42,14 +42,14 @@ class TorchNgramIndexer:
         # Bounded transformation and fixed single-query arithmetic preserve order independence.
         for start in range(0, len(queries), 64):
             matrix = self.vectorizer.transform(queries[start:start + 64]).tocsr()
-            gpu_queries = (torch.from_numpy(matrix.toarray()).to('cuda')
-                           if self.catalog_tensor is not None else None)
+            if self.catalog_tensor is not None:
+                gpu_queries = torch.from_numpy(matrix.toarray()).to('cuda')
+                with torch.inference_mode():
+                    scores_batch = torch.sparse.mm(self.catalog_tensor, gpu_queries.T).T.cpu().numpy()
+            else:
+                scores_batch = (matrix @ self.matrix.T).toarray()
             for i in range(matrix.shape[0]):
-                if gpu_queries is None:
-                    scores = (self.matrix @ matrix.getrow(i).T).toarray().ravel()
-                else:
-                    with torch.inference_mode():
-                        scores = torch.sparse.mm(self.catalog_tensor, gpu_queries[i:i+1].T).flatten().cpu().numpy()
+                scores = scores_batch[i]
                 positive = np.flatnonzero(scores > 0)
                 k = min(count, len(positive))
                 if k and k < len(positive):

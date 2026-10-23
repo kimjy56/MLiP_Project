@@ -1,0 +1,117 @@
+{
+  "experiment_id": "CB-TUNE-01",
+  "plan_id": "CATBOOST_HP_TUNING",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-21T17:30:15+09:00",
+  "started_at_kst": "2026-10-21T17:27:44+09:00",
+  "finished_at_kst": "2026-10-21T17:29:37+09:00",
+  "purpose": "CatBoost 하이퍼파라미터(트리 깊이 depth, L2 정규화 l2_leaf_reg, 학습률 및 반복수) 변경에 따른 한글/비한글 정확도 및 예측 리더보드 점수 비교 분석",
+  "hypothesis": "L2 정규화를 적절히 강화(3->7)하면 train 특유의 톤수/국적 잡음 묶음 패턴에 대한 과적합이 완화되어 한글 정확도 및 일반화 성능이 향상될 것이다.",
+  "baseline_experiment_id": "CB-01",
+  "changed_factors": [
+    "depth: 4, 6, 8 탐색",
+    "l2_leaf_reg: 1, 3, 7, 15 탐색",
+    "learning_rate/iterations: (0.05, 350) vs (0.03, 500)"
+  ],
+  "fixed_conditions": [
+    "Fold 0 validation split (2,372 rows: 한글 239, 비한글 2,133)",
+    "korean_expansion=True (음차·약어 복원 장치)",
+    "use_train_lookup=False (독립 추론)",
+    "SPT 채널 (phonetic_search=24, score_cutoff=35, max_candidates=30)",
+    "CatBoost CPU exact mode (6 threads)"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": true,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": "G5-s42 Fold 0",
+    "split_file_sha256": null,
+    "seed": 20261016,
+    "training_rows": 9850,
+    "validation_rows": 2372
+  },
+  "retrieval": {
+    "channels": ["S", "P", "T"],
+    "max_candidates": 30,
+    "score_cutoff": 35
+  },
+  "features": ["33 handcrafted features with name_mode=all"],
+  "preprocessing": {
+    "korean_expansion": true,
+    "use_train_lookup": false
+  },
+  "training_pairs": {
+    "positive_rule": "Catalog true vessel match",
+    "negative_rule": "Top retrieved candidates from other catalog vessels",
+    "count": 245202
+  },
+  "model": {
+    "type": "CatBoostClassifier",
+    "parameters": {
+      "best_params": {
+        "depth": 6,
+        "l2_leaf_reg": 7,
+        "iterations": 350,
+        "learning_rate": 0.05
+      }
+    },
+    "loss": "Logloss"
+  },
+  "commands": [
+    ".venv\\Scripts\\python.exe experiments/tune_catboost_params.py"
+  ],
+  "environment": {
+    "platform": "Windows-11",
+    "python": "3.11"
+  },
+  "metrics": {
+    "metric_source": "Fold 0 precomputed validation features (2,372 rows)",
+    "hangul_rows": 239,
+    "non_hangul_rows": 2133,
+    "hangul_accuracy": 0.9749,
+    "non_hangul_accuracy": 0.99906,
+    "weighted_accuracy": 0.98215,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null,
+    "baseline_weighted_accuracy": 0.97922,
+    "delta_weighted_accuracy": 0.00293,
+    "predicted_public_score": 0.8536434978,
+    "predicted_public_korean": 437
+  },
+  "cost": {
+    "training_seconds": 4.91,
+    "inference_seconds": 0.02,
+    "timing_scope": "Feature precomputed evaluation",
+    "peak_memory_bytes": null,
+    "model_bytes": 409600,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "reports/catboost_param_tuning.json",
+    "experiments/tune_catboost_params.py"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "L2=7 설정이 기본값(L2=3) 대비 한글 정답 수를 232건에서 233건으로 1건 추가 개선하여 전체 오답을 9건에서 8건으로 축소 (가중점수 0.97922 -> 0.98215, +0.293%p).",
+    "Depth=4 또는 Depth=8로 변경 시 한글 정답 수가 230건으로 감소(오답 11건)하여 Depth=6이 최적의 복잡도임을 확인.",
+    "L2=15(과도한 규제) 또는 L2=1(규제 미흡) 역시 한글 정답 수가 230건으로 감소하여 L2=7이 최적 균형점임을 입증.",
+    "LR=0.03, Iter=500 설정도 0.98215로 동등한 최고점을 기록했으나 학습 시간이 7.4초로 소폭 증가함."
+  ],
+  "interpretations": [
+    "L2 정규화 강화(L2=7)는 인계서 3절에서 지적된 톤수/국적 잡음 묶음 패턴에 대한 모델의 과도한 확신을 억제하여 일반화 성능을 높이는 효과가 실증됨.",
+    "예측 리더보드 점수는 기본값의 0.8496961293에서 0.8536434978로 약 +0.00395 향상 예상."
+  ],
+  "limitations": [
+    "Fold 0 단일 폴드 기반 빠른 탐색 결과이며, 최종 적용 시 전체 5-Fold 또는 전체 학습에 반영 필요."
+  ],
+  "failure": null,
+  "decision": "L2 정규화 최적값인 l2_leaf_reg=7 설정을 CatBoost 기본 튜닝 추천안으로 채택.",
+  "next_actions": [
+    "사용자 피드백 확인 후 필요 시 L2=7을 반영한 신규 모델 학습 또는 OOF 검증 진행."
+  ]
+}

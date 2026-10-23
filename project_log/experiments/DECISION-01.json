@@ -1,0 +1,17 @@
+{
+  "experiment_id": "DECISION-01",
+  "status": "implementation_checked",
+  "recorded_at_kst": "2026-10-21T13:54:38+09:00",
+  "purpose": "Independent CatBoost and MLP scorers sharing identical cached training candidates, features and weights",
+  "hypothesis": "Compare scoring models while fixing retrieval; performance comparison remains planned",
+  "changed_factors": ["candidate classifier family", "MLP training-only standardization"],
+  "fixed_conditions": ["same NPZ training pairs", "same lookup assets", "existing Matcher inference and tie breaking", "no augmentation"],
+  "data": {"split_id": "G5-s42", "seed": 42, "performance_run": false},
+  "commands": [".venv/Scripts/python.exe -m unittest tests.test_decision_models -v"],
+  "environment": {"python_environment": ".venv (previously approved)", "catboost_installed": false},
+  "metrics": {"weighted_accuracy": null, "hangul_accuracy": null, "non_hangul_accuracy": null},
+  "checks": {"unit_tests_passed": 2, "mlp_save_load": true, "mlp_reverse_single_empty": true},
+  "failure": {"initial_adapter_import": "Existing model imports require model directory in sys.path; adapter now initializes it"},
+  "limitations": ["Synthetic checks only; not a performance comparison", "CatBoost training untested because dependency absent", "Full 5-fold comparison and runtime measurement remain planned"],
+  "decision": "Provide separate reusable files; no submission artifact generation"
+}

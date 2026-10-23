@@ -1,0 +1,253 @@
+{
+  "experiment_id": "AS02-HANDOFF",
+  "status": "completed",
+  "purpose": "Execute AS section 6 of user-provided 10-21 handoff: Korean metadata ablation on AR-02 and independent non-Hangul noise utility",
+  "hypothesis": "Removing Korean nationality/type contribution may reduce reliance on training-specific metadata",
+  "baseline_experiment_id": "AR-02 received archive",
+  "changed_factors": [
+    "Korean metadata score zero"
+  ],
+  "fixed_conditions": [
+    "AR-02 candidate retrieval, names, tonnage and Latin scoring",
+    "same fold-trained maps"
+  ],
+  "data": {
+    "split_id": "G5-s42",
+    "seed": 42,
+    "sha256": {
+      "data\\train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "data\\vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "eval_kit\\folds_group5_seed42.csv": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    }
+  },
+  "limitations": [
+    "Handoff leaderboard composition is team-reported, not organizer-verified",
+    "G5 used as regression check per user-selected handoff",
+    "No hidden-test diagnostic submissions or score decoding performed"
+  ],
+  "decision": "G5 regression gate passed; local AS-02 package prepared, not uploaded",
+  "started_at_kst": "2026-10-21T18:19:05.686116+09:00",
+  "commands": [
+    "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe",
+    "handoff/as02/run_checks.py"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0"
+  },
+  "code": {
+    "file_sha256": {
+      "handoff\\as02\\independent_noise.py": "34461b010a6870aad79515eb194f94568dd3c94c165a159c977a7c9ea0884a7c",
+      "handoff\\as02\\run_checks.py": "01597f0a187aa5358c7bac4767e1ad8693810a0dc0f58b0ed27f08facc2c115e",
+      "handoff\\as02\\script.py": "f89fd72d20e18785cc9e0328976d776f0d2555d2cb54e3f650334cdda863df57"
+    }
+  },
+  "fold_results": [
+    {
+      "fold": 0,
+      "seconds": 21.50758889998542,
+      "seen_vessel_rows": 0,
+      "hangul": {
+        "rows": 239,
+        "before_accuracy": 0.9539748953974896,
+        "after_accuracy": 0.9497907949790795,
+        "changed": 5,
+        "fixed": 2,
+        "broken": 3,
+        "candidate_coverage": 1.0
+      },
+      "non_hangul": {
+        "rows": 2133,
+        "before_accuracy": 0.9985935302390999,
+        "after_accuracy": 0.9985935302390999,
+        "changed": 0,
+        "fixed": 0,
+        "broken": 0,
+        "candidate_coverage": 1.0
+      }
+    },
+    {
+      "fold": 1,
+      "seconds": 21.901641200005542,
+      "seen_vessel_rows": 0,
+      "hangul": {
+        "rows": 241,
+        "before_accuracy": 0.966804979253112,
+        "after_accuracy": 0.9626556016597511,
+        "changed": 6,
+        "fixed": 0,
+        "broken": 1,
+        "candidate_coverage": 1.0
+      },
+      "non_hangul": {
+        "rows": 2231,
+        "before_accuracy": 0.9991035410129987,
+        "after_accuracy": 0.9991035410129987,
+        "changed": 0,
+        "fixed": 0,
+        "broken": 0,
+        "candidate_coverage": 1.0
+      }
+    },
+    {
+      "fold": 2,
+      "seconds": 22.9006301999907,
+      "seen_vessel_rows": 0,
+      "hangul": {
+        "rows": 234,
+        "before_accuracy": 0.9829059829059829,
+        "after_accuracy": 0.9743589743589743,
+        "changed": 6,
+        "fixed": 0,
+        "broken": 2,
+        "candidate_coverage": 1.0
+      },
+      "non_hangul": {
+        "rows": 2282,
+        "before_accuracy": 1.0,
+        "after_accuracy": 1.0,
+        "changed": 0,
+        "fixed": 0,
+        "broken": 0,
+        "candidate_coverage": 1.0
+      }
+    },
+    {
+      "fold": 3,
+      "seconds": 22.40083440003218,
+      "seen_vessel_rows": 0,
+      "hangul": {
+        "rows": 244,
+        "before_accuracy": 1.0,
+        "after_accuracy": 0.9959016393442623,
+        "changed": 1,
+        "fixed": 0,
+        "broken": 1,
+        "candidate_coverage": 1.0
+      },
+      "non_hangul": {
+        "rows": 2189,
+        "before_accuracy": 1.0,
+        "after_accuracy": 1.0,
+        "changed": 0,
+        "fixed": 0,
+        "broken": 0,
+        "candidate_coverage": 1.0
+      }
+    },
+    {
+      "fold": 4,
+      "seconds": 21.370503999991342,
+      "seen_vessel_rows": 0,
+      "hangul": {
+        "rows": 233,
+        "before_accuracy": 0.9742489270386266,
+        "after_accuracy": 0.9914163090128756,
+        "changed": 4,
+        "fixed": 4,
+        "broken": 0,
+        "candidate_coverage": 1.0
+      },
+      "non_hangul": {
+        "rows": 2196,
+        "before_accuracy": 0.9986338797814208,
+        "after_accuracy": 0.9986338797814208,
+        "changed": 0,
+        "fixed": 0,
+        "broken": 0,
+        "candidate_coverage": 1.0
+      }
+    }
+  ],
+  "finished_at_kst": "2026-10-21T18:21:06.367585+09:00",
+  "artifacts": [
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\results\\fold_0.csv",
+      "sha256": "1c93e25166018b24a95be401766d6ca3b12394f7990f24d1f03a93ecea82716a"
+    },
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\results\\fold_1.csv",
+      "sha256": "c2cb03b12e66879f1ebfd4978d414fda885079ccd97a5cc6e81d9b11682a070b"
+    },
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\results\\fold_2.csv",
+      "sha256": "55c63dc665db5b1b98473d20a2645d0f515a06fa371381a48400338f1b0e4729"
+    },
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\results\\fold_3.csv",
+      "sha256": "34d54a0004740b508feaec2cd41b2dc5550ce7e6c8edf4fec4d6fb88b9b1f1e1"
+    },
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\results\\fold_4.csv",
+      "sha256": "8585ee9fc3f1d811647769e331dbca731a05c0a2038fb19a88c90e433e1e4e67"
+    },
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\results\\model_fold_0.json",
+      "sha256": "66e46a10904b921a940153f185263554efe292b21c6c37467394b88e38ea6d84"
+    },
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\results\\model_fold_1.json",
+      "sha256": "62c339ff3e0dae0fbc2abbe5e6628d2085be1c14facf153d351c0a3d5b44a7ed"
+    },
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\results\\model_fold_2.json",
+      "sha256": "91ec47d69cf26816021e1f9d5aaced7f9f338e0ad6045c29cdc218fddf474c43"
+    },
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\results\\model_fold_3.json",
+      "sha256": "0562c0d1d20c3d8e5e31c3f4ef7737296bda94e97ff36624dc054a9ccdc6ce79"
+    },
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\results\\model_fold_4.json",
+      "sha256": "f4cd5e0308909f32bd7639082801fcf89c613a6a525d10089b83160083d8751a"
+    },
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\results\\noise_audit.json",
+      "sha256": "153afac2ef07241961e676daf681bc82efd23db3f9cac60b461e565f86f7d689"
+    },
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\results\\oof_AR02-reproduced.csv",
+      "sha256": "69e5c9bd1f7cbcce268db0d36f4997f3b559c148e836b60cb098001a7bb1d7be"
+    },
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\results\\oof_AS-02.csv",
+      "sha256": "4834ffa7ce973975519173c08d9308396d972b4c40092051282fd6b4a779a464"
+    },
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\results\\eval_AR02-reproduced.txt",
+      "sha256": "5626abcf007fe91374f8e14fdfd4f232f9953d795319f2fe6a160d6718ecd17b"
+    },
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\results\\eval_AS-02.txt",
+      "sha256": "9bae123054f76cddcce31bd0b40079e3f8da0194b7a2bb299feae8b78dbfd71f"
+    }
+  ],
+  "summary": {
+    "hangul": {
+      "rows": 1191,
+      "before_accuracy": 0.9756507136859782,
+      "after_accuracy": 0.9748110831234257,
+      "changed": 22,
+      "fixed": 6,
+      "broken": 7
+    },
+    "non_hangul": {
+      "rows": 11031,
+      "before_accuracy": 0.9992747710996284,
+      "after_accuracy": 0.9992747710996284,
+      "changed": 0,
+      "fixed": 0,
+      "broken": 0
+    },
+    "before_weighted": 0.9827379309100732,
+    "after_weighted": 0.9821501895162865,
+    "regression_gate_passed": true,
+    "received_oof_changed_rows": 0,
+    "received_oof_matched_rows": 12222,
+    "zip": {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\submit_AS-02.zip",
+      "sha256": "cfb094cdc2f6635f85a6c969259f7713adae8534bc1a1c52764ec787b01aa2d0",
+      "bytes": 190639
+    }
+  }
+}

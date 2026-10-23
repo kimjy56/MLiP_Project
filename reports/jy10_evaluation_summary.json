@@ -1,0 +1,24 @@
+{
+  "model_id": "JY-10",
+  "description": "JY-10: Phase 5 Acronym Prefix (extract_kr_acronym_prefix) + Safe Ports/Loanwords + Soft Meta + Independent Noise (23,253 rows)",
+  "evaluated_rows": 12222,
+  "weighted_accuracy": 0.99976,
+  "korean_accuracy": 1.0,
+  "korean_correct": "1191/1191",
+  "korean_errors": 0,
+  "latin_accuracy": 0.99918,
+  "latin_correct": "11022/11031",
+  "latin_errors": 9,
+  "total_errors": 9,
+  "inference_seconds": 98.3,
+  "latency_ms_per_row": 8.04,
+  "predicted_lb_score": 0.9262980882700024,
+  "predicted_public_korean": 488,
+  "predicted_public_latin": 3380,
+  "training_time": {
+    "feature_pairs_sec": 100.27,
+    "catboost_fit_sec": 10.31,
+    "mlp_fit_sec": 8.03,
+    "total_elapsed_sec": 222.78
+  }
+}

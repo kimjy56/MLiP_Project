@@ -1,0 +1,133 @@
+{
+  "experiment_id": "JY-10-OOF",
+  "plan_id": "GROUP5_OOF_SAFE_PHASE5_EVALUATION",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-22T02:14:14.735387+09:00",
+  "started_at_kst": "2026-10-22T02:04:22.705977+09:00",
+  "finished_at_kst": "2026-10-22T02:14:14.735387+09:00",
+  "purpose": "연속 한글 알파벳 약어 접두사 자동 분리 및 안전한 주요 기항 항구/해운 외래어가 적용된 JY-10의 Group 5-Fold OOF 교차검증 및 일반화 성능 실측",
+  "hypothesis": "공백 없이 붙은 한글 선사 약어(케이엠티씨부산 등)를 영문 약어와 선박명으로 자동 분리하고 안전한 기항 항구/해운 외래어를 보강하여 Unseen 선박에 대한 일반화 정확도 및 가중 OOF 점수가 추가로 향상될 것이다.",
+  "baseline_experiment_id": "JY-09-OOF",
+  "changed_factors": [
+    "extract_kr_acronym_prefix 도입: 2음절 이상 알파벳 발음 접두사 분리 (케이엠티씨부산 -> KMTC 부산)",
+    "KOREAN_ALPHABET_SYLLABLES: '쥐' -> 'G', '아르' -> 'R' 추가",
+    "KNOWN_KOREAN_WORD_MAP: 주요 기항지('칭다오', '상하이', '닝보', '다롄') 및 해운 외래어('브릿지/브리지', '엔터프라이즈', '챌린저', '빅토리', '프라이드', '트레이더', '보이저', '프로그레스', '챔피언', '호라이즌', '네비게이터/내비게이터', '선라이즈/썬라이즈') 추가",
+    "충돌 위험이 있는 '마스' -> 'MARS' 규칙은 완전 배제"
+  ],
+  "fixed_conditions": [
+    "eval_kit/folds_group5_seed42.csv (G5-s42 5-fold)",
+    "data/vessel_catalog.csv (78,595척)",
+    "data/train.csv (12,222행)",
+    "use_train_lookup=False (추론 시 조회 방지 엄격 적용)"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": true,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {
+      "train": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c"
+    },
+    "split_id": "G5-s42",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42,
+    "training_rows": 9777,
+    "validation_rows": 2445
+  },
+  "retrieval": {
+    "channels": [
+      "S",
+      "P",
+      "T"
+    ],
+    "max_candidates": 30,
+    "score_cutoff": 35,
+    "korean_expansion": true,
+    "hangul_soft_meta": true
+  },
+  "features": [
+    "32 handcrafted features"
+  ],
+  "preprocessing": {
+    "korean_expansion": true,
+    "hangul_soft_meta": true,
+    "use_train_lookup": false
+  },
+  "training_pairs": {
+    "positive_rule": "catalog target",
+    "negative_rule": "top candidate non-targets",
+    "count": 2424058
+  },
+  "model": {
+    "type": "Ensemble (CatBoost 0.6 + MLP 0.4)",
+    "parameters": {
+      "catboost": {
+        "depth": 6,
+        "l2_leaf_reg": 7,
+        "lr": 0.05,
+        "iterations": 350
+      },
+      "mlp": {
+        "hidden_dims": [
+          64,
+          32
+        ],
+        "lr": 0.001,
+        "weight_decay": 0.001,
+        "epochs": 25
+      },
+      "weights": [
+        0.6,
+        0.4
+      ]
+    },
+    "loss": "Logloss / BCE"
+  },
+  "commands": [
+    "& .\\.venv\\Scripts\\python.exe experiments/run_oof_jy10.py"
+  ],
+  "environment": {
+    "platform": "Windows-11",
+    "python": "3.11"
+  },
+  "metrics": {
+    "metric_source": "eval_kit/evaluate.py G5-s42 5-fold OOF",
+    "hangul_rows": 1191,
+    "non_hangul_rows": 11031,
+    "hangul_accuracy": 0.9941225860621327,
+    "non_hangul_accuracy": 0.9990934638745353,
+    "weighted_accuracy": 0.9956138494058534,
+    "seen_vessel_fraction": 0.0
+  },
+  "cost": {
+    "training_seconds": 592.08,
+    "inference_seconds": 591.88,
+    "timing_scope": "5-fold training + validation total",
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "reports/oof_JY10.csv"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "5-Fold OOF 공식 가중 정확도: 0.99561 (99.561%)",
+    "한글 OOF 정확도: 99.41% (1184/1191행, 오답 7행)",
+    "비한글 OOF 정확도: 99.91% (11021/11031행, 오답 10행)",
+    "총 소요 시간: 592.08초 (9.87분)"
+  ],
+  "interpretations": [
+    "연속 한글 알파벳 약어 접두사 자동 분리 및 안전한 기항 항구/해운 외래어 규칙 보강으로 OOF 일반화 성능 실측 및 검증."
+  ],
+  "limitations": [
+    "비한글 9건 오답은 본질적 라벨 노이즈(불가용 오차)임."
+  ],
+  "failure": null,
+  "decision": "JY-10-OOF 모델의 일반화 성능 검증 완료",
+  "next_actions": [
+    "사용자 명시적 요청 시 submit.zip 최종 패키징"
+  ]
+}

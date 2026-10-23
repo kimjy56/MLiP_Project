@@ -29,10 +29,10 @@ from unidecode import unidecode
 from threadpoolctl import threadpool_limits
 
 try:
-    from model.name_processing import NameFeatureIndex, STRUCTURE_FEATURES, PHONETIC_FEATURES, name_view, rapidfuzz_phone_similarity
+    from model.name_processing import NameFeatureIndex, STRUCTURE_FEATURES, PHONETIC_FEATURES, name_view, rapidfuzz_phone_similarity, expand_korean_name
     from model.ngram_retrieval import CharacterNgramIndex
 except ImportError:
-    from name_processing import NameFeatureIndex, STRUCTURE_FEATURES, PHONETIC_FEATURES, name_view, rapidfuzz_phone_similarity
+    from name_processing import NameFeatureIndex, STRUCTURE_FEATURES, PHONETIC_FEATURES, name_view, rapidfuzz_phone_similarity, expand_korean_name
     from ngram_retrieval import CharacterNgramIndex
 
 CHANNELS = ('S', 'N', 'P', 'T')
@@ -56,21 +56,13 @@ def worker_count(name):
     return runtime_int(name, min(4, available), min(6, available))
 
 
-def prepare_row(row):
-    row = dict(row)
-    name = row.get('vessel_name')
-    row['_name'] = (norm(name), roman(name), phonetic(name), hangul(name))
-    row['_view'] = name_view(name)
-    row['_tons'] = (number(row.get('gross_tonnage')), number(row.get('international_gross_tonnage')))
-    return row
-
-
 def validate_channels(channels):
     if channels is None:
         return None
     if len(set(channels)) != len(channels) or not set(channels).issubset(CHANNELS):
         raise ValueError('Retrieval channels must be a unique subset of S/N/P/T')
     return [c for c in CHANNELS if c in channels]
+
 
 FEATURES = [
     'ratio', 'roman_ratio', 'phonetic_ratio',
@@ -98,7 +90,6 @@ def norm(value):
 
 
 def hangul(value):
-    # Same definition as the supplied educational baseline.
     return isinstance(value, str) and any('가' <= c <= '힣' for c in value)
 
 
@@ -106,8 +97,7 @@ def roman(value):
     return norm(unidecode(value if isinstance(value, str) else ''))
 
 
-def phonetic(value):
-    s = roman(value)
+def phonetic_from_roman(s):
     for old, new in [('PH', 'F'), ('SH', 'S'), ('CH', 'C'), ('TH', 'T'),
                      ('NG', 'N'), ('CK', 'K'), ('QU', 'K')]:
         s = s.replace(old, new)
@@ -115,6 +105,22 @@ def phonetic(value):
                                  'D': 'T', 'Z': 'J', 'C': 'K'}))
     s = re.sub('[AEIOUWYH]', '', s)
     return re.sub(r'(.)\1+', r'\1', s)
+
+
+def phonetic(value):
+    return phonetic_from_roman(roman(value))
+
+
+def prepare_row(row, expand_korean=False):
+    row = dict(row)
+    name = row.get('vessel_name')
+    is_ko = hangul(name)
+    r_name = expand_korean_name(name) if (expand_korean and is_ko) else name
+    r_roman = roman(r_name)
+    row['_name'] = (norm(name), r_roman, phonetic_from_roman(r_roman), is_ko)
+    row['_view'] = name_view(r_name, expand_korean=False)
+    row['_tons'] = (number(row.get('gross_tonnage')), number(row.get('international_gross_tonnage')))
+    return row
 
 
 def number(value):
@@ -130,7 +136,8 @@ def text(value):
 
 
 def make_assets(train, catalog, name_mode='baseline', phonetic_search=0, retrieval_channels=None,
-                use_train_lookup=True):
+                use_train_lookup=True, relax_tonnage_penalty=False, hangul_ignore_type_flag=False,
+                korean_expansion=False, hangul_soft_meta=False):
     """Must be called on a training fold only during validation."""
     c = catalog.set_index('vessel_id')
     calls, names = defaultdict(set), defaultdict(set)
@@ -153,6 +160,10 @@ def make_assets(train, catalog, name_mode='baseline', phonetic_search=0, retriev
         raise ValueError('use_train_lookup must be a boolean')
     return {'version': 5, 'search_algorithm': os.environ.get('VESSEL_SEARCH_ALGORITHM', 'rapidfuzz'), 'features': feature_names(name_mode),
             'use_train_lookup': use_train_lookup,
+            'relax_tonnage_penalty': bool(relax_tonnage_penalty),
+            'hangul_ignore_type_flag': bool(hangul_ignore_type_flag),
+            'hangul_soft_meta': bool(hangul_soft_meta),
+            'korean_expansion': bool(korean_expansion),
             'name_mode': name_mode, 'phonetic_search': int(phonetic_search),
             'retrieval_channels': validate_channels(retrieval_channels),
             'calls': {k: next(iter(v)) for k, v in calls.items() if len(v) == 1},
@@ -160,7 +171,9 @@ def make_assets(train, catalog, name_mode='baseline', phonetic_search=0, retriev
 
 
 class CatalogIndex:
-    def __init__(self, catalog, assets, use_train_lookup=None):
+    def __init__(self, catalog, assets, use_train_lookup=None,
+                 relax_tonnage_penalty=None, hangul_ignore_type_flag=None,
+                 korean_expansion=None, hangul_soft_meta=None):
         required = {'vessel_id', 'vessel_name', 'gross_tonnage', 'vessel_type', 'flag_name'}
         if not required.issubset(catalog.columns):
             raise ValueError('Catalog schema is incomplete')
@@ -174,6 +187,14 @@ class CatalogIndex:
                                  if use_train_lookup is None else use_train_lookup)
         if not isinstance(self.use_train_lookup, bool):
             raise ValueError('use_train_lookup must be a boolean')
+        self.relax_tonnage_penalty = (assets.get('relax_tonnage_penalty', False)
+                                      if relax_tonnage_penalty is None else relax_tonnage_penalty) or (os.environ.get('VESSEL_RELAX_TONNAGE_PENALTY', '0') == '1')
+        self.hangul_ignore_type_flag = (assets.get('hangul_ignore_type_flag', False)
+                                        if hangul_ignore_type_flag is None else hangul_ignore_type_flag) or (os.environ.get('VESSEL_HANGUL_IGNORE_TYPE_FLAG', '0') == '1')
+        self.hangul_soft_meta = (assets.get('hangul_soft_meta', False)
+                                 if hangul_soft_meta is None else hangul_soft_meta) or (os.environ.get('VESSEL_HANGUL_SOFT_META', '0') == '1')
+        self.korean_expansion = (assets.get('korean_expansion', False)
+                                 if korean_expansion is None else korean_expansion) or (os.environ.get('VESSEL_KOREAN_EXPANSION', '0') == '1')
         self.name_mode = assets.get('name_mode', 'baseline')
         self.phonetic_search = assets.get('phonetic_search', 0)
         self.retrieval_channels = validate_channels(assets.get('retrieval_channels'))
@@ -236,7 +257,7 @@ class CatalogIndex:
     def channel_candidates(self, row, channel):
         if channel not in CHANNELS:
             raise ValueError(f'Unknown retrieval channel: {channel}')
-        q, r_q, p_q, ko = row['_name'] if '_name' in row else prepare_row(row)['_name']
+        q, r_q, p_q, ko = row['_name'] if '_name' in row else prepare_row(row, self.korean_expansion)['_name']
         result = set()
         if channel == 'N':
             if self.ngram_index is None:
@@ -247,7 +268,7 @@ class CatalogIndex:
                 if self.torch_names is not None:
                     result.update(row['_retrieval']['names'] if '_retrieval' in row and 'names' in row['_retrieval'] else self.torch_names.search(q, count=24))
                 else:
-                    result.update(i for _, _, i in process.extract(q, self.names, scorer=fuzz.ratio, limit=24))
+                    result.update(i for _, _, i in process.extract(q, self.names, scorer=fuzz.ratio, limit=24, score_cutoff=35))
             return sorted(result)
         if channel == 'P':
             if ko:
@@ -255,25 +276,30 @@ class CatalogIndex:
                     if self.torch_romans is not None:
                         result.update(row['_retrieval']['romans'] if '_retrieval' in row and 'romans' in row['_retrieval'] else self.torch_romans.search(r_q, count=60))
                     else:
-                        result.update(i for _, _, i in process.extract(r_q, self.romans, scorer=fuzz.ratio, limit=60))
+                        result.update(i for _, _, i in process.extract(r_q, self.romans, scorer=fuzz.ratio, limit=60, score_cutoff=35))
                 if p_q:
                     if self.torch_phones is not None:
                         result.update(row['_retrieval']['phones'] if '_retrieval' in row and 'phones' in row['_retrieval'] else self.torch_phones.search(p_q, count=60))
                     else:
-                        result.update(i for _, _, i in process.extract(p_q, self.phones, scorer=fuzz.ratio, limit=60))
-            if q and self.phonetic_search:
-                key = (row['_view'] if '_view' in row else name_view(row['vessel_name'])).search_key
-                if key:
-                    if self.torch_keys is not None:
-                        result.update(row['_retrieval']['keys'] if '_retrieval' in row and 'keys' in row['_retrieval'] else self.torch_keys.search(key, count=self.phonetic_search))
-                    else:
-                        result.update(i for _, _, i in process.extract(
-                            key, self.name_index.search_keys, scorer=fuzz.ratio,
-                            limit=self.phonetic_search))
+                        result.update(i for _, _, i in process.extract(p_q, self.phones, scorer=fuzz.ratio, limit=60, score_cutoff=35))
+                if q and self.phonetic_search:
+                    key = (row['_view'] if '_view' in row else name_view(row['vessel_name'])).search_key
+                    if key:
+                        if self.torch_keys is not None:
+                            result.update(row['_retrieval']['keys'] if '_retrieval' in row and 'keys' in row['_retrieval'] else self.torch_keys.search(key, count=self.phonetic_search))
+                        else:
+                            result.update(i for _, _, i in process.extract(
+                                key, self.name_index.search_keys, scorer=fuzz.ratio,
+                                limit=self.phonetic_search, score_cutoff=35))
             return sorted(result)
         probs = self.assets['tables']['vessel_type'].get(text(row.get('vessel_type')), {})
         likely_types = sorted(probs, key=lambda x: (-probs[x], x))[:2]
-        for col in ['gross_tonnage', 'international_gross_tonnage']:
+        val_gross = number(row.get('gross_tonnage'))
+        val_inter = number(row.get('international_gross_tonnage'))
+        ton_cols = ['gross_tonnage']
+        if val_gross != val_inter and not (np.isnan(val_gross) and np.isnan(val_inter)):
+            ton_cols.append('international_gross_tonnage')
+        for col in ton_cols:
             value = number(row.get(col))
             result.update(self.nearest(value, 60 if ko else 24))
             if ko:
@@ -290,7 +316,7 @@ class CatalogIndex:
             if index is None:
                 continue
             selected = [r for r in rows if not (use_direct and self.direct(r)) and
-                        (field == 'keys' or (r['_name'][3] if field != 'names' else not r['_name'][3]))]
+                        (r['_name'][3] if field != 'names' else not r['_name'][3])]
             queries = [r['_view'].search_key if position is None else r['_name'][position] for r in selected]
             for row, result in zip(selected, index.batch_search(queries, count)):
                 row['_retrieval'][field] = result
@@ -298,10 +324,10 @@ class CatalogIndex:
     def prune_candidates_by_tonnage(self, row, candidates, max_candidates=30):
         if len(candidates) <= max_candidates:
             return sorted(candidates)
-        gross, inter = row['_tons'] if '_tons' in row else (number(row.get('gross_tonnage')), number(row.get('international_gross_tonnage')))
+        gross, inter = row['_tons'] if '_tons' in row else prepare_row(row, self.korean_expansion)['_tons']
         ton = inter if inter > 0 else (gross if gross > 0 else -1.0)
         alt_ton = gross if (gross > 0 and gross != ton) else -1.0
-        q, r_q, p_q, ko = row['_name'] if '_name' in row else prepare_row(row)['_name']
+        q, r_q, p_q, ko = row['_name'] if '_name' in row else prepare_row(row, self.korean_expansion)['_name']
 
         alias_cands = set()
         if self.use_train_lookup:
@@ -321,7 +347,10 @@ class CatalogIndex:
                     diff = min(diff, abs(c_gt - alt_ton))
                 rel = diff / max(1.0, c_gt)
                 # 한글 선박의 경우 9.8% 초과 시 페널티 대폭 부여 (AR-02 기준)
-                ton_pen = rel if rel <= 0.098 else rel * 3.5
+                if self.relax_tonnage_penalty:
+                    ton_pen = rel
+                else:
+                    ton_pen = rel if rel <= 0.098 else rel * 3.5
             elif ton > 0 and c_gt <= 0:
                 ton_pen = 0.25
             else:
@@ -358,7 +387,7 @@ class CatalogIndex:
         return sorted(result)
 
     def features(self, row, candidates, include_name_features=True):
-        row = row if '_name' in row else prepare_row(row)
+        row = row if '_name' in row else prepare_row(row, self.korean_expansion)
         name = row.get('vessel_name')
         q, r, p, ko = row['_name']
         names = [self.names[i] for i in candidates]
@@ -372,13 +401,25 @@ class CatalogIndex:
         gross, inter = row['_tons']
         def gap(value):
             return np.nan_to_num(np.abs(gt-value) / np.maximum(np.maximum(gt, value), 1), nan=2.0)
-        g1, g2 = gap(gross), gap(inter)
+        g1 = gap(gross)
+        g2 = g1 if (gross == inter or (not np.isfinite(gross) and not np.isfinite(inter))) else gap(inter)
         tp = self.assets['tables']['vessel_type'].get(text(row.get('vessel_type')), {})
         fp = self.assets['tables']['flag_name'].get(text(row.get('flag_name')), {})
+        names_sim = similarity(q, names, fuzz.ratio)
+        if self.hangul_ignore_type_flag and ko:
+            type_probs = [0.0 for _ in candidates]
+            flag_probs = [0.0 for _ in candidates]
+        elif self.hangul_soft_meta and ko:
+            type_probs = [0.5 * tp.get(self.types[i], 0.0) for i in candidates]
+            flag_probs = [max(0.5, fp.get(self.flags[i], 0.0)) if sim >= 0.85 else 0.5 * fp.get(self.flags[i], 0.0)
+                          for i, sim in zip(candidates, names_sim)]
+        else:
+            type_probs = [tp.get(self.types[i], 0) for i in candidates]
+            flag_probs = [fp.get(self.flags[i], 0) for i in candidates]
         digits = re.sub(r'\D', '', q)
         n = len(candidates)
         base = np.column_stack([
-            similarity(q, names, fuzz.ratio),
+            names_sim,
             similarity(r, romans, fuzz.ratio), similarity(p, phones, fuzz.ratio),
             similarity(p, phones, fuzz.partial_ratio),
             [min(len(q), len(s))/max(len(q), len(s), 1) for s in names],
@@ -386,8 +427,8 @@ class CatalogIndex:
             np.full(n, not digits), g1, g2, np.minimum(g1, g2),
             (g1 < 1e-6), (g2 < 1e-6), np.full(n, not np.isfinite(gross)),
             np.full(n, not np.isfinite(inter)),
-            [tp.get(self.types[i], 0) for i in candidates],
-            [fp.get(self.flags[i], 0) for i in candidates],
+            type_probs,
+            flag_probs,
             np.full(n, not text(row.get('flag_name'))), np.full(n, hangul(name)),
             np.full(n, len(q)), self.name_lengths[candidates],
         ]).astype(np.float32)
@@ -398,16 +439,75 @@ class CatalogIndex:
 
 class Matcher:
     @threadpool_limits.wrap(limits=1)
-    def __init__(self, catalog, model_dir, use_train_lookup=None):
+    def __init__(self, catalog, model_dir, use_train_lookup=None,
+                 relax_tonnage_penalty=None, hangul_ignore_type_flag=None,
+                 korean_expansion=None, hangul_soft_meta=None):
         model_dir = Path(model_dir)
         assets = json.loads((model_dir / 'assets.json').read_text(encoding='utf-8'))
         if assets['features'] != feature_names(assets.get('name_mode', 'baseline')):
             raise ValueError('Feature version mismatch')
-        self.index = CatalogIndex(catalog, assets, use_train_lookup=use_train_lookup)
-        # Read through Python so Unicode Windows project paths also work.
-        self.model = lgb.Booster(model_str=(model_dir / 'ranker.txt').read_text(encoding='utf-8'))
-        if self.model.feature_name() != assets['features']:
-            raise ValueError('Model and assets feature names differ')
+        self.index = CatalogIndex(catalog, assets, use_train_lookup=use_train_lookup,
+                                  relax_tonnage_penalty=relax_tonnage_penalty,
+                                  hangul_ignore_type_flag=hangul_ignore_type_flag,
+                                  korean_expansion=korean_expansion,
+                                  hangul_soft_meta=hangul_soft_meta)
+        if assets.get('decision_model') == 'set_mlp':
+            try:
+                from decision_models.set_model import SetDecisionModel
+            except ImportError:
+                from model.set_model import SetDecisionModel
+            self.model = SetDecisionModel.load(model_dir, device='cpu')
+            if self.model.feature_names != assets['features']:
+                raise ValueError('Set model and assets feature names differ')
+            return
+        cb_path = model_dir / 'catboost.cbm'
+        mlp_path = model_dir / 'mlp.pt'
+
+        scorers = []
+        if cb_path.is_file():
+            from catboost import CatBoostClassifier
+            cb = CatBoostClassifier()
+            cb.load_model(str(cb_path))
+            class _CatBoostScorer:
+                def __init__(self, model):
+                    self.model = model
+                def predict(self, x, num_threads=None):
+                    x = np.asarray(x, dtype=np.float32)
+                    if not len(x):
+                        return np.empty(0, dtype=np.float32)
+                    threads = num_threads or 4
+                    return self.model.predict_proba(x, thread_count=threads)[:, 1]
+            scorers.append(('cb', _CatBoostScorer(cb)))
+
+        if mlp_path.is_file():
+            try:
+                from decision_models.mlp_model import MLPDecisionModel
+            except ImportError:
+                from model.mlp_model import MLPDecisionModel
+            mlp = MLPDecisionModel.load(model_dir, device='cpu')
+            scorers.append(('mlp', mlp))
+
+        if len(scorers) >= 2:
+            class _EnsembleScorer:
+                def __init__(self, model_list):
+                    self.scorers = model_list
+                    self.weights = [1.0 / len(model_list)] * len(model_list)
+                def predict(self, x, num_threads=None):
+                    x = np.asarray(x, dtype=np.float32)
+                    if not len(x):
+                        return np.empty(0, dtype=np.float32)
+                    total_scores = np.zeros(len(x), dtype=np.float32)
+                    for (_, s), w in zip(self.scorers, self.weights):
+                        total_scores += w * s.predict(x, num_threads=num_threads)
+                    return total_scores
+            self.model = _EnsembleScorer(scorers)
+        elif len(scorers) == 1:
+            self.model = scorers[0][1]
+        else:
+            # Read through Python so Unicode Windows project paths also work.
+            self.model = lgb.Booster(model_str=(model_dir / 'ranker.txt').read_text(encoding='utf-8'))
+            if self.model.feature_name() != assets['features']:
+                raise ValueError('Model and assets feature names differ')
 
     def predict(self, queries, use_direct=True, diagnostics=False):
         """Use only query columns; legacy label diagnostics run after prediction.
@@ -454,7 +554,7 @@ class Matcher:
         with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as executor:
             for start in range(0, n_records, batch_size):
                 tick = time.monotonic()
-                rows = [prepare_row(r) for r in records[start:start + batch_size]]
+                rows = [prepare_row(r, self.index.korean_expansion) for r in records[start:start + batch_size]]
                 # Fixed catalog transform only: no test-fitted statistics or cross-row features.
                 self.index.prepare_retrieval(rows, use_direct)
                 timings['prepare_seconds'] += time.monotonic() - tick
@@ -463,7 +563,15 @@ class Matcher:
                 timings['feature_seconds'] += time.monotonic() - tick
                 tick = time.monotonic()
                 matrices = [f for _, _, f in built if f is not None]
-                scores = self.model.predict(np.concatenate(matrices), num_threads=runtime_int('VESSEL_SCORE_THREADS', 1, 6)) if matrices else []
+                if matrices:
+                    score_threads = runtime_int('VESSEL_SCORE_THREADS', 1, 6)
+                    if hasattr(self.model, 'predict_groups'):
+                        scores = self.model.predict_groups(
+                            np.concatenate(matrices), [len(f) for f in matrices], num_threads=score_threads)
+                    else:
+                        scores = self.model.predict(np.concatenate(matrices), num_threads=score_threads)
+                else:
+                    scores = []
                 offset = 0
                 for direct, candidates, features in built:
                     if direct:

@@ -117,6 +117,8 @@ def summarize_folds(summaries):
 
 def generate_oof(train, catalog, folds, output_dir, *, name_mode='baseline',
                  phonetic_search=0, retrieval_channels=None, use_train_lookup=True,
+                 relax_tonnage_penalty=False, hangul_ignore_type_flag=False,
+                 korean_expansion=False,
                  expected_rows=12222, on_fold=None):
     joined = validate_folds(train, catalog, folds, expected_rows)
     output_dir = Path(output_dir)
@@ -127,9 +129,16 @@ def generate_oof(train, catalog, folds, output_dir, *, name_mode='baseline',
         fitted = joined.loc[joined.fold != k].drop(columns='fold').copy()
         validation = joined.loc[joined.fold == k].drop(columns='fold').copy()
         destination = output_dir / f'fold_{k}' / 'model'
+        fit_kwargs = {}
+        if relax_tonnage_penalty:
+            fit_kwargs['relax_tonnage_penalty'] = True
+        if hangul_ignore_type_flag:
+            fit_kwargs['hangul_ignore_type_flag'] = True
+        if korean_expansion:
+            fit_kwargs['korean_expansion'] = True
         fit_result = fit(fitted, catalog, destination, name_mode, phonetic_search,
-                         retrieval_channels, use_train_lookup)
-        matcher = Matcher(catalog, destination)
+                         retrieval_channels, use_train_lookup, **fit_kwargs)
+        matcher = Matcher(catalog, destination, **fit_kwargs)
         # evaluate passes QUERY_COLUMNS only, and computes metrics afterwards.
         metrics, predictions = evaluate(matcher, validation, set(fitted.target_vessel_id))
         if len(predictions) != len(validation) or any(
@@ -168,6 +177,9 @@ def main():
     parser.add_argument('--phonetic-search', type=int, default=24)
     parser.add_argument('--retrieval-channels', nargs='*', choices=['S', 'N', 'P', 'T'], default=['S', 'N', 'P', 'T'])
     parser.add_argument('--use-train-lookup', action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument('--relax-tonnage-penalty', action=argparse.BooleanOptionalAction, default=False)
+    parser.add_argument('--hangul-ignore-type-flag', action=argparse.BooleanOptionalAction, default=False)
+    parser.add_argument('--korean-expansion', action=argparse.BooleanOptionalAction, default=False)
     args = parser.parse_args()
     if args.folds is None:
         args.folds = args.data_dir / 'eval_kit/folds_group5_seed42.csv'
@@ -233,6 +245,9 @@ def main():
         oof, summaries = generate_oof(train, catalog, folds, output_dir,
             name_mode=args.name_mode, phonetic_search=args.phonetic_search,
             retrieval_channels=args.retrieval_channels, use_train_lookup=args.use_train_lookup,
+            relax_tonnage_penalty=args.relax_tonnage_penalty,
+            hangul_ignore_type_flag=args.hangul_ignore_type_flag,
+            korean_expansion=args.korean_expansion,
             on_fold=completed_fold)
         oof_path = output_dir / f'oof_{args.experiment_id}.csv'
         oof.to_csv(oof_path, index=False, encoding='utf-8')

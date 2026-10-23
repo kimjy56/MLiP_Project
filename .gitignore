@@ -9,6 +9,8 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 *.log
+catboost_info/
+scratch/
 
 # Competition input data and original downloaded baseline
 /data/
@@ -21,6 +23,7 @@ train.csv
 vessel_catalog.csv
 test.csv
 sample_submission.csv
+*noisy*.csv
 
 # Generated model assets and submission archives
 /model/assets.json
@@ -33,6 +36,9 @@ sample_submission.csv
 artifacts/
 **/model/assets.json
 **/model/ranker.txt
+reports/oof_models*/
+model/folds/
+model_fold_*.json
 *.pt
 *.pth
 *.ckpt
@@ -57,6 +63,7 @@ oof*.csv
 *predictions*.csv
 submission.csv
 folds_*.csv
+fold_*.csv
 split.csv
 *_head.csv
 *errors.csv

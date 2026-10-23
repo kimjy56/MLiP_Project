@@ -1,0 +1,19 @@
+{
+  "changes": [
+    "Streaming SHA256 with identical digest",
+    "Linear binary label validation with existing error conditions"
+  ],
+  "limitations": [
+    "Repository-wide refactoring not completed",
+    "AS-SET-02 comparison interrupted before fold 5 completion; no active Python process observed"
+  ],
+  "status": "completed",
+  "recorded_at_kst": "2026-10-22T21:02:53.3695339+09:00",
+  "model_metrics": null,
+  "scope": "decision_models/common.py only",
+  "tests": {
+    "command": ".venv/Scripts/python.exe -X utf8 -m unittest tests.test_set_model tests.test_decision_models tests.test_set_comparison -q",
+    "passed": 13
+  },
+  "experiment_id": "REFACTOR-01"
+}

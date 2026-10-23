@@ -1,0 +1,669 @@
+{
+  "experiment_id": "AUG-03",
+  "plan_id": null,
+  "status": "completed",
+  "recorded_at_kst": "2026-10-21T12:38:54.826233+09:00",
+  "started_at_kst": "2026-10-21T12:38:54.971747+09:00",
+  "finished_at_kst": "2026-10-21T12:55:24.452632+09:00",
+  "purpose": "Paired actual-query group OOF: JY-01 configuration with/without weak train-only augmentation",
+  "hypothesis": "Weak name deletion and metadata masking may improve unseen-vessel generalization",
+  "baseline_experiment_id": "AUG-02",
+  "changed_factors": [
+    "0.5 row-selection probability; synthetic pair weights 0.5"
+  ],
+  "fixed_conditions": [
+    "same folds, real-row lookup assets, features, search, candidate selection, model hyperparameters"
+  ],
+  "code": {
+    "git_revision_at_run": "dbfe8fc8f6b5afc003af28fd94b50def49f36bed",
+    "dirty": true,
+    "file_sha256": {
+      "train.py": "134d992f37daa342c9705253c866ced83cdea80ac2d3af9284f8e9b3809a22ee",
+      "train_oof.py": "932b2470b93b3498960de5d0fa06d106c56f54e30656acfa63da9d4f5dc30ead",
+      "model/matcher.py": "e73b217432d24933f58b78c14a926ad22bf6fdd963ea66b6a1e31a833fb87f1f",
+      "model/name_processing.py": "c2b1e4170a33a757ca9fbf5ebe7578a76bdceb335f9906a45dddd16f8273910f",
+      "model/ngram_retrieval.py": "9c1e0e73a4b35c2723a30dd261bfc6561e9b465d9f4f3041e196c45f3e3ed59a",
+      "experiments/weak_augmentation.py": "affc438a389a312420e5256c6b3eaaa017ac2f95d667e7c741e974cfc6f45911",
+      "experiments/run_weak_augmentation.py": "4f490b5c4fe618d3d6719fe55e7eb11de4b1e40217ff040b0ce37ff3a49bf2d5",
+      "eval_kit/evaluate.py": "2c728b357727f8e3962128030dde3bcb6fc6b230fcde287e336d3e0eb6c9f38e"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "eval_kit/folds_group5_seed42.csv": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    },
+    "split_id": "G5-s42",
+    "seed": 42,
+    "validation_rows": 12222,
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+  },
+  "retrieval": {},
+  "features": [
+    "ratio",
+    "roman_ratio",
+    "phonetic_ratio",
+    "phonetic_partial",
+    "length_ratio",
+    "digits_equal",
+    "digits_missing",
+    "gross_gap",
+    "international_gap",
+    "best_gap",
+    "gross_exact",
+    "international_exact",
+    "gross_missing",
+    "international_missing",
+    "type_probability",
+    "flag_probability",
+    "flag_missing",
+    "is_hangul",
+    "name_length",
+    "catalog_name_length",
+    "number_sequence_equal",
+    "number_conflict",
+    "token_count_gap",
+    "token_roman_idf",
+    "token_roman_min",
+    "token_roman_last",
+    "weighted_phone_full",
+    "weighted_phone_token_idf",
+    "weighted_phone_token_min",
+    "weighted_phone_last",
+    "weighted_phone_residual",
+    "phone_shared_edge"
+  ],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "LightGBM binary candidate classifier",
+    "parameters": {
+      "n_estimators": 350,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "max_depth": -1,
+      "min_child_samples": 40,
+      "colsample_bytree": 0.9,
+      "reg_lambda": 2,
+      "random_state": 20261016,
+      "n_jobs": 4,
+      "verbosity": -1,
+      "deterministic": true,
+      "force_col_wise": true
+    }
+  },
+  "commands": [
+    "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe",
+    "experiments/run_weak_augmentation.py"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "executable": "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "numpy": "1.26.4",
+      "pandas": "2.0.3",
+      "scikit-learn": "1.5.2",
+      "lightgbm": "4.6.0",
+      "rapidfuzz": "3.14.3",
+      "Unidecode": "1.4.0"
+    }
+  },
+  "metrics": {
+    "metric_source": "Official eval_kit/evaluate.py G5-s42 OOF; diagnostics from same predictions",
+    "hangul_rows": 1191,
+    "non_hangul_rows": 11031,
+    "hangul_accuracy": 0.8900083963056256,
+    "non_hangul_accuracy": 0.9993654247121748,
+    "weighted_accuracy": 0.9228155048275903,
+    "candidate_recall_hangul": 0.9916036943744753,
+    "candidate_recall_non_hangul": 0.9997280391623606,
+    "seen_vessel_fraction": 0.0
+  },
+  "cost": {
+    "training_seconds": 590.6969490000629,
+    "inference_seconds": 175.15499999985332,
+    "timing_scope": "Sum over five folds: fit includes index/features/model save (augmented cost attributes reused base preparation); inference includes predict_details only, excludes Matcher construction/CSV and independence probes",
+    "peak_memory_bytes": null,
+    "model_bytes": 6273138,
+    "assets_bytes": 1860744,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    {
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-03\\oof_AUG-03.csv",
+      "sha256": "f788fbc542328f423ceacc9301c92f58a9b9aad15055a94a422c9c2222dc8222",
+      "rows": 12222
+    },
+    {
+      "command": [
+        "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe",
+        "-X",
+        "utf8",
+        "eval_kit/evaluate.py",
+        "--train",
+        "data/train.csv",
+        "--oof",
+        "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-03\\oof_AUG-03.csv",
+        "--id",
+        "AUG-03",
+        "--leaderboard",
+        "C:\\Projects\\ML_midterm\\reports\\augmentation_leaderboard.csv",
+        "--compare",
+        "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-02\\oof_AUG-02.csv"
+      ],
+      "output": "C:\\Projects\\ML_midterm\\reports\\AUG-03_official_evaluation.txt",
+      "sha256": "ee94a35618e2406cdf6edd7aa9ff9b56593ad44ea8c51f6abff9c0c6878c62a9",
+      "exit_code": 0
+    },
+    {
+      "path": "C:\\Projects\\ML_midterm\\reports\\augmentation_leaderboard.csv",
+      "sha256": "19097c01a1f879fc23753a70f6d765e1b31e400e89e4a9e14561663a69a6b047"
+    }
+  ],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "Previously used public train; development OOF, not independent final test.",
+    "Local .venv explicitly approved; Python differs from server.",
+    "Fixed weak corruption hypotheses, not learned test-distribution alignment.",
+    "Preserve existing positional negative-mining heuristic for paired comparability; no independent correction.",
+    "Official evaluator README locally v1.0; stricter project v1.1 requirements govern validation.",
+    "No catalog-only synthetic new IDs in this initial experiment.",
+    "Name deletion and masking are combined; individual contributions not identified.",
+    "Old positional hard-negative selection uses current roman_ratio/length_ratio/international_exact columns; preserved in both arms, should be fixed in a separately identified experiment."
+  ],
+  "failure": null,
+  "decision": "Do not adopt this combined augmentation setting",
+  "next_actions": [],
+  "runtime": {
+    "VESSEL_SEARCH_ALGORITHM": "rapidfuzz",
+    "VESSEL_PHONE_SIMILARITY": "rapidfuzz",
+    "VESSEL_FEATURE_WORKERS": "4",
+    "VESSEL_TRAIN_THREADS": "4",
+    "VESSEL_PREDICT_WORKERS": "4",
+    "VESSEL_SCORE_THREADS": "1",
+    "VESSEL_TRAIN_CANDIDATES": "50",
+    "VESSEL_MAX_CANDIDATES": "0",
+    "VESSEL_PREDICT_CANDIDATES": "30",
+    "VESSEL_TRAIN_BATCH": "64",
+    "VESSEL_PREDICT_BATCH": "64",
+    "VESSEL_SEARCH_DEVICE": "cpu"
+  },
+  "fold_results": [
+    {
+      "fold": 0,
+      "fit": {
+        "search_algorithm": "rapidfuzz",
+        "feature_workers": 4,
+        "model_threads": 4,
+        "batch_size": 64,
+        "index_seconds": 2.547000000020489,
+        "feature_seconds": 70.57900000002701,
+        "model_fit_seconds": 2.1715680000488646,
+        "training_rows": 9850,
+        "training_pairs": 351217,
+        "fit_seconds": 109.38274430000456,
+        "timing_scope": "Base feature/index preparation reused; attributed fit cost excludes baseline classifier fit",
+        "augmentation": {
+          "seed": 42,
+          "selection_fraction": 0.5,
+          "rows": 2666,
+          "unique_source_rows": 5353,
+          "operations": {
+            "mask_gross_tonnage": 353,
+            "mask_flag_name": 325,
+            "delete_one_letter": 1280,
+            "rejected_known_collision": 9,
+            "mask_international_gross_tonnage": 345,
+            "rejected_short_name": 47,
+            "mask_vessel_type": 363
+          },
+          "synthetic_sha256": "daef84ba63bc4c1cbbfd31768643a4c46378fb9a08e4beb57bbdda8a7d513634",
+          "hangul_rows": 192,
+          "duplicate_of_real_rows": 0
+        },
+        "synthetic_pair_count": 116779,
+        "synthetic_pair_sha256": "cf4e168a2f4bfd7f4f71251581b1cb6c2ecf50542a645947cf83139175117168",
+        "base_training_pair_sha256": "26c0bd9749a449cd4db7867b6d3e126f0c8e4cd4e5918786ef89654689a72e35",
+        "base_training_pair_hash_reused": true,
+        "extra_feature_seconds": 34.039176299993414,
+        "base_real_training_candidate_recall": 0.9990659443302821,
+        "base_real_unique_feature_rows": 5353
+      },
+      "validation": {
+        "rows": 2372,
+        "seconds": 32.07799999997951,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 239,
+        "hangul_accuracy": 0.9246861924686193,
+        "hangul_candidate_recall": 1.0,
+        "non_hangul_rows": 2133,
+        "non_hangul_accuracy": 0.9985935302390999,
+        "non_hangul_candidate_recall": 0.9990623534927332,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 2372,
+        "unseen_accuracy": 0.9911467116357504,
+        "unseen_candidate_recall": 0.9991568296795953,
+        "weighted_accuracy": 0.9468583937997634,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "artifacts": {
+        "assets.json": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-03\\fold_0\\model\\assets.json",
+          "sha256": "31efd4e30e8cfa1a278e8fab901e2cbd4d02d164979cf3a5d4205ec5d7dbe2eb",
+          "bytes": 372572
+        },
+        "ranker.txt": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-03\\fold_0\\model\\ranker.txt",
+          "sha256": "b93b7f5a81355509885b458b8c233087d987028821f189abfec020e15336df3e",
+          "bytes": 1255049
+        }
+      }
+    },
+    {
+      "fold": 1,
+      "fit": {
+        "search_algorithm": "rapidfuzz",
+        "feature_workers": 4,
+        "model_threads": 4,
+        "batch_size": 64,
+        "index_seconds": 2.8439999999827705,
+        "feature_seconds": 76.06300000002375,
+        "model_fit_seconds": 2.440950000018347,
+        "training_rows": 9750,
+        "training_pairs": 348961,
+        "fit_seconds": 119.53353830002015,
+        "timing_scope": "Base feature/index preparation reused; attributed fit cost excludes baseline classifier fit",
+        "augmentation": {
+          "seed": 43,
+          "selection_fraction": 0.5,
+          "rows": 2612,
+          "unique_source_rows": 5356,
+          "operations": {
+            "delete_one_letter": 1262,
+            "mask_vessel_type": 406,
+            "mask_gross_tonnage": 307,
+            "rejected_short_name": 53,
+            "mask_flag_name": 309,
+            "mask_international_gross_tonnage": 328,
+            "rejected_known_collision": 19
+          },
+          "synthetic_sha256": "20888b1c677b9acb35894a30d9a99937ef279b8350cf94c62fa2e724ce0d3950",
+          "hangul_rows": 169,
+          "duplicate_of_real_rows": 0
+        },
+        "synthetic_pair_count": 114224,
+        "synthetic_pair_sha256": "5d64bd25dc5d1f94dc44ce57f0d587cd5226731581f8155ad735380bdfb3f740",
+        "base_training_pair_sha256": "c2ae8da1134f549dc46540e6784302ad69b883b64d6b4f617ccd337025acac84",
+        "base_training_pair_hash_reused": true,
+        "extra_feature_seconds": 38.13958829996409,
+        "base_real_training_candidate_recall": 0.9990664675130695,
+        "base_real_unique_feature_rows": 5356
+      },
+      "validation": {
+        "rows": 2472,
+        "seconds": 34.90599999995902,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 241,
+        "hangul_accuracy": 0.921161825726141,
+        "hangul_candidate_recall": 1.0,
+        "non_hangul_rows": 2231,
+        "non_hangul_accuracy": 0.9991035410129987,
+        "non_hangul_candidate_recall": 0.9995517705064993,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 2472,
+        "unseen_accuracy": 0.991504854368932,
+        "unseen_candidate_recall": 0.9995954692556634,
+        "weighted_accuracy": 0.9445443403121982,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "artifacts": {
+        "assets.json": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-03\\fold_1\\model\\assets.json",
+          "sha256": "68767b3bd8d46009e19cba8b183b68c49e5844f9bd9f3ebbce4f12eb08df8be6",
+          "bytes": 372454
+        },
+        "ranker.txt": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-03\\fold_1\\model\\ranker.txt",
+          "sha256": "dd56df232aa624ceef8844d6a6ea0870b45e98a0bb7cb113751db2b2169dc904",
+          "bytes": 1255522
+        }
+      }
+    },
+    {
+      "fold": 2,
+      "fit": {
+        "search_algorithm": "rapidfuzz",
+        "feature_workers": 4,
+        "model_threads": 4,
+        "batch_size": 64,
+        "index_seconds": 2.89000000001397,
+        "feature_seconds": 77.67199999996228,
+        "model_fit_seconds": 2.5753035999950953,
+        "training_rows": 9706,
+        "training_pairs": 348351,
+        "fit_seconds": 122.42979029996786,
+        "timing_scope": "Base feature/index preparation reused; attributed fit cost excludes baseline classifier fit",
+        "augmentation": {
+          "seed": 44,
+          "selection_fraction": 0.5,
+          "rows": 2605,
+          "unique_source_rows": 5346,
+          "operations": {
+            "delete_one_letter": 1265,
+            "mask_international_gross_tonnage": 325,
+            "mask_flag_name": 287,
+            "mask_gross_tonnage": 357,
+            "mask_vessel_type": 371,
+            "rejected_short_name": 49,
+            "rejected_known_collision": 11
+          },
+          "synthetic_sha256": "6635b4118cebcc8214e3c0a8ba76b9b88b0a240308e725e094ca81b42cac7e32",
+          "hangul_rows": 176,
+          "duplicate_of_real_rows": 0
+        },
+        "synthetic_pair_count": 113929,
+        "synthetic_pair_sha256": "0174f8d5aec24d14cfc32a5752d6df738a8636e6d9c2234f51bde303abb814ab",
+        "base_training_pair_sha256": "ce22b46a3a73d7a1fa9e1a50b99457d266180c5f7e5a73151879be07bf230728",
+        "base_training_pair_hash_reused": true,
+        "extra_feature_seconds": 39.24548669997603,
+        "base_real_training_candidate_recall": 0.999438832772166,
+        "base_real_unique_feature_rows": 5346
+      },
+      "validation": {
+        "rows": 2516,
+        "seconds": 36.20299999997951,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 234,
+        "hangul_accuracy": 0.8376068376068376,
+        "hangul_candidate_recall": 0.9658119658119658,
+        "non_hangul_rows": 2282,
+        "non_hangul_accuracy": 1.0,
+        "non_hangul_candidate_recall": 1.0,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 2516,
+        "unseen_accuracy": 0.9848966613672496,
+        "unseen_candidate_recall": 0.9968203497615262,
+        "weighted_accuracy": 0.8863247863247863,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "artifacts": {
+        "assets.json": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-03\\fold_2\\model\\assets.json",
+          "sha256": "b25c4e45851b5bd11bd6330751d9486ef1d9b8378b2fdaeef46051b24310ecb6",
+          "bytes": 372496
+        },
+        "ranker.txt": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-03\\fold_2\\model\\ranker.txt",
+          "sha256": "b27901d2f2347fd5bcdc656745929d331efb03afcf266a414678c8980208ff61",
+          "bytes": 1254101
+        }
+      }
+    },
+    {
+      "fold": 3,
+      "fit": {
+        "search_algorithm": "rapidfuzz",
+        "feature_workers": 4,
+        "model_threads": 4,
+        "batch_size": 64,
+        "index_seconds": 2.875,
+        "feature_seconds": 73.04700000002049,
+        "model_fit_seconds": 2.6256342999986373,
+        "training_rows": 9789,
+        "training_pairs": 345852,
+        "fit_seconds": 115.76454150007339,
+        "timing_scope": "Base feature/index preparation reused; attributed fit cost excludes baseline classifier fit",
+        "augmentation": {
+          "seed": 45,
+          "selection_fraction": 0.5,
+          "rows": 2550,
+          "unique_source_rows": 5340,
+          "operations": {
+            "mask_flag_name": 281,
+            "rejected_short_name": 55,
+            "mask_international_gross_tonnage": 314,
+            "delete_one_letter": 1239,
+            "mask_vessel_type": 365,
+            "mask_gross_tonnage": 351,
+            "rejected_known_collision": 15
+          },
+          "synthetic_sha256": "fc7bfdcbe508d76114f68f103141d5c62c56464b3c0ef84040f39d4402c4cc1c",
+          "hangul_rows": 171,
+          "duplicate_of_real_rows": 0
+        },
+        "synthetic_pair_count": 111735,
+        "synthetic_pair_sha256": "afc25dc981bb6299c808f893e502cdb8b3e66a543a29382f5564e6f1882148d9",
+        "base_training_pair_sha256": "441c1fc496ad444a9c0de42b771c860f1d1b1a9e455a98ae5785310095aba29b",
+        "base_training_pair_hash_reused": true,
+        "extra_feature_seconds": 37.16990720003378,
+        "base_real_training_candidate_recall": 0.998876404494382,
+        "base_real_unique_feature_rows": 5340
+      },
+      "validation": {
+        "rows": 2433,
+        "seconds": 35.68699999997625,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 244,
+        "hangul_accuracy": 0.8852459016393442,
+        "hangul_candidate_recall": 1.0,
+        "non_hangul_rows": 2189,
+        "non_hangul_accuracy": 0.9995431703974418,
+        "non_hangul_candidate_recall": 1.0,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 2433,
+        "unseen_accuracy": 0.9880805589806823,
+        "unseen_candidate_recall": 1.0,
+        "weighted_accuracy": 0.9195350822667734,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "artifacts": {
+        "assets.json": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-03\\fold_3\\model\\assets.json",
+          "sha256": "fcfef285980c4f776fafa6f94d63848d5f354a78bdf48e9c6688e47e9745dbf3",
+          "bytes": 371485
+        },
+        "ranker.txt": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-03\\fold_3\\model\\ranker.txt",
+          "sha256": "d9d470a3df80bb208c9c600c5c0c8502c206896453e1b621bcccfc8ac835ec43",
+          "bytes": 1254172
+        }
+      }
+    },
+    {
+      "fold": 4,
+      "fit": {
+        "search_algorithm": "rapidfuzz",
+        "feature_workers": 4,
+        "model_threads": 4,
+        "batch_size": 64,
+        "index_seconds": 2.875,
+        "feature_seconds": 78.20299999997951,
+        "model_fit_seconds": 2.6695784999756142,
+        "training_rows": 9793,
+        "training_pairs": 349395,
+        "fit_seconds": 123.58633459999692,
+        "timing_scope": "Base feature/index preparation reused; attributed fit cost excludes baseline classifier fit",
+        "augmentation": {
+          "seed": 46,
+          "selection_fraction": 0.5,
+          "rows": 2640,
+          "unique_source_rows": 5337,
+          "operations": {
+            "delete_one_letter": 1271,
+            "mask_flag_name": 334,
+            "mask_vessel_type": 395,
+            "mask_gross_tonnage": 323,
+            "mask_international_gross_tonnage": 317,
+            "rejected_short_name": 56,
+            "rejected_known_collision": 14
+          },
+          "synthetic_sha256": "019613acbde360559b430edb3b7bf60875fe06ac3475794633a983fb1fc11f81",
+          "hangul_rows": 175,
+          "duplicate_of_real_rows": 0
+        },
+        "synthetic_pair_count": 115502,
+        "synthetic_pair_sha256": "e920f6d7a664f77bca93c95292dfa8b82d48ffaad7efc89fc359216dceb09ba5",
+        "base_training_pair_sha256": "ca7ad7d960cd11b2701ae371251c2eba3fb78a67f0e04d37e85cf4e2d9d5ecd6",
+        "base_training_pair_hash_reused": true,
+        "extra_feature_seconds": 39.77575610001804,
+        "base_real_training_candidate_recall": 0.9990631440884392,
+        "base_real_unique_feature_rows": 5337
+      },
+      "validation": {
+        "rows": 2429,
+        "seconds": 36.28099999995902,
+        "known_call_sign_fraction": 0.0,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 233,
+        "hangul_accuracy": 0.8798283261802575,
+        "hangul_candidate_recall": 0.9914163090128756,
+        "non_hangul_rows": 2196,
+        "non_hangul_accuracy": 0.9995446265938069,
+        "non_hangul_candidate_recall": 1.0,
+        "seen_rows": 0,
+        "seen_accuracy": null,
+        "seen_candidate_recall": null,
+        "unseen_rows": 2429,
+        "unseen_accuracy": 0.9880609304240429,
+        "unseen_candidate_recall": 0.9991766158913133,
+        "weighted_accuracy": 0.9157432163043223,
+        "metric_source": "local diagnostic; use distributed eval_kit for team ranking"
+      },
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "artifacts": {
+        "assets.json": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-03\\fold_4\\model\\assets.json",
+          "sha256": "b5a7cea82f7e159f16bd3ec4d444700b28eb644d18e3d0156a19d6b484a40991",
+          "bytes": 371737
+        },
+        "ranker.txt": {
+          "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-03\\fold_4\\model\\ranker.txt",
+          "sha256": "3361a9da6b77d479cd325e5ec96a1eb204c26a3f2167d111b3385b27ebfe1d08",
+          "bytes": 1254294
+        }
+      }
+    }
+  ],
+  "local_diagnostics": {
+    "metric_source": "local diagnostic; distributed team evaluation pending",
+    "folds": 5,
+    "hangul_rows": 1191,
+    "hangul_accuracy": 0.8900083963056256,
+    "hangul_candidate_recall": 0.9916036943744753,
+    "non_hangul_rows": 11031,
+    "non_hangul_accuracy": 0.9993654247121748,
+    "non_hangul_candidate_recall": 0.9997280391623606,
+    "seen_rows": 0,
+    "seen_accuracy": null,
+    "seen_candidate_recall": null,
+    "unseen_rows": 12222,
+    "unseen_accuracy": 0.9887088856161022,
+    "unseen_candidate_recall": 0.998936344297169,
+    "weighted_accuracy": 0.9228155048275903,
+    "candidate_recall_definition": "variable candidate-set coverage, including direct lookup; not Recall@K",
+    "training_seconds": 590.6969490000629,
+    "prediction_and_diagnostics_seconds": 175.15499999985332
+  },
+  "oof": {
+    "path": "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-03\\oof_AUG-03.csv",
+    "sha256": "f788fbc542328f423ceacc9301c92f58a9b9aad15055a94a422c9c2222dc8222",
+    "rows": 12222
+  },
+  "paired_study_wall_seconds": 989.5737437999924,
+  "team_evaluation": {
+    "command": [
+      "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "eval_kit/evaluate.py",
+      "--train",
+      "data/train.csv",
+      "--oof",
+      "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-03\\oof_AUG-03.csv",
+      "--id",
+      "AUG-03",
+      "--leaderboard",
+      "C:\\Projects\\ML_midterm\\reports\\augmentation_leaderboard.csv",
+      "--compare",
+      "C:\\Projects\\ML_midterm\\artifacts\\oof\\AUG-02\\oof_AUG-02.csv"
+    ],
+    "output": "C:\\Projects\\ML_midterm\\reports\\AUG-03_official_evaluation.txt",
+    "sha256": "ee94a35618e2406cdf6edd7aa9ff9b56593ad44ea8c51f6abff9c0c6878c62a9",
+    "exit_code": 0
+  }
+}

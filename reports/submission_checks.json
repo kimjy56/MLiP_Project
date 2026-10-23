@@ -7,11 +7,12 @@
     "model/name_processing.py",
     "model/ngram_retrieval.py",
     "model/ranker.txt",
-    "model/assets.json"
+    "model/assets.json",
+    "model/catboost.cbm"
   ],
-  "zip_bytes": 667005,
-  "uncompressed_bytes": 1757402,
-  "sha256": "8be1b6f90b3997e49984b1fd0e01856403facdac0422911ae16f9a1b725c0c15",
+  "zip_bytes": 941734,
+  "uncompressed_bytes": 2432899,
+  "sha256": "3cff51f35ba96814187f0865d5732136f061f939329a8ffe8ec88e1a77382296",
   "checks": [
     "clean extraction",
     "offline entry point",
@@ -25,27 +26,27 @@
     {
       "mode": "full",
       "rows": 60,
-      "seconds": 5.469000000040978
+      "seconds": 6.438000000081956
     },
     {
       "mode": "shuffled",
       "rows": 60,
-      "seconds": 5.452999999979511
+      "seconds": 6.280999999959022
     },
     {
       "mode": "subset",
       "rows": 15,
-      "seconds": 5.10899999999674
+      "seconds": 5.688000000081956
     },
     {
       "mode": "single",
       "rows": 1,
-      "seconds": 4.875
+      "seconds": 5.437999999965541
     },
     {
       "mode": "empty",
       "rows": 0,
-      "seconds": 4.85899999999674
+      "seconds": 5.39000000001397
     }
   ],
   "limitation": "Local Python 3.12 environment; not the official evaluation server."

@@ -1,0 +1,573 @@
+{
+  "experiment_id": "AS-SET-05",
+  "plan_id": "N3-leave-one-out-relative-representation",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-22T22:28:00+09:00",
+  "started_at_kst": "2026-10-22T22:34:31.844629+09:00",
+  "finished_at_kst": "2026-10-22T22:37:15.587753+09:00",
+  "purpose": "Leave-one-out relative representation (Experiment B vs Baseline A AS-SET-04)",
+  "hypothesis": "Replacing global set pooling [self, mean, max] with competitor-relative features [self, self - mean_others, self - max_others, flag] provides an invariant, competitor-sensitive signal without increasing model complexity.",
+  "baseline_experiment_id": "AS-SET-04",
+  "secondary_baselines": [
+    "AS-SET-02",
+    "AS-SET-03"
+  ],
+  "changed_factors": [
+    "CandidateSetNetwork context_mode changed from mean_max to leave_one_out",
+    "Context features: [self (32), self - mean_others (32), self - max_others (32), has_competitor_flag (1)] (total 97 dim vs 96 dim)",
+    "Leave-one-out handles single-candidate queries (diffs=0, flag=0), padding exclusion, and ties in top-2 maximum cleanly"
+  ],
+  "fixed_conditions": [
+    "identical training pairs and validation candidate sets from AS-SET-04 (natural candidate alignment max_candidates=30)",
+    "same G5-s42 5-fold split (12,222 rows)",
+    "same encoder (32-dim) and head (32-dim) architecture",
+    "same Adam optimizer, lr=0.001, weight_decay=0.001, seed=20261016, 25 epochs",
+    "same 64-query training batch grouping",
+    "no lookup (use_train_lookup=False)"
+  ],
+  "code": {
+    "git_revision_at_run": "dbfe8fc8f6b5afc003af28fd94b50def49f36bed",
+    "file_sha256": {
+      "experiments/compare_set_leave_one_out.py": "c5e7b4ceb7084c188f368a0065880dca7b328fb3d6e6a05490760b653c1f41c0",
+      "decision_models/set_model.py": "ad84b60c2bc0b357f2bc36919a124faae3a17844d5583894297d5655eb562d33",
+      "decision_models/matcher_adapter.py": "4e8766a1912feab63b3b1526fad197922bc149adf1d9b8a6ad5dd7605e81f8e6",
+      "model/matcher.py": "42698789d77fb4c788e65d66c95663400d42af063a981c9e0a10c5f5ccda3c83",
+      "model/name_processing.py": "983d9c3b06c7271a8aad10176e0d1242f8add6393cc3295251d449f72aaf0071",
+      "model/torch_indexer.py": "416f71fae6019247a3d24e81762a45773aea3f2c459243b909d4342c461d1598",
+      "train.py": "df78777f2ad549e0090626d4de3521466ecdf0ee1ce1e366c5df3c1b03fbed8d",
+      "train_oof.py": "14da1f5f20360d4f362f961e7c23e0eefcb82b240239b0c27df4b1be87b35ab4",
+      "handoff/as02/independent_noise.py": "34461b010a6870aad79515eb194f94568dd3c94c165a159c977a7c9ea0884a7c",
+      "eval_kit/evaluate.py": "2c728b357727f8e3962128030dde3bcb6fc6b230fcde287e336d3e0eb6c9f38e"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "split_id": "G5-s42",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 20261016,
+    "validation_rows": 12222
+  },
+  "retrieval": {
+    "channels": [
+      "S",
+      "P",
+      "T"
+    ],
+    "phonetic_search": 24,
+    "train_candidates": 30,
+    "predict_candidates": 30,
+    "algorithm_alignment": "prune_candidates_by_tonnage (same as AS-SET-04)"
+  },
+  "fold_results": [
+    {
+      "fold": 0,
+      "metrics": {
+        "weighted_accuracy": 0.9966491887788429,
+        "hangul_accuracy": 0.99581589958159,
+        "non_hangul_accuracy": 0.9985935302390999,
+        "hangul_correct": 238,
+        "hangul_rows": 239,
+        "non_hangul_correct": 2130,
+        "non_hangul_rows": 2133,
+        "candidate_recall_hangul": 1.0,
+        "candidate_recall_non_hangul": 0.9990623534927332
+      },
+      "training_seconds": 10.758846599957906,
+      "save_reload_seconds": 0.019531199941411614,
+      "cached_score_seconds": 0.3903791999910027,
+      "prediction_pipeline_seconds": 18.905201399931684,
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "cache_live_predictions_equal": true,
+      "loss_history": [
+        0.07505664678001658,
+        0.00631163869463487,
+        0.003922473788066844,
+        0.002981767938120376,
+        0.002541802537625488,
+        0.0023278698374897965,
+        0.0022156182981157278,
+        0.0020938142527132933,
+        0.0019713202437758666,
+        0.0019706878676635153,
+        0.0018765390381750135,
+        0.001840266095139037,
+        0.0019473474357078492,
+        0.001786311124080086,
+        0.001804016064148011,
+        0.0017630808451627367,
+        0.0018056997892649032,
+        0.0017028624229401578,
+        0.001792523901373647,
+        0.0016976890947534918,
+        0.0017517767046730311,
+        0.0016756352698009147,
+        0.0017453391547517254,
+        0.0017939212739172838,
+        0.0017436582690707988
+      ],
+      "model_bytes": 22408,
+      "artifacts": [
+        {
+          "path": "artifacts/AS-SET-05-hard/fold_0/set/set_config.json",
+          "bytes": 1915,
+          "sha256": "fad1492de983cda5c39df0bb5cf066140165850381fbabf99dfb7dd0c64da2c6"
+        },
+        {
+          "path": "artifacts/AS-SET-05-hard/fold_0/set/set_model.pt",
+          "bytes": 19733,
+          "sha256": "7579a68b661ad3540f401450d1b2ed2e02bc51d28cb13696f4600f959a394675"
+        },
+        {
+          "path": "artifacts/AS-SET-05-hard/fold_0/set/set_scaler.npz",
+          "bytes": 760,
+          "sha256": "8ca4c4620aa66971d188887be288821cc0d518e95575b766bb0ae5da15ec75e5"
+        }
+      ]
+    },
+    {
+      "fold": 1,
+      "metrics": {
+        "weighted_accuracy": 0.9997310623038995,
+        "hangul_accuracy": 1.0,
+        "non_hangul_accuracy": 0.9991035410129987,
+        "hangul_correct": 241,
+        "hangul_rows": 241,
+        "non_hangul_correct": 2229,
+        "non_hangul_rows": 2231,
+        "candidate_recall_hangul": 1.0,
+        "candidate_recall_non_hangul": 0.9995517705064993
+      },
+      "training_seconds": 9.33496050001122,
+      "save_reload_seconds": 0.01904889999423176,
+      "cached_score_seconds": 0.39819490001536906,
+      "prediction_pipeline_seconds": 20.185206399997696,
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "cache_live_predictions_equal": true,
+      "loss_history": [
+        0.06989251987676853,
+        0.006584423966751941,
+        0.004830187752979485,
+        0.0038726036800558403,
+        0.0034494911106241043,
+        0.003240838445601504,
+        0.0030878723738729883,
+        0.0030679545970434224,
+        0.002943627138415749,
+        0.0028804803016303296,
+        0.0029218051507691988,
+        0.002889100642945435,
+        0.002794195064723035,
+        0.0028449710817506544,
+        0.002688797105421588,
+        0.002886351540652532,
+        0.002659438578250108,
+        0.0027087413380744835,
+        0.002642482528325567,
+        0.0027318012651051963,
+        0.00270869677668376,
+        0.0027597208535670814,
+        0.0026046810143354293,
+        0.0027430743008185444,
+        0.0027120974613988073
+      ],
+      "model_bytes": 22405,
+      "artifacts": [
+        {
+          "path": "artifacts/AS-SET-05-hard/fold_1/set/set_config.json",
+          "bytes": 1912,
+          "sha256": "a9696a89bc707f1633c133bbff5638fde17b2e71733686ebcd889957de11b3d5"
+        },
+        {
+          "path": "artifacts/AS-SET-05-hard/fold_1/set/set_model.pt",
+          "bytes": 19733,
+          "sha256": "c11b54d4e6e8baacb47316ed632c0c69090453c50692e4d0f4cd22c2dfe914f4"
+        },
+        {
+          "path": "artifacts/AS-SET-05-hard/fold_1/set/set_scaler.npz",
+          "bytes": 760,
+          "sha256": "38d5e38b49b47ffb1ce106c97ef9b91f68cf9bb37b5f8a901372a3cca9ae7f92"
+        }
+      ]
+    },
+    {
+      "fold": 2,
+      "metrics": {
+        "weighted_accuracy": 0.9879027244057919,
+        "hangul_accuracy": 0.9829059829059829,
+        "non_hangul_accuracy": 0.9995617879053462,
+        "hangul_correct": 230,
+        "hangul_rows": 234,
+        "non_hangul_correct": 2281,
+        "non_hangul_rows": 2282,
+        "candidate_recall_hangul": 1.0,
+        "candidate_recall_non_hangul": 1.0
+      },
+      "training_seconds": 9.280158999958076,
+      "save_reload_seconds": 0.01583699998445809,
+      "cached_score_seconds": 0.419541799928993,
+      "prediction_pipeline_seconds": 20.21599980001338,
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "cache_live_predictions_equal": true,
+      "loss_history": [
+        0.07886053907580308,
+        0.006622290679110801,
+        0.0045010330865648505,
+        0.0036712879521738177,
+        0.0033550316576779564,
+        0.003056245017495994,
+        0.0030222548225620335,
+        0.0028909264785409077,
+        0.002853068182401391,
+        0.002821135984113016,
+        0.0027055945186602198,
+        0.002706743465690129,
+        0.0026604682237084997,
+        0.0026434902113654088,
+        0.0026380769278244263,
+        0.002592225812039877,
+        0.002541051339632556,
+        0.00264902168049219,
+        0.00254496507396461,
+        0.0026598284509895672,
+        0.0025828302644977713,
+        0.002554778498535401,
+        0.0026016080126202894,
+        0.0025774385562299332,
+        0.002520890434104441
+      ],
+      "model_bytes": 22404,
+      "artifacts": [
+        {
+          "path": "artifacts/AS-SET-05-hard/fold_2/set/set_config.json",
+          "bytes": 1911,
+          "sha256": "2b0a509242c55fb074311896cf20533730fad0f6cda2dfe90d347a904b8b4f2b"
+        },
+        {
+          "path": "artifacts/AS-SET-05-hard/fold_2/set/set_model.pt",
+          "bytes": 19733,
+          "sha256": "56fa72ce3911d92203208500b80ded51d40a0a3748a01d5ba6e4d6255df6ed49"
+        },
+        {
+          "path": "artifacts/AS-SET-05-hard/fold_2/set/set_scaler.npz",
+          "bytes": 760,
+          "sha256": "dfd35e9393c9315dea69cb1b2062272b64423d2ee946ce6d35ad37bce5968cfe"
+        }
+      ]
+    },
+    {
+      "fold": 3,
+      "metrics": {
+        "weighted_accuracy": 0.9883875412831669,
+        "hangul_accuracy": 0.9836065573770492,
+        "non_hangul_accuracy": 0.9995431703974418,
+        "hangul_correct": 240,
+        "hangul_rows": 244,
+        "non_hangul_correct": 2188,
+        "non_hangul_rows": 2189,
+        "candidate_recall_hangul": 1.0,
+        "candidate_recall_non_hangul": 1.0
+      },
+      "training_seconds": 8.924021899932995,
+      "save_reload_seconds": 0.01890949998050928,
+      "cached_score_seconds": 0.36960799992084503,
+      "prediction_pipeline_seconds": 20.239645099965855,
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "cache_live_predictions_equal": true,
+      "loss_history": [
+        0.07309196141513988,
+        0.006656814569615615,
+        0.004639931462065709,
+        0.0038375831080398534,
+        0.0034299340394442013,
+        0.003302574755355301,
+        0.0031012234014508896,
+        0.0030707493248523093,
+        0.002990619722206386,
+        0.002943898162049789,
+        0.00281959986474047,
+        0.0028177003853897195,
+        0.002821517918246808,
+        0.0027019716883797677,
+        0.0028084939762944385,
+        0.0027111526816158966,
+        0.0028077098553069097,
+        0.002807798280873909,
+        0.0026777441686665774,
+        0.002746506754348115,
+        0.002728900059606912,
+        0.0026184340733824874,
+        0.0027645567241428018,
+        0.002663164321851109,
+        0.00285713153241823
+      ],
+      "model_bytes": 22403,
+      "artifacts": [
+        {
+          "path": "artifacts/AS-SET-05-hard/fold_3/set/set_config.json",
+          "bytes": 1910,
+          "sha256": "b2d6e4890e9ed26b4072144ae9717f5169c37da80ee88eb2f75ebcdf7fb015e4"
+        },
+        {
+          "path": "artifacts/AS-SET-05-hard/fold_3/set/set_model.pt",
+          "bytes": 19733,
+          "sha256": "7202aa4bbe474137531be55de2071abe3aaadee35961ab99325c7d7c1b44e381"
+        },
+        {
+          "path": "artifacts/AS-SET-05-hard/fold_3/set/set_scaler.npz",
+          "bytes": 760,
+          "sha256": "d4aba08facad5fdcd2c93b3c64192905bd463c72e59509efc46a2b4ceab3138c"
+        }
+      ]
+    },
+    {
+      "fold": 4,
+      "metrics": {
+        "weighted_accuracy": 0.9934449682215811,
+        "hangul_accuracy": 0.9914163090128756,
+        "non_hangul_accuracy": 0.9981785063752276,
+        "hangul_correct": 231,
+        "hangul_rows": 233,
+        "non_hangul_correct": 2192,
+        "non_hangul_rows": 2196,
+        "candidate_recall_hangul": 1.0,
+        "candidate_recall_non_hangul": 1.0
+      },
+      "training_seconds": 8.848772099940106,
+      "save_reload_seconds": 0.014969000010751188,
+      "cached_score_seconds": 0.3725972999818623,
+      "prediction_pipeline_seconds": 20.197100799996406,
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "cache_live_predictions_equal": true,
+      "loss_history": [
+        0.0690280859504723,
+        0.006220871209075033,
+        0.0042607534222038335,
+        0.003467390084019332,
+        0.0032230004953331796,
+        0.0029261058463582227,
+        0.0028227329359919394,
+        0.002761428379302012,
+        0.002720604332752557,
+        0.0025928852912768074,
+        0.002548997628037743,
+        0.0024337549369570083,
+        0.002526617394499646,
+        0.002555896936096154,
+        0.0023948463752400794,
+        0.0024680557821692745,
+        0.0024853901355724336,
+        0.002373285339891934,
+        0.0024943755406274656,
+        0.002324544019988584,
+        0.0023937668441879564,
+        0.0023769111959457724,
+        0.002371333161019794,
+        0.0022154375266017017,
+        0.002352138562525854
+      ],
+      "model_bytes": 22405,
+      "artifacts": [
+        {
+          "path": "artifacts/AS-SET-05-hard/fold_4/set/set_config.json",
+          "bytes": 1912,
+          "sha256": "23a11ac157f69dd8cd9e5a2ec9281e0ae43d623f208fa00c1061044b63ec4ddd"
+        },
+        {
+          "path": "artifacts/AS-SET-05-hard/fold_4/set/set_model.pt",
+          "bytes": 19733,
+          "sha256": "a6978022ef6e10b732716e3f4c1d8cee2c4eb7a2ab5cb5127044fe5303a8f462"
+        },
+        {
+          "path": "artifacts/AS-SET-05-hard/fold_4/set/set_scaler.npz",
+          "bytes": 760,
+          "sha256": "8498ee569488903cbb30dcb9a6abba8a3f550f71ee9b850801317eac0f827859"
+        }
+      ]
+    }
+  ],
+  "metrics": {
+    "metric_source": "eval_kit/evaluate.py, local full G5",
+    "hangul_rows": 1191,
+    "non_hangul_rows": 11031,
+    "hangul_accuracy": 0.9907640638119227,
+    "non_hangul_accuracy": 0.9990028102619889,
+    "weighted_accuracy": 0.9932356877469426,
+    "candidate_recall_hangul": 1.0,
+    "candidate_recall_non_hangul": 0.9997280391623606,
+    "seen_vessel_fraction": 0.0
+  },
+  "cost": {
+    "training_seconds": 47.146760099800304,
+    "inference_seconds": 99.74315349990502,
+    "model_bytes": [
+      22408,
+      22405,
+      22404,
+      22403,
+      22405
+    ],
+    "timing_scope": "Training is optimizer only; inference is prediction pipeline over all 12,222 held-out rows across five folds."
+  },
+  "artifacts": [
+    {
+      "path": "artifacts/AS-SET-05-hard/oof_AS-SET-05.csv",
+      "bytes": 366702,
+      "sha256": "241bd4db6786e2f4e7c5ae26e42ca9d102826deae8d117714442efc1b8563411"
+    },
+    {
+      "path": "artifacts/AS-SET-05-hard/evaluation_AS-SET-05.json",
+      "bytes": 1456,
+      "sha256": "8c072059ca3ef220655a2d1dcebffff1608c42c06014d35d33118a00dafe07de"
+    }
+  ],
+  "features": [
+    "ratio",
+    "roman_ratio",
+    "phonetic_ratio",
+    "phonetic_partial",
+    "length_ratio",
+    "digits_equal",
+    "digits_missing",
+    "gross_gap",
+    "international_gap",
+    "best_gap",
+    "gross_exact",
+    "international_exact",
+    "gross_missing",
+    "international_missing",
+    "type_probability",
+    "flag_probability",
+    "flag_missing",
+    "is_hangul",
+    "name_length",
+    "catalog_name_length",
+    "number_sequence_equal",
+    "number_conflict",
+    "token_count_gap",
+    "token_roman_idf",
+    "token_roman_min",
+    "token_roman_last",
+    "weighted_phone_full",
+    "weighted_phone_token_idf",
+    "weighted_phone_token_min",
+    "weighted_phone_last",
+    "weighted_phone_residual",
+    "phone_shared_edge"
+  ],
+  "official_evaluation": {
+    "score": {
+      "h": 0.9907640638119227,
+      "nh": 0.9990028102619889,
+      "w": 0.9932356877469426,
+      "n_h": 1191,
+      "n_nh": 11031
+    },
+    "boot": {
+      "h": {
+        "est": 0.9907640638119227,
+        "lo": 0.97901960003187,
+        "hi": 0.9991533135856008,
+        "se": 0.0052045257050414686
+      },
+      "nh": {
+        "est": 0.9990028102619889,
+        "lo": 0.9983762865209562,
+        "hi": 0.999549956008111,
+        "se": 0.0002998377997697616
+      },
+      "w": {
+        "est": 0.9932356877469426,
+        "lo": 0.9851290778681228,
+        "hi": 0.999118497162014,
+        "se": 0.0036463251247119506
+      }
+    },
+    "compare": null,
+    "line": {
+      "date": "2026-10-22 22:37",
+      "id": "AS-SET-05",
+      "scheme": "G5-s42",
+      "oof": "oof_AS-SET-05.csv",
+      "oof_sha8": "241bd4db",
+      "rows": "12222",
+      "hangul": "0.99076",
+      "hangul_lo": "0.97902",
+      "hangul_hi": "0.99915",
+      "non_hangul": "0.99900",
+      "non_hangul_lo": "0.99838",
+      "non_hangul_hi": "0.99955",
+      "weighted": "0.99324",
+      "weighted_lo": "0.98513",
+      "weighted_hi": "0.99912",
+      "recall_h": "1.0000",
+      "recall_nh": "0.9997",
+      "compare_to": "",
+      "d_weighted": "",
+      "d_lo": "",
+      "d_hi": "",
+      "verdict": "",
+      "train_sec": "",
+      "infer_sec": "",
+      "zip_mb": "",
+      "note": "",
+      "checks": "train=ok;folds=G5-s42;foldcol=ok",
+      "eval_ver": "1.0"
+    },
+    "warnings": [],
+    "folds": "G5-s42"
+  },
+  "decision": "Completed; leave-one-out relative representation evaluated directly vs AS-SET-04"
+}

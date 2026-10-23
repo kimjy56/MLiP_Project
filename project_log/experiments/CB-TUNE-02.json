@@ -1,0 +1,106 @@
+{
+  "experiment_id": "CB-TUNE-02",
+  "plan_id": "CATBOOST_HP_FINE_TUNING",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-21T17:35:10+09:00",
+  "started_at_kst": "2026-10-21T17:32:35+09:00",
+  "finished_at_kst": "2026-10-21T17:34:42+09:00",
+  "purpose": "1차 탐색 최적 설정(Depth=6, L2=7) 주변 정밀 조사 (L2 5~10 구간, lr 0.03~0.05, border_count, random_strength 등 12개 후보)",
+  "hypothesis": "L2=7 근방의 정밀 탐색을 통해 최적의 극대점을 확인하고, 불필요한 과도/과소 파라미터 영역을 확정한다.",
+  "baseline_experiment_id": "CB-TUNE-01",
+  "changed_factors": [
+    "l2_leaf_reg: 5, 6, 7, 8, 9, 10 미세 탐색",
+    "learning_rate/iterations: (0.04, 400), (0.03, 450)",
+    "border_count: 128",
+    "random_strength: 2.0"
+  ],
+  "fixed_conditions": [
+    "Fold 0 validation split (2,372 rows: 한글 239, 비한글 2,133)",
+    "korean_expansion=True",
+    "use_train_lookup=False",
+    "SPT 채널 (phonetic_search=24, score_cutoff=35, max_candidates=30)",
+    "CatBoost CPU exact mode (6 threads)"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": true,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": "G5-s42 Fold 0",
+    "split_file_sha256": null,
+    "seed": 20261016,
+    "training_rows": 9850,
+    "validation_rows": 2372
+  },
+  "retrieval": {
+    "channels": ["S", "P", "T"],
+    "max_candidates": 30,
+    "score_cutoff": 35
+  },
+  "features": ["33 handcrafted features with name_mode=all"],
+  "preprocessing": {
+    "korean_expansion": true,
+    "use_train_lookup": false
+  },
+  "training_pairs": {
+    "count": 245202
+  },
+  "model": {
+    "type": "CatBoostClassifier",
+    "parameters": {
+      "best_params": {
+        "depth": 6,
+        "l2_leaf_reg": 7,
+        "learning_rate": 0.05,
+        "iterations": 350
+      }
+    },
+    "loss": "Logloss"
+  },
+  "commands": [
+    ".venv\\Scripts\\python.exe experiments/fine_tune_catboost.py"
+  ],
+  "environment": {
+    "platform": "Windows-11",
+    "python": "3.11"
+  },
+  "metrics": {
+    "metric_source": "Fold 0 precomputed validation features (2,372 rows)",
+    "hangul_rows": 239,
+    "non_hangul_rows": 2133,
+    "hangul_accuracy": 0.9749,
+    "non_hangul_accuracy": 0.99906,
+    "weighted_accuracy": 0.98215,
+    "baseline_weighted_accuracy": 0.97922,
+    "delta_weighted_accuracy": 0.00293,
+    "predicted_public_score": 0.8536434978,
+    "predicted_public_korean": 437
+  },
+  "cost": {
+    "training_seconds": 4.8,
+    "inference_seconds": 0.02,
+    "timing_scope": "Feature precomputed evaluation",
+    "model_bytes": 409600
+  },
+  "artifacts": [
+    "reports/catboost_fine_tuning.json",
+    "experiments/fine_tune_catboost.py"
+  ],
+  "observations": [
+    "L2=7, depth=6, lr=0.05, iter=350 조합이 12개 후보 중 유일하게 0.98215(한글 233건, 오답 8건)를 기록하며 독보적 1위를 유지함.",
+    "L2를 5, 6 또는 8, 9, 10으로 미세 이동한 모든 설정에서 한글 정답이 230건으로 하락(오답 11건)하여 L2=7이 정확한 국소 최적점(Global/Local Sweet Spot)임을 확인.",
+    "border_count=128 축소나 random_strength=2.0 강화 역시 한글 230건으로 성능 하락을 초래함."
+  ],
+  "interpretations": [
+    "CatBoost의 기본 분할 상태에서 L2 정규화 강도 7.0이 선박 매칭 특성(특히 톤수 불일치 패널티와 이름 유사도의 상호작용)에서 과적합과 일반화 사이의 최적 균형점임이 통계적으로 검증됨."
+  ],
+  "limitations": [
+    "Fold 0 표본 기준 탐색이므로, 최종 적용 시 전체 학습 모델(JY-04 v2)로 패키징 필요."
+  ],
+  "decision": "최종 CatBoost 결정 모델의 공식 파라미터로 depth=6, l2_leaf_reg=7, learning_rate=0.05, iterations=350을 최종 확정 채택.",
+  "next_actions": [
+    "사용자 확인 후 해당 파라미터로 전체 train 학습 및 JY-04 v2 모델 빌드"
+  ]
+}

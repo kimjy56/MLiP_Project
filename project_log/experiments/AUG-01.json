@@ -1,0 +1,136 @@
+{
+  "experiment_id": "AUG-01",
+  "plan_id": null,
+  "status": "failed",
+  "recorded_at_kst": "2026-10-21T12:38:37.642502+09:00",
+  "started_at_kst": "2026-10-21T12:38:37.788530+09:00",
+  "finished_at_kst": "2026-10-21T12:38:40.085098+09:00",
+  "purpose": "Paired actual-query group OOF: JY-01 configuration with/without weak train-only augmentation",
+  "hypothesis": "Weak name deletion and metadata masking may improve unseen-vessel generalization",
+  "baseline_experiment_id": "AUG-00",
+  "changed_factors": [
+    "0.5 row-selection probability; synthetic pair weights 0.5"
+  ],
+  "fixed_conditions": [
+    "same folds, real-row lookup assets, features, search, candidate selection, model hyperparameters"
+  ],
+  "code": {
+    "git_revision_at_run": "dbfe8fc8f6b5afc003af28fd94b50def49f36bed",
+    "dirty": true,
+    "file_sha256": {
+      "train.py": "ecba283f7b8fb3d014e8cdc5e73d97e0f8980a202e476133f18e12b803d8ae16",
+      "train_oof.py": "932b2470b93b3498960de5d0fa06d106c56f54e30656acfa63da9d4f5dc30ead",
+      "model/matcher.py": "e73b217432d24933f58b78c14a926ad22bf6fdd963ea66b6a1e31a833fb87f1f",
+      "model/name_processing.py": "c2b1e4170a33a757ca9fbf5ebe7578a76bdceb335f9906a45dddd16f8273910f",
+      "model/ngram_retrieval.py": "9c1e0e73a4b35c2723a30dd261bfc6561e9b465d9f4f3041e196c45f3e3ed59a",
+      "experiments/weak_augmentation.py": "affc438a389a312420e5256c6b3eaaa017ac2f95d667e7c741e974cfc6f45911",
+      "experiments/run_weak_augmentation.py": "5c83c9f557f25b0affd641f6c35a746b777cec4c0fdb12f3b7026ac13544b565",
+      "eval_kit/evaluate.py": "2c728b357727f8e3962128030dde3bcb6fc6b230fcde287e336d3e0eb6c9f38e"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "eval_kit/folds_group5_seed42.csv": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    },
+    "split_id": "G5-s42",
+    "seed": 42
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "LightGBM binary candidate classifier",
+    "parameters": {
+      "n_estimators": 350,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "max_depth": -1,
+      "min_child_samples": 40,
+      "colsample_bytree": 0.9,
+      "reg_lambda": 2,
+      "random_state": 20261016,
+      "n_jobs": 4,
+      "verbosity": -1,
+      "deterministic": true,
+      "force_col_wise": true
+    }
+  },
+  "commands": [
+    "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe",
+    "experiments/run_weak_augmentation.py"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "executable": "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "numpy": "1.26.4",
+      "pandas": "2.0.3",
+      "scikit-learn": "1.5.2",
+      "lightgbm": "4.6.0",
+      "rapidfuzz": "3.14.3",
+      "Unidecode": "1.4.0"
+    }
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "Previously used public train; development OOF, not independent final test.",
+    "Local .venv explicitly approved; Python differs from server.",
+    "Fixed weak corruption hypotheses, not learned test-distribution alignment.",
+    "Preserve existing positional negative-mining heuristic for paired comparability; no independent correction.",
+    "Official evaluator README locally v1.0; stricter project v1.1 requirements govern validation.",
+    "No catalog-only synthetic new IDs in this initial experiment."
+  ],
+  "failure": {
+    "type": "NameError",
+    "message": "name 'name_mode' is not defined"
+  },
+  "decision": null,
+  "next_actions": [],
+  "runtime": {
+    "VESSEL_SEARCH_ALGORITHM": "rapidfuzz",
+    "VESSEL_PHONE_SIMILARITY": "rapidfuzz",
+    "VESSEL_FEATURE_WORKERS": "4",
+    "VESSEL_TRAIN_THREADS": "4",
+    "VESSEL_PREDICT_WORKERS": "4",
+    "VESSEL_SCORE_THREADS": "1",
+    "VESSEL_TRAIN_CANDIDATES": "50",
+    "VESSEL_MAX_CANDIDATES": "0",
+    "VESSEL_PREDICT_CANDIDATES": "30",
+    "VESSEL_TRAIN_BATCH": "64",
+    "VESSEL_PREDICT_BATCH": "64",
+    "VESSEL_SEARCH_DEVICE": "cpu"
+  },
+  "fold_results": []
+}

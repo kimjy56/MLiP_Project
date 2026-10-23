@@ -14,7 +14,8 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
 FILES = ['script.py', 'requirements.txt', 'model/matcher.py',
-         'model/name_processing.py', 'model/ngram_retrieval.py', 'model/ranker.txt', 'model/assets.json']
+         'model/name_processing.py', 'model/ngram_retrieval.py', 'model/ranker.txt', 'model/assets.json',
+         'model/catboost.cbm']
 
 
 def main():

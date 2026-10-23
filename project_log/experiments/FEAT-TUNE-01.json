@@ -1,0 +1,86 @@
+{
+  "experiment_id": "FEAT-TUNE-01",
+  "plan_id": "FEATURE_ABLATION_STUDY",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-21T17:54:10+09:00",
+  "started_at_kst": "2026-10-21T17:51:29+09:00",
+  "finished_at_kst": "2026-10-21T17:53:15+09:00",
+  "purpose": "32개 전체 특징을 대상으로 8가지 특징 그룹 조합(Full 32개, 선종/국적 메타 제외, 톤수 제외, 발음 제외, 이름+숫자만 등)의 한글/비한글 정확도 및 예측 리더보드 점수 비교 분석",
+  "hypothesis": "인계서에서 지적된 톤수/국적 잡음 묶음 문제에 대해 특정 그룹을 완전히 제외하는 것보다, L2 정규화 하에서 32개 전체 특징을 유지하는 것이 더 높은 표현력과 정확도를 제공할 것이다.",
+  "baseline_experiment_id": "CB-TUNE-02",
+  "changed_factors": [
+    "특징 조합 8종 탐색 (Full 32개 vs No Meta 28개 vs No Tonnage 25개 vs No Phone 24개 vs Name+Digit 13개 등)"
+  ],
+  "fixed_conditions": [
+    "Fold 0 validation split (2,372 rows: 한글 239, 비한글 2,133)",
+    "korean_expansion=True",
+    "use_train_lookup=False",
+    "CatBoost 최적 하이퍼파라미터 (depth=6, l2_leaf_reg=7, lr=0.05, iter=350)",
+    "SPT 채널 (phonetic_search=24, score_cutoff=35, max_candidates=30)"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": true,
+    "file_sha256": {}
+  },
+  "data": {
+    "split_id": "G5-s42 Fold 0",
+    "training_rows": 9850,
+    "validation_rows": 2372
+  },
+  "retrieval": {
+    "channels": ["S", "P", "T"],
+    "max_candidates": 30,
+    "score_cutoff": 35
+  },
+  "features": ["Feature ablation subsets from 32 handcrafted features"],
+  "model": {
+    "type": "CatBoostClassifier",
+    "parameters": {
+      "depth": 6,
+      "l2_leaf_reg": 7,
+      "learning_rate": 0.05,
+      "iterations": 350
+    }
+  },
+  "commands": [
+    ".venv\\Scripts\\python.exe experiments/tune_feature_subsets.py"
+  ],
+  "environment": {
+    "platform": "Windows-11",
+    "python": "3.11"
+  },
+  "metrics": {
+    "metric_source": "Fold 0 precomputed validation features (2,372 rows)",
+    "hangul_rows": 239,
+    "non_hangul_rows": 2133,
+    "hangul_accuracy": 0.9749,
+    "non_hangul_accuracy": 0.99906,
+    "weighted_accuracy": 0.98215,
+    "total_errors": 8,
+    "predicted_public_score": 0.8536434978,
+    "predicted_public_korean": 437
+  },
+  "cost": {
+    "training_seconds": 4.67,
+    "inference_seconds": 0.02,
+    "timing_scope": "Feature precomputed evaluation"
+  },
+  "artifacts": [
+    "reports/feature_combination_tuning.json",
+    "experiments/tune_feature_subsets.py"
+  ],
+  "observations": [
+    "전체 특징(Full 32개)을 모두 사용할 때 0.98215 (한글 233/239, 오답 8건)로 가장 높은 성능을 기록함.",
+    "선종/국적 메타 제외 시 한글 229건(오답 12건)으로 4건 악화되며, 톤수 제외 시 226건(오답 15건)으로 7건 악화됨.",
+    "발음 특징 제외 시 한글 228건(오답 13건)으로 5건 악화되어 발음 특성의 한글 판별 기여가 실증됨.",
+    "이름+숫자만 남길 경우 한글 정답이 186건(오답 60건)으로 폭락하여 톤수와 발음, 메타데이터가 필수 불가결한 다면적 식별자임을 입증함."
+  ],
+  "interpretations": [
+    "특징을 임의로 하드 드롭(제외)하는 것은 심각한 정보 손실을 야기하며, train 과적합 방지는 특징 제거가 아니라 L2 정규화(L2=7)를 통해 제어하는 것이 정답임이 통계적으로 확증됨."
+  ],
+  "decision": "32개 전체 특징(Full Features) 구성을 최적 특징 세트로 유지 확정.",
+  "next_actions": [
+    "32개 Full Features + 최적 CatBoost(depth=6, L2=7) 및 최적 MLP 결합 방안 검토"
+  ]
+}

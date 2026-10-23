@@ -1,0 +1,863 @@
+{
+  "experiment_id": "AS-SET-03",
+  "plan_id": "N2-candidate-budget-30",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-22T21:49:30+09:00",
+  "started_at_kst": "2026-10-22T21:50:38.059263+09:00",
+  "finished_at_kst": "2026-10-22T21:59:56.585093+09:00",
+  "purpose": "Align training candidate set budget with inference candidate set budget (max 30 candidates) to test candidate pool consistency on SetDecisionModel",
+  "hypothesis": "Reducing training candidates from 50 to 30 reduces Train-Test discrepancy in candidate set statistics (mean/max), potentially improving set model ranking precision on G5",
+  "baseline_experiment_id": "AS-SET-02",
+  "changed_factors": [
+    "training candidate budget reduced from 50 to 30 (VESSEL_TRAIN_CANDIDATES=30)",
+    "explicit tracking of naturally retrieved vs gold-injected candidate sets"
+  ],
+  "fixed_conditions": [
+    "same G5-s42 5-fold split",
+    "same SetDecisionModel architecture (32-dim encoder, mean/max pooling, 32-dim head, 4,193 parameters)",
+    "same Adam optimizer, lr=0.001, weight_decay=0.001, seed=20261016, 25 epochs",
+    "same 64-query training batch grouping",
+    "same frozen G5 validation candidate sets (max 30 candidates, 12,222 rows)",
+    "no lookup (use_train_lookup=False)"
+  ],
+  "code": {
+    "git_revision_at_run": "dbfe8fc8f6b5afc003af28fd94b50def49f36bed",
+    "dirty": true,
+    "file_sha256": {
+      "experiments/compare_set_budget.py": "93565db7a0b079714ede00fbb0429ac7a6c4e16f5e6afa4eda836173dcf0ca2a",
+      "decision_models/set_model.py": "03d290928aa90443ded6c98da7e6b9bad01a24c0d657b010e1ad4fbdec2acc9f",
+      "decision_models/matcher_adapter.py": "4e8766a1912feab63b3b1526fad197922bc149adf1d9b8a6ad5dd7605e81f8e6",
+      "model/matcher.py": "42698789d77fb4c788e65d66c95663400d42af063a981c9e0a10c5f5ccda3c83",
+      "model/name_processing.py": "983d9c3b06c7271a8aad10176e0d1242f8add6393cc3295251d449f72aaf0071",
+      "model/torch_indexer.py": "416f71fae6019247a3d24e81762a45773aea3f2c459243b909d4342c461d1598",
+      "train.py": "df78777f2ad549e0090626d4de3521466ecdf0ee1ce1e366c5df3c1b03fbed8d",
+      "train_oof.py": "14da1f5f20360d4f362f961e7c23e0eefcb82b240239b0c27df4b1be87b35ab4",
+      "handoff/as02/independent_noise.py": "34461b010a6870aad79515eb194f94568dd3c94c165a159c977a7c9ea0884a7c",
+      "eval_kit/evaluate.py": "2c728b357727f8e3962128030dde3bcb6fc6b230fcde287e336d3e0eb6c9f38e"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "split_id": "G5-s42",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 20261016,
+    "training_rows": null,
+    "validation_rows": 12222
+  },
+  "retrieval": {
+    "channels": [
+      "S",
+      "P",
+      "T"
+    ],
+    "phonetic_search": 24,
+    "train_candidates": 30,
+    "predict_candidates": 30
+  },
+  "features": [
+    "ratio",
+    "roman_ratio",
+    "phonetic_ratio",
+    "phonetic_partial",
+    "length_ratio",
+    "digits_equal",
+    "digits_missing",
+    "gross_gap",
+    "international_gap",
+    "best_gap",
+    "gross_exact",
+    "international_exact",
+    "gross_missing",
+    "international_missing",
+    "type_probability",
+    "flag_probability",
+    "flag_missing",
+    "is_hangul",
+    "name_length",
+    "catalog_name_length",
+    "number_sequence_equal",
+    "number_conflict",
+    "token_count_gap",
+    "token_roman_idf",
+    "token_roman_min",
+    "token_roman_last",
+    "weighted_phone_full",
+    "weighted_phone_token_idf",
+    "weighted_phone_token_min",
+    "weighted_phone_last",
+    "weighted_phone_residual",
+    "phone_shared_edge"
+  ],
+  "preprocessing": {
+    "name_mode": "all",
+    "korean_expansion": true,
+    "hangul_soft_meta": true,
+    "train_lookup": false,
+    "augmentation": "existing non-Hangul independent_noise, seed 42+fold"
+  },
+  "training_pairs": {
+    "positive_rule": "target_vessel_id match",
+    "negative_rule": "retrieved catalog candidates (hard negatives by text/phonetic/tonnage similarity)",
+    "count": null
+  },
+  "model": {
+    "type": "set",
+    "parameters": {
+      "embedding_dim": 32,
+      "hidden_dim": 32,
+      "epochs": 25,
+      "batch_size_queries": 64,
+      "lr": 0.001,
+      "weight_decay": 0.001,
+      "seed": 20261016,
+      "parameter_count": 4193
+    },
+    "loss": "weighted candidate-pair BCE"
+  },
+  "commands": [
+    ".venv/Scripts/python.exe -X utf8 experiments/compare_set_budget.py --device cuda"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows",
+    "training_device": "cuda",
+    "inference_device": "cpu"
+  },
+  "metrics": {
+    "metric_source": "eval_kit/evaluate.py, local full G5",
+    "hangul_rows": 1191,
+    "non_hangul_rows": 11031,
+    "hangul_accuracy": 0.9974811083123426,
+    "non_hangul_accuracy": 0.9991841174870819,
+    "weighted_accuracy": 0.9979920110647644,
+    "candidate_recall_hangul": 1.0,
+    "candidate_recall_non_hangul": 0.9997280391623606,
+    "seen_vessel_fraction": 0.0
+  },
+  "cost": {
+    "training_seconds": 41.01753330021165,
+    "inference_seconds": 98.98486830003094,
+    "timing_scope": "Training is optimizer only; inference is candidate search/features/scoring over all 12,222 held-out rows across five folds. CSV load, model/index load and file save separate; not official-server time.",
+    "peak_memory_bytes": null,
+    "model_bytes": [
+      22174,
+      22175,
+      22162,
+      22161,
+      22168
+    ],
+    "assets_bytes": [
+      592510,
+      592306,
+      589771,
+      591778,
+      590437
+    ],
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    {
+      "path": "artifacts/AS-SET-03/oof_AS-SET-03.csv",
+      "sha256": "fcb5e4d8e3d64e6521dfb208cc0e912375610ec39a0d120230f6fd984ec5df34",
+      "bytes": 366702
+    },
+    {
+      "path": "artifacts/AS-SET-03/evaluation_AS-SET-03.json",
+      "sha256": "c714c489b2743acabce5fe6356b19c26bd21fde11c0d7f2081af45a7fc020d87",
+      "bytes": 2061
+    }
+  ],
+  "error_cases_file": "artifacts/AS-SET-03/changed_predictions.csv",
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "Development G5 evaluation only; no Public test estimate",
+    "User-authorized Python 3.11.15 execution",
+    "Focuses purely on candidate budget alignment (30 vs 50); architecture remains identical to AS-SET-02"
+  ],
+  "failure": null,
+  "decision": "Completed; comparison vs AS-SET-02 available",
+  "next_actions": [],
+  "fold_results": [
+    {
+      "fold": 0,
+      "metrics": {
+        "rows": 2372,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 239,
+        "hangul_correct": 238,
+        "hangul_accuracy": 0.99581589958159,
+        "hangul_candidate_coverage": 1.0,
+        "hangul_candidate_misses": 0,
+        "hangul_selection_errors": 1,
+        "non_hangul_rows": 2133,
+        "non_hangul_correct": 2130,
+        "non_hangul_accuracy": 0.9985935302390999,
+        "non_hangul_candidate_coverage": 0.9990623534927332,
+        "non_hangul_candidate_misses": 2,
+        "non_hangul_selection_errors": 1,
+        "weighted_accuracy": 0.9966491887788429
+      },
+      "training_seconds": 9.98899410001468,
+      "save_reload_seconds": 0.02101789996959269,
+      "cached_score_seconds": 0.2044017999432981,
+      "index_load_seconds": 2.4396785999415442,
+      "prediction_pipeline_seconds": 18.11429539998062,
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "cache_live_predictions_equal": true,
+      "loss_history": [
+        0.11836088372731651,
+        0.012464322436665402,
+        0.007354379986926848,
+        0.005747507777649702,
+        0.005153738511565328,
+        0.004537197969710278,
+        0.00430310385302278,
+        0.004229560077719503,
+        0.003996796909629521,
+        0.003690360343807289,
+        0.003569458169536312,
+        0.0038124750814829953,
+        0.003518395605516823,
+        0.0035169902221940373,
+        0.0034371178480430797,
+        0.00332032540683238,
+        0.0034057202286684575,
+        0.0033962733312994237,
+        0.0034215941008348813,
+        0.0032748613218976856,
+        0.003552139408346214,
+        0.003460862246468588,
+        0.003325920698478681,
+        0.0034286120488846946,
+        0.003246047216326591
+      ],
+      "model_bytes": 22174,
+      "assets_bytes": 592510,
+      "artifacts": [
+        {
+          "path": "artifacts/AS-SET-03/fold_0/set/set_config.json",
+          "sha256": "36b515543b1192cb501b039072efc8213db011f9977aea8e2f659458a23f499c",
+          "bytes": 1809
+        },
+        {
+          "path": "artifacts/AS-SET-03/fold_0/set/set_model.pt",
+          "sha256": "b46796913d836ce8d2e430cbcd394b15f0bb63327ff7f0a0288b037448f61cb4",
+          "bytes": 19605
+        },
+        {
+          "path": "artifacts/AS-SET-03/fold_0/set/set_scaler.npz",
+          "sha256": "8ca4c4620aa66971d188887be288821cc0d518e95575b766bb0ae5da15ec75e5",
+          "bytes": 760
+        },
+        {
+          "path": "artifacts/AS-SET-03/fold_0/set/assets.json",
+          "sha256": "9e1ed18c7628acb0741a358d26ce0d10981aeded50c56dd83d7064c59a143d3b",
+          "bytes": 592510
+        }
+      ]
+    },
+    {
+      "fold": 1,
+      "metrics": {
+        "rows": 2472,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 241,
+        "hangul_correct": 241,
+        "hangul_accuracy": 1.0,
+        "hangul_candidate_coverage": 1.0,
+        "hangul_candidate_misses": 0,
+        "hangul_selection_errors": 0,
+        "non_hangul_rows": 2231,
+        "non_hangul_correct": 2229,
+        "non_hangul_accuracy": 0.9991035410129987,
+        "non_hangul_candidate_coverage": 0.9995517705064993,
+        "non_hangul_candidate_misses": 1,
+        "non_hangul_selection_errors": 1,
+        "weighted_accuracy": 0.9997310623038995
+      },
+      "training_seconds": 7.9981339001096785,
+      "save_reload_seconds": 0.018682699999772012,
+      "cached_score_seconds": 0.20725400000810623,
+      "index_load_seconds": 2.4126653000712395,
+      "prediction_pipeline_seconds": 19.78526559995953,
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "cache_live_predictions_equal": true,
+      "loss_history": [
+        0.11389137723708552,
+        0.012140085119036229,
+        0.0073406707992868265,
+        0.006210418007288338,
+        0.005591654854730026,
+        0.005646095904430842,
+        0.005050906093673991,
+        0.0047239839524419866,
+        0.0047067304165385165,
+        0.004601678774027104,
+        0.004481469326705552,
+        0.004497764737324152,
+        0.004420844830482166,
+        0.0043041708052198435,
+        0.0044864366259418625,
+        0.004214910478096975,
+        0.004158432799784221,
+        0.0041020039657661015,
+        0.004212152201902627,
+        0.004266653553462988,
+        0.004609316207865863,
+        0.004392949768252132,
+        0.0040466531315933064,
+        0.004197449967875266,
+        0.004179406200143086
+      ],
+      "model_bytes": 22175,
+      "assets_bytes": 592306,
+      "artifacts": [
+        {
+          "path": "artifacts/AS-SET-03/fold_1/set/set_config.json",
+          "sha256": "1133d2ea5d1782021fd3124f97adc09b1f7bf5ce9a613aa67c8cff7b95f94682",
+          "bytes": 1810
+        },
+        {
+          "path": "artifacts/AS-SET-03/fold_1/set/set_model.pt",
+          "sha256": "ffa33b293cc37942a87fbad2095f704b92e408d33abbffcbadfc1500f83f2221",
+          "bytes": 19605
+        },
+        {
+          "path": "artifacts/AS-SET-03/fold_1/set/set_scaler.npz",
+          "sha256": "38d5e38b49b47ffb1ce106c97ef9b91f68cf9bb37b5f8a901372a3cca9ae7f92",
+          "bytes": 760
+        },
+        {
+          "path": "artifacts/AS-SET-03/fold_1/set/assets.json",
+          "sha256": "e3321ff3da70ca26c855d1140b21ebe0702c178c7cbec20d959f3cd631a3c4de",
+          "bytes": 592306
+        }
+      ]
+    },
+    {
+      "fold": 2,
+      "metrics": {
+        "rows": 2516,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 234,
+        "hangul_correct": 234,
+        "hangul_accuracy": 1.0,
+        "hangul_candidate_coverage": 1.0,
+        "hangul_candidate_misses": 0,
+        "hangul_selection_errors": 0,
+        "non_hangul_rows": 2282,
+        "non_hangul_correct": 2281,
+        "non_hangul_accuracy": 0.9995617879053462,
+        "non_hangul_candidate_coverage": 1.0,
+        "non_hangul_candidate_misses": 0,
+        "non_hangul_selection_errors": 1,
+        "weighted_accuracy": 0.9998685363716038
+      },
+      "training_seconds": 7.240236500045285,
+      "save_reload_seconds": 0.016985599999316037,
+      "cached_score_seconds": 0.18838089995551854,
+      "index_load_seconds": 2.3726045000366867,
+      "prediction_pipeline_seconds": 19.960461700102314,
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "cache_live_predictions_equal": true,
+      "loss_history": [
+        0.1244327931637454,
+        0.014609282025210947,
+        0.008688082055404162,
+        0.006858615045384072,
+        0.006185680961361494,
+        0.005495385439161512,
+        0.005257710404205632,
+        0.004957035829999573,
+        0.004816998291569314,
+        0.004704295239912283,
+        0.004556129513779466,
+        0.004437092600478506,
+        0.004415533321199597,
+        0.004382322755745069,
+        0.004423443542625,
+        0.004273016356977157,
+        0.004327384402905197,
+        0.004407598730733834,
+        0.004085360856167877,
+        0.004114408355839919,
+        0.004115203494233978,
+        0.004036585563222136,
+        0.004055312262265201,
+        0.004043885200291702,
+        0.0040122595572313
+      ],
+      "model_bytes": 22162,
+      "assets_bytes": 589771,
+      "artifacts": [
+        {
+          "path": "artifacts/AS-SET-03/fold_2/set/set_config.json",
+          "sha256": "f3ed89563e26af7fa1486342b1fad4300c145501aaba9ac234f7dd41c37dfcaa",
+          "bytes": 1797
+        },
+        {
+          "path": "artifacts/AS-SET-03/fold_2/set/set_model.pt",
+          "sha256": "2c4e5e04aeb6a41128f0cf6cac9cc0090feae0e6f9846e82761729f3fb0aff3d",
+          "bytes": 19605
+        },
+        {
+          "path": "artifacts/AS-SET-03/fold_2/set/set_scaler.npz",
+          "sha256": "dfd35e9393c9315dea69cb1b2062272b64423d2ee946ce6d35ad37bce5968cfe",
+          "bytes": 760
+        },
+        {
+          "path": "artifacts/AS-SET-03/fold_2/set/assets.json",
+          "sha256": "1c0d3194bf5b02bc494b985487785631da0e15b17a9a2402df7545d17f53eae6",
+          "bytes": 589771
+        }
+      ]
+    },
+    {
+      "fold": 3,
+      "metrics": {
+        "rows": 2433,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 244,
+        "hangul_correct": 244,
+        "hangul_accuracy": 1.0,
+        "hangul_candidate_coverage": 1.0,
+        "hangul_candidate_misses": 0,
+        "hangul_selection_errors": 0,
+        "non_hangul_rows": 2189,
+        "non_hangul_correct": 2188,
+        "non_hangul_accuracy": 0.9995431703974418,
+        "non_hangul_candidate_coverage": 1.0,
+        "non_hangul_candidate_misses": 0,
+        "non_hangul_selection_errors": 1,
+        "weighted_accuracy": 0.9998629511192325
+      },
+      "training_seconds": 7.847348800045438,
+      "save_reload_seconds": 0.01699099992401898,
+      "cached_score_seconds": 0.2045885999687016,
+      "index_load_seconds": 2.437442700029351,
+      "prediction_pipeline_seconds": 20.26983400003519,
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "cache_live_predictions_equal": true,
+      "loss_history": [
+        0.114210469224809,
+        0.012728586483259734,
+        0.007937210268730155,
+        0.006397378134429777,
+        0.005619605372494976,
+        0.005646543412201226,
+        0.00503821992796648,
+        0.00490841128883962,
+        0.004626228277069829,
+        0.0044991452069085185,
+        0.004411157305625479,
+        0.00447512371253726,
+        0.004455777386438917,
+        0.004228293132699274,
+        0.00437893850847374,
+        0.004212945839324461,
+        0.004145545143688775,
+        0.004673242490145773,
+        0.004084785950054395,
+        0.004792231902624142,
+        0.004185038386911346,
+        0.00393089875945607,
+        0.004185113387021751,
+        0.004049325448201655,
+        0.00412403065292696
+      ],
+      "model_bytes": 22161,
+      "assets_bytes": 591778,
+      "artifacts": [
+        {
+          "path": "artifacts/AS-SET-03/fold_3/set/set_config.json",
+          "sha256": "9ec48fe04f7bcecc8b0e805135de5a04ed2ee4e7998f433b0d304863df132c84",
+          "bytes": 1796
+        },
+        {
+          "path": "artifacts/AS-SET-03/fold_3/set/set_model.pt",
+          "sha256": "61061a6c0161555c89bb882f6046ec66a4a9f4f70ad78e910a53d1d478f4587b",
+          "bytes": 19605
+        },
+        {
+          "path": "artifacts/AS-SET-03/fold_3/set/set_scaler.npz",
+          "sha256": "d4aba08facad5fdcd2c93b3c64192905bd463c72e59509efc46a2b4ceab3138c",
+          "bytes": 760
+        },
+        {
+          "path": "artifacts/AS-SET-03/fold_3/set/assets.json",
+          "sha256": "7e5572c7b813e2a41fca8ea3e9ec8458f3f106dce2cb19ca5d4c483d9f6d6e85",
+          "bytes": 591778
+        }
+      ]
+    },
+    {
+      "fold": 4,
+      "metrics": {
+        "rows": 2429,
+        "seen_vessel_fraction": 0.0,
+        "hangul_rows": 233,
+        "hangul_correct": 231,
+        "hangul_accuracy": 0.9914163090128756,
+        "hangul_candidate_coverage": 1.0,
+        "hangul_candidate_misses": 0,
+        "hangul_selection_errors": 2,
+        "non_hangul_rows": 2196,
+        "non_hangul_correct": 2194,
+        "non_hangul_accuracy": 0.9990892531876139,
+        "non_hangul_candidate_coverage": 1.0,
+        "non_hangul_candidate_misses": 0,
+        "non_hangul_selection_errors": 2,
+        "weighted_accuracy": 0.993718192265297
+      },
+      "training_seconds": 7.942819999996573,
+      "save_reload_seconds": 0.018966900068335235,
+      "cached_score_seconds": 0.18396369996480644,
+      "index_load_seconds": 2.3894492000108585,
+      "prediction_pipeline_seconds": 20.855011599953286,
+      "row_independence": {
+        "passed": true,
+        "rows": 12,
+        "checks": [
+          "repeat",
+          "reversed",
+          "subset",
+          "single",
+          "empty"
+        ]
+      },
+      "cache_live_predictions_equal": true,
+      "loss_history": [
+        0.11051993042270387,
+        0.011953413064031167,
+        0.007280159123379542,
+        0.006133132280498968,
+        0.005697799895596912,
+        0.004963026500826677,
+        0.004828823972995696,
+        0.00447596940154509,
+        0.004574636717313355,
+        0.004670208892582503,
+        0.00423111144364237,
+        0.004277927475033288,
+        0.00445156243822305,
+        0.0039916909597674044,
+        0.003957373837013438,
+        0.004070289575654892,
+        0.004054004571549523,
+        0.003926353334896502,
+        0.003967007081498805,
+        0.00404540025680999,
+        0.0037325631047513356,
+        0.003802408832085412,
+        0.0038413438043905057,
+        0.0041589676640747236,
+        0.003797345708183342
+      ],
+      "model_bytes": 22168,
+      "assets_bytes": 590437,
+      "artifacts": [
+        {
+          "path": "artifacts/AS-SET-03/fold_4/set/set_config.json",
+          "sha256": "25e4acd523951d27173f608edf353d2fac247f3925137ee3a2238fd6818fbd94",
+          "bytes": 1803
+        },
+        {
+          "path": "artifacts/AS-SET-03/fold_4/set/set_model.pt",
+          "sha256": "9f3b5046e02e149eda48187df65672fe9138f4d0ce93a5dfe2d2632b2ecd27e4",
+          "bytes": 19605
+        },
+        {
+          "path": "artifacts/AS-SET-03/fold_4/set/set_scaler.npz",
+          "sha256": "8498ee569488903cbb30dcb9a6abba8a3f550f71ee9b850801317eac0f827859",
+          "bytes": 760
+        },
+        {
+          "path": "artifacts/AS-SET-03/fold_4/set/assets.json",
+          "sha256": "cdf662220ddde4015fdadfe318903ef168dbfae0b6ba3214c611b8a64dcefee9",
+          "bytes": 590437
+        }
+      ]
+    }
+  ],
+  "official_evaluation": {
+    "score": {
+      "h": 0.9974811083123426,
+      "nh": 0.9991841174870819,
+      "w": 0.9979920110647644,
+      "n_h": 1191,
+      "n_nh": 11031
+    },
+    "boot": {
+      "h": {
+        "est": 0.9974811083123426,
+        "lo": 0.9931448157669237,
+        "hi": 1.0,
+        "se": 0.0019216604658572327
+      },
+      "nh": {
+        "est": 0.9991841174870819,
+        "lo": 0.9986432552760579,
+        "hi": 0.999725010289625,
+        "se": 0.00027133463122458787
+      },
+      "w": {
+        "est": 0.9979920110647644,
+        "lo": 0.9949269162784982,
+        "hi": 0.9998362370791053,
+        "se": 0.0013463065673921838
+      }
+    },
+    "compare": {
+      "d": {
+        "h": 0.0,
+        "nh": 0.0,
+        "w": 0.0
+      },
+      "boot": {
+        "h": {
+          "est": 0.0,
+          "lo": 0.0,
+          "hi": 0.0,
+          "se": 0.0
+        },
+        "nh": {
+          "est": 0.0,
+          "lo": -0.00027164193992172783,
+          "hi": 0.00027066224332611167,
+          "se": 0.00012871345853251466
+        },
+        "w": {
+          "est": 0.0,
+          "lo": -8.149258197651835e-05,
+          "hi": 8.119867299783352e-05,
+          "se": 3.8614037559754406e-05
+        }
+      },
+      "verdict": "동등",
+      "n_common": 12222
+    },
+    "line": {
+      "date": "2026-10-22 21:59",
+      "id": "AS-SET-03",
+      "scheme": "G5-s42",
+      "oof": "oof_AS-SET-03.csv",
+      "oof_sha8": "fcb5e4d8",
+      "rows": "12222",
+      "hangul": "0.99748",
+      "hangul_lo": "0.99314",
+      "hangul_hi": "1.00000",
+      "non_hangul": "0.99918",
+      "non_hangul_lo": "0.99864",
+      "non_hangul_hi": "0.99973",
+      "weighted": "0.99799",
+      "weighted_lo": "0.99493",
+      "weighted_hi": "0.99984",
+      "recall_h": "1.0000",
+      "recall_nh": "0.9997",
+      "compare_to": "oof_AS-SET-02.csv",
+      "d_weighted": "0.00000",
+      "d_lo": "-0.00008",
+      "d_hi": "0.00008",
+      "verdict": "동등",
+      "train_sec": "",
+      "infer_sec": "",
+      "zip_mb": "",
+      "note": "",
+      "checks": "train=ok;folds=G5-s42;foldcol=ok",
+      "eval_ver": "1.0"
+    },
+    "warnings": [],
+    "folds": "G5-s42"
+  },
+  "shared_folds": [
+    {
+      "fold": 0,
+      "real_training_rows": 9850,
+      "augmented_training_rows": 18748,
+      "validation_rows": 2372,
+      "pairs": {
+        "queries": 10660,
+        "pairs": 284897,
+        "retrieved_before_gold_insertion_fraction": 0.9994371482176361,
+        "natural_queries": 10654,
+        "injected_queries": 6,
+        "avg_candidates_per_query": 26.72579737335835,
+        "max_candidates_per_query": 31,
+        "min_candidates_per_query": 24
+      },
+      "preparation_seconds": 2.8450041000032797,
+      "training_candidate_feature_seconds": 73.70326139999088,
+      "validation_candidate_feature_seconds": 0.0,
+      "train_cache": {
+        "path": "artifacts/AS-SET-03/fold_0/train_pairs.npz",
+        "sha256": "a141a4e763f16c36b6cfe5ff164a1c76b933b1ffb5d234af9db9086864181f11",
+        "bytes": 7535581
+      },
+      "validation_cache": {
+        "path": "artifacts/AS-SET-03/fold_0/validation_pairs.npz",
+        "sha256": "7e2928be59e7293511041458c4897278634feaa4330983bdf68076ed345c94db",
+        "bytes": 2152273
+      }
+    },
+    {
+      "fold": 1,
+      "real_training_rows": 9750,
+      "augmented_training_rows": 18550,
+      "validation_rows": 2472,
+      "pairs": {
+        "queries": 10574,
+        "pairs": 282570,
+        "retrieved_before_gold_insertion_fraction": 0.9996217136372234,
+        "natural_queries": 10570,
+        "injected_queries": 4,
+        "avg_candidates_per_query": 26.723094382447513,
+        "max_candidates_per_query": 30,
+        "min_candidates_per_query": 24
+      },
+      "preparation_seconds": 2.7727285999571905,
+      "training_candidate_feature_seconds": 73.16913369996473,
+      "validation_candidate_feature_seconds": 0.0,
+      "train_cache": {
+        "path": "artifacts/AS-SET-03/fold_1/train_pairs.npz",
+        "sha256": "e24d06c275cf76064a04882f030126ddc55a07fae9ef08e05ab80fc2a50804c8",
+        "bytes": 7468827
+      },
+      "validation_cache": {
+        "path": "artifacts/AS-SET-03/fold_1/validation_pairs.npz",
+        "sha256": "b8b85a36956a65710f2f878026885713486d252c70cd1e8b1d0d73977379eec9",
+        "bytes": 2227150
+      }
+    },
+    {
+      "fold": 2,
+      "real_training_rows": 9706,
+      "augmented_training_rows": 18455,
+      "validation_rows": 2516,
+      "pairs": {
+        "queries": 10593,
+        "pairs": 283335,
+        "retrieved_before_gold_insertion_fraction": 0.9995279901821957,
+        "natural_queries": 10588,
+        "injected_queries": 5,
+        "avg_candidates_per_query": 26.747380345511186,
+        "max_candidates_per_query": 30,
+        "min_candidates_per_query": 24
+      },
+      "preparation_seconds": 3.216375599964522,
+      "training_candidate_feature_seconds": 74.33772409998346,
+      "validation_candidate_feature_seconds": 0.0,
+      "train_cache": {
+        "path": "artifacts/AS-SET-03/fold_2/train_pairs.npz",
+        "sha256": "e0bda0d26990f9d67d1e1b6affedd8b1922ae4de60a90cc747bed8ec20c9cc1c",
+        "bytes": 7490301
+      },
+      "validation_cache": {
+        "path": "artifacts/AS-SET-03/fold_2/validation_pairs.npz",
+        "sha256": "3f03bd32fd0fcb484578096e51c5de66fcd1e8c3ffa4361ac8c7dd431417ad62",
+        "bytes": 2273628
+      }
+    },
+    {
+      "fold": 3,
+      "real_training_rows": 9789,
+      "augmented_training_rows": 18631,
+      "validation_rows": 2433,
+      "pairs": {
+        "queries": 10630,
+        "pairs": 284227,
+        "retrieved_before_gold_insertion_fraction": 0.9993414863593603,
+        "natural_queries": 10623,
+        "injected_queries": 7,
+        "avg_candidates_per_query": 26.7381937911571,
+        "max_candidates_per_query": 30,
+        "min_candidates_per_query": 24
+      },
+      "preparation_seconds": 2.83496390003711,
+      "training_candidate_feature_seconds": 76.86189970001578,
+      "validation_candidate_feature_seconds": 0.0,
+      "train_cache": {
+        "path": "artifacts/AS-SET-03/fold_3/train_pairs.npz",
+        "sha256": "dfa556f1be5f9efff2b2ab0691e1e793856d5be005a3fb14c4b63b516e0c2b4c",
+        "bytes": 7501007
+      },
+      "validation_cache": {
+        "path": "artifacts/AS-SET-03/fold_3/validation_pairs.npz",
+        "sha256": "ead8c04dd76a4a886283b31b69296d236a63c82a47197f16870e26796f4a6be5",
+        "bytes": 2200111
+      }
+    },
+    {
+      "fold": 4,
+      "real_training_rows": 9793,
+      "augmented_training_rows": 18628,
+      "validation_rows": 2429,
+      "pairs": {
+        "queries": 10683,
+        "pairs": 285431,
+        "retrieved_before_gold_insertion_fraction": 0.9993447533464382,
+        "natural_queries": 10676,
+        "injected_queries": 7,
+        "avg_candidates_per_query": 26.718243938968456,
+        "max_candidates_per_query": 31,
+        "min_candidates_per_query": 24
+      },
+      "preparation_seconds": 3.057013199897483,
+      "training_candidate_feature_seconds": 83.95380830008071,
+      "validation_candidate_feature_seconds": 0.0,
+      "train_cache": {
+        "path": "artifacts/AS-SET-03/fold_4/train_pairs.npz",
+        "sha256": "a62a76519ca15d40525d9d2148eaa73909c29c29334df277ade1990a366de69f",
+        "bytes": 7538801
+      },
+      "validation_cache": {
+        "path": "artifacts/AS-SET-03/fold_4/validation_pairs.npz",
+        "sha256": "d1fac39a252ee5b7c45ed6b477426858b721b7ba852e517efb97e4194b00a129",
+        "bytes": 2197564
+      }
+    }
+  ]
+}

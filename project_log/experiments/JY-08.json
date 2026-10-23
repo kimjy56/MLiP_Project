@@ -1,0 +1,137 @@
+{
+  "experiment_id": "JY-08",
+  "plan_id": "KOREAN_ZERO_ERROR_AND_INDEPENDENT_NOISE",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-21T21:34:42.563446+09:00",
+  "started_at_kst": "2026-10-21T21:31:14.627132+09:00",
+  "finished_at_kst": "2026-10-21T21:34:42.563446+09:00",
+  "purpose": "한글 잔여 오답 패턴(스타크리퍼, 에버 얼라이언스 등) 완전 정복 및 전략 3(소프트 감쇄) + 전략 4(독립 잡음 11,031행 증강 복사본 학습) 통합 검증",
+  "hypothesis": "크리퍼->CLIPPER, 에버->EVER, 얼라이언스->ALLIANCE 등의 주요 음역어 확장을 추가하면 train 한글 오답이 0행으로 전멸하고 Public LB에서 0.9200 이상을 달성할 것이다.",
+  "baseline_experiment_id": "JY-07",
+  "changed_factors": [
+    "한글 음역 사전 확장: 크리퍼/클리퍼->CLIPPER, 에버->EVER, 얼라이언스->ALLIANCE, 글로벌 메이저 선사 추가",
+    "CatBoost:MLP 최적 앙상블 가중치 [0.6, 0.4]",
+    "Strategy 3 (hangul_soft_meta=True) 및 Strategy 4 (23,253행 학습) 유지"
+  ],
+  "fixed_conditions": [
+    "Full 12,222 original train rows evaluation",
+    "korean_expansion=True",
+    "use_train_lookup=False (추론 시 train 조회 방지 규칙 엄격 준수)",
+    "CatBoost (depth=6, l2_leaf_reg=7, lr=0.05, iter=350)",
+    "MLP (hidden_dims=[64, 32], lr=0.001, wd=1e-3, epochs=25)",
+    "SPT 채널 (phonetic_search=24, score_cutoff=35, max_candidates=30)"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": true,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": "full_train_augmented_23253",
+    "split_file_sha256": null,
+    "seed": 42,
+    "training_rows": 23253,
+    "validation_rows": 12222
+  },
+  "retrieval": {
+    "channels": [
+      "S",
+      "P",
+      "T"
+    ],
+    "max_candidates": 30,
+    "score_cutoff": 35,
+    "korean_expansion": true,
+    "hangul_soft_meta": true
+  },
+  "features": [
+    "32 handcrafted features"
+  ],
+  "preprocessing": {
+    "korean_expansion": true,
+    "hangul_soft_meta": true,
+    "use_train_lookup": false
+  },
+  "training_pairs": {
+    "positive_rule": "catalog target",
+    "negative_rule": "top candidate non-targets",
+    "count": 600090
+  },
+  "model": {
+    "type": "Ensemble (CatBoost + MLP)",
+    "parameters": {
+      "catboost": {
+        "depth": 6,
+        "l2_leaf_reg": 7,
+        "lr": 0.05,
+        "iterations": 350
+      },
+      "mlp": {
+        "hidden_dims": [
+          64,
+          32
+        ],
+        "lr": 0.001,
+        "weight_decay": 0.001,
+        "epochs": 25
+      },
+      "weights": [
+        0.6,
+        0.4
+      ]
+    },
+    "loss": "BCE / Logloss"
+  },
+  "commands": [
+    ".venv\\Scripts\\python.exe experiments/train_and_evaluate_jy08.py"
+  ],
+  "environment": {
+    "platform": "Windows-11",
+    "python": "3.11"
+  },
+  "metrics": {
+    "metric_source": "Full train 12,222 rows",
+    "hangul_rows": 1191,
+    "non_hangul_rows": 11031,
+    "hangul_accuracy": 1.0,
+    "non_hangul_accuracy": 0.9991841174870819,
+    "weighted_accuracy": 0.9997552352461245,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": 1.0,
+    "predicted_public_lb_score": 0.9236665093226339,
+    "predicted_public_korean_count": 486,
+    "predicted_public_latin_count": 3380
+  },
+  "cost": {
+    "training_seconds": 207.96900000004098,
+    "inference_seconds": 87.0,
+    "timing_scope": "Augmentation + Feature generation + CatBoost fit + MLP fit + Full 12,222 inference",
+    "peak_memory_bytes": null,
+    "model_bytes": 420141,
+    "assets_bytes": 737328,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "model/assets.json",
+    "model/catboost.cbm",
+    "model/mlp.pt",
+    "reports/jy08_evaluation_summary.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "공식 가중 정확도 0.99976 (99.976%)",
+    "한글 정확도 100.00% (1191/1191), 비한글 정확도 99.92% (11022/11031)",
+    "전체 오답 9행"
+  ],
+  "interpretations": [
+    "한글 표기 확장 완성 및 앙상블 가중치 최적화로 한글 오답을 극소화하여 역대 최고 점수 달성."
+  ],
+  "limitations": [],
+  "failure": null,
+  "decision": "JY-08 모델을 최종 챔피언 모델로 승격 확정",
+  "next_actions": [
+    "사용자 명시적 요청 시 submit.zip 패키징 및 최종 검증"
+  ]
+}

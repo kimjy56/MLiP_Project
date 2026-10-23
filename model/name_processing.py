@@ -35,9 +35,12 @@ def compact(value):
 
 def phone_spelling(value):
     """Resolve a few digraphs, keeping vowels and digits. Not English G2P."""
-    for old, new in [('PH', 'F'), ('CK', 'K'), ('QU', 'KW')]:
+    for old, new in [('PH', 'F'), ('CK', 'K'), ('QU', 'KW'), ('EO', 'O')]:
         value = value.replace(old, new)
+    # ㅡ 말음 탈락: e.g. RODEU -> ROD, BAENGKEU -> BAENGK
+    value = re.sub(r'EU$', '', value)
     return value
+
 
 
 def retrieval_key(value):
@@ -59,7 +62,159 @@ class NameView:
     search_key: str
 
 
-def name_view(value):
+KOREAN_ALPHABET_SYLLABLES = {
+    '에이': 'A', '비': 'B', '씨': 'C', '시': 'C', '디': 'D', '이': 'E',
+    '에프': 'F', '지': 'G', '쥐': 'G', '에이치': 'H', '아이': 'I', '제이': 'J',
+    '케이': 'K', '엘': 'L', '엠': 'M', '엔': 'N', '오': 'O',
+    '피': 'P', '큐': 'Q', '알': 'R', '아르': 'R', '에스': 'S', '티': 'T',
+    '유': 'U', '브이': 'V', '더블유': 'W', '엑스': 'X', '와이': 'Y', '제트': 'Z',
+    '앤': 'N',
+}
+
+KNOWN_KOREAN_WORD_MAP = {
+    '현대': 'HYUNDAI', '흥아': 'HEUNGA', '우양': 'WOOYANG', '인천': 'INCHEON',
+    '마루': 'MARU', '한진': 'HANJIN', '동양': 'DONGYANG', '대우': 'DAEWOO',
+    '삼성': 'SAMSUNG', '고려': 'KOREA', '대한': 'KOREA', '아시아': 'ASIA',
+    '아세안': 'ASIAN', '태평양': 'PACIFIC',
+    '인터오션': 'INTEROCEAN', '오션': 'OCEAN', '썬': 'SUN',
+    '글로비스': 'GLOVIS', '커리지': 'COURAGE', '갤럭시': 'GALAXY',
+    '이스턴': 'EASTERN', '웨스턴': 'WESTERN', '스타': 'STAR', '스카이': 'SKY',
+    '월드': 'WORLD', '글로벌': 'GLOBAL', '코리아': 'KOREA', '팬오션': 'PAN OCEAN',
+    '천경': 'CK', '동영': 'PEGA', '포스코': 'POSCO', '에스케이': 'SK',
+    '파이오니어': 'PIONEER', '피아니어': 'PIONEER', '리더': 'LEADER', '마스터': 'MASTER',
+    '익스프레스': 'EXPRESS', '프런티어': 'FRONTIER', '하모니': 'HARMONY',
+    '블루': 'BLUE', '그린': 'GREEN', '골든': 'GOLDEN', '에이스': 'ACE',
+    '해운': 'SHIPPING', '캐리어': 'CARRIER', '컨테이너': 'CONTAINER', '라인': 'LINE',
+    '크리퍼': 'CLIPPER', '클리퍼': 'CLIPPER',
+    '에버': 'EVER', '얼라이언스': 'ALLIANCE', '에버그린': 'EVERGREEN',
+    '머스크': 'MAERSK', '엠에스씨': 'MSC', '하팍': 'HAPAG', '오엔이': 'ONE', '짐': 'ZIM',
+    '글로리': 'GLORY', '스피릿': 'SPIRIT', '슈프림': 'SUPREME', '수페리어': 'SUPERIOR',
+    '시앤시': 'CNC', '씨앤씨': 'CNC',
+    # 안전한 주요 기항 항구 (Safe Foreign Ports)
+    '칭다오': 'QINGDAO', '상하이': 'SHANGHAI', '닝보': 'NINGBO', '다롄': 'DALIAN',
+    # 안전한 선박 고유명사 외래어 (Safe Maritime Loanwords)
+    '브릿지': 'BRIDGE', '브리지': 'BRIDGE', '엔터프라이즈': 'ENTERPRISE',
+    '챌린저': 'CHALLENGER', '빅토리': 'VICTORY', '프라이드': 'PRIDE', '트레이더': 'TRADER',
+    '보이저': 'VOYAGER', '프로그레스': 'PROGRESS', '챔피언': 'CHAMPION',
+    '호라이즌': 'HORIZON', '네비게이터': 'NAVIGATOR', '내비게이터': 'NAVIGATOR',
+    '선라이즈': 'SUNRISE', '썬라이즈': 'SUNRISE',
+}
+
+ROMAN_NUMERALS = {
+    'I': '1', 'II': '2', 'III': '3', 'IV': '4', 'V': '5',
+    'VI': '6', 'VII': '7', 'VIII': '8', 'IX': '9', 'X': '10'
+}
+
+KOREAN_NUM_WORD_MAP = {
+    '원': '1', '투': '2', '쓰리': '3', '스리': '3', '포': '4', '파이브': '5',
+    '식스': '6', '세븐': '7', '에잇': '8', '나인': '9', '텐': '10',
+}
+
+
+def parse_korean_acronym_token(token):
+    idx = 0
+    res = []
+    syllable_names = sorted(KOREAN_ALPHABET_SYLLABLES.keys(), key=lambda x: -len(x))
+    while idx < len(token):
+        matched = False
+        for s in syllable_names:
+            if token.startswith(s, idx):
+                res.append(KOREAN_ALPHABET_SYLLABLES[s])
+                idx += len(s)
+                matched = True
+                break
+        if not matched:
+            return None
+    if len(res) >= 2 or (len(res) == 1 and len(token) >= 2):
+        return ''.join(res)
+    return None
+
+
+def extract_kr_acronym_prefix(word):
+    """'케이엠티씨부산'처럼 공백 없이 붙은 한글 알파벳 읽기(2글자 이상 약어)를
+
+    앞머리에서 찾아 ('KMTC', '부산')으로 분리한다.
+    """
+    if not isinstance(word, str) or len(word) < 2 or not any('가' <= c <= '힣' for c in word):
+        return None
+    pos = 0
+    letters = []
+    n = len(word)
+    syllable_items = sorted(KOREAN_ALPHABET_SYLLABLES.items(), key=lambda x: -len(x[0]))
+    while pos < n:
+        matched = False
+        for kr_let, en_let in syllable_items:
+            if word.startswith(kr_let, pos):
+                # 1음절 모음 글자 ('이', '오', '유')가 첫 글자로 오면 일반 한국어 단어(이순신 등)일 수 있으므로 건너뜀
+                if len(kr_let) == 1 and kr_let in ('이', '오', '유') and len(letters) == 0:
+                    continue
+                letters.append(en_let)
+                pos += len(kr_let)
+                matched = True
+                break
+        if not matched:
+            break
+    if len(letters) >= 2 and (pos >= 3 or pos == n):
+        return ''.join(letters), word[pos:]
+    return None
+
+
+def expand_korean_name(name):
+    if not isinstance(name, str) or not any('가' <= c <= '힣' for c in name):
+        return name
+    s = name
+    for k in sorted(KNOWN_KOREAN_WORD_MAP.keys(), key=lambda x: -len(x)):
+        s = s.replace(k, f" {KNOWN_KOREAN_WORD_MAP[k]} ")
+    s = re.sub(r'제\s*(\d+)\s*호?', r'NO. \1 ', s)
+    # 선박 부속어/접미사 및 수식어 정규화 (호선, 바지, 급, 탱커)
+    s = re.sub(r'\b(호선|바지|급|탱커)\b', ' ', s)
+    tokens = s.split()
+    new_tokens = []
+    for t in tokens:
+        acronym = parse_korean_acronym_token(t)
+        if acronym:
+            new_tokens.append(acronym)
+        elif t in KOREAN_NUM_WORD_MAP:
+            new_tokens.append(KOREAN_NUM_WORD_MAP[t])
+        else:
+            # 연속된 알파벳 약어 접두사 분리 검사 (예: 케이엠티씨부산 -> KMTC, 부산)
+            prefix_res = extract_kr_acronym_prefix(t)
+            if prefix_res:
+                acronym_part, remainder = prefix_res
+                new_tokens.append(acronym_part)
+                if remainder:
+                    if remainder.endswith('호선') and len(remainder) >= 4:
+                        remainder = remainder[:-2]
+                    elif remainder.endswith('바지') and len(remainder) >= 4:
+                        remainder = remainder[:-2]
+                    elif remainder.endswith('탱커') and len(remainder) >= 4:
+                        remainder = remainder[:-2]
+                    elif remainder.endswith('급') and len(remainder) >= 3:
+                        remainder = remainder[:-1]
+                    elif remainder.endswith('호') and len(remainder) >= 3 and not remainder.endswith('번호'):
+                        remainder = remainder[:-1]
+                    if remainder in KOREAN_NUM_WORD_MAP:
+                        remainder = KOREAN_NUM_WORD_MAP[remainder]
+                    new_tokens.append(remainder)
+                continue
+
+            if t.endswith('호선') and len(t) >= 4:
+                t = t[:-2]
+            elif t.endswith('바지') and len(t) >= 4:
+                t = t[:-2]
+            elif t.endswith('탱커') and len(t) >= 4:
+                t = t[:-2]
+            elif t.endswith('급') and len(t) >= 3:
+                t = t[:-1]
+            elif t.endswith('호') and len(t) >= 3 and not t.endswith('번호'):
+                t = t[:-1]
+            new_tokens.append(t)
+    return ' '.join(new_tokens)
+
+
+def name_view(value, expand_korean=False):
+    if expand_korean and isinstance(value, str):
+        value = expand_korean_name(value)
     raw = unicodedata.normalize('NFKC', value).upper() if isinstance(value, str) else ''
     # Split BEFORE Unidecode: its Hangul output adds syllable spaces.
     tokens = tuple(compact(unidecode(t).upper()) for t in re.findall(r'[^\W_]+', raw))
@@ -68,6 +223,10 @@ def name_view(value):
     phones = tuple(phone_spelling(t) for t in tokens)
     # Preserve boundaries: (1, 23) must not equal (12, 3). Ignore leading zeros.
     numbers = tuple(n.lstrip('0') or '0' for n in re.findall(r'\d+', raw))
+    if not numbers:
+        roman_nums = tuple(ROMAN_NUMERALS[t] for t in tokens if t in ROMAN_NUMERALS)
+        if roman_nums:
+            numbers = roman_nums
     return NameView(roman, tokens, phone_spelling(roman), phones,
                     numbers, retrieval_key(roman))
 
@@ -157,11 +316,6 @@ class NameFeatureIndex:
                 return 0., 0.
             if q == c:
                 return 1., 1.
-            # 방안 3: 단어 개수가 같으면 1:1 순서 매칭 (선박명 단어 역전 0건)
-            if len(q) == len(c):
-                sims = np.array([scorer(a, b) for a, b in zip(q, c)])
-                return ((np.average(sims, weights=query_qw) + np.average(sims, weights=cw)) / 2,
-                        float(sims.min()))
             scores = np.array([[scorer(a, b) for b in c] for a in q])
             # Both directions penalize extra unmatched words. Frequency comes
             # exclusively from the fixed official catalog, never from test.

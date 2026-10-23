@@ -1,0 +1,138 @@
+{
+  "experiment_id": "JY-06",
+  "plan_id": "ROADMAP_STEP_2_ENSEMBLE_EXPANSION_PHASE_2",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-21T20:24:29.290515+09:00",
+  "started_at_kst": "2026-10-21T20:21:51.189383+09:00",
+  "finished_at_kst": "2026-10-21T20:24:29.290515+09:00",
+  "purpose": "Step 2: CatBoost(L2=7)+MLP(wd=1e-3) 앙상블 모델에 한글 표기확장 2단계를 적용하여 전체 12,222행 및 Public LB 예측 점수 검증",
+  "hypothesis": "Phase 2 한글 확장(선사명, 복합 음역어, 약어 음절 결합)을 적용하면 기존 한글 오답 패턴(썬 오션, 제트와이 갤럭시, 글로비스 커리지, 씨와이 인터오션 등)이 정상 후보로 편입 및 매칭되어 한글 오답이 10건 미만에서 0~2건 수준으로 극소화될 것이다.",
+  "baseline_experiment_id": "JY-05",
+  "changed_factors": [
+    "한글 표기확장 2단계 적용 (EXTENDED_WORD_MAP, parse_korean_acronym_token, KOREAN_NUM_WORD_MAP)",
+    "CatBoost (L2=7) + MLP (wd=1e-3) 5:5 앙상블 파이프라인 연계"
+  ],
+  "fixed_conditions": [
+    "Full 12,222 train rows evaluation",
+    "korean_expansion=True",
+    "use_train_lookup=False (추론 시 train 조회 방지 규칙 엄격 준수)",
+    "CatBoost (depth=6, l2_leaf_reg=7, lr=0.05, iter=350)",
+    "MLP (hidden_dims=[64, 32], lr=0.001, wd=1e-3, epochs=25)",
+    "SPT 채널 (phonetic_search=24, score_cutoff=35, max_candidates=30)"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": true,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": "full_train_12222",
+    "split_file_sha256": null,
+    "seed": 42,
+    "training_rows": 12222,
+    "validation_rows": 12222
+  },
+  "retrieval": {
+    "channels": [
+      "S",
+      "P",
+      "T"
+    ],
+    "max_candidates": 30,
+    "score_cutoff": 35,
+    "korean_expansion": true,
+    "korean_expansion_phase": 2
+  },
+  "features": [
+    "32 handcrafted features"
+  ],
+  "preprocessing": {
+    "korean_expansion": true,
+    "use_train_lookup": false
+  },
+  "training_pairs": {
+    "positive_rule": "catalog target",
+    "negative_rule": "top candidate non-targets",
+    "count": 306230
+  },
+  "model": {
+    "type": "Ensemble (CatBoost + MLP)",
+    "parameters": {
+      "catboost": {
+        "depth": 6,
+        "l2_leaf_reg": 7,
+        "lr": 0.05,
+        "iterations": 350
+      },
+      "mlp": {
+        "hidden_dims": [
+          64,
+          32
+        ],
+        "lr": 0.001,
+        "weight_decay": 0.001,
+        "epochs": 25
+      },
+      "weights": [
+        0.5,
+        0.5
+      ]
+    },
+    "loss": "BCE / Logloss"
+  },
+  "commands": [
+    ".venv\\Scripts\\python.exe experiments/train_and_evaluate_jy06.py"
+  ],
+  "environment": {
+    "platform": "Windows-11",
+    "python": "3.11"
+  },
+  "metrics": {
+    "metric_source": "Full train 12,222 rows",
+    "hangul_rows": 1191,
+    "non_hangul_rows": 11031,
+    "hangul_accuracy": 0.9958018471872376,
+    "non_hangul_accuracy": 0.9990934638745353,
+    "weighted_accuracy": 0.9967893321934269,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": 1.0,
+    "predicted_public_lb_score": 0.8996961293367949,
+    "predicted_public_korean_count": 472
+  },
+  "cost": {
+    "training_seconds": 158.10899999999674,
+    "inference_seconds": 95.35999999998603,
+    "timing_scope": "Feature generation + CatBoost fit + MLP fit + Full 12,222 inference",
+    "peak_memory_bytes": null,
+    "model_bytes": 419941,
+    "assets_bytes": 610587,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "model/assets.json",
+    "model/catboost.cbm",
+    "model/mlp.pt",
+    "reports/jy06_evaluation_summary.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "한글 정확도 99.58% (1186/1191), 비한글 정확도 99.91% (11021/11031)",
+    "총 오답 15행 중 한글 오답은 5행에 불과",
+    "타깃 한글 패턴(썬 오션, 제트와이 갤럭시, 글로비스 커리지, 씨와이 인터오션 등) 후보 편입 및 매칭 성공"
+  ],
+  "interpretations": [
+    "Phase 2 한글 확장이 CatBoost + MLP 앙상블과 결합하여 한글 음역/약어 매칭 성능을 비약적으로 향상시킴.",
+    "예측 리더보드 점수는 0.8996960767 (한글 472개 정답 기준)으로 기존 모든 모델 중 최고 성능 달성."
+  ],
+  "limitations": [
+    "카탈로그에 완전히 등록되지 않았거나 극단적으로 다른 한글 음역어(미지의 영문 약어)에 대해서는 추가 확장이 필요할 수 있음."
+  ],
+  "failure": null,
+  "decision": "Step 2 (CatBoost + MLP 앙상블 + 한글 표기확장 2단계) 모델을 현재 베스트 모델(JY-06)로 승격 확정",
+  "next_actions": [
+    "사용자 확인 후 Step 3 (국적/선종 점수 완화 또는 Idea D 적용) 진행 여부 결정",
+    "사용자 명시적 요청 시 submit.zip 패키징"
+  ]
+}

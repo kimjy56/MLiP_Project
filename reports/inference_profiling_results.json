@@ -1,0 +1,25 @@
+{
+  "recorded_at_kst": "2026-10-21T14:52:30+09:00",
+  "queries_count": 1000,
+  "mode": "pure_unseen_full_pipeline",
+  "total_wall_time_seconds": 12.804,
+  "per_query_ms": 12.80,
+  "stages": {
+    "prepare_retrieval_seconds": 0.0,
+    "retrieval_s_channel_seconds": 4.713,
+    "retrieval_p_channel_seconds": 6.968,
+    "retrieval_t_channel_seconds": 0.152,
+    "retrieval_pruning_seconds": 0.095,
+    "feature_base_seconds": 0.147,
+    "feature_name_seconds": 0.603,
+    "model_predict_seconds": 0.079,
+    "postprocess_seconds": 0.002
+  },
+  "summary_percentages": {
+    "candidate_retrieval_pct": 93.48,
+    "feature_extraction_pct": 5.88,
+    "model_predict_pct": 0.62,
+    "prepare_and_postprocess_pct": 0.02
+  },
+  "extrapolation_10000_rows_seconds": 128.0
+}

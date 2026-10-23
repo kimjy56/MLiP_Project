@@ -1,0 +1,18 @@
+{
+  "handoff_document": {
+    "path": "C:/Users/jy200/Downloads/10-21_인계.md",
+    "sha256": "f7058cde85a1393007c84640f8a9e8c3d281cec04e8ba371a64e869738343898"
+  },
+  "baseline_zip": {
+    "path": "C:/Users/jy200/Downloads/submit_AR-02.zip",
+    "sha256": "74e4ed31108fd45e4da252286c4143884dcd7be7d2917925d6c25b855d0592c8"
+  },
+  "as02_zip": {
+    "path": "artifacts/as02_handoff/submit_AS-02.zip",
+    "sha256": "cfb094cdc2f6635f85a6c969259f7713adae8534bc1a1c52764ec787b01aa2d0",
+    "bytes": 190639
+  },
+  "source_and_oof_hashes": "project_log/experiments/AS02-HANDOFF.json",
+  "scope": "AS section 6 work authorized by user; local deliverables only, sharing destination pending",
+  "remaining": ["Team sharing folder destination not supplied", "Official competition submission not executed", "Final-selection lookup-OFF policy requires a separate check; AR-02 lookup preserved for the single-factor experiment"]
+}

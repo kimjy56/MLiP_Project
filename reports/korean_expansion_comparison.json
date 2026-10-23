@@ -1,0 +1,48 @@
+{
+  "experiment_id": "EXP-KO-EXPANSION-01",
+  "evaluated_at_kst": "2026-10-21T16:55:03+09:00",
+  "purpose": "한글 표기 변형 및 약어 확장(korean_expansion)의 전체 한글 1,191건 및 비한글 1,000건 대상 효과 정밀 비교 검증",
+  "dataset": {
+    "korean_rows": 1191,
+    "latin_sample_rows": 1000,
+    "total_evaluated": 2191
+  },
+  "configurations": [
+    {
+      "name": "Baseline",
+      "korean_expansion": false,
+      "hangul_ignore_type_flag": false,
+      "korean_accuracy": 0.9916036943744752,
+      "korean_correct": 1181,
+      "korean_top30_recall": 0.9916036943744752,
+      "elapsed_seconds": 29.00
+    },
+    {
+      "name": "Candidate (korean_expansion ON)",
+      "korean_expansion": true,
+      "hangul_ignore_type_flag": false,
+      "korean_accuracy": 0.9932829554995802,
+      "korean_correct": 1183,
+      "korean_top30_recall": 0.9949622166246851,
+      "elapsed_seconds": 28.98
+    },
+    {
+      "name": "Candidate 2 (korean_expansion + ignore_type_flag)",
+      "korean_expansion": true,
+      "hangul_ignore_type_flag": true,
+      "korean_accuracy": 0.9882451721242653,
+      "korean_correct": 1177,
+      "korean_top30_recall": 0.9949622166246851,
+      "elapsed_seconds": 29.73
+    }
+  ],
+  "delta_summary": {
+    "korean_accuracy_delta": 0.001679261125105,
+    "korean_recall_delta": 0.0033585222502099,
+    "korean_changed_rows": 8,
+    "correct_to_wrong": 2,
+    "wrong_to_correct": 4,
+    "latin_changed_rows": 0,
+    "conclusion": "korean_expansion 단독 적용 시 한글 Top-30 리콜 +0.34%p 향상 및 최종 정확도 순증(+2건). 비한글 100% 무영향 및 지연시간 증가 0ms 확인. 팀 단일 장치 원칙에 최적 부합."
+  }
+}

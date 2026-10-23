@@ -1,0 +1,24 @@
+{
+  "model_id": "JY-09",
+  "description": "JY-09: Safe Phase 4 Korean Expansion ('시'->C, CNC, GLORY, SPIRIT, SUPREME, SUPERIOR) + Soft Meta + Independent Noise (23,253 rows)",
+  "evaluated_rows": 12222,
+  "weighted_accuracy": 0.99976,
+  "korean_accuracy": 1.0,
+  "korean_correct": "1191/1191",
+  "korean_errors": 0,
+  "latin_accuracy": 0.99918,
+  "latin_correct": "11022/11031",
+  "latin_errors": 9,
+  "total_errors": 9,
+  "inference_seconds": 96.36,
+  "latency_ms_per_row": 7.88,
+  "predicted_lb_score": 0.9262980882700024,
+  "predicted_public_korean": 488,
+  "predicted_public_latin": 3380,
+  "training_time": {
+    "feature_pairs_sec": 94.45,
+    "catboost_fit_sec": 10.67,
+    "mlp_fit_sec": 7.56,
+    "total_elapsed_sec": 214.83
+  }
+}

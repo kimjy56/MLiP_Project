@@ -1,0 +1,72 @@
+{
+  "recorded_at_kst": "2026-10-21T12:55:53.692109+09:00",
+  "baseline": "AUG-02",
+  "augmentation": "AUG-03",
+  "weighted_difference": -0.007395873365351968,
+  "bootstrap_95_ci": [
+    -0.02583,
+    0.00949
+  ],
+  "changes": {
+    "hangul": {
+      "rows": 1191,
+      "fixed": 25,
+      "broken": 38,
+      "prediction_changed": 80
+    },
+    "non_hangul": {
+      "rows": 11031,
+      "fixed": 9,
+      "broken": 0,
+      "prediction_changed": 9
+    }
+  },
+  "metrics": {
+    "AUG-02": {
+      "metric_source": "Official eval_kit/evaluate.py G5-s42 OOF; diagnostics from same predictions",
+      "hangul_rows": 1191,
+      "non_hangul_rows": 11031,
+      "hangul_accuracy": 0.9009235936188077,
+      "non_hangul_accuracy": 0.9985495421992566,
+      "weighted_accuracy": 0.9302113781929423,
+      "candidate_recall_hangul": 0.9916036943744753,
+      "candidate_recall_non_hangul": 0.9997280391623606,
+      "seen_vessel_fraction": 0.0
+    },
+    "AUG-03": {
+      "metric_source": "Official eval_kit/evaluate.py G5-s42 OOF; diagnostics from same predictions",
+      "hangul_rows": 1191,
+      "non_hangul_rows": 11031,
+      "hangul_accuracy": 0.8900083963056256,
+      "non_hangul_accuracy": 0.9993654247121748,
+      "weighted_accuracy": 0.9228155048275903,
+      "candidate_recall_hangul": 0.9916036943744753,
+      "candidate_recall_non_hangul": 0.9997280391623606,
+      "seen_vessel_fraction": 0.0
+    }
+  },
+  "costs": {
+    "AUG-02": {
+      "training_seconds": 398.1400000000722,
+      "inference_seconds": 181.5470000000205,
+      "timing_scope": "Sum over five folds: fit includes index/features/model save (augmented cost attributes reused base preparation); inference includes predict_details only, excludes Matcher construction/CSV and independence probes",
+      "peak_memory_bytes": null,
+      "model_bytes": 6286620,
+      "assets_bytes": 1860744,
+      "submission_zip_bytes": null
+    },
+    "AUG-03": {
+      "training_seconds": 590.6969490000629,
+      "inference_seconds": 175.15499999985332,
+      "timing_scope": "Sum over five folds: fit includes index/features/model save (augmented cost attributes reused base preparation); inference includes predict_details only, excludes Matcher construction/CSV and independence probes",
+      "peak_memory_bytes": null,
+      "model_bytes": 6273138,
+      "assets_bytes": 1860744,
+      "submission_zip_bytes": null
+    }
+  },
+  "deployed_model_unchanged": {
+    "model/assets.json": true,
+    "model/ranker.txt": true
+  }
+}
