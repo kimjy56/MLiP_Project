@@ -59,3 +59,4 @@ DEV-02,team 5-fold OOF 4-channel (SNPT),completed,5-fold group OOF,0.97803599975
 DEV-03,team 5-fold OOF parallel 4-channel (SNPT),completed,5-fold group OOF,0.9780359997597794,experiments/DEV-03.json
 OPT-01,candidate limit 30 tuning test (SNPT),completed,5-fold group OOF,0.974509551397059,experiments/OPT-01.json
 OPT-02,candidate limit 50 and rapidfuzz OSA test (SPT),completed,5-fold group OOF,0.9762455794946552,experiments/OPT-02.json
+JY-11-OOF,CatBoost 0.6 + MLP 0.4 Ensemble (type/flag rules),completed,5-fold group OOF,0.9944655627020439,experiments/JY-11-OOF.json

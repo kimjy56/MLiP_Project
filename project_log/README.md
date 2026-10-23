@@ -1,5 +1,9 @@
 # 프로젝트 기록 대장
 
+## 2026-10-23 KST — 최신 초소형 모델 문헌 조사
+
+1B 이하 생성형·이름 변환형·검색형 모델을 구분해 공식 자료를 조사했다. LFM2.5-350M, HyperCLOVA X 0.5B, Qwen3.5-0.8B, ByT5-small, EmbeddingGemma 2, T5Gemma 2, 다국어 MiniLM을 목적별 후보로 정리했다. EmbeddingGemma 2의 2026-10-06 공개와 텍스트 270M/전체 740M 구분, LFM 생성형과 Encoder의 한국어 지원 차이를 기록했다. 개발사 벤치마크와 우리 과제 성능은 별개다. [조사 보고서](../docs/ULTRA_SMALL_MODEL_SURVEY_2026-10-23.md). 모델 채택·코드 변경·설치·학습·ZIP 생성 없음.
+
 ## 2026-10-23 — AS-03 공식 제출 결과 분석 (Public 0.8424194595)
 
 사용자가 제공한 `submit_AS-03.zip` (`catboost+mlp edit`, 2026-10-22 23:38:32 KST)의 DACON 공식 채점 결과를 기록 및 분석했다.

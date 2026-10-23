@@ -1,0 +1,276 @@
+{
+  "experiment_id": "AS-NAME-02",
+  "plan_id": "NAME-DECODER-V0",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-23T17:32:01.715797+09:00",
+  "started_at_kst": "2026-10-23T17:32:01.720797+09:00",
+  "finished_at_kst": "2026-10-23T17:33:06.583158+09:00",
+  "purpose": "Independent multi-hypothesis name decoder pilot",
+  "hypothesis": "Official observed/canonical name pairs teach useful byte-level alternatives",
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "ByT5 fine-tuning"
+  ],
+  "fixed_conditions": [
+    "same pilot rows",
+    "same full-catalog trie",
+    "10 beams",
+    "seed 42"
+  ],
+  "code": {
+    "git_revision_at_run": "65fe67be2ef5a716c7fbb39dab8b60a792b29c1e",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/__init__.py": "aa71bd583edfc7d582df94b7a549c328e7f578bebb0132c8717efd5775a71b18",
+      "name_decoder/__main__.py": "8b03098377f7b4c529d70fac6e48ddf9d952c1599144ab193c031d3eb642f941",
+      "name_decoder/catalog.py": "0293277ac443327ff80d0eb65386d265a07b39ad4b9b00dea9c0243fd9c5d4c3",
+      "name_decoder/data.py": "6b8042fdbc186d38a818024733bbdb09fe4ded4e2e3b76021bfffeca96ef0dbe",
+      "name_decoder/model.py": "e10322f6d640990d3ded4c839172be8389245141d38fadfc91ce1dc4a18195db",
+      "experiments/train_name_decoder.py": "f949d4e1aa306fdcb32e6f5a9981ec06f9878b6eadaf4cf44e92ce89ee2c5d42"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "split_id": "G5-s42/fold-0/pilot",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42,
+    "training_rows": 9850,
+    "validation_rows": 128,
+    "total_heldout_rows": 2372,
+    "training_vessels": 4680,
+    "selected_sample_ids_sha256": "bb5d05c665663627cce980c3cb598b08d33ebdc6af546c0c7205e61f291d302b"
+  },
+  "retrieval": {
+    "catalog_names": 78592,
+    "vessel_ids": 78595,
+    "duplicate_name_groups": 3,
+    "method": "full-catalog byte-prefix-constrained beam search",
+    "num_beams": 10,
+    "length_penalty": 1.0,
+    "training_lookup": false
+  },
+  "features": [],
+  "preprocessing": {
+    "name": "NFC, uppercase, whitespace collapse; retain digits/punctuation",
+    "augmentation": "none"
+  },
+  "training_pairs": {
+    "positive_rule": "training-fold observed name -> official gold catalog name",
+    "negative_rule": null,
+    "count": 4685,
+    "hangul_pairs": 305,
+    "non_hangul_pairs": 4380,
+    "sampling_hangul_mass": 0.7
+  },
+  "model": {
+    "type": "google/byt5-small",
+    "loss": "teacher-forced token cross entropy",
+    "parameters": {
+      "steps": 200,
+      "batch_size": 8,
+      "accumulation": 2,
+      "learning_rate": 0.0001,
+      "weight_decay": 0.01,
+      "optimizer": "AdamW",
+      "max_grad_norm": 1.0,
+      "training_autocast": "bfloat16 on CUDA",
+      "inference_dtype": "float32",
+      "checkpoint_config": "preserve tie_word_embeddings and scale_decoder_outputs"
+    },
+    "pretrained_manifest": {
+      "repo_id": "google/byt5-small",
+      "revision": "68377bdc18a2ffec8a0533fef03b1c513a4dd49d",
+      "recorded_at_kst": "2026-10-23T17:15:19.795936+09:00",
+      "files": {
+        "config.json": {
+          "sha256": "7845fb21b320f3fa05392ce151143502cf08729c8c89732da3293615885d3e83",
+          "bytes": 698
+        },
+        "generation_config.json": {
+          "sha256": "f5a1c7e2be8092018d8835128987edf0111637dd98e90599cc80310fef75d95a",
+          "bytes": 147
+        },
+        "pytorch_model.bin": {
+          "sha256": "5c5aaf56299d6f2d4eaadad550a40765198828ead4d74f0a15f91cbe0961931a",
+          "bytes": 1198627927
+        },
+        "README.md": {
+          "sha256": "6daea4f59e1a86e7db0a44c488651130cfd39c3b92cf63eead46db865bdabaed",
+          "bytes": 4233
+        },
+        "special_tokens_map.json": {
+          "sha256": "bda1d200ddf8b187ed2f2ff89a69c540e1bfde26993b762d534c20d82bfc8ec8",
+          "bytes": 2503
+        },
+        "tokenizer_config.json": {
+          "sha256": "3b791189b080dc37ab27ebd5cba352720ff150146217f93da1612ee8f41a846e",
+          "bytes": 2593
+        }
+      }
+    },
+    "parameter_count": 300768256
+  },
+  "commands": [
+    "python experiments/train_name_decoder.py --experiment-id AS-NAME-02 --data-dir data --folds eval_kit/folds_group5_seed42.csv --base-model artifacts/pretrained/byt5-small --fold 0 --steps 200 --batch-size 8 --accumulation 2 --learning-rate 0.0001 --eval-per-language 64 --seed 42 --device cuda"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "os": "Windows",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "5.20.1",
+      "safetensors": "0.8.0",
+      "pandas": "2.0.3",
+      "rapidfuzz": "3.14.3",
+      "Unidecode": "1.4.0"
+    },
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 5080"
+  },
+  "metrics": {
+    "metric_source": "local name-recall pilot, not ID accuracy",
+    "hangul_rows": 64,
+    "non_hangul_rows": 64,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": 0.0
+  },
+  "cost": {
+    "training_seconds": 21.59433720004745,
+    "inference_seconds": 13.930195300024934,
+    "timing_scope": "inference: tokenization + full-catalog constrained decoding + name/ID mapping; excludes loading, saving",
+    "peak_memory_bytes": 6123908608,
+    "model_bytes": 1203127456,
+    "assets_bytes": null,
+    "submission_zip_bytes": null,
+    "loading_and_trie_seconds": 1.210420300019905,
+    "baseline_seconds": 10.342877099988982,
+    "pretrained_inference_seconds": 13.509404800017364
+  },
+  "artifacts": [
+    {
+      "path": "artifacts/AS-NAME-02/model/added_tokens.json",
+      "sha256": "637ca6c69e56d85a9c6f1f30221c8210ba866a4383ce7261cecbfbc8573984db",
+      "bytes": 3145
+    },
+    {
+      "path": "artifacts/AS-NAME-02/model/config.json",
+      "sha256": "8f7d17b5d586bd9bee12547a0ecd6c6672c3a81500a939d86a85cfd4491e78dd",
+      "bytes": 882
+    },
+    {
+      "path": "artifacts/AS-NAME-02/model/generation_config.json",
+      "sha256": "f136083797475c5fcdf1be2892a197ea3fdd6effd80892892f009d12f9923cd1",
+      "bytes": 149
+    },
+    {
+      "path": "artifacts/AS-NAME-02/model/model.safetensors",
+      "sha256": "36075674c80e361d860701bfab055be2be0ce25a22325a706f6d76ec12b12d9d",
+      "bytes": 1203093688
+    },
+    {
+      "path": "artifacts/AS-NAME-02/model/tokenizer_config.json",
+      "sha256": "aaf41ff14b5aa3a8fe931c099cb1f6a67575834f1bed3241a82d1d55ab16b299",
+      "bytes": 29592
+    },
+    {
+      "path": "artifacts/AS-NAME-02/pilot_predictions.csv",
+      "sha256": "c1519f07a2cc306840f0b4a9a43309385335bcca517ea73d1cd75482688f6ea6",
+      "bytes": 172450
+    },
+    {
+      "path": "artifacts/AS-NAME-02/training_history.json",
+      "sha256": "44d10a96353e8663d8ddad72f55c2731086bac08a53794f0c57bd045cda263a6",
+      "bytes": 5052
+    },
+    {
+      "path": "artifacts/AS-NAME-02/training_pairs.csv",
+      "sha256": "caa269f8273ded42d5816fb035d99c1836b6cbfb1de9d76e45976fcbdee25c08",
+      "bytes": 147408
+    }
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "All outputs restricted to official catalog names; duplicate-name IDs retained",
+    "Mean loss first/last 20 steps: 5.21333/1.32493"
+  ],
+  "interpretations": [],
+  "limitations": [
+    "Pilot only; not full OOF or official ID accuracy",
+    "Known development data, not an untouched final test",
+    "Single-row inference; no server timing claim",
+    "Windows Python 3.11.15 and transformers 5.20.1 differ from server"
+  ],
+  "failure": null,
+  "decision": "Pilot completed; no model adoption decision from a single fold/subsample",
+  "next_actions": [
+    "Full G5-s42 name-recall evaluation before selection",
+    "Validate saved model in server environment",
+    "Design metadata-aware ID resolution separately"
+  ],
+  "pilot_results": {
+    "roman_wratio": {
+      "hangul": {
+        "rows": 64,
+        "gold_name_in_top_1": 0.15625,
+        "gold_name_in_top_5": 0.265625,
+        "gold_name_in_top_10": 0.484375,
+        "mean_returned_names": 10.0
+      },
+      "non_hangul": {
+        "rows": 64,
+        "gold_name_in_top_1": 1.0,
+        "gold_name_in_top_5": 1.0,
+        "gold_name_in_top_10": 1.0,
+        "mean_returned_names": 10.0
+      }
+    },
+    "pretrained": {
+      "hangul": {
+        "rows": 64,
+        "gold_name_in_top_1": 0.0,
+        "gold_name_in_top_5": 0.0,
+        "gold_name_in_top_10": 0.0,
+        "mean_returned_names": 10.0
+      },
+      "non_hangul": {
+        "rows": 64,
+        "gold_name_in_top_1": 0.109375,
+        "gold_name_in_top_5": 0.125,
+        "gold_name_in_top_10": 0.125,
+        "mean_returned_names": 10.0
+      }
+    },
+    "finetuned": {
+      "hangul": {
+        "rows": 64,
+        "gold_name_in_top_1": 0.0,
+        "gold_name_in_top_5": 0.046875,
+        "gold_name_in_top_10": 0.0625,
+        "mean_returned_names": 10.0
+      },
+      "non_hangul": {
+        "rows": 64,
+        "gold_name_in_top_1": 0.6875,
+        "gold_name_in_top_5": 0.71875,
+        "gold_name_in_top_10": 0.71875,
+        "mean_returned_names": 10.0
+      }
+    }
+  },
+  "serialization": {
+    "probe_rows": 4,
+    "top_10_names_equal": true
+  },
+  "independence": {
+    "probe_rows": 4,
+    "reordered_and_subset_equal": true,
+    "scope": "top-10 name lists, same process, single-row inference"
+  }
+}

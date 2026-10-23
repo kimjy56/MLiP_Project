@@ -419,7 +419,7 @@ def main():
     print(f"{'한글 정확도 (70%)':<16} | {ko_clean*100:>12.3f}% | {ko_noisy*100:>14.3f}% | {delta_ko:>+10.3f}%p | {(ko_noisy/max(1e-6, ko_clean))*100:>6.2f}%")
     print(f"{'비한글 정확도 (30%)':<14} | {latin_clean*100:>12.3f}% | {latin_noisy*100:>14.3f}% | {delta_latin:>+10.3f}%p | {(latin_noisy/max(1e-6, latin_clean))*100:>6.2f}%")
     print("-" * 75)
-    print(f"오답 수 비교: Clean {clean_metrics['total_rows'] - clean_metrics['total_correct']}행 ➜ Noisy {noisy_metrics['total_rows'] - noisy_metrics['total_correct']}행 (+{noisy_metrics['total_rows'] - noisy_metrics['total_correct'] - (clean_metrics['total_rows'] - clean_metrics['total_correct'])}행 증가)")
+    print(f"오답 수 비교: Clean {clean_metrics['total_rows'] - clean_metrics['total_correct']}행 -> Noisy {noisy_metrics['total_rows'] - noisy_metrics['total_correct']}행 (+{noisy_metrics['total_rows'] - noisy_metrics['total_correct'] - (clean_metrics['total_rows'] - clean_metrics['total_correct'])}행 증가)")
     print("=" * 75)
 
     # 7. 보고서 저장

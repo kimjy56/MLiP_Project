@@ -114,11 +114,15 @@ class MatcherRefactorTests(unittest.TestCase):
         self.assertEqual(feats_missing[1, 15], 0.5)
 
         # 2. South Korea dual compatibility & Old year attenuation
+        # Set candidate 0 to South Korea, candidate 1 to unrelated
+        index.flags[0] = 'South Korea'
+        index.flags[1] = 'Unrelated'
         row_panama_old = {'vessel_name': '테스트선박', 'gross_tonnage': 1000.0, 'vessel_type': '화물선',
                           'flag_name': '파나마', 'arrival_year': 2016}
         feats_old = index.features(row_panama_old, [0, 1])
-        for val in feats_old[:, 15]:
-            self.assertIn(val, [0.5, 1.0])
+        # Candidate 0 (South Korea) gets 1.0; candidate 1 (unrelated flag & unrelated name) gets 0.0
+        self.assertEqual(feats_old[0, 15], 1.0)
+        self.assertEqual(feats_old[1, 15], 0.0)
 
 
 if __name__ == '__main__':

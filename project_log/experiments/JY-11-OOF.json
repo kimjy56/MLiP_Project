@@ -1,0 +1,135 @@
+{
+  "experiment_id": "JY-11-OOF",
+  "plan_id": "GROUP5_OOF_TYPE_FLAG_COMPATIBILITY_EVALUATION",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-23T17:11:12.532351+09:00",
+  "started_at_kst": "2026-10-23T17:01:19.427098+09:00",
+  "finished_at_kst": "2026-10-23T17:11:12.532351+09:00",
+  "purpose": "선종(vessel_type) 이진 사전 호환성 매칭(2% 이상 1.0, 미만 0.0) 및 국적(flag_name) South Korea 편의치적 호환, 연도별 감쇠, 결측 중립화가 반영된 앙상블 모델(CatBoost 0.6 + MLP 0.4)의 Group 5-Fold OOF 교차검증 및 일반화 성능 실측",
+  "hypothesis": "선종의 1:N 이산 확률 페널티를 이진 호환성으로 전환하고, 편의치적 선박의 South Korea 호환 및 연도별 국적 변동 감쇠를 적용하면 한글 선박의 국적/선종 오분류를 방지하여 AS-03(0.99561) 대비 OOF 점수와 한글 정확도가 추가 개선될 것이다.",
+  "baseline_experiment_id": "JY-10-OOF",
+  "changed_factors": [
+    "type_probs: 한글 선종의 카탈로그 영문 타입 사전 호환성 이진 매칭 (tp >= 0.02 -> 1.0, else 0.0, 결측사전 0.5)",
+    "flag_probs [개선 1]: 결측 국적 중립 점수(0.5) 부여로 불필요한 페널티 제거",
+    "flag_probs [개선 2]: South Korea/Korea 동시 호환(1.0)으로 파나마/마샬제도 기재 국적 선박의 48.7% 매칭 복구",
+    "flag_probs [개선 3]: 입항 연도 기반 국적 변동 감쇠 (<=2019: 0.5, <=2023: 0.25, >=2024: 0.0)",
+    "flag_probs [개선 4]: 고유사도(>=0.85) 선박명 불일치 완화 (0.5)"
+  ],
+  "fixed_conditions": [
+    "eval_kit/folds_group5_seed42.csv (G5-s42 5-fold)",
+    "data/vessel_catalog.csv (78,595척)",
+    "data/train.csv (12,222행)",
+    "use_train_lookup=False (추론 시 조회 방지 엄격 적용)"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": true,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {
+      "train": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c"
+    },
+    "split_id": "G5-s42",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42,
+    "training_rows": 9777,
+    "validation_rows": 2445
+  },
+  "retrieval": {
+    "channels": [
+      "S",
+      "P",
+      "T"
+    ],
+    "max_candidates": 30,
+    "score_cutoff": 35,
+    "korean_expansion": true,
+    "hangul_soft_meta": true
+  },
+  "features": [
+    "32 handcrafted features"
+  ],
+  "preprocessing": {
+    "korean_expansion": true,
+    "hangul_soft_meta": true,
+    "use_train_lookup": false
+  },
+  "training_pairs": {
+    "positive_rule": "catalog target",
+    "negative_rule": "top candidate non-targets",
+    "count": 2424058
+  },
+  "model": {
+    "type": "Ensemble (CatBoost 0.6 + MLP 0.4)",
+    "parameters": {
+      "catboost": {
+        "depth": 6,
+        "l2_leaf_reg": 7,
+        "lr": 0.05,
+        "iterations": 350
+      },
+      "mlp": {
+        "hidden_dims": [
+          64,
+          32
+        ],
+        "lr": 0.001,
+        "weight_decay": 0.001,
+        "epochs": 25
+      },
+      "weights": [
+        0.6,
+        0.4
+      ]
+    },
+    "loss": "Logloss / BCE"
+  },
+  "commands": [
+    "& .\\.venv\\Scripts\\python.exe experiments/run_oof_jy11.py"
+  ],
+  "environment": {
+    "platform": "Windows-11",
+    "python": "3.11"
+  },
+  "metrics": {
+    "metric_source": "eval_kit/evaluate.py G5-s42 5-fold OOF",
+    "hangul_rows": 1191,
+    "non_hangul_rows": 11031,
+    "hangul_accuracy": 0.9924433249370277,
+    "non_hangul_accuracy": 0.9991841174870819,
+    "weighted_accuracy": 0.9944655627020439,
+    "seen_vessel_fraction": 0.0
+  },
+  "cost": {
+    "training_seconds": 593.11,
+    "inference_seconds": 592.89,
+    "timing_scope": "5-fold training + validation total",
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "reports/oof_JY11.csv"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "5-Fold OOF 공식 가중 정확도: 0.99447 (99.447%)",
+    "한글 OOF 정확도: 99.24% (1182/1191행, 오답 9행)",
+    "비한글 OOF 정확도: 99.92% (11022/11031행, 오답 9행)",
+    "총 소요 시간: 593.11초 (9.89분)"
+  ],
+  "interpretations": [
+    "선종 이진 사전 호환성 및 국적 South Korea 편의치적/연도별 감쇠 규칙이 반영된 앙상블 모델 5-Fold OOF 성능 실측."
+  ],
+  "limitations": [
+    "비한글 9건 오답은 본질적 라벨 노이즈(불가용 오차)임."
+  ],
+  "failure": null,
+  "decision": "JY-11-OOF 앙상블 모델의 일반화 성능 검증 완료",
+  "next_actions": [
+    "AS-03 및 AS-04와의 성능 비교 분석",
+    "사용자 명시적 요청 시 submit.zip 패키징 여부 결정"
+  ]
+}

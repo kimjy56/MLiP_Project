@@ -406,8 +406,18 @@ class CatalogIndex:
             type_probs = [0.0 for _ in candidates]
             flag_probs = [0.0 for _ in candidates]
         elif self.hangul_soft_meta and ko:
-            type_probs = [1.0 if tp.get(self.types[i], 0.0) >= 0.02 else (0.5 if not tp else 0.0)
-                          for i in candidates]
+            if not tp:
+                type_probs = [0.5 for _ in candidates]
+            else:
+                type_probs = []
+                for i in candidates:
+                    p = tp.get(self.types[i], 0.0)
+                    if p >= 0.20:
+                        type_probs.append(1.0)
+                    elif p >= 0.02:
+                        type_probs.append(p)
+                    else:
+                        type_probs.append(0.0)
             flag_raw = text(row.get('flag_name'))
             if not flag_raw:
                 flag_probs = [0.5 for _ in candidates]
@@ -416,15 +426,15 @@ class CatalogIndex:
                 flag_probs = []
                 for i, sim in zip(candidates, names_sim):
                     c_flag = self.flags[i]
-                    is_compatible = (fp.get(c_flag, 0.0) >= 0.02) or (c_flag in {'South Korea', 'Korea', 'Republic of Korea'})
-                    if is_compatible:
+                    p = fp.get(c_flag, 0.0)
+                    if c_flag in {'South Korea', 'Korea', 'Republic of Korea'} or p >= 0.30:
                         flag_probs.append(1.0)
-                    elif np.isfinite(year) and year <= 2019:
-                        flag_probs.append(0.5)
+                    elif p >= 0.02:
+                        flag_probs.append(p)
                     elif sim >= 0.85:
                         flag_probs.append(0.5)
-                    elif np.isfinite(year) and year <= 2023:
-                        flag_probs.append(0.25)
+                    elif sim >= 0.70 and np.isfinite(year) and year <= 2019:
+                        flag_probs.append(0.5)
                     else:
                         flag_probs.append(0.0)
         else:
@@ -453,9 +463,10 @@ class CatalogIndex:
 
 
 def _similarity_cdist(query, choices, scorer):
-    if not query:
+    if not query or not isinstance(query, str):
         return np.zeros(len(choices), dtype=np.float32)
-    return process.cdist([query], choices, scorer=scorer, workers=1)[0] / 100
+    clean_choices = [c if isinstance(c, str) else '' for c in choices]
+    return process.cdist([query], clean_choices, scorer=scorer, workers=1)[0] / 100
 
 
 def _tonnage_gap(gt_arr, value):
@@ -537,7 +548,7 @@ def load_decision_model(model_dir: Path, assets: dict):
         scorers.append(('mlp', mlp))
 
     if len(scorers) >= 2:
-        return EnsembleScorer(scorers)
+        return EnsembleScorer(scorers, weights=assets.get('ensemble_weights'))
     if len(scorers) == 1:
         return scorers[0][1]
 
