@@ -406,7 +406,8 @@ class CatalogIndex:
             type_probs = [0.0 for _ in candidates]
             flag_probs = [0.0 for _ in candidates]
         elif self.hangul_soft_meta and ko:
-            type_probs = [0.5 * tp.get(self.types[i], 0.0) for i in candidates]
+            type_probs = [1.0 if tp.get(self.types[i], 0.0) >= 0.02 else (0.5 if not tp else 0.0)
+                          for i in candidates]
             flag_probs = [max(0.5, fp.get(self.flags[i], 0.0)) if sim >= 0.85 else 0.5 * fp.get(self.flags[i], 0.0)
                           for i, sim in zip(candidates, names_sim)]
         else:

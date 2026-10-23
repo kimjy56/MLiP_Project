@@ -90,6 +90,19 @@ class MatcherRefactorTests(unittest.TestCase):
         for p in preds:
             self.assertIn(p, catalog.vessel_id.values)
 
+    def test_hangul_soft_meta_dictionary_compatibility(self):
+        train, catalog, _ = fixture()
+        assets = make_assets(train, catalog, name_mode='baseline', hangul_soft_meta=True)
+        index = CatalogIndex(catalog, assets, hangul_soft_meta=True)
+        # Test row with Korean vessel name and vessel_type
+        row = {'vessel_name': '테스트선박', 'gross_tonnage': 1000.0, 'vessel_type': '화물선', 'flag_name': 'Panama'}
+        # Features with candidate indices
+        cands = [0, 1]
+        feats = index.features(row, cands)
+        # 14th feature is type_probs, 15th is flag_probs
+        self.assertEqual(feats.shape[0], 2)
+        self.assertIn(feats[0, 14], [0.0, 0.5, 1.0])
+
 
 if __name__ == '__main__':
     unittest.main()
