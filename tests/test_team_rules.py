@@ -4,6 +4,7 @@ except Exception:
     pass
 
 """Synthetic contract tests, not competition performance evidence."""
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -218,13 +219,14 @@ class TeamRules(unittest.TestCase):
             training.fit(train, catalog, root / 'model', use_train_lookup=True)
             (root / 'open').mkdir()
             catalog.to_csv(root / 'open/vessel_catalog.csv', index=False)
-            preserved = {p: train_oof.sha256(p) for p in [root / 'open/vessel_catalog.csv',
+            _file_hash = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
+            preserved = {p: _file_hash(p) for p in [root / 'open/vessel_catalog.csv',
                          root / 'model/assets.json', root / 'model/ranker.txt']}
             with patch.object(script, 'ROOT', root):
                 expected = None
                 for queries in [train, train.iloc[::-1], train.iloc[::2], train.iloc[:1], train.iloc[:0]]:
                     queries.loc[:, QUERY_COLUMNS].to_csv(root / 'open/test.csv', index=False)
-                    before = train_oof.sha256(root / 'open/test.csv')
+                    before = _file_hash(root / 'open/test.csv')
                     path = script.run()
                     result = pd.read_csv(path, dtype=str, keep_default_na=False)
                     self.assertEqual(list(result.columns), ['sample_id', 'target_vessel_id'])
@@ -233,8 +235,8 @@ class TeamRules(unittest.TestCase):
                     if expected is None:
                         expected = observed
                     self.assertEqual(observed, {s: expected[s] for s in queries.sample_id})
-                    self.assertEqual(before, train_oof.sha256(root / 'open/test.csv'))
-                    self.assertTrue(all(train_oof.sha256(p) == digest for p, digest in preserved.items()))
+                    self.assertEqual(before, _file_hash(root / 'open/test.csv'))
+                    self.assertTrue(all(_file_hash(p) == digest for p, digest in preserved.items()))
             self.assertFalse(list(root.rglob('*.zip')))
 
 

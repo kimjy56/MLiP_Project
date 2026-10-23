@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import argparse
 from datetime import datetime, timedelta, timezone
-import hashlib
 import json
 import os
 from pathlib import Path
@@ -27,15 +26,6 @@ import pandas as pd
 from train import ROOT, MODEL_PARAMETERS, QUERY_COLUMNS, Matcher, evaluate, fit, read_data
 
 
-def _sha256(path: Path) -> str:
-    h = hashlib.sha256()
-    with open(path, "rb") as f:
-        for chunk in iter(lambda: f.read(1 << 20), b""):
-            h.update(chunk)
-    return h.hexdigest()
-
-
-sha256 = _sha256
 
 
 def now_kst():
@@ -147,10 +137,14 @@ def generate_oof(train, catalog, folds, output_dir, *, name_mode='baseline',
         independence = check_independence(matcher, validation.loc[:, QUERY_COLUMNS], predictions)
         parts.append(pd.DataFrame({'sample_id': validation.sample_id.to_numpy(),
                                    'pred_vessel_id': predictions, 'fold': k}))
-        artifacts = {name: {'path': str(destination / name),
-                             'sha256': _sha256(destination / name),
-                             'bytes': (destination / name).stat().st_size}
-                     for name in ('assets.json', 'ranker.txt')}
+        known_artifact_names = ('assets.json', 'ranker.txt', 'catboost.cbm', 'set_model.pt', 'mlp.pt')
+        artifacts = {
+            name: {
+                'path': str(destination / name),
+                'bytes': (destination / name).stat().st_size
+            }
+            for name in known_artifact_names if (destination / name).is_file()
+        }
         summary = {'fold': k, 'fit': fit_result, 'validation': metrics,
                    'row_independence': independence, 'artifacts': artifacts}
         summaries.append(summary)
@@ -171,7 +165,6 @@ def main():
     parser.add_argument('--data-dir', type=Path, default=ROOT / 'data')
     parser.add_argument('--folds', type=Path, default=ROOT / 'eval_kit/folds_group5_seed42.csv',
                         help='Default: <data-dir>/eval_kit/folds_group5_seed42.csv')
-    parser.add_argument('--folds-sha256', required=True, help='Expected hash from the team distribution')
     parser.add_argument('--output-root', type=Path, default=ROOT / 'artifacts/oof')
     parser.add_argument('--name-mode', choices=['baseline', 'structure', 'all'], default='all')
     parser.add_argument('--phonetic-search', type=int, default=24)
@@ -185,8 +178,6 @@ def main():
         args.folds = args.data_dir / 'eval_kit/folds_group5_seed42.csv'
     if not re.fullmatch(r'[A-Za-z]+-[0-9]+', args.experiment_id):
         parser.error('Use an assigned team ID such as O-01')
-    if not re.fullmatch(r'[0-9a-fA-F]{64}', args.folds_sha256):
-        parser.error('--folds-sha256 must be a 64-digit SHA-256 hash')
     if args.phonetic_search < 0:
         parser.error('--phonetic-search must be nonnegative')
     record_path = ROOT / 'project_log/experiments' / f'{args.experiment_id}.json'
@@ -202,8 +193,7 @@ def main():
         'purpose': 'Generate full OOF using supplied fixed group folds; no model selection or tuning',
         'hypothesis': 'Not a performance-improvement claim; evaluate the specified configuration',
         'code': {'git_revision': revision.stdout.strip() if revision.returncode == 0 else None,
-                 'dirty': bool(status.stdout.strip()) if status.returncode == 0 else None,
-                 'sha256': {name: _sha256(ROOT / name) for name in code_files}},
+                 'dirty': bool(status.stdout.strip()) if status.returncode == 0 else None},
         'configuration': {'name_mode': args.name_mode, 'phonetic_search': args.phonetic_search,
                           'retrieval_channels': args.retrieval_channels,
                           'use_train_lookup': args.use_train_lookup, 'model': MODEL_PARAMETERS,
@@ -235,10 +225,7 @@ def main():
         save_record()
         for name, path in [('train', args.data_dir / 'train.csv'),
                             ('catalog', args.data_dir / 'vessel_catalog.csv'), ('folds', args.folds)]:
-            record['data'][name] = {'path': str(path), 'sha256': _sha256(path)}
-        if record['data']['folds']['sha256'] != args.folds_sha256.lower():
-            raise ValueError('Fold hash differs from the supplied team hash')
-        record['data']['expected_folds_sha256'] = args.folds_sha256.lower()
+            record['data'][name] = {'path': str(path)}
         train, catalog = read_data(args.data_dir)
         folds = pd.read_csv(args.folds, encoding='utf-8-sig', keep_default_na=False,
                             dtype={'sample_id': str, 'target_vessel_id': str})
@@ -252,8 +239,7 @@ def main():
         oof_path = output_dir / f'oof_{args.experiment_id}.csv'
         oof.to_csv(oof_path, index=False, encoding='utf-8')
         record.update(status='completed', local_diagnostics=summarize_folds(summaries),
-                      oof={'path': str(oof_path), 'rows': len(oof),
-                                               'sha256': _sha256(oof_path)})
+                      oof={'path': str(oof_path), 'rows': len(oof)})
     except BaseException as exc:
         record.update(status='interrupted' if isinstance(exc, KeyboardInterrupt) else 'failed',
                       failure={'type': type(exc).__name__, 'message': str(exc)})

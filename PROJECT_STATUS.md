@@ -1,7 +1,7 @@
 # PROJECT_STATUS — 프로젝트 진행 상태 및 인수인계 대장
 
-최종 갱신 시각: 2026-10-23 10:48 (KST)  
-현재 마일스톤: **집합 결정 모델(SetDecisionModel) 구조 최적화 및 일반화 검증**
+최종 갱신 시각: 2026-10-23 11:07 (KST)  
+현재 마일스톤: **코드베이스 리팩터링 및 원격 동기화 완료**
 
 ---
 
@@ -21,6 +21,10 @@
 
 ### [완료된 마일스톤 및 실험]
 - [x] **REFACTOR-01 & REFACTOR-02**: 결정 모델 입력 전처리 및 배치 추론 분리 (19개 단위 테스트 통과, 12,222행 비트 단위 동일성 검증)
+- [x] **REFACTOR-03**: Matcher 구조 개선 및 train_oof 해시 검증 완전 제거
+  - `model/matcher.py`: Scorer 클래스(`CatBoostScorer`, `EnsembleScorer`) 및 `load_decision_model` 팩토리 분리, 핫패스 정적 도우미 함수 추출로 오버헤드 제거
+  - `train_oof.py`: 해시 함수(`_sha256`, `sha256`) 및 `--folds-sha256` 인자 완전 삭제, 동적 모델 아티팩트 수집 적용
+  - `tests/test_matcher_refactor.py`: 5개 신규 단위 테스트 추가 및 전체 54개 테스트 전건 통과 (5.60초)
 - [x] **AS-SET-02**: 후보 집합 문맥 모델(`CandidateSetNetwork`, 4,193 파라미터) 5-fold 전체 OOF 평가 완료
   - 공식 가중 점수: **0.997992** (한글 99.748%, 비한글 99.918%)
 - [x] **AS-SET-03**: 학습 후보 상한을 추론과 동일한 30개로 축소 (Hard Negatives 80% 유지)

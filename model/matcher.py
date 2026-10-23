@@ -294,13 +294,15 @@ class CatalogIndex:
             return sorted(result)
         probs = self.assets['tables']['vessel_type'].get(text(row.get('vessel_type')), {})
         likely_types = sorted(probs, key=lambda x: (-probs[x], x))[:2]
-        val_gross = number(row.get('gross_tonnage'))
-        val_inter = number(row.get('international_gross_tonnage'))
-        ton_cols = ['gross_tonnage']
+        if '_tons' in row:
+            val_gross, val_inter = row['_tons']
+        else:
+            val_gross = number(row.get('gross_tonnage'))
+            val_inter = number(row.get('international_gross_tonnage'))
+        ton_values = [val_gross]
         if val_gross != val_inter and not (np.isnan(val_gross) and np.isnan(val_inter)):
-            ton_cols.append('international_gross_tonnage')
-        for col in ton_cols:
-            value = number(row.get(col))
+            ton_values.append(val_inter)
+        for value in ton_values:
             result.update(self.nearest(value, 60 if ko else 24))
             if ko:
                 for typ in likely_types:
@@ -393,19 +395,13 @@ class CatalogIndex:
         names = [self.names[i] for i in candidates]
         romans = [self.romans[i] for i in candidates]
         phones = [self.phones[i] for i in candidates]
-        def similarity(query, choices, scorer):
-            if not query:
-                return np.zeros(len(choices), dtype=np.float32)
-            return process.cdist([query], choices, scorer=scorer, workers=1)[0] / 100
         gt = self.gt[candidates]
         gross, inter = row['_tons']
-        def gap(value):
-            return np.nan_to_num(np.abs(gt-value) / np.maximum(np.maximum(gt, value), 1), nan=2.0)
-        g1 = gap(gross)
-        g2 = g1 if (gross == inter or (not np.isfinite(gross) and not np.isfinite(inter))) else gap(inter)
+        g1 = _tonnage_gap(gt, gross)
+        g2 = g1 if (gross == inter or (not np.isfinite(gross) and not np.isfinite(inter))) else _tonnage_gap(gt, inter)
         tp = self.assets['tables']['vessel_type'].get(text(row.get('vessel_type')), {})
         fp = self.assets['tables']['flag_name'].get(text(row.get('flag_name')), {})
-        names_sim = similarity(q, names, fuzz.ratio)
+        names_sim = _similarity_cdist(q, names, fuzz.ratio)
         if self.hangul_ignore_type_flag and ko:
             type_probs = [0.0 for _ in candidates]
             flag_probs = [0.0 for _ in candidates]
@@ -420,8 +416,9 @@ class CatalogIndex:
         n = len(candidates)
         base = np.column_stack([
             names_sim,
-            similarity(r, romans, fuzz.ratio), similarity(p, phones, fuzz.ratio),
-            similarity(p, phones, fuzz.partial_ratio),
+            _similarity_cdist(r, romans, fuzz.ratio),
+            _similarity_cdist(p, phones, fuzz.ratio),
+            _similarity_cdist(p, phones, fuzz.partial_ratio),
             [min(len(q), len(s))/max(len(q), len(s), 1) for s in names],
             [float(digits == self.digits[i]) for i in candidates],
             np.full(n, not digits), g1, g2, np.minimum(g1, g2),
@@ -435,6 +432,105 @@ class CatalogIndex:
         if self.name_mode == 'baseline' or not include_name_features:
             return base
         return np.column_stack([base, self.name_index.features(name, candidates, self.name_mode, query=row['_view'])])
+
+
+def _similarity_cdist(query, choices, scorer):
+    if not query:
+        return np.zeros(len(choices), dtype=np.float32)
+    return process.cdist([query], choices, scorer=scorer, workers=1)[0] / 100
+
+
+def _tonnage_gap(gt_arr, value):
+    denom = np.maximum(np.maximum(gt_arr, value), 1.0)
+    return np.nan_to_num(np.abs(gt_arr - value) / denom, nan=2.0)
+
+
+class CatBoostScorer:
+    """Wraps a loaded CatBoost model to return binary probability scores."""
+
+    def __init__(self, model):
+        self.model = model
+
+    def predict(self, x, num_threads=None):
+        x = np.asarray(x, dtype=np.float32)
+        if not len(x):
+            return np.empty(0, dtype=np.float32)
+        threads = num_threads or 4
+        return self.model.predict_proba(x, thread_count=threads)[:, 1]
+
+
+class EnsembleScorer:
+    """Weighted ensemble of decision model scorers."""
+
+    def __init__(self, scorers, weights=None):
+        # Normalize scorers: accept either ('name', scorer) tuples or direct scorer objects
+        self.scorers = [s[1] if isinstance(s, (tuple, list)) and len(s) == 2 else s for s in scorers]
+        if weights is None:
+            self.weights = [1.0 / len(self.scorers)] * len(self.scorers)
+        else:
+            self.weights = list(weights)
+
+    def predict(self, x, num_threads=None):
+        x = np.asarray(x, dtype=np.float32)
+        if not len(x):
+            return np.empty(0, dtype=np.float32)
+        total_scores = np.zeros(len(x), dtype=np.float32)
+        for s, w in zip(self.scorers, self.weights):
+            total_scores += w * s.predict(x, num_threads=num_threads)
+        return total_scores
+
+
+# Backward compatibility aliases
+_CatBoostScorer = CatBoostScorer
+_EnsembleScorer = EnsembleScorer
+
+
+def load_decision_model(model_dir: Path, assets: dict):
+    """Load the decision model for inference based on assets and available artifacts."""
+    model_dir = Path(model_dir)
+    expected_features = assets.get('features', [])
+
+    if assets.get('decision_model') == 'set_mlp':
+        try:
+            from decision_models.set_model import SetDecisionModel
+        except ImportError:
+            from model.set_model import SetDecisionModel
+        model = SetDecisionModel.load(model_dir, device='cpu')
+        if model.feature_names != expected_features:
+            raise ValueError('Set model and assets feature names differ')
+        return model
+
+    cb_path = model_dir / 'catboost.cbm'
+    mlp_path = model_dir / 'mlp.pt'
+
+    scorers = []
+    if cb_path.is_file():
+        from catboost import CatBoostClassifier
+        cb = CatBoostClassifier()
+        cb.load_model(str(cb_path))
+        scorers.append(('cb', CatBoostScorer(cb)))
+
+    if mlp_path.is_file():
+        try:
+            from decision_models.mlp_model import MLPDecisionModel
+        except ImportError:
+            from model.mlp_model import MLPDecisionModel
+        mlp = MLPDecisionModel.load(model_dir, device='cpu')
+        scorers.append(('mlp', mlp))
+
+    if len(scorers) >= 2:
+        return EnsembleScorer(scorers)
+    if len(scorers) == 1:
+        return scorers[0][1]
+
+    # Default: LightGBM ranker.txt
+    ranker_path = model_dir / 'ranker.txt'
+    if not ranker_path.is_file():
+        raise FileNotFoundError(f'No decision model found in {model_dir}')
+    model = lgb.Booster(model_str=ranker_path.read_text(encoding='utf-8'))
+    if model.feature_name() != expected_features:
+        raise ValueError('Model and assets feature names differ')
+    return model
 
 
 class Matcher:
@@ -451,63 +547,7 @@ class Matcher:
                                   hangul_ignore_type_flag=hangul_ignore_type_flag,
                                   korean_expansion=korean_expansion,
                                   hangul_soft_meta=hangul_soft_meta)
-        if assets.get('decision_model') == 'set_mlp':
-            try:
-                from decision_models.set_model import SetDecisionModel
-            except ImportError:
-                from model.set_model import SetDecisionModel
-            self.model = SetDecisionModel.load(model_dir, device='cpu')
-            if self.model.feature_names != assets['features']:
-                raise ValueError('Set model and assets feature names differ')
-            return
-        cb_path = model_dir / 'catboost.cbm'
-        mlp_path = model_dir / 'mlp.pt'
-
-        scorers = []
-        if cb_path.is_file():
-            from catboost import CatBoostClassifier
-            cb = CatBoostClassifier()
-            cb.load_model(str(cb_path))
-            class _CatBoostScorer:
-                def __init__(self, model):
-                    self.model = model
-                def predict(self, x, num_threads=None):
-                    x = np.asarray(x, dtype=np.float32)
-                    if not len(x):
-                        return np.empty(0, dtype=np.float32)
-                    threads = num_threads or 4
-                    return self.model.predict_proba(x, thread_count=threads)[:, 1]
-            scorers.append(('cb', _CatBoostScorer(cb)))
-
-        if mlp_path.is_file():
-            try:
-                from decision_models.mlp_model import MLPDecisionModel
-            except ImportError:
-                from model.mlp_model import MLPDecisionModel
-            mlp = MLPDecisionModel.load(model_dir, device='cpu')
-            scorers.append(('mlp', mlp))
-
-        if len(scorers) >= 2:
-            class _EnsembleScorer:
-                def __init__(self, model_list):
-                    self.scorers = model_list
-                    self.weights = [1.0 / len(model_list)] * len(model_list)
-                def predict(self, x, num_threads=None):
-                    x = np.asarray(x, dtype=np.float32)
-                    if not len(x):
-                        return np.empty(0, dtype=np.float32)
-                    total_scores = np.zeros(len(x), dtype=np.float32)
-                    for (_, s), w in zip(self.scorers, self.weights):
-                        total_scores += w * s.predict(x, num_threads=num_threads)
-                    return total_scores
-            self.model = _EnsembleScorer(scorers)
-        elif len(scorers) == 1:
-            self.model = scorers[0][1]
-        else:
-            # Read through Python so Unicode Windows project paths also work.
-            self.model = lgb.Booster(model_str=(model_dir / 'ranker.txt').read_text(encoding='utf-8'))
-            if self.model.feature_name() != assets['features']:
-                raise ValueError('Model and assets feature names differ')
+        self.model = load_decision_model(model_dir, assets)
 
     def predict(self, queries, use_direct=True, diagnostics=False):
         """Use only query columns; legacy label diagnostics run after prediction.
