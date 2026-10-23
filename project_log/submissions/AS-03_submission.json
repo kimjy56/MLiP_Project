@@ -1,0 +1,60 @@
+{
+  "submission_label": "AS-03",
+  "submission_id": null,
+  "submitted_at_kst": "2026-10-22T23:38:32+09:00",
+  "recorded_at_kst": "2026-10-23T16:05:00+09:00",
+  "status": "scored_user_reported",
+  "reported_public_score": 0.8424194595,
+  "official_public_score": 0.8424194595,
+  "official_private_score": null,
+  "official_runtime_seconds": 86,
+  "submission_filename": "submit_AS-03.zip",
+  "user_description": "catboost+mlp edit",
+  "evidence_reference": "User supplied DACON submission result in chat on 2026-10-23 KST",
+  "local_zip_path": "artifacts/as03_handoff/submit_AS-03.zip",
+  "local_zip_sha256": "3cff51f35ba96814187f0865d5732136f061f939329a8ffe8ec88e1a77382296",
+  "local_zip_bytes": 941734,
+  "uploaded_zip_identity_verified": true,
+  "baseline_submission_label": "AS-02",
+  "baseline_reported_public_score": 0.8694329714,
+  "score_difference": -0.0270135119,
+  "local_oof_summary": {
+    "scheme": "G5-s42",
+    "total_rows": 12222,
+    "weighted_accuracy": 0.99561,
+    "hangul_accuracy": 0.99412,
+    "non_hangul_accuracy": 0.99909,
+    "hangul_errors": 7,
+    "non_hangul_errors": 10
+  },
+  "mathematical_decomposition": {
+    "assumed_hangul_rows": 532,
+    "assumed_non_hangul_rows": 3568,
+    "total_public_rows": 4100,
+    "decoded_hangul_correct": 427,
+    "decoded_hangul_accuracy": 0.8026315789,
+    "decoded_non_hangul_correct": 3337,
+    "decoded_non_hangul_accuracy": 0.9352578475,
+    "reconstructed_score": 0.8424194595,
+    "residual": 2.32e-11,
+    "comparison_vs_as02": {
+      "hangul_correct_delta": -22,
+      "hangul_accuracy_delta_pct": -4.1353,
+      "non_hangul_correct_delta": 23,
+      "non_hangul_accuracy_delta_pct": 0.6446,
+      "weighted_score_delta": -0.0270135119
+    }
+  },
+  "analysis": {
+    "generalization_gap": "로컬 5-fold OOF(0.99561) 대비 Public 점수(0.84242) 간 -0.15319의 Generalization Gap 발생",
+    "non_hangul_gain": "독립 비한글 잡음 증강 및 CatBoost 분류기 최적화로 비한글 정답 수는 AS-02(3,314개) 대비 +23개(3,337개)로 유의미하게 향상됨",
+    "hangul_loss": "한글 정답 수가 AS-02(449개) 대비 -22개(427개)로 감소함. 한글 가중치(0.7)가 높아 비한글 개선을 상쇄하고 전체 점수가 0.8694 -> 0.8424로 하락",
+    "likely_causes": [
+      "0.85 임계값의 hangul_soft_meta 규칙: 테스트 환경의 노이즈/외래어 변형으로 유사도가 0.85에 미달할 때 0.5 감쇄가 정답 후보를 과도하게 배제했을 위험",
+      "MLP 0.4 앙상블 비중: OOD(Unseen vessels) 테스트 환경에서 MLP가 보정되지 않은 신뢰도 점수를 부여했을 가능성",
+      "연속 약어 접두사 분리 규칙의 테스트 데이터 분포와의 미세 불일치"
+    ],
+    "runtime": "서버 실행 시간 1분 26초(86초)로 1,200초 제한 대비 매우 안정적 (행당 약 21ms)"
+  },
+  "decision": "AS-03(CatBoost+MLP 앙상블 및 Soft Meta)의 실측 Public 점수가 AS-02 대비 하락함에 따라 최종 채택 기각. 대신 후보군 전체의 문맥과 상대 순위를 함께 인코딩하고 손실 불균형을 해결한 Set Model(AS-04)을 주력으로 추진"
+}
