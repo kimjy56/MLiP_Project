@@ -103,6 +103,23 @@ class MatcherRefactorTests(unittest.TestCase):
         self.assertEqual(feats.shape[0], 2)
         self.assertIn(feats[0, 14], [0.0, 0.5, 1.0])
 
+    def test_hangul_flag_domain_improvements(self):
+        train, catalog, _ = fixture()
+        assets = make_assets(train, catalog, name_mode='baseline', hangul_soft_meta=True)
+        index = CatalogIndex(catalog, assets, hangul_soft_meta=True)
+        # 1. Missing flag neutrality
+        row_missing = {'vessel_name': '테스트선박', 'gross_tonnage': 1000.0, 'vessel_type': '화물선', 'flag_name': ''}
+        feats_missing = index.features(row_missing, [0, 1])
+        self.assertEqual(feats_missing[0, 15], 0.5)
+        self.assertEqual(feats_missing[1, 15], 0.5)
+
+        # 2. South Korea dual compatibility & Old year attenuation
+        row_panama_old = {'vessel_name': '테스트선박', 'gross_tonnage': 1000.0, 'vessel_type': '화물선',
+                          'flag_name': '파나마', 'arrival_year': 2016}
+        feats_old = index.features(row_panama_old, [0, 1])
+        for val in feats_old[:, 15]:
+            self.assertIn(val, [0.5, 1.0])
+
 
 if __name__ == '__main__':
     unittest.main()

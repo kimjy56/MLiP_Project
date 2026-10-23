@@ -408,8 +408,25 @@ class CatalogIndex:
         elif self.hangul_soft_meta and ko:
             type_probs = [1.0 if tp.get(self.types[i], 0.0) >= 0.02 else (0.5 if not tp else 0.0)
                           for i in candidates]
-            flag_probs = [max(0.5, fp.get(self.flags[i], 0.0)) if sim >= 0.85 else 0.5 * fp.get(self.flags[i], 0.0)
-                          for i, sim in zip(candidates, names_sim)]
+            flag_raw = text(row.get('flag_name'))
+            if not flag_raw:
+                flag_probs = [0.5 for _ in candidates]
+            else:
+                year = number(row.get('arrival_year'))
+                flag_probs = []
+                for i, sim in zip(candidates, names_sim):
+                    c_flag = self.flags[i]
+                    is_compatible = (fp.get(c_flag, 0.0) >= 0.02) or (c_flag in {'South Korea', 'Korea', 'Republic of Korea'})
+                    if is_compatible:
+                        flag_probs.append(1.0)
+                    elif np.isfinite(year) and year <= 2019:
+                        flag_probs.append(0.5)
+                    elif sim >= 0.85:
+                        flag_probs.append(0.5)
+                    elif np.isfinite(year) and year <= 2023:
+                        flag_probs.append(0.25)
+                    else:
+                        flag_probs.append(0.0)
         else:
             type_probs = [tp.get(self.types[i], 0) for i in candidates]
             flag_probs = [fp.get(self.flags[i], 0) for i in candidates]
