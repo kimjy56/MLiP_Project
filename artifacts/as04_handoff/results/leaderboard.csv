@@ -1,0 +1,2 @@
+﻿date,id,scheme,oof,oof_sha8,rows,hangul,hangul_lo,hangul_hi,non_hangul,non_hangul_lo,non_hangul_hi,weighted,weighted_lo,weighted_hi,recall_h,recall_nh,compare_to,d_weighted,d_lo,d_hi,verdict,train_sec,infer_sec,zip_mb,note,checks,eval_ver
+2026-10-22 23:52,AS-04,G5-s42,oof_AS-04.csv,124b32e0,12222,0.99748,0.99314,1.00000,0.99918,0.99864,0.99973,0.99799,0.99493,0.99984,1.0000,0.9997,oof_AS-03.csv,0.00238,-0.00003,0.00726,동등,,,,,train=ok;folds=G5-s42;foldcol=ok,1.0

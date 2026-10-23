@@ -33,7 +33,8 @@ sample_submission.csv
 *.zip
 *.7z
 *.tar.gz
-artifacts/
+artifacts/*
+!artifacts/*handoff/
 **/model/assets.json
 **/model/ranker.txt
 reports/oof_models*/
@@ -75,3 +76,10 @@ split.csv
 
 # Local workspace IPC sockets
 kernel-ipc-*
+
+# Handoff artifacts exceptions (allow AS handoff results and packages)
+!artifacts/*handoff/**
+!handoff/**
+**/__pycache__/
+*.py[cod]
+

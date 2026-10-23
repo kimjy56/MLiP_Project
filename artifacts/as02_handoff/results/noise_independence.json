@@ -1,0 +1,111 @@
+{
+  "rows": 11031,
+  "pairwise": {
+    "name_typo vs ton_missing": {
+      "counts": [
+        [
+          6478,
+          489
+        ],
+        [
+          3787,
+          277
+        ]
+      ],
+      "odds_ratio": 0.9689838717429069,
+      "p_value": 0.6979944767843473,
+      "reject_bonferroni_005": false
+    },
+    "name_typo vs ton_shift": {
+      "counts": [
+        [
+          4394,
+          2573
+        ],
+        [
+          2527,
+          1537
+        ]
+      ],
+      "odds_ratio": 1.0386970350990492,
+      "p_value": 0.35834606717068684,
+      "reject_bonferroni_005": false
+    },
+    "name_typo vs flag_missing": {
+      "counts": [
+        [
+          5734,
+          1233
+        ],
+        [
+          3425,
+          639
+        ]
+      ],
+      "odds_ratio": 0.8676306675901753,
+      "p_value": 0.007910651994543636,
+      "reject_bonferroni_005": true
+    },
+    "ton_missing vs ton_shift": {
+      "counts": [
+        [
+          6449,
+          3816
+        ],
+        [
+          472,
+          294
+        ]
+      ],
+      "odds_ratio": 1.0526629623707493,
+      "p_value": 0.5103622252580131,
+      "reject_bonferroni_005": false
+    },
+    "ton_missing vs flag_missing": {
+      "counts": [
+        [
+          8520,
+          1745
+        ],
+        [
+          639,
+          127
+        ]
+      ],
+      "odds_ratio": 0.9703915950334289,
+      "p_value": 0.8030566986764078,
+      "reject_bonferroni_005": false
+    },
+    "ton_shift vs flag_missing": {
+      "counts": [
+        [
+          5785,
+          1136
+        ],
+        [
+          3374,
+          736
+        ]
+      ],
+      "odds_ratio": 1.1108560074137772,
+      "p_value": 0.04617923583410643,
+      "reject_bonferroni_005": false
+    }
+  },
+  "actual_name_change_conditional": {
+    "ton_missing": {
+      "False": 0.22523136872868973,
+      "True": 0.20887728459530025
+    },
+    "ton_shift": {
+      "False": 0.21976592977893367,
+      "True": 0.23138686131386862
+    },
+    "flag_missing": {
+      "False": 0.22666229937766133,
+      "True": 0.21153846153846154
+    }
+  },
+  "interpretation": "Separate deterministic PRNG streams by event; finite sample rates need not match. No seed selection based on these checks.",
+  "multiple_testing": "Six pairwise tests; Bonferroni threshold 0.05/6. Test of draws, not resulting original-plus-noise field independence."
+}

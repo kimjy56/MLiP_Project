@@ -1,0 +1,12 @@
+{
+  "command": ".venv/Scripts/python.exe -X utf8 eval_kit/check_submission.py --zip artifacts/as02_handoff/submit_AS-02.zip --train data/train.csv --catalog data/vessel_catalog.csv",
+  "exit_code": 0,
+  "failures": 0,
+  "warnings": 0,
+  "rows": 300,
+  "hangul_rows": 90,
+  "checks": ["structure", "requirements", "static scan", "full", "shuffled", "subset", "single"],
+  "full_run_seconds_displayed": 2.3,
+  "limitations": ["Local Windows Python 3.11.15, not official L4 server", "Public training rows; direct lookup can bypass scoring", "Tool does not enforce network isolation", "Tool displays outdated 20-minute limit; current supplied limit is 30 minutes"],
+  "additional_holdout_check": "holdout_independence.json"
+}

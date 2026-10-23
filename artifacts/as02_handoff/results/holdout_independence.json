@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "rows": 24,
+  "lookup": false,
+  "checks": [
+    "reverse",
+    "subset",
+    "single",
+    "empty"
+  ],
+  "source": "official public train fold 0, fold-trained model"
+}

@@ -1,0 +1,28 @@
+{
+  "hangul": {
+    "rows": 1191,
+    "before_accuracy": 0.9756507136859782,
+    "after_accuracy": 0.9748110831234257,
+    "changed": 22,
+    "fixed": 6,
+    "broken": 7
+  },
+  "non_hangul": {
+    "rows": 11031,
+    "before_accuracy": 0.9992747710996284,
+    "after_accuracy": 0.9992747710996284,
+    "changed": 0,
+    "fixed": 0,
+    "broken": 0
+  },
+  "before_weighted": 0.9827379309100732,
+  "after_weighted": 0.9821501895162865,
+  "regression_gate_passed": true,
+  "received_oof_changed_rows": 0,
+  "received_oof_matched_rows": 12222,
+  "zip": {
+    "path": "C:\\Projects\\ML_midterm\\artifacts\\as02_handoff\\submit_AS-02.zip",
+    "sha256": "cfb094cdc2f6635f85a6c969259f7713adae8534bc1a1c52764ec787b01aa2d0",
+    "bytes": 190639
+  }
+}

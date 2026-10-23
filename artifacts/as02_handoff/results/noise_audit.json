@@ -1,0 +1,50 @@
+{
+  "rows": 11031,
+  "requested_probabilities": {
+    "name_typo": 0.365,
+    "ton_missing": 0.07,
+    "ton_shift": 0.37,
+    "flag_missing": 0.17
+  },
+  "observed_rates": {
+    "name_typo": 0.3684162813888133,
+    "ton_missing": 0.06944066721058834,
+    "ton_shift": 0.3725863475659505,
+    "flag_missing": 0.16970356268697306
+  },
+  "applied_rates": {
+    "name_applied": 0.22409573021484905,
+    "ton_shift_applied": 0.34593418547729127
+  },
+  "conditional_rates": {
+    "name_typo | ton_missing": {
+      "False": 0.3689235265465173,
+      "True": 0.36161879895561355
+    },
+    "name_typo | ton_shift": {
+      "False": 0.3651206473053027,
+      "True": 0.3739659367396594
+    },
+    "name_typo | flag_missing": {
+      "False": 0.3739491210830877,
+      "True": 0.34134615384615385
+    },
+    "ton_missing | ton_shift": {
+      "False": 0.06819823724895246,
+      "True": 0.07153284671532846
+    },
+    "ton_missing | flag_missing": {
+      "False": 0.06976744186046512,
+      "True": 0.06784188034188034
+    },
+    "ton_shift | flag_missing": {
+      "False": 0.3683808276012665,
+      "True": 0.39316239316239315
+    }
+  },
+  "limitations": [
+    "Independent draws, not proof that resulting fields or names are statistically independent.",
+    "Original train noise retained; final missingness differs from event probabilities.",
+    "Short names may be ineligible for typo; missing tonnage overrides shift."
+  ]
+}
