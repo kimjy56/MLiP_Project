@@ -1,0 +1,29 @@
+{
+  "sources": [
+    {
+      "path": "artifacts/as02_handoff/results/oof_AS-02.csv",
+      "sha256": "4834ffa7ce973975519173c08d9308396d972b4c40092051282fd6b4a779a464"
+    },
+    {
+      "path": "artifacts/as03_handoff/results/oof_AS-03.csv",
+      "sha256": "91f275fed7c4424002b6979cdfaa4b860bea948cd6bec2945011c76be527aa2e"
+    },
+    {
+      "path": "artifacts/as04_handoff/results/oof_AS-04.csv",
+      "sha256": "124b32e0342dfb4b1bc1bf4b8f7cefef5206faba3917eb55ebd7a977205884af"
+    }
+  ],
+  "rows": 12222,
+  "expected_hash_source": "project_log/experiments/AS-NAME-02.json:data.split_file_sha256",
+  "all_three_oof_assignments_identical": true,
+  "original_byte_hash_matches": true,
+  "group_leakage": false,
+  "method": "Join saved sample_id/fold assignments to official train target IDs in train row order; reproduce UTF-8/newline format against known hash",
+  "restored_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+  "train_sha256": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+  "expected_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+  "vessels": 5851,
+  "recorded_at_kst": "2026-10-23T22:34:23.5785083+09:00",
+  "operation": "restore existing fold assignments, not resplit",
+  "output": "eval_kit/folds_group5_seed42.csv"
+}

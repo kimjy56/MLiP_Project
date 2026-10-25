@@ -83,3 +83,6 @@ kernel-ipc-*
 **/__pycache__/
 *.py[cod]
 
+
+# Reverse-channel public heldout row features (hashes stay in experiment JSON)
+/reports/noisy_channel/*/candidate_scores.csv

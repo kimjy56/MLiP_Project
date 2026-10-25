@@ -68,7 +68,8 @@ KOREAN_ALPHABET_SYLLABLES = {
     '케이': 'K', '엘': 'L', '엠': 'M', '엔': 'N', '오': 'O',
     '피': 'P', '큐': 'Q', '알': 'R', '아르': 'R', '에스': 'S', '티': 'T',
     '유': 'U', '브이': 'V', '더블유': 'W', '엑스': 'X', '와이': 'Y', '제트': 'Z',
-    '앤': 'N',
+    '앤': 'N', '앰': 'M', '앨': 'L', '애스': 'S', '애프': 'F', '액스': 'X',
+    '애이': 'A', '애이치': 'H', '재이': 'J', '지트': 'Z',
 }
 
 KNOWN_KOREAN_WORD_MAP = {
@@ -98,6 +99,25 @@ KNOWN_KOREAN_WORD_MAP = {
     '보이저': 'VOYAGER', '프로그레스': 'PROGRESS', '챔피언': 'CHAMPION',
     '호라이즌': 'HORIZON', '네비게이터': 'NAVIGATOR', '내비게이터': 'NAVIGATOR',
     '선라이즈': 'SUNRISE', '썬라이즈': 'SUNRISE',
+    # 신규 발굴 안전 외래어 및 여객선 (Safe Passenger/Maritime Loanwords from AR-06)
+    '에코누리': 'ECONURI', '한우리': 'HANWOORI', '누산타라': 'NUSANTARA', '스테나': 'STENA',
+    '코모도': 'COMMODORE', '코모도어': 'COMMODORE', '쓰시마': 'TSUSHIMA',
+    '판스타': 'PANSTAR', '팬스타': 'PANSTAR', '씨스타': 'SEASTAR', '시스타': 'SEASTAR',
+    '씨웨이즈': 'SEAWAYS', '시웨이즈': 'SEAWAYS', '카페리': 'CARFERRY', '카훼리': 'CARFERRY',
+    '크루즈': 'CRUISE', '크루저': 'CRUISER', '썬크루저': 'SUNCRUISER', '선크루저': 'SUNCRUISER',
+    '씨플라워': 'SEAFLOWER', '실버클라우드': 'SILVERCLOUD', '하이제트': 'HIJET',
+    '아일랜더': 'ISLANDER', '아일랜드': 'ISLAND', '파라다이스': 'PARADISE',
+    '유로카고': 'EUROCARGO', '퍼시픽': 'PACIFIC', '아틀란틱': 'ATLANTIC',
+    '다이아몬드': 'DIAMOND', '크리스탈': 'CRYSTAL', '에메랄드': 'EMERALD', '사파이어': 'SAPPHIRE',
+    '유니온': 'UNION', '유니언': 'UNION', '센추리': 'CENTURY', '드래곤': 'DRAGON',
+    '피닉스': 'PHOENIX', '알바트로스': 'ALBATROSS', '벨루가': 'BELUGA', '돌핀': 'DOLPHIN',
+    '카니발': 'CARNIVAL', '시스팬': 'SEASPAN', '씨스팬': 'SEASPAN', '미드나잇': 'MIDNIGHT',
+    # 중국 기항지 및 선박 고유명사 (Chinese Ports & Vessel Names from AR-06)
+    '웨이하이': 'WEIHAI', '저우산': 'ZHOUSHAN', '샤먼': 'XIAMEN', '광저우': 'GUANGZHOU',
+    '선전': 'SHENZHEN', '텐진': 'TIANJIN', '산동': 'SHANDONG', '산둥': 'SHANDONG',
+    '닝하이': 'NINGHAI', '닝하이투오': 'NINGHAITUO', '푸루이': 'FURUI', '푸후이': 'FUHUI',
+    '푸유안': 'FUYUAN', '바오루이': 'BAORUI', '바오루이링': 'BAORUILING', '안딩하이': 'ANDINGHAI',
+    '안딩': 'ANDING', '치셍': 'CHIHSHENG', '한렌': 'HANREN', '펭슈': 'FENGXIU', '펭슈하이': 'FENGXIUHAI',
 }
 
 ROMAN_NUMERALS = {
@@ -159,12 +179,24 @@ def extract_kr_acronym_prefix(word):
     return None
 
 
+PINYIN_BIGRAM_CONTRACTIONS = [
+    ('투오', 'TUO'), ('루이', 'RUI'), ('후이', 'HUI'), ('유안', 'YUAN'),
+    ('위안', 'YUAN'), ('샤오', 'XIAO'), ('자오', 'ZHAO'), ('차오', 'CHAO'),
+    ('바오', 'BAO'), ('다오', 'DAO'), ('하오', 'HAO'), ('가오', 'GAO'),
+    ('라오', 'LAO'), ('타오', 'TAO'), ('저우', 'ZHOU'), ('구오', 'GUO'),
+    ('루오', 'LUO'), ('수이', 'SUI'), ('추이', 'CUI'), ('구이', 'GUI'),
+    ('웨이', 'WEI'),
+]
+
+
 def expand_korean_name(name):
     if not isinstance(name, str) or not any('가' <= c <= '힣' for c in name):
         return name
     s = name
     for k in sorted(KNOWN_KOREAN_WORD_MAP.keys(), key=lambda x: -len(x)):
         s = s.replace(k, f" {KNOWN_KOREAN_WORD_MAP[k]} ")
+    for kr_bi, en_bi in PINYIN_BIGRAM_CONTRACTIONS:
+        s = s.replace(kr_bi, f" {en_bi} ")
     s = re.sub(r'제\s*(\d+)\s*호?', r'NO. \1 ', s)
     # 선박 부속어/접미사 및 수식어 정규화 (호선, 바지, 급, 탱커)
     s = re.sub(r'\b(호선|바지|급|탱커)\b', ' ', s)

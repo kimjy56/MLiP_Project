@@ -1,0 +1,125 @@
+{
+  "experiment_id": "AS-05-PACKAGE-01",
+  "submission_id": "AS-05",
+  "status": "packaged_small_runtime_checks_passed",
+  "recorded_at_kst": "2026-10-24T23:25:53.058590+09:00",
+  "purpose": "User-requested AS-05 ZIP using the completed reverse-channel checkpoint",
+  "hypothesis": "Gated reverse-name likelihood can refine ambiguous baseline candidates",
+  "baseline": {
+    "path": "submit_AS-04.zip",
+    "sha256": "a26896e0c35c03c1128a2925e285ce8d32ca3defc871c08a8e3a222a2d3b2122"
+  },
+  "checkpoint": {
+    "path": "artifacts\\AS-HCX-NC-01\\model",
+    "manifest_sha256": "2c4488961a4ca7f92d46cd79ad295d53019dc9781439bdf6e34cddb71fab1dfd",
+    "heldout_fold": 0,
+    "checkpoint_sha256": {
+      "added_tokens.json": "6a3d05a3466ebce433995aa857049fa022d93edf3c57c36d9df3762ccea15407",
+      "chat_template.jinja": "f558b0d553e94855ee7eb43d9e49f8430c7e9e4e59b24cacdf1271c772837e18",
+      "config.json": "f12c9535f0b3e806dc6e9fdbe1fa332395e415045d45b80d18ae891fcc57ac91",
+      "generation_config.json": "8fd7c5acfb2299e85656c8472a26e56ad4a058f492fd1fd50aefe64603beaaae",
+      "merges.txt": "31478af22bfd540985121b918c0ee8273cb9e4e6724beb4fdd7dcc3c8275448c",
+      "model.safetensors": "2231185285a52ca5ba167573486da83f3895201dd9303c1e4e4a66c74ddeb9d3",
+      "special_tokens_map.json": "82f45c169fe5b200cdb121e184af2216507c5ef9f0c3bf610e110e421e69af4d",
+      "tokenizer.json": "1ce80c377be4ae8a4e57758da0d6ee3dc6da3f25857d72c07a52a156d7de7fab",
+      "tokenizer_config.json": "1fb1a4a6e527eeff72cd35f47eac9e4a38e7f08d7da2563b966f8efd9998b5f5",
+      "vocab.json": "cfe2bdf330509bd4772f6dbe19a529a80798c3a00d8ab5a74925a4f6674047fa"
+    }
+  },
+  "configuration": {
+    "channel_weight": 0.2,
+    "normalization": "mean_including_EOS",
+    "max_baseline_margin": 1.0,
+    "candidate_limit": 35,
+    "bound_pruning": "candidate baseline score upper-bounds fused score",
+    "cpu_threads": 4,
+    "device": "CUDA float32 when available; CPU float32 otherwise",
+    "row_independence": "no cross-row cache, aggregation or time-adaptive gate"
+  },
+  "code": {
+    "git_revision": "b2efe726ba991628ca76e2d4b417a5c3f92a25f2",
+    "dirty": true,
+    "source_sha256": {
+      "experiments/build_as05_submission.py": "f2ea140618aca35ac7e0a270e2503c0dcd4328b8b8b7ac06b5019c3564f5acc7",
+      "experiments/as05_reranker.py": "af58c38727afaf1fd889e39002c97ed019d03630eb5b5f0e209a8e9899e34cbe",
+      "name_decoder/noisy_channel.py": "4fec13387db17128afacea36ff48ddc4ebba08c7dec29b82fa423d93a5e0b738",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863"
+    }
+  },
+  "metrics": {
+    "official_server_score": null,
+    "full_oof_score": null
+  },
+  "checks": {
+    "source_compilation": true,
+    "checkpoint_hashes_match": true,
+    "official_structure": true,
+    "common_checker": {
+      "command": ".\\.venv-server\\Scripts\\python.exe -X utf8 eval_kit/check_submission.py --zip submit_AS-05.zip --train data/train.csv --catalog data/vessel_catalog.csv --n 12 --single 1 --timeout 120",
+      "exit_code": 0,
+      "public_train_rows": 12,
+      "hangul_rows": 4,
+      "single_row_runs": 1,
+      "failures": 0,
+      "warnings": 1,
+      "format_valid": true,
+      "shuffle_differences": 0,
+      "half_differences": 0,
+      "single_differences": 0,
+      "full_run_seconds": 6.5,
+      "warning": "Small-sample CPU runtime extrapolation; not a measured server full run. Checker text still cites the older 1200-second limit.",
+      "raw_log": "reports/as05_package_check.txt",
+      "raw_log_encoding_note": "PowerShell redirected Korean text is mojibake; this JSON preserves the readable check summary."
+    },
+    "reverse_runtime": {
+      "scope": "public catalog fixture; software check only",
+      "real_checkpoint_loaded": true,
+      "mean_logp_fusion_matches_exhaustive": true,
+      "candidate_order_invariant": true,
+      "reranker_selected_different_id": true,
+      "cpu_threads": 4,
+      "device": "cpu",
+      "seconds_including_loading_and_repeated_scoring": 15.272851300003822
+    },
+    "cuda_path_tested": false,
+    "official_python_3_11_17_tested": false,
+    "current_python": "3.11.3",
+    "full_dataset_accuracy_tested": false,
+    "actual_private_test_run": false
+  },
+  "limitations": [
+    "Uses the completed fold-0-excluded reverse checkpoint without retraining.",
+    "Fold 1-4 examples may have been used to train this reverse checkpoint; they are not OOF evidence.",
+    "128-row cached pilot is not full AS-05 ID validation; margin gating is a new integration choice.",
+    "GPU execution and official server end-to-end runtime have not been verified locally."
+  ],
+  "upload_performed": false,
+  "retraining_performed": false,
+  "finished_at_kst": "2026-10-24T23:30:04+09:00",
+  "archive": {
+    "path": "submit_AS-05.zip",
+    "sha256": "d11f56f18de8cdb966e0eb8158e216fa9feb3f834f89785445f5e6218be1a5eb",
+    "bytes": 2276905967,
+    "member_count": 20
+  },
+  "staging_directory": "artifacts\\AS-05\\package",
+  "package_code_sha256": {
+    "model/as05_reranker.py": "af58c38727afaf1fd889e39002c97ed019d03630eb5b5f0e209a8e9899e34cbe",
+    "model/channel/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "model/channel/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+    "model/channel/noisy_channel.py": "4fec13387db17128afacea36ff48ddc4ebba08c7dec29b82fa423d93a5e0b738",
+    "script.py": "0e862acfbc01e372a755e0af5fb753713a8473e0775d82e4a6e503d5006dd780"
+  },
+  "commands": [
+    ".\\.venv-server\\Scripts\\python.exe -X utf8 experiments/build_as05_submission.py",
+    ".\\.venv-server\\Scripts\\python.exe -X utf8 eval_kit/check_submission.py --zip submit_AS-05.zip --train data/train.csv --catalog data/vessel_catalog.csv --n 12 --single 1 --timeout 120"
+  ],
+  "artifacts": [
+    "submit_AS-05.zip",
+    "artifacts/AS-05/package",
+    "reports/as05_package_check.txt",
+    "reports/as05_reverse_runtime_check.json",
+    "docs/AS05_SUBMISSION.md"
+  ],
+  "decision": "Deliver the user-requested ZIP; no full-OOF or official-server improvement claim."
+}

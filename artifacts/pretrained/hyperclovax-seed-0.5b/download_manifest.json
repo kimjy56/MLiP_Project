@@ -1,0 +1,35 @@
+{
+  "repo_id": "naver-hyperclovax/HyperCLOVAX-SEED-Text-Instruct-0.5B",
+  "revision": "3da5046fb0195d14f2497de198136987d35fd644",
+  "recorded_at_kst": "2026-10-24T01:49:42.841308+09:00",
+  "files": {
+    "config.json": {
+      "sha256": "2f7b047eafde467097fddbfa7281da5579c6ad9920af06e52c8666c87729b745",
+      "bytes": 760
+    },
+    "LICENSE": {
+      "sha256": "38ecac78adef21eceff609f917f3cf904b3381ee9a6c83f824b89f4f9d28bbb4",
+      "bytes": 12560
+    },
+    "model.safetensors": {
+      "sha256": "f40f63fa6a118eb9b59e8910c3ab5a6e6499805966284bb2cd41e197719d156b",
+      "bytes": 1132587360
+    },
+    "README.md": {
+      "sha256": "5e636ec45bae657097736aba2f4878928c605a35f37c89f59fe1579e17a32303",
+      "bytes": 7231
+    },
+    "special_tokens_map.json": {
+      "sha256": "ec0481f56b50b66a4723b905c89345c52d45eed6571dd87a023285b99a929cc9",
+      "bytes": 1929
+    },
+    "tokenizer.json": {
+      "sha256": "1ce80c377be4ae8a4e57758da0d6ee3dc6da3f25857d72c07a52a156d7de7fab",
+      "bytes": 8029694
+    },
+    "tokenizer_config.json": {
+      "sha256": "64982c20eb3c1ebd5469934a1d576afc17a96e02df0d90c8e1c81233d27047e2",
+      "bytes": 11905
+    }
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "analysis_id": "ANALYSIS-AS05-SERVER-01",
+  "recorded_at_kst": "2026-10-25T10:41:17+09:00",
+  "scope": "Existing scores, source/assets, public data aggregates and cached candidates; no model inference/training",
+  "score_analysis": {
+    "difference": "-0.0001386595",
+    "percentage_point_difference": "-0.0138659500",
+    "displayed_seconds": {
+      "ar06": 234,
+      "as05": 769,
+      "extra": 535
+    },
+    "time_ratio": 3.286324786324786,
+    "official_language_accuracies": null,
+    "assumed_group_counts": {
+      "hangul": 532,
+      "non_hangul": 3568,
+      "officially_confirmed": false
+    },
+    "all_ar06_solutions": [
+      {
+        "hangul_correct": 473,
+        "non_hangul_correct": 3369,
+        "score": "0.9056363582723625206514042955"
+      },
+      {
+        "hangul_correct": 530,
+        "non_hangul_correct": 2477,
+        "score": "0.9056363582723625206514042955"
+      }
+    ],
+    "all_as05_solutions": [
+      {
+        "hangul_correct": 472,
+        "non_hangul_correct": 3383,
+        "score": "0.9054976988435213594524427661"
+      },
+      {
+        "hangul_correct": 529,
+        "non_hangul_correct": 2491,
+        "score": "0.9054976988435213594524427661"
+      }
+    ],
+    "same_branch_net_delta": {
+      "hangul": -1,
+      "non_hangul": 14
+    },
+    "crossbranch_deltas": [
+      [
+        56,
+        -878
+      ],
+      [
+        -58,
+        906
+      ]
+    ],
+    "one_kr_value_in_en_rows": 15.649122807017545,
+    "conditional_hybrid_score": "0.9068134883172055699787585556",
+    "hybrid_score_is_measured": false
+  },
+  "package_audit": {
+    "as04_as05_base_asset_bytes_identical": true,
+    "base_asset_sha256": "5a70a74ec75e33d03ba1e676559d95183f7a091b3a38926c30f4e7792346e650",
+    "as04_script_sha256": "57ba7094daf93813bc134be591bed2f64eef5270a4daff0a16ee7aaefad140b4",
+    "as05_script_sha256": "0e862acfbc01e372a755e0af5fb753713a8473e0775d82e4a6e503d5006dd780",
+    "ar06_handoff_common_keys_equal": {
+      "callsign_lookup": true,
+      "en_mode": true,
+      "flag_log_lift": true,
+      "kr_mode": true,
+      "learned_syl_top2": true,
+      "learned_syl_top3": true,
+      "learned_word_map": true,
+      "learned_word_top2": true,
+      "name_lookup": true,
+      "type_log_lift": true,
+      "use_train_lookup_default": true,
+      "version": true
+    },
+    "as04_added_keys": [
+      "flag_trans_prob",
+      "type_trans_prob"
+    ],
+    "as05_config": {
+      "submission_id": "AS-05",
+      "checkpoint_id": "AS-HCX-NC-01",
+      "channel_weight": 0.2,
+      "normalization": "mean_including_EOS",
+      "max_baseline_margin": 1.0,
+      "candidate_limit": 35,
+      "bound_pruning": "candidate baseline score upper-bounds fused score",
+      "cpu_threads": 4,
+      "device": "CUDA float32 when available; CPU float32 otherwise",
+      "row_independence": "no cross-row cache, aggregation or time-adaptive gate"
+    },
+    "as05_checkpoint": "AS-HCX-NC-01",
+    "uploaded_ar06_zip_hash_verified": false,
+    "source_diff_review": "AR06 handoff -> AS04 changes Korean metadata scoring and adds transition probability tables. AS04 -> AS05 adds both-language reranker calls and runtime/entrypoint setup."
+  },
+  "public_data": {
+    "train_rows": 12222,
+    "catalog_rows": 78595,
+    "train_target_vessels": 5851,
+    "catalog_coverage": 0.07444493924549908,
+    "languages": {
+      "hangul": {
+        "rows": 1191,
+        "unique_vessels": 382,
+        "tonnage_missing_rows": 0,
+        "flag_missing_rows": 116,
+        "type_missing_rows": 0,
+        "observed_name_digit_fraction": 0.07976490344248531,
+        "tonnage_comparable_rows": 1191,
+        "tonnage_relative_error_quantiles": {
+          "0.5": 0.0,
+          "0.9": 0.041326181648007485,
+          "0.99": 0.04969574036511156,
+          "1": 0.09342657342657343
+        }
+      },
+      "non_hangul": {
+        "rows": 11031,
+        "unique_vessels": 5471,
+        "tonnage_missing_rows": 793,
+        "flag_missing_rows": 1899,
+        "type_missing_rows": 0,
+        "observed_name_digit_fraction": 0.049678179675460066,
+        "tonnage_comparable_rows": 10238,
+        "tonnage_relative_error_quantiles": {
+          "0.5": 0.0,
+          "0.9": 0.04533783552637009,
+          "0.99": 0.04996963960424331,
+          "1": 0.09040928527794746
+        },
+        "name_mismatch_rows": 4127,
+        "name_mismatch_fraction": 0.3741274589792403,
+        "first_latin_alnum_preserved_fraction": 0.994470129634666,
+        "name_mismatch_given_tonnage_missing": 1.0
+      }
+    },
+    "catalog_groups": {
+      "train_targets": {
+        "vessels": 5851,
+        "gross_tonnage_median": 29354.0,
+        "name_contains_digit_fraction": 0.053666039993163564,
+        "type_absent_from_train_targets_fraction": 0.0,
+        "top_types": {
+          "Bulk": 1452,
+          "Chemical Parcel": 739,
+          "Tanker": 568,
+          "Chem & Oil": 492,
+          "Products": 450,
+          "GCargo": 385,
+          "LPG": 293,
+          "PCC": 277,
+          "Open Hatch": 260,
+          "Container": 237
+        }
+      },
+      "other_catalog": {
+        "vessels": 72744,
+        "gross_tonnage_median": 3421.0,
+        "name_contains_digit_fraction": 0.24451501154734412,
+        "type_absent_from_train_targets_fraction": 0.22147531067854392,
+        "top_types": {
+          "GCargo": 11588,
+          "Bulk": 10676,
+          "Products": 6469,
+          "Container": 6468,
+          "Pass": 4052,
+          "Pass/Car F.": 2877,
+          "MPP": 2560,
+          "Tanker": 1930,
+          "AHTS": 1767,
+          "Chemical Parcel": 1629
+        }
+      }
+    },
+    "definitions": "Names: NFKC uppercase collapsed whitespace; differences include renaming, punctuation and typos. Tonnage: positive international else gross; relative denominator catalog gross tonnage."
+  },
+  "cached_fold0_gate_diagnostic": {
+    "hangul": {
+      "rows": 239,
+      "gate_le1_rows": 1,
+      "baseline_errors": 0,
+      "errors_inside_gate": 0,
+      "gold_in_top35_rows": 239
+    },
+    "non_hangul": {
+      "rows": 2133,
+      "gate_le1_rows": 4,
+      "baseline_errors": 3,
+      "errors_inside_gate": 3,
+      "gold_in_top35_rows": 2133
+    }
+  },
+  "gate_scope": "Fold0-excluded cached candidates with rounded scores; not full-fit submission inference",
+  "test_file_present": false,
+  "source_sha256": {
+    "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+    "eval_kit/folds_group5_seed42.csv": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "artifacts/ar06_handoff/train_AR-06/script.py": "336f94a61528edf8ca41db3e6286182f628f78276cf71e1c86c2499a03d0ee9f",
+    "artifacts/ar06_handoff/train_AR-06/model/model.json": "355d37a4c998feed0a72f0bccca43a67c9e6ed0ac572f241922bd34adf845780",
+    "reports/diagnostics/baseline_candidates_fold0_top35.csv": "51f144a113e467910f3e3f424d54822f5a1ca37cb36942f8e507bb9b40da1aa2",
+    "experiments/analyze_as05_server_result.py": "ed6d17a057e04fb7c9a46007689ca24dab4eb5af348197f870517e3562565f8b"
+  },
+  "code_revision": "b2efe726ba991628ca76e2d4b417a5c3f92a25f2",
+  "limitations": [
+    "Hidden test distribution and individual predictions unavailable",
+    "Official scores and display durations supplied by user, not independently fetched",
+    "Group counts unconfirmed and decoding nonunique",
+    "Original uploaded AR06 ZIP hash unavailable",
+    "Server timing phases and LM call count unknown"
+  ]
+}

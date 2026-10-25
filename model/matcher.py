@@ -204,6 +204,7 @@ class CatalogIndex:
         self.ids = self.catalog.vessel_id.astype(str).tolist()
         self.lookup = {v: i for i, v in enumerate(self.ids)}
         self.names = [norm(x) for x in self.catalog.vessel_name]
+        self.sorted_names = [norm(' '.join(sorted(str(x).upper().split()))) for x in self.catalog.vessel_name]
         self.romans = [roman(x) for x in self.catalog.vessel_name]
         self.phones = [phonetic(x) for x in self.catalog.vessel_name]
         self.name_index = (NameFeatureIndex(self.catalog.vessel_name)
@@ -257,7 +258,9 @@ class CatalogIndex:
     def channel_candidates(self, row, channel):
         if channel not in CHANNELS:
             raise ValueError(f'Unknown retrieval channel: {channel}')
-        q, r_q, p_q, ko = row['_name'] if '_name' in row else prepare_row(row, self.korean_expansion)['_name']
+        if '_name' not in row:
+            row = prepare_row(row, self.korean_expansion)
+        q, r_q, p_q, ko = row['_name']
         result = set()
         if channel == 'N':
             if self.ngram_index is None:
@@ -269,6 +272,11 @@ class CatalogIndex:
                     result.update(row['_retrieval']['names'] if '_retrieval' in row and 'names' in row['_retrieval'] else self.torch_names.search(q, count=24))
                 else:
                     result.update(i for _, _, i in process.extract(q, self.names, scorer=fuzz.ratio, limit=24, score_cutoff=35))
+                    v = row.get('_view')
+                    if v is not None and len(v.tokens) >= 2:
+                        sorted_q = ''.join(sorted(v.tokens))
+                        if sorted_q != q and hasattr(self, 'sorted_names'):
+                            result.update(i for _, _, i in process.extract(sorted_q, self.sorted_names, scorer=fuzz.ratio, limit=12, score_cutoff=40))
             return sorted(result)
         if channel == 'P':
             if ko:
@@ -342,6 +350,13 @@ class CatalogIndex:
             if c_i in alias_cands:
                 scored.append((-999.0, c_i))
                 continue
+            if ko:
+                c_p = self.phones[c_i]
+                sim = rapidfuzz_phone_similarity(p_q, c_p) if (p_q and c_p) else 0.0
+            else:
+                c_n = self.names[c_i]
+                sim = (fuzz.ratio(q, c_n) / 100.0) if (q and c_n) else 0.0
+
             c_gt = self.gt[c_i]
             if ton > 0 and c_gt > 0:
                 diff = abs(c_gt - ton)
@@ -351,19 +366,15 @@ class CatalogIndex:
                 # 한글 선박의 경우 9.8% 초과 시 페널티 대폭 부여 (AR-02 기준)
                 if self.relax_tonnage_penalty:
                     ton_pen = rel
+                elif sim >= 0.88 and rel <= 0.25:
+                    # AR-06: High similarity gating - prevent excessive penalty for 10~25% tonnage discrepancies
+                    ton_pen = min(rel * 3.5, 0.35)
                 else:
                     ton_pen = rel if rel <= 0.098 else rel * 3.5
             elif ton > 0 and c_gt <= 0:
                 ton_pen = 0.25
             else:
                 ton_pen = 0.0
-
-            if ko:
-                c_p = self.phones[c_i]
-                sim = rapidfuzz_phone_similarity(p_q, c_p) if (p_q and c_p) else 0.0
-            else:
-                c_n = self.names[c_i]
-                sim = (fuzz.ratio(q, c_n) / 100.0) if (q and c_n) else 0.0
 
             priority = sim - 1.5 * ton_pen
             scored.append((-priority, c_i))

@@ -1,0 +1,41 @@
+{
+  "benchmark_id": "BENCH-HCX-CACHE-01",
+  "started_at_kst": "2026-10-24T10:36:13.679557+09:00",
+  "finished_at_kst": "2026-10-24T10:40:20.484310+09:00",
+  "threads": 4,
+  "catalog_scorer": "ratio",
+  "use_cache_false_seconds": 904.01,
+  "use_cache_true_seconds": 245.69,
+  "speedup_factor": 3.68,
+  "equality_summary": {
+    "total_rows": 128,
+    "exact_text_matches": 128,
+    "exact_text_match_ratio": 1.0,
+    "all_identical": true
+  },
+  "metrics": {
+    "hangul": {
+      "rows": 64,
+      "direct_exact_hits": 20,
+      "direct_exact_accuracy": 0.3125,
+      "gold_name_in_top_1": 0.625,
+      "gold_name_hits_top_1": 40,
+      "gold_name_in_top_5": 0.8125,
+      "gold_name_hits_top_5": 52,
+      "gold_name_in_top_10": 0.82812,
+      "gold_name_hits_top_10": 53
+    },
+    "non_hangul": {
+      "rows": 64,
+      "direct_exact_hits": 35,
+      "direct_exact_accuracy": 0.54688,
+      "gold_name_in_top_1": 0.95312,
+      "gold_name_hits_top_1": 61,
+      "gold_name_in_top_5": 0.98438,
+      "gold_name_hits_top_5": 63,
+      "gold_name_in_top_10": 0.98438,
+      "gold_name_hits_top_10": 63
+    },
+    "weighted_name_exact_accuracy": 0.72344
+  }
+}

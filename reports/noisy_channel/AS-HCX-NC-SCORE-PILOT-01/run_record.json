@@ -1,0 +1,135 @@
+{
+  "experiment_id": "AS-HCX-NC-SCORE-PILOT-01",
+  "plan_id": null,
+  "status": "scored_unvalidated",
+  "recorded_at_kst": "2026-10-24T22:45:10+09:00",
+  "started_at_kst": "2026-10-24T22:45:10+09:00",
+  "finished_at_kst": "2026-10-24T23:13:45+09:00",
+  "purpose": "Public heldout fixed-candidate reverse likelihood feature export",
+  "hypothesis": null,
+  "baseline_experiment_id": null,
+  "changed_factors": [],
+  "fixed_conditions": [],
+  "code": {
+    "git_revision_at_run": "b2efe726ba991628ca76e2d4b417a5c3f92a25f2",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/lora.py": "be04dcc566fb546156d3c359601b0415b449c4180c67a8063b977e9ec56be975",
+      "name_decoder/noisy_channel.py": "4fec13387db17128afacea36ff48ddc4ebba08c7dec29b82fa423d93a5e0b738",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "experiments/noisy_channel_common.py": "c31297e28ee173b71133a449e15308265fd8e128905257b3e057c89192960b7d",
+      "experiments/train_noisy_channel.py": "498f3a7578c449c0b06afa492499656a37203426797c7479312515b778bc1552",
+      "experiments/score_noisy_channel_candidates.py": "c3e2963db7712128c643eda6f22e45e1f5302db1b6fa55544c842017a452455f"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    },
+    "split_id": "folds_group5_seed42.csv",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "heldout_fold": 0,
+    "scope": "public_heldout_subset",
+    "scored_rows": 128,
+    "heldout_total_rows": 2372,
+    "validation_is_independent_final_test": false
+  },
+  "retrieval": {
+    "source": "fixed externally supplied baseline candidates; unchanged by this script",
+    "candidates_csv": "C:\\Users\\jy200\\Documents\\ChatGPT\\실전기계학습\\reports\\diagnostics\\baseline_candidates_pilot128.csv",
+    "candidates_sha256": "84ede14f04b5035107cad758e87e197cc1dedf8475301a85861436346666ce78",
+    "candidate_pairs": 4480,
+    "count_min": 35,
+    "count_max": 35,
+    "count_mean": 35.0,
+    "baseline_record": "C:\\Users\\jy200\\Documents\\ChatGPT\\실전기계학습\\reports\\diagnostics\\fold0_baseline_provenance.json",
+    "baseline_record_sha256": "7f94e91d0101e3b2ced8a6079425e08aae0f90e22a7b863c2e3390dbbe1d5801",
+    "baseline_fitting_provenance_verified": false
+  },
+  "features": [
+    "log_probability",
+    "mean_log_probability",
+    "target_token_count"
+  ],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "teacher-forced reverse name likelihood (merged CPU model)",
+    "checkpoint": "C:\\Users\\jy200\\Documents\\ChatGPT\\실전기계학습\\artifacts\\AS-HCX-NC-01\\model",
+    "manifest_sha256": "2c4488961a4ca7f92d46cd79ad295d53019dc9781439bdf6e34cddb71fab1dfd",
+    "parameters": {
+      "channel_weight": 0.0,
+      "normalization": "mean",
+      "pair_batch_size": 1
+    },
+    "formula": "combined_score = baseline_score + channel_weight * channel_logp",
+    "tie_break": "vessel ID ascending"
+  },
+  "commands": [
+    "C:\\Users\\jy200\\Documents\\ChatGPT\\실전기계학습\\.venv-server\\Scripts\\python.exe experiments/score_noisy_channel_candidates.py --experiment-id AS-HCX-NC-SCORE-PILOT-01 --model-path artifacts\\AS-HCX-NC-01\\model --candidates-csv reports\\diagnostics\\baseline_candidates_pilot128.csv --baseline-record reports\\diagnostics\\fold0_baseline_provenance.json --heldout-fold 0 --channel-weight 0.0 --normalization mean --allow-subset --threads 4"
+  ],
+  "environment": {
+    "python": "3.11.3",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "safetensors": "0.6.2",
+      "pandas": "2.0.3",
+      "numpy": "1.26.4"
+    },
+    "device": "cpu",
+    "threads": 4
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": 1705.1144499000002,
+    "timing_scope": "preparation: input/hash checks and model load; inference: likelihood plus fusion; saving: CSV export plus CSV hashing",
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null,
+    "preparation_seconds": 2.51562240000203,
+    "saving_seconds": 0.05658679999760352,
+    "total_seconds": 1707.6912245000058
+  },
+  "artifacts": [
+    "C:\\Users\\jy200\\Documents\\ChatGPT\\실전기계학습\\reports\\noisy_channel\\AS-HCX-NC-SCORE-PILOT-01"
+  ],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "No accuracy evaluation or weight tuning is performed here.",
+    "The baseline record is retained but its fold fitting must be audited externally.",
+    "Candidate recall cannot increase because the provided candidate IDs are unchanged.",
+    "The ID tie rule must be compared with the original baseline predictor.",
+    "Same-name catalog IDs receive the same channel likelihood."
+  ],
+  "failure": null,
+  "decision": "Separate agent must evaluate official ID accuracy and fixes/breaks.",
+  "next_actions": [],
+  "artifact_sha256": {
+    "candidate_scores.csv": "e078a75649b1c1672f45fa4502a8ba1c8b149988e8cf92f3e99d9b9856be9b97",
+    "predictions.csv": "d76cb374f5e5617714ed2524398f9a0cfd5ab5b171b399d9ce4f5b6d02a953fd"
+  },
+  "validation_status": "pending_external_agent"
+}

@@ -1,0 +1,340 @@
+{
+  "schema_version": 1,
+  "experiment_id": "AS-HCX-NC-SMOKE-02",
+  "direction": "catalog_name_to_observed_name",
+  "prompt_version": "catalog-to-observed-name-v2-task-prefix",
+  "catalog_normalization": "NFC-uppercase-collapse-whitespace",
+  "observed_normalization": "NFC-strip-preserve-case-internal-space-digits-punctuation",
+  "max_length": 256,
+  "eos_token_id": 100275,
+  "heldout_fold": 0,
+  "data_sha256": {
+    "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+    "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+  },
+  "base_sha256": {
+    "config.json": "2f7b047eafde467097fddbfa7281da5579c6ad9920af06e52c8666c87729b745",
+    "download_manifest.json": "d32abee557f177f9a1466b7ed619ee33a46479e0afe5d385c0c0fe9c733ba2a3",
+    "model.safetensors": "f40f63fa6a118eb9b59e8910c3ab5a6e6499805966284bb2cd41e197719d156b",
+    "special_tokens_map.json": "ec0481f56b50b66a4723b905c89345c52d45eed6571dd87a023285b99a929cc9",
+    "tokenizer.json": "1ce80c377be4ae8a4e57758da0d6ee3dc6da3f25857d72c07a52a156d7de7fab",
+    "tokenizer_config.json": "64982c20eb3c1ebd5469934a1d576afc17a96e02df0d90c8e1c81233d27047e2"
+  },
+  "adapter": {
+    "rank": 16,
+    "alpha": 32.0,
+    "targets": [
+      "q_proj",
+      "v_proj"
+    ],
+    "modules": [
+      {
+        "name": "model.layers.0.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.0.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.1.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.1.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.2.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.2.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.3.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.3.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.4.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.4.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.5.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.5.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.6.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.6.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.7.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.7.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.8.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.8.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.9.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.9.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.10.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.10.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.11.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.11.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.12.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.12.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.13.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.13.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.14.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.14.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.15.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.15.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.16.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.16.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.17.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.17.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.18.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.18.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.19.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.19.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.20.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.20.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.21.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.21.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.22.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.22.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      },
+      {
+        "name": "model.layers.23.self_attn.q_proj",
+        "in_features": 1024,
+        "out_features": 2048,
+        "adapter_parameters": 49152
+      },
+      {
+        "name": "model.layers.23.self_attn.v_proj",
+        "in_features": 1024,
+        "out_features": 1024,
+        "adapter_parameters": 32768
+      }
+    ],
+    "trainable_parameters": 1966080,
+    "total_parameters_with_adapters": 568247296
+  },
+  "merged": true,
+  "merged_module_count": 48,
+  "checkpoint_sha256": {
+    "added_tokens.json": "6a3d05a3466ebce433995aa857049fa022d93edf3c57c36d9df3762ccea15407",
+    "chat_template.jinja": "f558b0d553e94855ee7eb43d9e49f8430c7e9e4e59b24cacdf1271c772837e18",
+    "config.json": "f12c9535f0b3e806dc6e9fdbe1fa332395e415045d45b80d18ae891fcc57ac91",
+    "generation_config.json": "8fd7c5acfb2299e85656c8472a26e56ad4a058f492fd1fd50aefe64603beaaae",
+    "merges.txt": "31478af22bfd540985121b918c0ee8273cb9e4e6724beb4fdd7dcc3c8275448c",
+    "model.safetensors": "d328c9e1570827c60439e69b6f7d68993c6ee23183fdc164c041c931b7e48bd0",
+    "special_tokens_map.json": "82f45c169fe5b200cdb121e184af2216507c5ef9f0c3bf610e110e421e69af4d",
+    "tokenizer.json": "1ce80c377be4ae8a4e57758da0d6ee3dc6da3f25857d72c07a52a156d7de7fab",
+    "tokenizer_config.json": "1fb1a4a6e527eeff72cd35f47eac9e4a38e7f08d7da2563b966f8efd9998b5f5",
+    "vocab.json": "cfe2bdf330509bd4772f6dbe19a529a80798c3a00d8ab5a74925a4f6674047fa"
+  },
+  "validation_status": "pending_external_agent",
+  "created_at_kst": "2026-10-25T01:01:41+09:00"
+}

@@ -1,0 +1,58 @@
+{
+  "scope": "8 public pairs, runtime only; no accuracy measurement",
+  "model_load_seconds_including_torch_import": 10.741303300004802,
+  "device": "cpu",
+  "cpu_threads": 4,
+  "measurements": [
+    {
+      "hangul": true,
+      "observed_length_percentile": 0.5,
+      "seconds": 0.6576340000028722,
+      "target_tokens_including_eos": 5
+    },
+    {
+      "hangul": true,
+      "observed_length_percentile": 0.5,
+      "seconds": 0.3695455000124639,
+      "target_tokens_including_eos": 5
+    },
+    {
+      "hangul": true,
+      "observed_length_percentile": 0.9,
+      "seconds": 0.42053709999891,
+      "target_tokens_including_eos": 9
+    },
+    {
+      "hangul": true,
+      "observed_length_percentile": 0.9,
+      "seconds": 0.45133769999665674,
+      "target_tokens_including_eos": 9
+    },
+    {
+      "hangul": false,
+      "observed_length_percentile": 0.5,
+      "seconds": 0.44488120000460185,
+      "target_tokens_including_eos": 6
+    },
+    {
+      "hangul": false,
+      "observed_length_percentile": 0.5,
+      "seconds": 0.3934556000021985,
+      "target_tokens_including_eos": 6
+    },
+    {
+      "hangul": false,
+      "observed_length_percentile": 0.9,
+      "seconds": 0.401337200004491,
+      "target_tokens_including_eos": 6
+    },
+    {
+      "hangul": false,
+      "observed_length_percentile": 0.9,
+      "seconds": 0.40155730000697076,
+      "target_tokens_including_eos": 6
+    }
+  ],
+  "mean_pair_seconds": 0.4425357000036456,
+  "max_pair_seconds": 0.6576340000028722
+}

@@ -1,0 +1,138 @@
+{
+  "benchmark_id": "ROBUSTNESS-FULL-FOLD0-PRESETS-01",
+  "timestamp": "2026-10-25T00:19:01",
+  "val_rows": 2372,
+  "clean_baseline_weighted": 0.99958,
+  "clean_baseline_hangul": 1.0,
+  "clean_baseline_non_hangul": 0.99859,
+  "results": {
+    "default": {
+      "preset": "default",
+      "any_noise_rate": 0.6311129848229342,
+      "typo_rate": 0.2188026981450253,
+      "baseline_noisy_weighted": 0.99651,
+      "baseline_noisy_hangul": 0.99582,
+      "baseline_noisy_non_hangul": 0.99812,
+      "fused_noisy_weighted": 0.99944,
+      "fused_noisy_hangul": 1.0,
+      "fused_noisy_non_hangul": 0.99812,
+      "total_misses": 5,
+      "noise_induced_misses": 2,
+      "gold_in_cands_count": 2,
+      "rescues_count": 1,
+      "rescues": [
+        {
+          "sample_id": "TRAIN_08942",
+          "is_hangul": true,
+          "is_noise_induced": true,
+          "orig_name": "씨 울프",
+          "noisy_name": "씨 울프",
+          "gold_vid": "VESSEL_52940",
+          "gold_name": "Sea Wolf",
+          "base_pred_vid": "VESSEL_29676",
+          "base_pred_name": "Gulf No. 16",
+          "gold_noisy_logp": -1.7849916949489852,
+          "base_pred_noisy_logp": -6.052317260472046
+        }
+      ]
+    },
+    "severe": {
+      "preset": "severe",
+      "any_noise_rate": 0.8026981450252951,
+      "typo_rate": 0.2951096121416526,
+      "baseline_noisy_weighted": 0.9668,
+      "baseline_noisy_hangul": 0.95397,
+      "baseline_noisy_non_hangul": 0.99672,
+      "fused_noisy_weighted": 0.97308,
+      "fused_noisy_hangul": 0.96234,
+      "fused_noisy_non_hangul": 0.99812,
+      "total_misses": 18,
+      "noise_induced_misses": 15,
+      "gold_in_cands_count": 10,
+      "rescues_count": 5,
+      "rescues": [
+        {
+          "sample_id": "TRAIN_04405",
+          "is_hangul": false,
+          "is_noise_induced": true,
+          "orig_name": "M/V HEMISPHERE",
+          "noisy_name": "M/V HEMISPEHRE",
+          "gold_vid": "VESSEL_54793",
+          "gold_name": "Hemisphere",
+          "base_pred_vid": "VESSEL_54786",
+          "base_pred_name": "Zhe Hai You 5",
+          "gold_noisy_logp": -4.325208930091725,
+          "base_pred_noisy_logp": -6.416363171405262
+        },
+        {
+          "sample_id": "TRAIN_07823",
+          "is_hangul": true,
+          "is_noise_induced": true,
+          "orig_name": "모닝 레나",
+          "noisy_name": "모닝 레나",
+          "gold_vid": "VESSEL_33666",
+          "gold_name": "Morning Lena",
+          "base_pred_vid": "VESSEL_28536",
+          "base_pred_name": "Morning Cara",
+          "gold_noisy_logp": -0.08868953520432114,
+          "base_pred_noisy_logp": -4.704513954606955
+        },
+        {
+          "sample_id": "TRAIN_07839",
+          "is_hangul": false,
+          "is_noise_induced": true,
+          "orig_name": "SEASTAR VULCAN",
+          "noisy_name": "SEASTAR VULAN",
+          "gold_vid": "VESSEL_62088",
+          "gold_name": "Seastar Vulcan",
+          "base_pred_vid": "VESSEL_17461",
+          "base_pred_name": "Seastar Valiant",
+          "gold_noisy_logp": -1.531400294442262,
+          "base_pred_noisy_logp": -3.700082400015422
+        },
+        {
+          "sample_id": "TRAIN_08942",
+          "is_hangul": true,
+          "is_noise_induced": true,
+          "orig_name": "씨 울프",
+          "noisy_name": "씨 울프",
+          "gold_vid": "VESSEL_52940",
+          "gold_name": "Sea Wolf",
+          "base_pred_vid": "VESSEL_29676",
+          "base_pred_name": "Gulf No. 16",
+          "gold_noisy_logp": -1.7849916949489852,
+          "base_pred_noisy_logp": -6.052317260472046
+        },
+        {
+          "sample_id": "TRAIN_11587",
+          "is_hangul": false,
+          "is_noise_induced": true,
+          "orig_name": "ALWINE",
+          "noisy_name": "ALWNE",
+          "gold_vid": "VESSEL_65169",
+          "gold_name": "Alwine",
+          "base_pred_vid": "VESSEL_33844",
+          "base_pred_name": "Alani",
+          "gold_noisy_logp": -3.8335319720208645,
+          "base_pred_noisy_logp": -5.06172177195549
+        }
+      ]
+    },
+    "name_only": {
+      "preset": "name_only",
+      "any_noise_rate": 0.32588532883642496,
+      "typo_rate": 0.2951096121416526,
+      "baseline_noisy_weighted": 0.99665,
+      "baseline_noisy_hangul": 0.99582,
+      "baseline_noisy_non_hangul": 0.99859,
+      "fused_noisy_weighted": 0.99665,
+      "fused_noisy_hangul": 0.99582,
+      "fused_noisy_non_hangul": 0.99859,
+      "total_misses": 4,
+      "noise_induced_misses": 1,
+      "gold_in_cands_count": 1,
+      "rescues_count": 0,
+      "rescues": []
+    }
+  }
+}

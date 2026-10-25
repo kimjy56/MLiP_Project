@@ -1,0 +1,550 @@
+{
+  "timestamp": "2026-10-25T02:11:49+0900",
+  "key_noise_cases": [
+    {
+      "case": "HEMISPHERE (transposition typo)",
+      "observed": "M/V HEMISPEHRE",
+      "correct_catalog": "HEMISPHERE",
+      "wrong_catalog": "Zhe Hai You 5",
+      "v1": {
+        "correct_mean_logp": -4.325208930091725,
+        "wrong_mean_logp": -6.416362942920791,
+        "margin": 2.0911540128290653
+      },
+      "v2": {
+        "correct_mean_logp": -1.6598989041522145,
+        "wrong_mean_logp": -5.315965910752614,
+        "margin": 3.6560670066003995
+      },
+      "margin_diff": 1.5649129937713342,
+      "v2_sharper": true
+    },
+    {
+      "case": "SEASTAR VULCAN (letter deletion)",
+      "observed": "SEASTAR VULAN",
+      "correct_catalog": "SEASTAR VULCAN",
+      "wrong_catalog": "Seastar Valiant",
+      "v1": {
+        "correct_mean_logp": -1.531400294442262,
+        "wrong_mean_logp": -3.700082400015422,
+        "margin": 2.1686821055731604
+      },
+      "v2": {
+        "correct_mean_logp": -1.1403045782021113,
+        "wrong_mean_logp": -3.5683670629348074,
+        "margin": 2.4280624847326964
+      },
+      "margin_diff": 0.25938037915953593,
+      "v2_sharper": true
+    },
+    {
+      "case": "ALWINE (letter deletion)",
+      "observed": "ALWNE",
+      "correct_catalog": "ALWINE",
+      "wrong_catalog": "Alani",
+      "v1": {
+        "correct_mean_logp": -3.833533387631178,
+        "wrong_mean_logp": -5.06172177195549,
+        "margin": 1.2281883843243122
+      },
+      "v2": {
+        "correct_mean_logp": -3.61132250726223,
+        "wrong_mean_logp": -4.586544793099165,
+        "margin": 0.975222285836935
+      },
+      "margin_diff": -0.25296609848737717,
+      "v2_sharper": false
+    },
+    {
+      "case": "MARSGRACHT (Hangul phonetics)",
+      "observed": "마스그라치",
+      "correct_catalog": "MARSGRACHT",
+      "wrong_catalog": "MAASGRACHT",
+      "v1": {
+        "correct_mean_logp": -1.8310506576672196,
+        "wrong_mean_logp": -2.8855247339233756,
+        "margin": 1.054474076256156
+      },
+      "v2": {
+        "correct_mean_logp": -1.3834420873317868,
+        "wrong_mean_logp": -2.0450233574956656,
+        "margin": 0.6615812701638788
+      },
+      "margin_diff": -0.39289280609227717,
+      "v2_sharper": false
+    },
+    {
+      "case": "SEA WOLF (Hangul phonetics)",
+      "observed": "씨 울프",
+      "correct_catalog": "SEA WOLF",
+      "wrong_catalog": "Gulf No. 16",
+      "v1": {
+        "correct_mean_logp": -1.784990169070079,
+        "wrong_mean_logp": -6.052317260472046,
+        "margin": 4.267327091401967
+      },
+      "v2": {
+        "correct_mean_logp": -1.1479329576362942,
+        "wrong_mean_logp": -5.784569401061162,
+        "margin": 4.636636443424868
+      },
+      "margin_diff": 0.36930935202290094,
+      "v2_sharper": true
+    },
+    {
+      "case": "MORNING LENA (sister ship tie)",
+      "observed": "모닝 레나",
+      "correct_catalog": "MORNING LENA",
+      "wrong_catalog": "Morning Cara",
+      "v1": {
+        "correct_mean_logp": -0.08868940668180585,
+        "wrong_mean_logp": -4.704510765758459,
+        "margin": 4.615821359076653
+      },
+      "v2": {
+        "correct_mean_logp": -0.1394782705232501,
+        "wrong_mean_logp": -4.830431541451253,
+        "margin": 4.690953270928002
+      },
+      "margin_diff": 0.07513191185134893,
+      "v2_sharper": true
+    }
+  ],
+  "target_12_cases": {
+    "v1_hits": 12,
+    "v2_hits": 12,
+    "total": 12,
+    "details_v1": [
+      {
+        "sample_id": "TRAIN_03728",
+        "obs_name": "SC CHONGQING",
+        "gold_name": "SC Chongqing",
+        "top1_name": "SC Chongqing",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 2.6544651842947733,
+        "components": {
+          "llm_name_logp": -0.385,
+          "ton_logp": 3.5,
+          "flag_logp": 3.0993,
+          "type_logp": 2.9713,
+          "num_logp": 0.0,
+          "total_logp": 8.5329
+        }
+      },
+      {
+        "sample_id": "TRAIN_03799",
+        "obs_name": "DIOMID",
+        "gold_name": "Diomid",
+        "top1_name": "Diomid",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 7.07064486935338,
+        "components": {
+          "llm_name_logp": -0.8002,
+          "ton_logp": 3.5,
+          "flag_logp": 2.2986,
+          "type_logp": 0.9244,
+          "num_logp": 0.0,
+          "total_logp": 6.6585
+        }
+      },
+      {
+        "sample_id": "TRAIN_05971",
+        "obs_name": "호다카 갤럭시",
+        "gold_name": "Hodaka Galaxy",
+        "top1_name": "Hodaka Galaxy",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 5.662117244489492,
+        "components": {
+          "llm_name_logp": -0.0469,
+          "ton_logp": 3.5,
+          "flag_logp": 3.0173,
+          "type_logp": 2.5447,
+          "num_logp": 0.0,
+          "total_logp": 8.6349
+        }
+      },
+      {
+        "sample_id": "TRAIN_06864",
+        "obs_name": "HONOR GALAXY",
+        "gold_name": "Honor Galaxy",
+        "top1_name": "Honor Galaxy",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 2.7632556259798413,
+        "components": {
+          "llm_name_logp": -0.1059,
+          "ton_logp": 3.5,
+          "flag_logp": 3.0173,
+          "type_logp": 2.5447,
+          "num_logp": 0.0,
+          "total_logp": 8.5758
+        }
+      },
+      {
+        "sample_id": "TRAIN_07693",
+        "obs_name": "ALIPNE EAGLE",
+        "gold_name": "Alpine Eagle",
+        "top1_name": "Alpine Eagle",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 3.142189014918176,
+        "components": {
+          "llm_name_logp": -1.5264,
+          "ton_logp": -0.5556,
+          "flag_logp": 3.0173,
+          "type_logp": 2.2664,
+          "num_logp": 0.0,
+          "total_logp": 0.9606
+        }
+      },
+      {
+        "sample_id": "TRAIN_07851",
+        "obs_name": "KAMMOE VICTORIA",
+        "gold_name": "Kamome Victoria",
+        "top1_name": "Kamome Victoria",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 3.0706315272458085,
+        "components": {
+          "llm_name_logp": -2.0145,
+          "ton_logp": 0.0,
+          "flag_logp": 2.1031,
+          "type_logp": 1.0792,
+          "num_logp": 0.0,
+          "total_logp": 0.0996
+        }
+      },
+      {
+        "sample_id": "TRAIN_08761",
+        "obs_name": "KULJAK ARROW",
+        "gold_name": "Kuljak Arrow",
+        "top1_name": "Kuljak Arrow",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 8.535637141624452,
+        "components": {
+          "llm_name_logp": -0.1269,
+          "ton_logp": 3.5,
+          "flag_logp": 4.033,
+          "type_logp": -2.5,
+          "num_logp": 0.0,
+          "total_logp": 7.3495
+        }
+      },
+      {
+        "sample_id": "TRAIN_09393",
+        "obs_name": "OCIOS IOAANIS",
+        "gold_name": "Ocios Ioannis",
+        "top1_name": "Ocios Ioannis",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 2.0043719313543065,
+        "components": {
+          "llm_name_logp": -1.6431,
+          "ton_logp": -0.4529,
+          "flag_logp": -0.6803,
+          "type_logp": 2.2664,
+          "num_logp": 0.0,
+          "total_logp": -1.9601
+        }
+      },
+      {
+        "sample_id": "TRAIN_10022",
+        "obs_name": "SHAN SHI",
+        "gold_name": "Shan Shi",
+        "top1_name": "Shan Shi",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 1.5045445341425294,
+        "components": {
+          "llm_name_logp": -0.6271,
+          "ton_logp": -0.7437,
+          "flag_logp": 2.1203,
+          "type_logp": 1.6224,
+          "num_logp": 0.0,
+          "total_logp": 0.6025
+        }
+      },
+      {
+        "sample_id": "TRAIN_10986",
+        "obs_name": "HANSA TROMSOE",
+        "gold_name": "Hansa Tromsoe",
+        "top1_name": "Hansa Tromsoe",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 5.791501200030326,
+        "components": {
+          "llm_name_logp": -0.2274,
+          "ton_logp": 3.5,
+          "flag_logp": 2.7147,
+          "type_logp": 2.2664,
+          "num_logp": 0.0,
+          "total_logp": 8.1009
+        }
+      },
+      {
+        "sample_id": "TRAIN_11270",
+        "obs_name": "YOGAN OCEAN",
+        "gold_name": "Yongan Ocean",
+        "top1_name": "Yongan Ocean",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 1.5202771734605758,
+        "components": {
+          "llm_name_logp": -2.1617,
+          "ton_logp": 0.0,
+          "flag_logp": 2.1031,
+          "type_logp": 2.2538,
+          "num_logp": 0.0,
+          "total_logp": 0.4223
+        }
+      },
+      {
+        "sample_id": "TRAIN_11797",
+        "obs_name": "DONINNGTON",
+        "gold_name": "Donington",
+        "top1_name": "Donington",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 9.907252777925137,
+        "components": {
+          "llm_name_logp": -2.9135,
+          "ton_logp": 3.5,
+          "flag_logp": 0.0,
+          "type_logp": 4.0,
+          "num_logp": 0.0,
+          "total_logp": 3.9365
+        }
+      }
+    ],
+    "details_v2": [
+      {
+        "sample_id": "TRAIN_03728",
+        "obs_name": "SC CHONGQING",
+        "gold_name": "SC Chongqing",
+        "top1_name": "SC Chongqing",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 3.053626498498488,
+        "components": {
+          "llm_name_logp": -0.114,
+          "ton_logp": 3.5,
+          "flag_logp": 3.0993,
+          "type_logp": 2.9713,
+          "num_logp": 0.0,
+          "total_logp": 8.8039
+        }
+      },
+      {
+        "sample_id": "TRAIN_03799",
+        "obs_name": "DIOMID",
+        "gold_name": "Diomid",
+        "top1_name": "Diomid",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 6.873742149968855,
+        "components": {
+          "llm_name_logp": -0.0468,
+          "ton_logp": 3.5,
+          "flag_logp": 2.2986,
+          "type_logp": 0.9244,
+          "num_logp": 0.0,
+          "total_logp": 7.4118
+        }
+      },
+      {
+        "sample_id": "TRAIN_05971",
+        "obs_name": "호다카 갤럭시",
+        "gold_name": "Hodaka Galaxy",
+        "top1_name": "Hodaka Galaxy",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 5.466971560567618,
+        "components": {
+          "llm_name_logp": -0.1359,
+          "ton_logp": 3.5,
+          "flag_logp": 3.0173,
+          "type_logp": 2.5447,
+          "num_logp": 0.0,
+          "total_logp": 8.5458
+        }
+      },
+      {
+        "sample_id": "TRAIN_06864",
+        "obs_name": "HONOR GALAXY",
+        "gold_name": "Honor Galaxy",
+        "top1_name": "Honor Galaxy",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 3.48649849011729,
+        "components": {
+          "llm_name_logp": -0.147,
+          "ton_logp": 3.5,
+          "flag_logp": 3.0173,
+          "type_logp": 2.5447,
+          "num_logp": 0.0,
+          "total_logp": 8.5347
+        }
+      },
+      {
+        "sample_id": "TRAIN_07693",
+        "obs_name": "ALIPNE EAGLE",
+        "gold_name": "Alpine Eagle",
+        "top1_name": "Alpine Eagle",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 2.627134461062898,
+        "components": {
+          "llm_name_logp": -1.3249,
+          "ton_logp": -0.5556,
+          "flag_logp": 3.0173,
+          "type_logp": 2.2664,
+          "num_logp": 0.0,
+          "total_logp": 1.1621
+        }
+      },
+      {
+        "sample_id": "TRAIN_07851",
+        "obs_name": "KAMMOE VICTORIA",
+        "gold_name": "Kamome Victoria",
+        "top1_name": "Kamome Victoria",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 2.3725508760602168,
+        "components": {
+          "llm_name_logp": -1.9969,
+          "ton_logp": 0.0,
+          "flag_logp": 2.1031,
+          "type_logp": 1.0792,
+          "num_logp": 0.0,
+          "total_logp": 0.1172
+        }
+      },
+      {
+        "sample_id": "TRAIN_08761",
+        "obs_name": "KULJAK ARROW",
+        "gold_name": "Kuljak Arrow",
+        "top1_name": "Kuljak Arrow",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 8.806905189648788,
+        "components": {
+          "llm_name_logp": -0.0641,
+          "ton_logp": 3.5,
+          "flag_logp": 4.033,
+          "type_logp": -2.5,
+          "num_logp": 0.0,
+          "total_logp": 7.4123
+        }
+      },
+      {
+        "sample_id": "TRAIN_09393",
+        "obs_name": "OCIOS IOAANIS",
+        "gold_name": "Ocios Ioannis",
+        "top1_name": "Ocios Ioannis",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 2.914743115305442,
+        "components": {
+          "llm_name_logp": -1.372,
+          "ton_logp": -0.4529,
+          "flag_logp": -0.6803,
+          "type_logp": 2.2664,
+          "num_logp": 0.0,
+          "total_logp": -1.689
+        }
+      },
+      {
+        "sample_id": "TRAIN_10022",
+        "obs_name": "SHAN SHI",
+        "gold_name": "Shan Shi",
+        "top1_name": "Shan Shi",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 1.572335151051572,
+        "components": {
+          "llm_name_logp": -0.0888,
+          "ton_logp": -0.7437,
+          "flag_logp": 2.1203,
+          "type_logp": 1.6224,
+          "num_logp": 0.0,
+          "total_logp": 1.1408
+        }
+      },
+      {
+        "sample_id": "TRAIN_10986",
+        "obs_name": "HANSA TROMSOE",
+        "gold_name": "Hansa Tromsoe",
+        "top1_name": "Hansa Tromsoe",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 5.76988983186675,
+        "components": {
+          "llm_name_logp": -0.1473,
+          "ton_logp": 3.5,
+          "flag_logp": 2.7147,
+          "type_logp": 2.2664,
+          "num_logp": 0.0,
+          "total_logp": 8.181
+        }
+      },
+      {
+        "sample_id": "TRAIN_11270",
+        "obs_name": "YOGAN OCEAN",
+        "gold_name": "Yongan Ocean",
+        "top1_name": "Yongan Ocean",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 2.267503437908913,
+        "components": {
+          "llm_name_logp": -1.2778,
+          "ton_logp": 0.0,
+          "flag_logp": 2.1031,
+          "type_logp": 2.2538,
+          "num_logp": 0.0,
+          "total_logp": 1.3062
+        }
+      },
+      {
+        "sample_id": "TRAIN_11797",
+        "obs_name": "DONINNGTON",
+        "gold_name": "Donington",
+        "top1_name": "Donington",
+        "gold_rank": 1,
+        "is_hit": true,
+        "top1_margin": 9.857441718083251,
+        "components": {
+          "llm_name_logp": -1.8003,
+          "ton_logp": 3.5,
+          "flag_logp": 0.0,
+          "type_logp": 4.0,
+          "num_logp": 0.0,
+          "total_logp": 5.0497
+        }
+      }
+    ]
+  },
+  "pilot_factored_32": {
+    "v1": {
+      "hangul_accuracy": 0.9375,
+      "hangul_correct": 15,
+      "hangul_total": 16,
+      "non_hangul_accuracy": 0.875,
+      "non_hangul_correct": 14,
+      "non_hangul_total": 16,
+      "weighted_accuracy": 0.91875
+    },
+    "v2": {
+      "hangul_accuracy": 0.9375,
+      "hangul_correct": 15,
+      "hangul_total": 16,
+      "non_hangul_accuracy": 0.875,
+      "non_hangul_correct": 14,
+      "non_hangul_total": 16,
+      "weighted_accuracy": 0.91875
+    }
+  }
+}

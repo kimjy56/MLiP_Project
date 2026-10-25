@@ -1,0 +1,29 @@
+{
+  "experiment_id": "AS-05-RUNTIME-01",
+  "status": "cancelled_by_user_scope_change",
+  "recorded_at_kst": "2026-10-24T23:33:39.075285+09:00",
+  "purpose": "Measure AS-05 exact package end-to-end against 1800-second limit",
+  "scope": "public train-derived runtime stress; no accuracy claim",
+  "seed": 42,
+  "requested_rows": 30000,
+  "budget_seconds": 1800,
+  "source_package_sha256": "d11f56f18de8cdb966e0eb8158e216fa9feb3f834f89785445f5e6218be1a5eb",
+  "code_sha256": "b0f21895086ea84a73399d16dfdef7fb9cbbed5bff99ea4c36abd494b245a51c",
+  "results": null,
+  "limitations": [
+    "Local CPU runtime, not official L4 server measurement.",
+    "Repeated public observations; not a bound for every unseen input distribution."
+  ],
+  "input": {
+    "rows": 30000,
+    "hangul_rows": 2930,
+    "full_public_repetitions": 2,
+    "sampled_remainder": 5556,
+    "train_sha256": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "input_sha256": "9dcb0e98cd00d34e88c6c57753989eac0102fb82482138fed1306b5319538362",
+    "catalog_sha256": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+  },
+  "started_at_kst": "2026-10-24T23:33:42.306639+09:00",
+  "finished_at_kst": "2026-10-24T23:37:18.485941+09:00",
+  "decision": "User requested small-sample estimation instead of full execution. Stopped the process before completion; no full-run result."
+}

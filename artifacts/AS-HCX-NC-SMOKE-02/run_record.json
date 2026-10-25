@@ -1,0 +1,465 @@
+{
+  "experiment_id": "AS-HCX-NC-SMOKE-02",
+  "plan_id": null,
+  "status": "trained_unvalidated",
+  "recorded_at_kst": "2026-10-25T01:01:24+09:00",
+  "started_at_kst": "2026-10-25T01:01:24+09:00",
+  "finished_at_kst": "2026-10-25T01:01:41+09:00",
+  "purpose": "Reverse name-channel LoRA training",
+  "hypothesis": "A reverse name likelihood may add candidate-ranking information.",
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "reverse objective",
+    "all-layer q/v LoRA",
+    "candidate learning rate 2e-4 (unless overridden)",
+    "observation normalization preserves case and internal spaces"
+  ],
+  "fixed_conditions": [],
+  "code": {
+    "git_revision_at_run": "b2efe726ba991628ca76e2d4b417a5c3f92a25f2",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/lora.py": "be04dcc566fb546156d3c359601b0415b449c4180c67a8063b977e9ec56be975",
+      "name_decoder/noisy_channel.py": "85a65546440219cee45bcc11960b947fa417ad27ad53a0fbb7ed6fabb5e1f343",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "experiments/noisy_channel_common.py": "c31297e28ee173b71133a449e15308265fd8e128905257b3e057c89192960b7d",
+      "experiments/train_noisy_channel.py": "0aa48a80ee3c5e5f5b267382dc6a4e52c0c7d7c63bb11ba2ba7740f9057bc09f",
+      "experiments/score_noisy_channel_candidates.py": "c3e2963db7712128c643eda6f22e45e1f5302db1b6fa55544c842017a452455f"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    },
+    "split_id": "folds_group5_seed42.csv",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42,
+    "heldout_fold": 0,
+    "training_rows": 9850,
+    "validation_rows": 2372,
+    "training_vessels": 4680,
+    "validation_is_independent_final_test": false,
+    "training_vessel_ids_sha256": "f7094848b233532e5000ac39697a10704d0db4860ea25160fa8c1ad598aaeb0e"
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {
+    "catalog": "NFC-uppercase-collapse-whitespace",
+    "observed": "NFC-strip-preserve-case-internal-space-digits-punctuation",
+    "deduplicate": [
+      "catalog_name",
+      "observed_name"
+    ],
+    "pair_sort_order": [
+      "catalog_name",
+      "observed_name"
+    ],
+    "prompt_version": "catalog-to-observed-name-v2-task-prefix",
+    "max_length": 256,
+    "truncation": "error",
+    "prompt_labels": -100,
+    "padding_labels": -100,
+    "target": "separately tokenized observed name plus EOS"
+  },
+  "training_pairs": {
+    "positive_rule": "training-fold target ID -> catalog name; raw observed name normalized",
+    "negative_rule": "none (conditional language modelling)",
+    "count": 4685,
+    "hangul_pairs": 305,
+    "non_hangul_pairs": 4380,
+    "ordered_pairs_sha256": "fc369497c8420c1cedd3c66ad7d88cbbedb781ec3f7bcf13e8a24dad18f4ebaf",
+    "sampling": "with replacement, uniform within each language group",
+    "hangul_probability_mass": 0.7,
+    "draws_planned": 2,
+    "sampled_indices_sha256": "798d19bedbd4461aaceaff003f366abcbd6a33a391f85970f790e421b1084298",
+    "hangul_draws": 1,
+    "non_hangul_draws": 1
+  },
+  "model": {
+    "type": "Llama causal LM with plain PyTorch q_proj/v_proj LoRA",
+    "base_path": "C:\\Users\\jy200\\Documents\\ChatGPT\\실전기계학습\\artifacts\\pretrained\\hyperclovax-seed-0.5b",
+    "base_sha256": {
+      "config.json": "2f7b047eafde467097fddbfa7281da5579c6ad9920af06e52c8666c87729b745",
+      "download_manifest.json": "d32abee557f177f9a1466b7ed619ee33a46479e0afe5d385c0c0fe9c733ba2a3",
+      "model.safetensors": "f40f63fa6a118eb9b59e8910c3ab5a6e6499805966284bb2cd41e197719d156b",
+      "special_tokens_map.json": "ec0481f56b50b66a4723b905c89345c52d45eed6571dd87a023285b99a929cc9",
+      "tokenizer.json": "1ce80c377be4ae8a4e57758da0d6ee3dc6da3f25857d72c07a52a156d7de7fab",
+      "tokenizer_config.json": "64982c20eb3c1ebd5469934a1d576afc17a96e02df0d90c8e1c81233d27047e2"
+    },
+    "parameters": {
+      "rank": 16,
+      "alpha": 32.0,
+      "targets": [
+        "q_proj",
+        "v_proj"
+      ],
+      "modules": [
+        {
+          "name": "model.layers.0.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.0.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.1.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.1.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.2.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.2.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.3.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.3.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.4.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.4.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.5.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.5.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.6.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.6.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.7.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.7.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.8.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.8.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.9.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.9.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.10.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.10.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.11.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.11.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.12.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.12.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.13.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.13.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.14.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.14.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.15.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.15.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.16.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.16.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.17.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.17.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.18.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.18.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.19.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.19.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.20.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.20.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.21.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.21.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.22.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.22.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.23.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.23.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        }
+      ],
+      "trainable_parameters": 1966080,
+      "total_parameters_with_adapters": 568247296,
+      "steps": 2,
+      "batch_size": 1,
+      "accumulation": 1,
+      "learning_rate": 0.0002,
+      "scheduler": "warmup_cosine",
+      "warmup_steps": 0,
+      "weight_decay": 0.01,
+      "gradient_clip_norm": 1.0
+    },
+    "loss": "token-mean cross entropy on observed name and EOS; mean of microbatch losses"
+  },
+  "commands": [
+    "C:\\Users\\jy200\\Documents\\ChatGPT\\실전기계학습\\.venv-server\\Scripts\\python.exe experiments\\train_noisy_channel.py --experiment-id AS-HCX-NC-SMOKE-02 --steps 2 --warmup-steps 0 --batch-size 1 --accumulation 1 --threads 2"
+  ],
+  "environment": {
+    "python": "3.11.3",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "safetensors": "0.6.2",
+      "pandas": "2.0.3",
+      "numpy": "1.26.4"
+    },
+    "device": "cpu",
+    "threads": 2
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": 2.3104416999999557,
+    "inference_seconds": null,
+    "timing_scope": "preparation includes hashes/data/tokenization/load; training is optimizer loop; saving includes adapters/merge/tokenizer/checkpoint hashing",
+    "peak_memory_bytes": null,
+    "model_bytes": 2276147183,
+    "assets_bytes": null,
+    "submission_zip_bytes": null,
+    "preparation_seconds": 3.959595199999967,
+    "saving_seconds": 2.914386499999864,
+    "total_seconds": 9.188204699999915,
+    "adapter_bytes": 7874728
+  },
+  "artifacts": [
+    "C:\\Users\\jy200\\Documents\\ChatGPT\\실전기계학습\\artifacts\\AS-HCX-NC-SMOKE-02"
+  ],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "Not a LoRA-only ablation against AS-HCX-04.",
+    "No accuracy, merge equivalence, throughput or memory claim without separate verification.",
+    "A name-only model cannot distinguish IDs with the same catalog name.",
+    "Public train was previously explored; heldout is not an untouched final test."
+  ],
+  "failure": null,
+  "decision": "Do not promote until the separate validation agent reports.",
+  "next_actions": [],
+  "completed_optimizer_steps": 2,
+  "validation_status": "pending_external_agent",
+  "artifact_sha256": {
+    "adapter.safetensors": "07dd9c29ec4e2066a7e525f5010d60daf8e98c9043e279decdca48ead7d4a371",
+    "adapter_config.json": "518443bdbe1187413909e28ed2d8dd2a1ebbbc874519773d6050add62bb3c967",
+    "model/noisy_channel_manifest.json": "1f11be38b16dba62edd053a97b0b223d8875d610cb3f005bba88df73d912ece3",
+    "training_history.json": "630bc7eb40197976022dd86248b469e47578dbbea51d82c34df8d77403f8fe73"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "scope": "Five public fold-0 ambiguous candidate sets; timing only, no accuracy claim; baseline differs from full-fit submission assets",
+  "rows": 5,
+  "measurements": [
+    {
+      "seconds_excluding_model_load": 0.6584347000025446,
+      "scored_name_pairs": 1
+    },
+    {
+      "seconds_excluding_model_load": 0.8407281999971019,
+      "scored_name_pairs": 2
+    },
+    {
+      "seconds_excluding_model_load": 0.8918781999964267,
+      "scored_name_pairs": 2
+    },
+    {
+      "seconds_excluding_model_load": 0.7452011999994284,
+      "scored_name_pairs": 2
+    },
+    {
+      "seconds_excluding_model_load": 0.798230300002615,
+      "scored_name_pairs": 2
+    }
+  ],
+  "mean_eligible_row_seconds": 0.7868945199996233,
+  "max_eligible_row_seconds": 0.8918781999964267,
+  "mean_pairs_per_eligible_row": 1.8,
+  "max_pairs_per_eligible_row": 2
+}

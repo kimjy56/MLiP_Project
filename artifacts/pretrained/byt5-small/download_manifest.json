@@ -1,0 +1,31 @@
+{
+  "repo_id": "google/byt5-small",
+  "revision": "68377bdc18a2ffec8a0533fef03b1c513a4dd49d",
+  "recorded_at_kst": "2026-10-24T00:29:40.968743+09:00",
+  "files": {
+    "config.json": {
+      "sha256": "7845fb21b320f3fa05392ce151143502cf08729c8c89732da3293615885d3e83",
+      "bytes": 698
+    },
+    "generation_config.json": {
+      "sha256": "f5a1c7e2be8092018d8835128987edf0111637dd98e90599cc80310fef75d95a",
+      "bytes": 147
+    },
+    "pytorch_model.bin": {
+      "sha256": "5c5aaf56299d6f2d4eaadad550a40765198828ead4d74f0a15f91cbe0961931a",
+      "bytes": 1198627927
+    },
+    "README.md": {
+      "sha256": "6daea4f59e1a86e7db0a44c488651130cfd39c3b92cf63eead46db865bdabaed",
+      "bytes": 4233
+    },
+    "special_tokens_map.json": {
+      "sha256": "bda1d200ddf8b187ed2f2ff89a69c540e1bfde26993b762d534c20d82bfc8ec8",
+      "bytes": 2503
+    },
+    "tokenizer_config.json": {
+      "sha256": "3b791189b080dc37ab27ebd5cba352720ff150146217f93da1612ee8f41a846e",
+      "bytes": 2593
+    }
+  }
+}

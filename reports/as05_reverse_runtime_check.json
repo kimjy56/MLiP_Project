@@ -1,0 +1,10 @@
+{
+  "scope": "public catalog fixture; software check only",
+  "real_checkpoint_loaded": true,
+  "mean_logp_fusion_matches_exhaustive": true,
+  "candidate_order_invariant": true,
+  "reranker_selected_different_id": true,
+  "cpu_threads": 4,
+  "device": "cpu",
+  "seconds_including_loading_and_repeated_scoring": 15.272851300003822
+}

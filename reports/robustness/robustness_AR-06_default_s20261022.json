@@ -1,0 +1,112 @@
+{
+  "timestamp_kst": "2026-10-23T22:45:49.683495+09:00",
+  "model_id": "AR-06",
+  "preset": "default",
+  "seed": 20261022,
+  "config": {
+    "description": "실제 현장/대회 평가서버 수준의 종합 현실적 노이즈",
+    "typo_prob": 0.365,
+    "ton_shift_prob": 0.37,
+    "ton_shift_range": [
+      0.03,
+      0.05
+    ],
+    "ton_missing_prob": 0.07,
+    "flag_missing_prob": 0.17,
+    "hangul_meta_noise": true,
+    "hangul_spacing_prob": 0.15
+  },
+  "benchmark_1000": {
+    "audit_summary": {
+      "total_rows": 1000,
+      "seed": 20261022,
+      "typo_applied_count": 203,
+      "typo_applied_rate": 0.203,
+      "hangul_spacing_applied_count": 13,
+      "hangul_spacing_applied_rate": 0.013,
+      "ton_shift_applied_count": 343,
+      "ton_shift_applied_rate": 0.343,
+      "ton_missing_applied_count": 80,
+      "ton_missing_applied_rate": 0.08,
+      "flag_missing_applied_count": 178,
+      "flag_missing_applied_rate": 0.178,
+      "any_noise_applied_count": 628,
+      "any_noise_applied_rate": 0.628
+    },
+    "clean_metrics": {
+      "weighted": 0.9996674057649667,
+      "hangul": 1.0,
+      "hangul_correct": 98,
+      "hangul_rows": 98,
+      "non_hangul": 0.9988913525498891,
+      "non_hangul_correct": 901,
+      "non_hangul_rows": 902,
+      "total_correct": 999,
+      "total_rows": 1000
+    },
+    "noisy_metrics": {
+      "weighted": 0.9996674057649667,
+      "hangul": 1.0,
+      "hangul_correct": 98,
+      "hangul_rows": 98,
+      "non_hangul": 0.9988913525498891,
+      "non_hangul_correct": 901,
+      "non_hangul_rows": 902,
+      "total_correct": 999,
+      "total_rows": 1000
+    },
+    "pure_noisy_metrics": {
+      "weighted": 0.9994791666666666,
+      "hangul": 1.0,
+      "hangul_correct": 52,
+      "hangul_rows": 52,
+      "non_hangul": 0.9982638888888888,
+      "non_hangul_correct": 575,
+      "non_hangul_rows": 576,
+      "total_correct": 627,
+      "total_rows": 628
+    },
+    "retention_rate_pct": 100.0,
+    "delta_weighted_pct": 0.0,
+    "inference_seconds": {
+      "clean": 25.92200000002049,
+      "noisy": 23.17200000002049
+    }
+  },
+  "oof_12222": {
+    "clean": {
+      "weighted": 0.998606948542315,
+      "hangul": 0.998320738874895,
+      "hangul_correct": 1189,
+      "hangul_rows": 1191,
+      "non_hangul": 0.9992747710996284,
+      "non_hangul_correct": 11023,
+      "non_hangul_rows": 11031,
+      "total_correct": 12212,
+      "total_rows": 12222
+    },
+    "noisy": {
+      "weighted": 0.9947813432581913,
+      "hangul": 0.9932829554995802,
+      "hangul_correct": 1183,
+      "hangul_rows": 1191,
+      "non_hangul": 0.9982775813616173,
+      "non_hangul_correct": 11012,
+      "non_hangul_rows": 11031,
+      "total_correct": 12195,
+      "total_rows": 12222
+    },
+    "pure_noisy": {
+      "weighted": 0.9933607975774188,
+      "hangul": 0.9914407988587732,
+      "hangul_correct": 695,
+      "hangul_rows": 701,
+      "non_hangul": 0.9978407945875918,
+      "non_hangul_correct": 6932,
+      "non_hangul_rows": 6947,
+      "total_correct": 7627,
+      "total_rows": 7648
+    },
+    "retention_pct": 99.6169058016562
+  }
+}

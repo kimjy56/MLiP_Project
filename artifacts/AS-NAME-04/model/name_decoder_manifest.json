@@ -1,0 +1,66 @@
+{
+  "experiment_id": "AS-NAME-04",
+  "recorded_at_kst": "2026-10-24T00:47:41.474966+09:00",
+  "task": "observed_name_to_catalog_name",
+  "top_k": 10,
+  "final_train": false,
+  "training_data": {
+    "source_files_sha256": {
+      "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "split_id": "supplied-group-fold-0/pilot",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42,
+    "training_rows": 9850,
+    "validation_rows": 128,
+    "total_heldout_rows": 2372,
+    "training_vessels": 4680,
+    "training_sample_ids_sha256": "3555e1c76e8880fff5d70c887db095f0724bdb8993996e37acf7c895f5312121",
+    "selected_sample_ids_sha256": "bb5d05c665663627cce980c3cb598b08d33ebdc6af546c0c7205e61f291d302b"
+  },
+  "model_parameters": {
+    "steps": 200,
+    "batch_size": 8,
+    "epoch_equivalent_requested": null,
+    "sampled_pair_draws": 3200,
+    "loss_reduction": "token",
+    "final_train": false,
+    "accumulation": 2,
+    "learning_rate": 0.0001,
+    "weight_decay": 0.01,
+    "optimizer": "AdamW",
+    "max_grad_norm": 1.0,
+    "training_autocast": "bfloat16 on CUDA",
+    "inference_dtype": "float32",
+    "checkpoint_config": "preserve tie_word_embeddings and scale_decoder_outputs"
+  },
+  "catalog_sha256": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+  "preprocessing": {
+    "name": "NFC, uppercase, whitespace collapse; retain digits/punctuation",
+    "augmentation": "none"
+  },
+  "environment": {
+    "python": "3.11.3",
+    "os": "Windows",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "safetensors": "0.6.2",
+      "pandas": "2.0.3",
+      "rapidfuzz": "3.14.3",
+      "Unidecode": "1.4.0"
+    },
+    "device": "cpu",
+    "gpu": null
+  },
+  "serialization": {
+    "probe_rows": 4,
+    "top_10_names_equal": true
+  },
+  "independence": {
+    "probe_rows": 4,
+    "reordered_and_subset_equal": true,
+    "scope": "top-10 name lists, same process, single-row inference"
+  }
+}

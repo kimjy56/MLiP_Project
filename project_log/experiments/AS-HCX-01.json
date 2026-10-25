@@ -1,0 +1,145 @@
+{
+  "experiment_id": "AS-HCX-01",
+  "plan_id": "HCX-PILOT-01",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-24T02:00:00+09:00",
+  "started_at_kst": "2026-10-24T01:48:00+09:00",
+  "finished_at_kst": "2026-10-24T01:59:30+09:00",
+  "purpose": "Evaluate HyperCLOVA X SEED Instruct 0.5B for vessel name transliteration and matching",
+  "hypothesis": "A Korean-specialized 0.57B causal instruction LLM can transliterate Korean port ship names and resolve English canonical names via Zero-shot and Few-shot in-context learning.",
+  "baseline_experiment_id": "AS-NAME-05",
+  "changed_factors": [
+    "Model architecture: LlamaForCausalLM (naver-hyperclovax/HyperCLOVAX-SEED-Text-Instruct-0.5B)",
+    "Generation paradigm: Decoder-only Causal LM with ChatML prompting",
+    "Prompting: Zero-shot vs Few-shot In-Context Learning (5 Fold 0 training pairs)"
+  ],
+  "fixed_conditions": [
+    "Fold 0 split from eval_kit/folds_group5_seed42.csv",
+    "Single-row inference on CPU with 12 threads",
+    "Greedy decoding (do_sample=False, max_new_tokens=10~15)",
+    "Official vessel_catalog.csv canonical names"
+  ],
+  "code": {
+    "git_revision_at_run": "b2efe726ba991628ca76e2d4b417a5c3f92a25f2",
+    "dirty": true,
+    "file_sha256": {
+      "tools/fetch_hyperclovax.py": "184b23ce5b1e56b469446dfdfd61ff97970d473456bb01f11c75c88d8b6daee7",
+      "experiments/test_hcx_pilot.py": "7f00bf75402c46231c518fb193fb69b2d0751919dc26a79ee32dbba7e447b9ad"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "split_id": "supplied-group-fold-0/pilot",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42,
+    "training_rows": 9850,
+    "validation_rows": 8
+  },
+  "retrieval": {
+    "method": "few-shot generation + RapidFuzz WRatio catalog search"
+  },
+  "features": [],
+  "preprocessing": {
+    "prompt_template": "<|im_start|>system...<|im_end|>\n<|im_start|>user\n입력: {name}<|im_end|>\n<|im_start|>assistant\n출력:"
+  },
+  "training_pairs": {
+    "positive_rule": "In-context few-shot examples from Fold 0 training fold",
+    "negative_rule": null,
+    "count": 5
+  },
+  "model": {
+    "type": "naver-hyperclovax/HyperCLOVAX-SEED-Text-Instruct-0.5B",
+    "architecture": "LlamaForCausalLM",
+    "parameters": {
+      "vocab_size": 110592,
+      "hidden_size": 1024,
+      "num_hidden_layers": 24,
+      "num_attention_heads": 16,
+      "num_key_value_heads": 8,
+      "intermediate_size": 4096,
+      "max_position_embeddings": 8192,
+      "torch_dtype": "float32 on CPU",
+      "tied_embeddings": true
+    },
+    "parameter_count": 566281216,
+    "pretrained_manifest": {
+      "repo_id": "naver-hyperclovax/HyperCLOVAX-SEED-Text-Instruct-0.5B",
+      "revision": "3da5046fb0195d14f2497de198136987d35fd644"
+    }
+  },
+  "commands": [
+    ".\\.venv-server\\Scripts\\python.exe tools\\fetch_hyperclovax.py",
+    ".\\.venv-server\\Scripts\\python.exe experiments\\test_hcx_pilot.py"
+  ],
+  "environment": {
+    "python": "3.11.3",
+    "os": "Windows",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "safetensors": "0.6.2",
+      "pandas": "2.0.3",
+      "rapidfuzz": "3.14.3"
+    },
+    "device": "cpu",
+    "gpu": null
+  },
+  "metrics": {
+    "metric_source": "pilot in-context generation and RapidFuzz catalog lookup",
+    "hangul_rows": 4,
+    "non_hangul_rows": 4,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": 0.0
+  },
+  "cost": {
+    "training_seconds": 0.0,
+    "inference_seconds": 38.6,
+    "timing_scope": "CPU inference with 12 threads: ~4.8s per generation",
+    "peak_memory_bytes": null,
+    "model_bytes": 1132587360,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    {
+      "path": "artifacts/pretrained/hyperclovax-seed-0.5b/model.safetensors",
+      "sha256": "f40f63fa6a118eb9b59e8910c3ab5a6e6499805966284bb2cd41e197719d156b",
+      "bytes": 1132587360
+    },
+    {
+      "path": "artifacts/pretrained/hyperclovax-seed-0.5b/download_manifest.json",
+      "sha256": "fc1892864380eb0b3e64f7f5d6f4c8033230a1bf605273ba2f8941f173f443b3",
+      "bytes": 1197
+    }
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Zero-shot Instruct prompting produced semantic translations ('글로리 하나' -> 'Glorious One') and explanatory commentary.",
+    "Few-shot In-Context Learning (5 training examples) successfully induced exact uppercase shipping name transliteration ('한진 파이오니아' -> 'HANJIN PIONEER', '우진 파이오니아호' -> 'WOOJIN PIONEER').",
+    "Model exhibits strong Korean vocabulary expansion ('라용 케미' -> 'RAYONG CHEMICAL') and phonetic transliteration ('동진포춘' -> 'DONGJIN POCHUN').",
+    "Unlike ByT5 with constrained Trie decoding, HyperCLOVA X generates open vocabulary text and can produce non-catalog names without constrained beam search or supervised fine-tuning."
+  ],
+  "interpretations": [
+    "HyperCLOVA X SEED 0.5B possesses genuine Korean linguistic competence and shipping terminology awareness.",
+    "Direct free-form generation requires post-processing fuzzy matching against the 78,592 catalog names, or Prefix-constrained Trie decoding.",
+    "Compared to ByT5 (which guarantees 100% catalog-valid names via Trie beam search), HyperCLOVA X would benefit most either as a candidate generator / alias normalizer in the candidate cascade, or via fine-tuning (SFT) on training name pairs."
+  ],
+  "limitations": [
+    "CPU inference latency is ~2.2s~4.8s per sample with 10 new tokens (slower than ByT5's 0.57s on CPU).",
+    "Unconstrained generative outputs can produce hallucinations if not anchored by catalog search."
+  ],
+  "failure": null,
+  "decision": "Model secured and validated. Pretrained weights and manifest preserved. Few-shot capability confirmed. Further fine-tuning or constrained decoding can be tested upon user selection.",
+  "next_actions": [
+    "Option 1: Supervised Fine-Tuning (SFT) on Fold 0 training pairs (4,685 pairs)",
+    "Option 2: Prefix-Constrained Beam Search for HyperCLOVA X using catalog token Trie",
+    "Option 3: Use HyperCLOVA X as an offline Korean ship alias expander to enrich KNOWN_KOREAN_WORD_MAP in AR-06"
+  ]
+}

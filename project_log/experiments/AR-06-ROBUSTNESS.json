@@ -1,0 +1,133 @@
+{
+  "experiment_id": "AR-06-ROBUSTNESS",
+  "plan_id": "ROBUSTNESS-STRESS-AR06",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-23T22:45:49+09:00",
+  "started_at_kst": "2026-10-23T22:34:33+09:00",
+  "finished_at_kst": "2026-10-23T22:45:49+09:00",
+  "purpose": "AR-06 모델의 현실적 노이즈(오타/톤수오차/결측) 환경 강건성 검증 및 기존 모델(Matcher, AS-03, AS-04)과의 비교",
+  "hypothesis": "AR-06의 L-WIN(톤수창 OSA Top-40), L-ORD(단어순서 무관 유사도), L-EN0(미등장 감점 면제), 병음축약 및 고유사도 톤수감점 완화 장치가 극한의 노이즈 환경에서도 높은 방어율을 제공할 것이다.",
+  "baseline_experiment_id": "AS-SET-09",
+  "changed_factors": [
+    "AR-06 엔진 (KR_MODE AR06 + EN_MODE EN_V3)",
+    "노이즈 주입 환경 (PRESETS['default'], seed=20261022)"
+  ],
+  "fixed_conditions": [
+    "동일 1,000행 벤치마크 및 동일 5-Fold Unseen 분할 (folds_group5_seed42.csv 12,222행)",
+    "동일 노이즈 시드 (20261022) 및 섭동 엔진 (RobustnessPerturber)",
+    "공식 가중 산식 (0.7 * 한글 + 0.3 * 비한글)"
+  ],
+  "code": {
+    "git_revision_at_run": "b2efe72",
+    "dirty": true,
+    "file_sha256": {
+      "AR-06/run_ar06.py": "media_uploaded",
+      "AR-06/script.py": "media_uploaded",
+      "AR-06/model/model.json": "media_uploaded",
+      "experiments/verify_ar06_robustness.py": "local_eval"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "split_id": "G5-s42",
+    "seed": 20261022,
+    "training_rows": 9777,
+    "validation_rows": 2445
+  },
+  "retrieval": {
+    "catalog_size": 78595,
+    "method": "AR-06 Dual Index (Exact + L-WIN 10% OSA Top-40 + L-ORD Sorted Alpha + Suffix3 + Skeleton + Phonetic)"
+  },
+  "features": [],
+  "preprocessing": {
+    "hangul": "AR06 (Pinyin contraction + 35 ferry terms + literal/semantic dictionary + acronym prefix)",
+    "english": "EN_V3 (L-WIN + L-ORD + L-EN0)"
+  },
+  "training_pairs": {
+    "positive_rule": "Fold-by-fold observed pairs",
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "AR-06 Rule-Lift Hybrid Matcher",
+    "parameters": {
+      "kr_mode": "AR06",
+      "en_mode": "EN_V3"
+    },
+    "loss": null
+  },
+  "commands": [
+    "python experiments/verify_ar06_robustness.py --preset default --seed 20261022 --full-oof"
+  ],
+  "environment": {
+    "python": "3.11.5",
+    "os": "Windows",
+    "device": "cpu"
+  },
+  "metrics": {
+    "metric_source": "5-Fold Unseen OOF & 1000-row standard stress test",
+    "benchmark_1000": {
+      "clean_weighted": 0.999667,
+      "noisy_weighted": 0.999667,
+      "pure_noisy_weighted": 0.999479,
+      "retention_rate_pct": 100.0,
+      "clean_correct": 999,
+      "noisy_correct": 999,
+      "pure_noisy_correct": 627,
+      "pure_noisy_total": 628
+    },
+    "oof_12222": {
+      "clean_weighted": 0.998607,
+      "clean_hangul": 0.998321,
+      "clean_non_hangul": 0.999275,
+      "clean_correct": 12212,
+      "noisy_weighted": 0.994781,
+      "noisy_hangul": 0.993283,
+      "noisy_non_hangul": 0.998278,
+      "noisy_correct": 12195,
+      "pure_noisy_weighted": 0.993361,
+      "pure_noisy_hangul": 0.991441,
+      "pure_noisy_non_hangul": 0.997841,
+      "pure_noisy_correct": 7627,
+      "pure_noisy_total": 7648,
+      "retention_rate_pct": 99.617
+    }
+  },
+  "cost": {
+    "training_seconds": 2.0,
+    "inference_seconds": 185.0,
+    "timing_scope": "Full 5-fold OOF Clean (12,222) + Noisy (12,222) inference",
+    "peak_memory_bytes": null,
+    "model_bytes": 575939,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "reports/robustness/robustness_AR-06_default_s20261022.json",
+    "AR-06/model/model.json",
+    "AR-06/run_ar06.py"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "1,000행 표준 스트레스 벤치마크에서 Clean 99.967% -> Noisy 99.967% (오답 단 1행, 방어율 100.00%) 달성",
+    "12,222행 5-Fold Unseen OOF 전수 평가에서 Clean 99.861% -> Noisy 99.478% (방어율 99.62%) 기록",
+    "7,648행 순수 노이즈 집단에서 한글 99.144%, 비한글 99.784%로 기존 AS-04(한글 94.437%) 대비 +4.707%p 압도적 방어력 실측"
+  ],
+  "interpretations": [
+    "L-WIN의 톤수창 Top-40 OSA 추출이 첫 글자 오타 및 톤수 오차가 복합 발생한 극한 노이즈 선박을 대부분 정상 구출함.",
+    "L-ORD의 정렬 토큰 매칭이 다단어 선박명의 어순 변경 노이즈를 완벽히 방어함.",
+    "이름 유사도 게이팅 기반 톤수 감점 완화가 10~25% 톤수 오차가 발생한 정상 선박의 순위 역전을 차단함."
+  ],
+  "limitations": [
+    "훈련 데이터셋의 통계적 로그 리프트에 일부 의존하므로, 카탈로그 전체에 대한 후보 탐색 시 비한글 라벨 노이즈 8행은 여전히 물리적 한계 존재."
+  ],
+  "failure": null,
+  "decision": "AR-06의 L-WIN/L-ORD/고유사도 톤수완화 장치가 노이즈 방어에서 최고 수준의 성능을 입증함. 향후 Set Model(AS-04)과 AR-06 후보 검색기의 결합을 추진할 근거 확보.",
+  "next_actions": [
+    "AR-06의 L-WIN + L-ORD 검색 로직을 메인 Matcher 파이프라인의 후보 생성기로 이식 검토",
+    "Set Decision Model과의 앙상블 상호보완성 실측"
+  ]
+}

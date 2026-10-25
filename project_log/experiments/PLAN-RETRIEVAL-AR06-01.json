@@ -1,0 +1,104 @@
+{
+  "experiment_id": "PLAN-RETRIEVAL-AR06-01",
+  "plan_id": "PLAN-RETRIEVAL-AR06-01",
+  "status": "planned",
+  "recorded_at_kst": "2026-10-25T10:51:42+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "Propose independent candidate retrieval paths for actual AR06/AS05 entrypoint",
+  "hypothesis": "Tone-independent n-gram and phonetic retrieval may recover names missed by prefix-oriented and tonnage-window retrieval",
+  "baseline_experiment_id": "ANALYSIS-AS05-SERVER-01",
+  "changed_factors": [
+    "Phase A: fixed-catalog n-gram retrieval only; candidate limit is an initial setting, not optimized",
+    "Later independent comparisons: mixed Hangul variants, phonetic n-gram, quality-based expansion, shortlist protection"
+  ],
+  "fixed_conditions": [
+    "Freeze baseline scorer, metadata rule, LM checkpoint and fusion settings in first comparison",
+    "Use official vessel-group folds; no fitting on heldout/test queries",
+    "Preserve baseline candidate set and duplicate-name vessel IDs before pruning"
+  ],
+  "code": {
+    "git_revision_at_run": "b2efe726ba991628ca76e2d4b417a5c3f92a25f2",
+    "dirty": true,
+    "file_sha256": {
+      "submit_AS-05.zip::script.py": "0e862acfbc01e372a755e0af5fb753713a8473e0775d82e4a6e503d5006dd780",
+      "model/ngram_retrieval.py": "9c1e0e73a4b35c2723a30dd261bfc6561e9b465d9f4f3041e196c45f3e3ed59a"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {
+    "proposed_global_ngram_range": [
+      2,
+      4
+    ],
+    "initial_added_name_budget_non_hangul": 24,
+    "initial_added_name_budget_hangul": 60,
+    "candidate_budget_unit": "Name/index hits before expanding all same-name IDs; final ID count measured separately",
+    "index_fit_source": "Official catalog only",
+    "first_rollout": "Non-Hangul and Hangul as separate comparisons"
+  },
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [],
+  "environment": {},
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "docs/RETRIEVAL_AUGMENTATION_PLAN.md"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "AS05 actual ZIP uses exact, prefix/suffix, first-character phonetic/skeleton and tonnage channels; no CharacterNgramIndex integration.",
+    "Candidate count <200 and empty-set checks drive expansion; these do not measure retrieval quality.",
+    "Hangul full variants combine same-rank word alternatives, limiting mixed-rank combinations.",
+    "Number posting lists longer than 500 are skipped; use joint name/number retrieval as a later proposal.",
+    "Existing model/ngram_retrieval.py implements sparse fixed-catalog 2-4gram retrieval; adapt imports/normalization and use vessel ID tie-break explicitly."
+  ],
+  "interpretations": [],
+  "limitations": [
+    "No retrieval enhancement implemented or timed.",
+    "Old retrieval-combination experiments used other models/splits and do not establish AS05 improvement.",
+    "Full Fold0 cached top35 already covers every gold target; stress/rare-type controls are required to test recovery."
+  ],
+  "failure": null,
+  "decision": "Start with a separate global n-gram candidate union; evaluate inclusion before and after top35 pruning and final Fix/Break before expanding other channels.",
+  "next_actions": [
+    "Compare original retrieval vs added global n-grams with original scorer and same candidates policy on a small heldout cohort plus clearly labeled stress transformations.",
+    "Measure candidate origin, unique recoveries, union size, recall at fixed shortlist K, Fix/Break and timing."
+  ]
+}

@@ -1,0 +1,243 @@
+{
+  "experiment_id": "AS-HCX-SCORER-01",
+  "plan_id": null,
+  "status": "completed",
+  "recorded_at_kst": "2026-10-24T10:21:46.228175+09:00",
+  "started_at_kst": "2026-10-24T10:21:46.228175+09:00",
+  "finished_at_kst": "2026-10-24T10:22:47.623049+09:00",
+  "purpose": "Paired comparison of cached HCX generated-name catalog lookup",
+  "hypothesis": "Full-string ratio reduces false positives from short partial catalog names",
+  "baseline_experiment_id": "AS-HCX-03",
+  "changed_factors": [
+    "Only catalog scorer: WRatio -> ratio"
+  ],
+  "fixed_conditions": [
+    "Same cached generations, targets, sorted catalog, top-10 and fold-0 pilot",
+    "No training, no generation, no ID disambiguation"
+  ],
+  "code": {
+    "git_revision_at_run": "b2efe726ba991628ca76e2d4b417a5c3f92a25f2",
+    "dirty": true,
+    "file_sha256": {
+      "experiments/compare_hcx_catalog_scorers.py": "e43e156e98afc06c8e695d7d5bfc899309c18cc22ff868b5a17bfc9aeddb903f",
+      "experiments/train_hyperclovax_sft.py": "dc3e71cf8ada34547204fb0e2f13d9c9e857e99e56f224ae0d70ec274150c7a8",
+      "name_decoder/catalog_search.py": "1510957c6df3bc1a89f1aba94cdbc6201c9a0437c17859cfc49afd8f9175b553",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "tests/test_catalog_search.py": "43bf8e17e4324082214a5d37a11dfd874bfd240dcbe1a072a56d3fd36543178e"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "split_id": "supplied-group-fold-0/pilot",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42,
+    "training_rows": 9850,
+    "validation_rows": 128,
+    "unique_validation_vessels": 108,
+    "cached_predictions_sha256": "3d49da9e8d3403714e8d4042037681dfd28c3c155e25b42daed1be8bdf9c6fbf",
+    "source_record_sha256": "f1c1f14cf9afb45254c3ba637f9360d3965fb8c1a8c9c50ca1cf861d520dc2dc"
+  },
+  "retrieval": {
+    "scorers": [
+      "WRatio",
+      "ratio"
+    ],
+    "catalog_names": 78592,
+    "limit": 10,
+    "tie_break": "lexicographic canonical name"
+  },
+  "features": [],
+  "preprocessing": {
+    "generated_text": "Unchanged cached cleaned text",
+    "catalog": "canonical_name; no fitted preprocessing"
+  },
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "naver-hyperclovax/HyperCLOVAX-SEED-Text-Instruct-0.5B-SFT",
+    "source_experiment": "AS-HCX-03",
+    "retrained": false
+  },
+  "commands": [
+    "C:\\Users\\jy200\\Documents\\ChatGPT\\실전기계학습\\.venv-server\\Scripts\\python.exe experiments/compare_hcx_catalog_scorers.py --experiment-id AS-HCX-SCORER-01 --repeats 3"
+  ],
+  "environment": {
+    "python": "3.11.3",
+    "os": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "rapidfuzz": "3.14.3",
+      "pandas": "2.0.3",
+      "numpy": "1.26.4"
+    },
+    "thread_cap": 4
+  },
+  "metrics": {
+    "metric_source": "local cached public-train heldout name comparison",
+    "hangul_rows": 64,
+    "non_hangul_rows": 64,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": 0.0
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": "Lookup only: cached-text loop + RapidFuzz top-10; excludes loading/index/training/generation/metrics/saving",
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null,
+    "loading_seconds": 0.6368117999991227,
+    "index_seconds": 0.06466379999983474,
+    "lookup_seconds_by_repeat": {
+      "WRatio": [
+        17.29416389999824,
+        19.73926179999762,
+        17.07305489999999
+      ],
+      "ratio": [
+        2.4128493999996863,
+        2.520046600002388,
+        1.6186515000008512
+      ]
+    },
+    "lookup_seconds_median": {
+      "WRatio": 17.29416389999824,
+      "ratio": 2.4128493999996863
+    },
+    "lookup_speedup_median": 7.167527281230435
+  },
+  "artifacts": [
+    {
+      "path": "artifacts/AS-HCX-SCORER-01/paired_predictions.csv",
+      "sha256": "ef4fe393793b17b033755d3c97e06b3ee2206f8047c5d249289400698a3a1eae",
+      "bytes": 54490
+    }
+  ],
+  "error_cases_file": "artifacts/AS-HCX-SCORER-01/paired_predictions.csv",
+  "observations": [
+    "Weighted NAME accuracy: 0.584375 -> 0.7234375 (+13.90625 percentage points).",
+    "Top-1 fixes: 11 Hangul rows and 4 non-Hangul rows; no regressions. Rows are not distinct vessels.",
+    "Remaining 27 errors: gold present in top-10 in 15 rows (13 Hangul, 2 non-Hangul); absent in 12 (11 Hangul, 1 non-Hangul).",
+    "POLAR BRAIT still selects POLAR BRASIL over gold POLAR BRIGHT in the full catalog (2 public heldout rows). KITI BOM selects KITI BHUM correctly in 2 rows."
+  ],
+  "interpretations": [
+    "Evidence supports changing the post-generation scorer on this pilot, not an improvement in the frozen language model itself.",
+    "The 15 remaining candidate-selection errors motivate reranking with other row attributes; the 12 misses motivate candidate expansion/generation improvements. These are hypotheses, not measured ID gains."
+  ],
+  "limitations": [
+    "128 previously explored/selected pilot rows; not an untouched final test or full OOF",
+    "Name matching only; official vessel-ID score is unmeasured",
+    "End-to-end generation latency was not remeasured",
+    "Python 3.11.3 differs from target server Python 3.11.17",
+    "No seen-vessel rows; seen-vessel accuracy is unmeasured",
+    "Timing is a local alternating-order benchmark with host-load variation; a CLI import check overlapped earlier repeats. No 13x universal speedup claim."
+  ],
+  "failure": null,
+  "decision": "Use ratio by default for generated-name lookup; retain WRatio option for reproduction. Official-ID integration requires separate evaluation.",
+  "next_actions": [
+    "Expand heldout name evaluation with fixed scorer",
+    "Evaluate union of decoder names and existing ID candidates; preserve all same-name IDs",
+    "Measure full ID OOF and runtime before adoption in submission matcher"
+  ],
+  "results": {
+    "WRatio": {
+      "hangul": {
+        "rows": 64,
+        "top_1_hits": 29,
+        "top_1_name_accuracy": 0.453125,
+        "top_5_hits": 38,
+        "top_5_name_accuracy": 0.59375,
+        "top_10_hits": 40,
+        "top_10_name_accuracy": 0.625,
+        "direct_exact_hits": 20,
+        "direct_exact_accuracy": 0.3125
+      },
+      "non_hangul": {
+        "rows": 64,
+        "top_1_hits": 57,
+        "top_1_name_accuracy": 0.890625,
+        "top_5_hits": 61,
+        "top_5_name_accuracy": 0.953125,
+        "top_10_hits": 61,
+        "top_10_name_accuracy": 0.953125,
+        "direct_exact_hits": 35,
+        "direct_exact_accuracy": 0.546875
+      },
+      "weighted_name_accuracy": 0.5843749999999999
+    },
+    "ratio": {
+      "hangul": {
+        "rows": 64,
+        "top_1_hits": 40,
+        "top_1_name_accuracy": 0.625,
+        "top_5_hits": 52,
+        "top_5_name_accuracy": 0.8125,
+        "top_10_hits": 53,
+        "top_10_name_accuracy": 0.828125,
+        "direct_exact_hits": 20,
+        "direct_exact_accuracy": 0.3125
+      },
+      "non_hangul": {
+        "rows": 64,
+        "top_1_hits": 61,
+        "top_1_name_accuracy": 0.953125,
+        "top_5_hits": 63,
+        "top_5_name_accuracy": 0.984375,
+        "top_10_hits": 63,
+        "top_10_name_accuracy": 0.984375,
+        "direct_exact_hits": 35,
+        "direct_exact_accuracy": 0.546875
+      },
+      "weighted_name_accuracy": 0.7234375
+    }
+  },
+  "paired_changes": {
+    "hangul": {
+      "fixed": 11,
+      "regressed": 0,
+      "still_correct": 29,
+      "still_wrong": 24
+    },
+    "non_hangul": {
+      "fixed": 4,
+      "regressed": 0,
+      "still_correct": 57,
+      "still_wrong": 3
+    }
+  },
+  "checks": {
+    "source_hashes_equal": true,
+    "seeded_pilot_equal": true,
+    "historical_WRatio_top10_equal": true,
+    "repeats_equal": true,
+    "vessel_group_disjoint": true
+  },
+  "name_accuracy_delta": 0.1390625000000001,
+  "validation": {
+    "recorded_at_kst": "2026-10-24T10:24:12.887241+09:00",
+    "unit_tests": {
+      "command": ".\\.venv-server\\Scripts\\python.exe -m unittest discover -s tests -p test_catalog_search.py -v",
+      "passed": 3
+    },
+    "integration_tests": {
+      "command": ".\\.venv-server\\Scripts\\python.exe -m unittest discover -s tests -p test_hcx_catalog_integration.py -v",
+      "passed": 1,
+      "scope": "Actual evaluate_pilot wiring, fake deterministic generation; not model accuracy"
+    },
+    "cli_help": "passed; --catalog-scorer {ratio,WRatio} exposed",
+    "integration_test_sha256": "7475271796a04ae3f9caf7ae6ec1ea6c1d2f0d829769ea638bf3e2de774b447f",
+    "git_diff_check": "Existing unrelated trailing whitespace at project_log/README.md old line 78; left unchanged"
+  },
+  "record_updated_at_kst": "2026-10-24T10:24:12.887241+09:00"
+}

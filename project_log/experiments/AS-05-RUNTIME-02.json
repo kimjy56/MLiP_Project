@@ -1,0 +1,205 @@
+{
+  "experiment_id": "AS-05-RUNTIME-02",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-24T23:37:19.740463+09:00",
+  "purpose": "Measure AS-05 exact package end-to-end against 1800-second limit",
+  "scope": "public train-derived runtime stress; no accuracy claim",
+  "seed": 42,
+  "requested_rows": 300,
+  "budget_seconds": 1800,
+  "source_package_sha256": "d11f56f18de8cdb966e0eb8158e216fa9feb3f834f89785445f5e6218be1a5eb",
+  "code_sha256": "ce65182fe2cdf7e8a21effe8810fed2c0f1fd68422d69ea6fae6eefc004ce8ef",
+  "results": {
+    "seconds": 12.067788100001053,
+    "exit_code": 0,
+    "timing_scope": "Python startup/imports, input/model reads and hashes, catalog indexes, prediction and output write; excludes archive extraction/workload preparation",
+    "rows": 300,
+    "under_1800_seconds": true,
+    "stdout": "AS-05 rows=300 reranked=0 pairs=0 changed=0 unsupported=0\n{\"model_load_seconds\": 0.0, \"pair_seconds\": [], \"pair_token_counts\": [], \"eligible_per_row_pairs\": [], \"predict_seconds\": 7.13145450000593, \"total_seconds\": 10.990582099999301, \"fixed_seconds\": 3.8591275999933714, \"baseline_predict_seconds\": 7.13145450000593, \"note\": \"Exact package functions with timing wrappers; no score changes. CPU 4 threads.\"}",
+    "output_valid": true
+  },
+  "limitations": [
+    "Local CPU runtime, not official L4 server measurement.",
+    "Repeated public observations; not a bound for every unseen input distribution."
+  ],
+  "input": {
+    "rows": 300,
+    "hangul_rows": 28,
+    "full_public_repetitions": 0,
+    "sampled_remainder": 300,
+    "train_sha256": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "input_sha256": "fbe88fcdaf101216de737e4b589eb9f73f7a633a56d7a8b6c4f04c02f6e724a0",
+    "catalog_sha256": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+  },
+  "started_at_kst": "2026-10-24T23:37:22.966953+09:00",
+  "profile": {
+    "model_load_seconds": 0.0,
+    "pair_seconds": [],
+    "pair_token_counts": [],
+    "eligible_per_row_pairs": [],
+    "predict_seconds": 7.13145450000593,
+    "total_seconds": 10.990582099999301,
+    "fixed_seconds": 3.8591275999933714,
+    "baseline_predict_seconds": 7.13145450000593,
+    "note": "Exact package functions with timing wrappers; no score changes. CPU 4 threads."
+  },
+  "finished_at_kst": "2026-10-24T23:37:35.044301+09:00",
+  "artifacts": [
+    "artifacts\\AS-05-RUNTIME-02"
+  ],
+  "runtime_estimate": {
+    "recorded_at_kst": "2026-10-24T23:44:02+09:00",
+    "scope": "small-sample CPU estimate, not full execution or server certification",
+    "sample_rows": 300,
+    "sample_end_to_end_seconds": 12.067788100001053,
+    "sample_eligible_rows": 0,
+    "baseline_seconds_per_row": 0.023771515000019765,
+    "fixed_seconds_including_cold_model_load": 15.677636899999925,
+    "additional_latency_sample_pairs": 8,
+    "additional_ambiguous_rows": 5,
+    "mean_eligible_row_seconds": 0.7868945199996233,
+    "max_eligible_row_seconds": 0.8918781999964267,
+    "mean_pairs_per_eligible_row": 1.8,
+    "max_pairs_per_eligible_row": 2,
+    "formula": "fixed + N * baseline_seconds_per_row + N * rerank_fraction * eligible_row_seconds",
+    "assumptions": [
+      "1% of rows trigger reranking (0/300 triggered in the random sample).",
+      "Candidate difficulty and name lengths resemble the small public samples.",
+      "Conservative column uses maximum observed ambiguous-row time and multiplies the whole estimate by 1.5.",
+      "Row counts are scenarios, not an assertion of private test size.",
+      "No GPU speedup assumed; private distribution/server differences remain unmeasured."
+    ],
+    "estimates": [
+      {
+        "rows_scenario": 8200,
+        "assumed_rerank_fraction": 0.01,
+        "estimated_seconds": 275.1294105401311,
+        "estimated_minutes": 4.585490175668852,
+        "conservative_seconds_with_50pct_margin": 425.60710844980355,
+        "conservative_minutes_with_50pct_margin": 7.093451807496725,
+        "conservative_estimate_under_1800_seconds": true
+      },
+      {
+        "rows_scenario": 10000,
+        "assumed_rerank_fraction": 0.01,
+        "estimated_seconds": 332.08223890015995,
+        "estimated_minutes": 5.534703981669333,
+        "conservative_seconds_with_50pct_margin": 513.8709103497604,
+        "conservative_minutes_with_50pct_margin": 8.564515172496007,
+        "conservative_estimate_under_1800_seconds": true
+      },
+      {
+        "rows_scenario": 30000,
+        "assumed_rerank_fraction": 0.01,
+        "estimated_seconds": 964.8914429004799,
+        "estimated_minutes": 16.081524048341333,
+        "conservative_seconds_with_50pct_margin": 1494.5798203492814,
+        "conservative_minutes_with_50pct_margin": 24.909663672488023,
+        "conservative_estimate_under_1800_seconds": true
+      }
+    ],
+    "zip_modified": false,
+    "full_run_cancelled": "AS-05-RUNTIME-01 stopped at user request before completion"
+  },
+  "additional_measurements": {
+    "pair_latency": {
+      "scope": "8 public pairs, runtime only; no accuracy measurement",
+      "model_load_seconds_including_torch_import": 10.741303300004802,
+      "device": "cpu",
+      "cpu_threads": 4,
+      "measurements": [
+        {
+          "hangul": true,
+          "observed_length_percentile": 0.5,
+          "seconds": 0.6576340000028722,
+          "target_tokens_including_eos": 5
+        },
+        {
+          "hangul": true,
+          "observed_length_percentile": 0.5,
+          "seconds": 0.3695455000124639,
+          "target_tokens_including_eos": 5
+        },
+        {
+          "hangul": true,
+          "observed_length_percentile": 0.9,
+          "seconds": 0.42053709999891,
+          "target_tokens_including_eos": 9
+        },
+        {
+          "hangul": true,
+          "observed_length_percentile": 0.9,
+          "seconds": 0.45133769999665674,
+          "target_tokens_including_eos": 9
+        },
+        {
+          "hangul": false,
+          "observed_length_percentile": 0.5,
+          "seconds": 0.44488120000460185,
+          "target_tokens_including_eos": 6
+        },
+        {
+          "hangul": false,
+          "observed_length_percentile": 0.5,
+          "seconds": 0.3934556000021985,
+          "target_tokens_including_eos": 6
+        },
+        {
+          "hangul": false,
+          "observed_length_percentile": 0.9,
+          "seconds": 0.401337200004491,
+          "target_tokens_including_eos": 6
+        },
+        {
+          "hangul": false,
+          "observed_length_percentile": 0.9,
+          "seconds": 0.40155730000697076,
+          "target_tokens_including_eos": 6
+        }
+      ],
+      "mean_pair_seconds": 0.4425357000036456,
+      "max_pair_seconds": 0.6576340000028722
+    },
+    "ambiguous_rows": {
+      "scope": "Five public fold-0 ambiguous candidate sets; timing only, no accuracy claim; baseline differs from full-fit submission assets",
+      "rows": 5,
+      "measurements": [
+        {
+          "seconds_excluding_model_load": 0.6584347000025446,
+          "scored_name_pairs": 1
+        },
+        {
+          "seconds_excluding_model_load": 0.8407281999971019,
+          "scored_name_pairs": 2
+        },
+        {
+          "seconds_excluding_model_load": 0.8918781999964267,
+          "scored_name_pairs": 2
+        },
+        {
+          "seconds_excluding_model_load": 0.7452011999994284,
+          "scored_name_pairs": 2
+        },
+        {
+          "seconds_excluding_model_load": 0.798230300002615,
+          "scored_name_pairs": 2
+        }
+      ],
+      "mean_eligible_row_seconds": 0.7868945199996233,
+      "max_eligible_row_seconds": 0.8918781999964267,
+      "mean_pairs_per_eligible_row": 1.8,
+      "max_pairs_per_eligible_row": 2
+    }
+  },
+  "additional_artifacts": [
+    "reports/as05_pair_latency_sample.json",
+    "reports/as05_ambiguous_latency_sample.json",
+    "reports/as05_runtime_estimate.json"
+  ],
+  "profile_entry_sha256": "6a5937f7b0f7d6987997473462efb69c7554c23c8956b08cf2f1c70c4b7344a8",
+  "commands": [
+    ".\\.venv-server\\Scripts\\python.exe -X utf8 experiments/benchmark_as05_runtime.py --rows 300 --experiment-id AS-05-RUNTIME-02 --profile",
+    "Two local public-data timing probes: 8 name pairs and 5 ambiguous candidate sets; no accuracy measurement."
+  ],
+  "decision": "30-minute constraint appears feasible under stated sample extrapolation; no full-run/server guarantee; existing AS-05 ZIP retained."
+}

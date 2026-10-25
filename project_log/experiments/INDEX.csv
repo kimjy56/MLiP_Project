@@ -60,3 +60,17 @@ DEV-03,team 5-fold OOF parallel 4-channel (SNPT),completed,5-fold group OOF,0.97
 OPT-01,candidate limit 30 tuning test (SNPT),completed,5-fold group OOF,0.974509551397059,experiments/OPT-01.json
 OPT-02,candidate limit 50 and rapidfuzz OSA test (SPT),completed,5-fold group OOF,0.9762455794946552,experiments/OPT-02.json
 JY-11-OOF,CatBoost 0.6 + MLP 0.4 Ensemble (type/flag rules),completed,5-fold group OOF,0.9944655627020439,experiments/JY-11-OOF.json
+AS-HCX-01,HyperCLOVA X SEED 0.5B pilot ICL,completed,pilot heldout name evaluation,0.40937,experiments/AS-HCX-01.json
+AS-HCX-02,HyperCLOVA X SEED 0.5B SFT 150-step,completed,pilot heldout name evaluation,0.57031,experiments/AS-HCX-02.json
+AS-HCX-03,HyperCLOVA X SEED 0.5B SFT 300-step,completed,pilot heldout name evaluation,0.58437,experiments/AS-HCX-03.json
+AS-HCX-SCORER-01,HCX cached catalog scorer comparison,completed,pilot name accuracy; NOT official vessel ID,0.7234375,experiments/AS-HCX-SCORER-01.json
+AS-HCX-04,HyperCLOVA X SEED 0.5B SFT 300-step (Warmup 15 + Cosine),completed,pilot heldout name evaluation,0.82031,experiments/AS-HCX-04.json
+AS-HCX-NC-01,Reverse name channel plain PyTorch LoRA,planned,implementation only; validation delegated,,experiments/AS-HCX-NC-01.json
+AS-HCX-05,HyperCLOVA X 24-layer LoRA SFT 600-step (Balanced 50:50),completed,pilot heldout name evaluation,0.80312,project_log/experiments/AS-HCX-05.json
+AS-05-PACKAGE-01,AS-05 gated reverse-channel submission ZIP,packaged_small_runtime_checks_passed,public 12-row software check only,,experiments/AS-05-PACKAGE-01.json
+AS-05-RUNTIME-01,Full runtime workload cancelled by user,cancelled_by_user_scope_change,no completed timing result,,experiments/AS-05-RUNTIME-01.json
+AS-05-RUNTIME-02,AS-05 sample runtime and extrapolation,completed,300 rows plus small conditional probes; runtime only,,experiments/AS-05-RUNTIME-02.json
+AUDIT-HCX-NC-01,Reverse-channel cached score evidence audit,completed,fixed top35 pilot ID selection; no new inference,,experiments/AUDIT-HCX-NC-01.json
+AUDIT-HCX-NC-02,Reverse-channel V2 evidence and evaluation-scope audit,completed,existing records only; no new inference,,experiments/AUDIT-HCX-NC-02.json
+ANALYSIS-AS05-SERVER-01,official score and package audit,completed,user-reported server scores; public-data aggregates only,,experiments/ANALYSIS-AS05-SERVER-01.json
+PLAN-RETRIEVAL-AR06-01,retrieval augmentation proposal,planned,no new evaluation,,experiments/PLAN-RETRIEVAL-AR06-01.json

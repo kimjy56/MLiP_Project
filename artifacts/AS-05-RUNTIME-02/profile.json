@@ -1,0 +1,11 @@
+{
+  "model_load_seconds": 0.0,
+  "pair_seconds": [],
+  "pair_token_counts": [],
+  "eligible_per_row_pairs": [],
+  "predict_seconds": 7.13145450000593,
+  "total_seconds": 10.990582099999301,
+  "fixed_seconds": 3.8591275999933714,
+  "baseline_predict_seconds": 7.13145450000593,
+  "note": "Exact package functions with timing wrappers; no score changes. CPU 4 threads."
+}

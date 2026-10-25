@@ -1,0 +1,130 @@
+{
+  "benchmark_id": "BENCH-HCX-TRIE-01",
+  "started_at_kst": "2026-10-24T11:20:21.965363+09:00",
+  "finished_at_kst": "2026-10-24T11:31:22.190035+09:00",
+  "threads": 4,
+  "max_new_tokens": 20,
+  "catalog_scorer": "ratio",
+  "trie_stats": {
+    "catalog_names_count": 78592,
+    "trie_build_seconds": 2.54
+  },
+  "comparison": {
+    "unconstrained_beam4_top1": {
+      "hangul": {
+        "rows": 64,
+        "direct_exact_hits": 21,
+        "direct_exact_accuracy": 0.32812,
+        "gold_name_in_top_1": 0.67188,
+        "gold_name_hits_top_1": 43,
+        "gold_name_in_top_5": 0.79688,
+        "gold_name_hits_top_5": 51,
+        "gold_name_in_top_10": 0.8125,
+        "gold_name_hits_top_10": 52
+      },
+      "non_hangul": {
+        "rows": 64,
+        "direct_exact_hits": 37,
+        "direct_exact_accuracy": 0.57812,
+        "gold_name_in_top_1": 0.98438,
+        "gold_name_hits_top_1": 63,
+        "gold_name_in_top_5": 0.98438,
+        "gold_name_hits_top_5": 63,
+        "gold_name_in_top_10": 0.98438,
+        "gold_name_hits_top_10": 63
+      },
+      "weighted_name_exact_accuracy": 0.76563,
+      "total_seconds": 619.63,
+      "avg_seconds_per_row": 4.841
+    },
+    "unconstrained_beam4_aggregated": {
+      "hangul": {
+        "rows": 64,
+        "direct_exact_hits": 23,
+        "direct_exact_accuracy": 0.35938,
+        "gold_name_in_top_1": 0.67188,
+        "gold_name_hits_top_1": 43,
+        "gold_name_in_top_5": 0.8125,
+        "gold_name_hits_top_5": 52,
+        "gold_name_in_top_10": 0.875,
+        "gold_name_hits_top_10": 56
+      },
+      "non_hangul": {
+        "rows": 64,
+        "direct_exact_hits": 39,
+        "direct_exact_accuracy": 0.60938,
+        "gold_name_in_top_1": 0.98438,
+        "gold_name_hits_top_1": 63,
+        "gold_name_in_top_5": 0.98438,
+        "gold_name_hits_top_5": 63,
+        "gold_name_in_top_10": 0.98438,
+        "gold_name_hits_top_10": 63
+      },
+      "weighted_name_exact_accuracy": 0.76563,
+      "total_seconds": 619.63,
+      "avg_seconds_per_row": 4.841
+    },
+    "trie_constrained_beam4_top1": {
+      "hangul": {
+        "rows": 64,
+        "in_catalog_count": 64,
+        "in_catalog_ratio": 1.0,
+        "direct_exact_hits": 23,
+        "direct_exact_accuracy": 0.35938,
+        "gold_name_in_top_1": 0.35938,
+        "gold_name_hits_top_1": 23,
+        "gold_name_in_top_5": 0.375,
+        "gold_name_hits_top_5": 24,
+        "gold_name_in_top_10": 0.4375,
+        "gold_name_hits_top_10": 28
+      },
+      "non_hangul": {
+        "rows": 64,
+        "in_catalog_count": 64,
+        "in_catalog_ratio": 1.0,
+        "direct_exact_hits": 39,
+        "direct_exact_accuracy": 0.60938,
+        "gold_name_in_top_1": 0.60938,
+        "gold_name_hits_top_1": 39,
+        "gold_name_in_top_5": 0.625,
+        "gold_name_hits_top_5": 40,
+        "gold_name_in_top_10": 0.65625,
+        "gold_name_hits_top_10": 42
+      },
+      "weighted_name_exact_accuracy": 0.43438,
+      "total_seconds": 656.55,
+      "avg_seconds_per_row": 5.129
+    },
+    "trie_constrained_beam4_aggregated": {
+      "hangul": {
+        "rows": 64,
+        "in_catalog_count": 64,
+        "in_catalog_ratio": 1.0,
+        "direct_exact_hits": 38,
+        "direct_exact_accuracy": 0.59375,
+        "gold_name_in_top_1": 0.35938,
+        "gold_name_hits_top_1": 23,
+        "gold_name_in_top_5": 0.5625,
+        "gold_name_hits_top_5": 36,
+        "gold_name_in_top_10": 0.64062,
+        "gold_name_hits_top_10": 41
+      },
+      "non_hangul": {
+        "rows": 64,
+        "in_catalog_count": 64,
+        "in_catalog_ratio": 1.0,
+        "direct_exact_hits": 49,
+        "direct_exact_accuracy": 0.76562,
+        "gold_name_in_top_1": 0.60938,
+        "gold_name_hits_top_1": 39,
+        "gold_name_in_top_5": 0.73438,
+        "gold_name_hits_top_5": 47,
+        "gold_name_in_top_10": 0.78125,
+        "gold_name_hits_top_10": 50
+      },
+      "weighted_name_exact_accuracy": 0.43438,
+      "total_seconds": 656.55,
+      "avg_seconds_per_row": 5.129
+    }
+  }
+}

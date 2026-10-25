@@ -1,0 +1,276 @@
+{
+  "audit_id": "AUDIT-HCX-NC-02",
+  "recorded_at_kst": "2026-10-25T10:25:39+09:00",
+  "scope": "Cached record and code audit; no model inference, training or new performance benchmark",
+  "source_sha256": {
+    "reports/robustness/robustness_full_fold0_v1_vs_v2.json": "c7228017688c34d0c4bb75cca9868559571a2d476fc0a873af89d2149f5b1584",
+    "reports/noisy_channel/comparison_v1_vs_v2.json": "9bd84a962ae173d0c56908bb1f3093c7a80f246c61c22de2fd8963bfa79b01e1",
+    "experiments/benchmark_noise_full_fold0_v1_vs_v2.py": "41a8cbadcd99edc28e901f8a3f9a2a7d76631c58b165ccd4903322b41d190bf5",
+    "experiments/compare_nc_v1_vs_v2.py": "694682948a55dfb264dce13f19c9ae49d6321a7098e817cc73513dd8b1aee228",
+    "name_decoder/factored_noisy_channel.py": "01ba7e5ccf522f8413f7f805680d995e83a13646bc0637c03704605651d6e710",
+    "artifacts/AS-HCX-NC-02/run_record.json": "8a3a4c239bc28a5b42a0fc7d3cbb5198504c44c7aaf46c11d0bed80e89e0ee99",
+    "artifacts/AS-HCX-NC-02/training_vessel_ids.json": "f7094848b233532e5000ac39697a10704d0db4860ea25160fa8c1ad598aaeb0e",
+    "artifacts/AS-HCX-NC-02/model/noisy_channel_manifest.json": "14cb25aa7ecad3a6016ce2b57c9f0fbc786f2947539f4301fb9ab8ccc8faa876",
+    "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "eval_kit/folds_group5_seed42.csv": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+  },
+  "code_revision": "b2efe726ba991628ca76e2d4b417a5c3f92a25f2",
+  "environment": {
+    "python": "3.11.3"
+  },
+  "v2_training": {
+    "heldout_fold": 0,
+    "training_rows": 9850,
+    "pairs": {
+      "positive_rule": "training-fold target ID -> catalog name; raw observed name normalized",
+      "negative_rule": "none (conditional language modelling)",
+      "count": 6814,
+      "raw_pairs_count": 4685,
+      "augmented_pairs_count": 2129,
+      "augment_factor": 0.5,
+      "hangul_pairs": 367,
+      "non_hangul_pairs": 6447,
+      "ordered_pairs_sha256": "eaf114004e57845800f382f7f9fa91d600889e35e91cefa2f4d75fe70edd6f4f",
+      "sampling": "with replacement, uniform within each language group",
+      "hangul_probability_mass": 0.7,
+      "draws_planned": 2400,
+      "sampled_indices_sha256": "24a74ce7a168bd93dacdc2a61df0c67973b250ef9a2992e013d8ea09113a1b4d",
+      "hangul_draws": 1700,
+      "non_hangul_draws": 700
+    },
+    "training_seconds": 1725.8759936000001,
+    "prompt_version": "catalog-to-observed-name-v2-task-prefix",
+    "training_status": "trained_unvalidated",
+    "model_checkpoint_hash_as_recorded": "090b46cd5422f1074618b42fdcd80ea84b7746b8c4155d159068a30326ab03cd",
+    "checkpoint_bytes_not_rehashed": true
+  },
+  "stress_diagnostics": {
+    "default": {
+      "rows": 2372,
+      "baseline_errors": 5,
+      "noise_induced_errors": 2,
+      "gold_in_top8_among_errors": 2,
+      "candidate_misses_among_errors": 3,
+      "errors_with_gold_in_v2_fit": 0,
+      "error_fold_counts": {
+        "0": 5
+      },
+      "correct_rows_tested": 128,
+      "correct_rows_unchecked": 2239,
+      "baseline_weighted": 0.9965085418027528,
+      "variants": {
+        "v1": {
+          "observed_fixes": 1,
+          "hangul_fixes": 1,
+          "non_hangul_fixes": 0,
+          "weighted_if_no_breaks_elsewhere": 0.9994374120956399,
+          "reported_sample_breaks": 0,
+          "full_end_to_end_weighted": null
+        },
+        "v2": {
+          "observed_fixes": 1,
+          "hangul_fixes": 1,
+          "non_hangul_fixes": 0,
+          "weighted_if_no_breaks_elsewhere": 0.9994374120956399,
+          "reported_sample_breaks": 0,
+          "full_end_to_end_weighted": null
+        }
+      }
+    },
+    "severe": {
+      "rows": 2372,
+      "baseline_errors": 18,
+      "noise_induced_errors": 15,
+      "gold_in_top8_among_errors": 10,
+      "candidate_misses_among_errors": 8,
+      "errors_with_gold_in_v2_fit": 0,
+      "error_fold_counts": {
+        "0": 18
+      },
+      "correct_rows_tested": 128,
+      "correct_rows_unchecked": 2226,
+      "baseline_weighted": 0.9667978979456124,
+      "variants": {
+        "v1": {
+          "observed_fixes": 5,
+          "hangul_fixes": 2,
+          "non_hangul_fixes": 3,
+          "weighted_if_no_breaks_elsewhere": 0.9730775794596567,
+          "reported_sample_breaks": 0,
+          "full_end_to_end_weighted": null
+        },
+        "v2": {
+          "observed_fixes": 6,
+          "hangul_fixes": 3,
+          "non_hangul_fixes": 3,
+          "weighted_if_no_breaks_elsewhere": 0.9760064497525436,
+          "reported_sample_breaks": 0,
+          "full_end_to_end_weighted": null
+        }
+      }
+    },
+    "name_only": {
+      "rows": 2372,
+      "baseline_errors": 4,
+      "noise_induced_errors": 1,
+      "gold_in_top8_among_errors": 1,
+      "candidate_misses_among_errors": 3,
+      "errors_with_gold_in_v2_fit": 0,
+      "error_fold_counts": {
+        "0": 4
+      },
+      "correct_rows_tested": 128,
+      "correct_rows_unchecked": 2240,
+      "baseline_weighted": 0.9966491887788429,
+      "variants": {
+        "v1": {
+          "observed_fixes": 0,
+          "hangul_fixes": 0,
+          "non_hangul_fixes": 0,
+          "weighted_if_no_breaks_elsewhere": 0.9966491887788429,
+          "reported_sample_breaks": 0,
+          "full_end_to_end_weighted": null
+        },
+        "v2": {
+          "observed_fixes": 0,
+          "hangul_fixes": 0,
+          "non_hangul_fixes": 0,
+          "weighted_if_no_breaks_elsewhere": 0.9966491887788429,
+          "reported_sample_breaks": 0,
+          "full_end_to_end_weighted": null
+        }
+      }
+    }
+  },
+  "target12": {
+    "rows": 12,
+    "in_fit_rows": 9,
+    "fold_counts": {
+      "0": 3,
+      "1": 1,
+      "3": 2,
+      "2": 3,
+      "4": 3
+    },
+    "per_row": [
+      {
+        "sample_id": "TRAIN_03728",
+        "fold": 0,
+        "gold_in_v2_fit": false,
+        "reported_hit": true
+      },
+      {
+        "sample_id": "TRAIN_03799",
+        "fold": 1,
+        "gold_in_v2_fit": true,
+        "reported_hit": true
+      },
+      {
+        "sample_id": "TRAIN_05971",
+        "fold": 3,
+        "gold_in_v2_fit": true,
+        "reported_hit": true
+      },
+      {
+        "sample_id": "TRAIN_06864",
+        "fold": 0,
+        "gold_in_v2_fit": false,
+        "reported_hit": true
+      },
+      {
+        "sample_id": "TRAIN_07693",
+        "fold": 2,
+        "gold_in_v2_fit": true,
+        "reported_hit": true
+      },
+      {
+        "sample_id": "TRAIN_07851",
+        "fold": 2,
+        "gold_in_v2_fit": true,
+        "reported_hit": true
+      },
+      {
+        "sample_id": "TRAIN_08761",
+        "fold": 3,
+        "gold_in_v2_fit": true,
+        "reported_hit": true
+      },
+      {
+        "sample_id": "TRAIN_09393",
+        "fold": 0,
+        "gold_in_v2_fit": false,
+        "reported_hit": true
+      },
+      {
+        "sample_id": "TRAIN_10022",
+        "fold": 4,
+        "gold_in_v2_fit": true,
+        "reported_hit": true
+      },
+      {
+        "sample_id": "TRAIN_10986",
+        "fold": 2,
+        "gold_in_v2_fit": true,
+        "reported_hit": true
+      },
+      {
+        "sample_id": "TRAIN_11270",
+        "fold": 4,
+        "gold_in_v2_fit": true,
+        "reported_hit": true
+      },
+      {
+        "sample_id": "TRAIN_11797",
+        "fold": 4,
+        "gold_in_v2_fit": true,
+        "reported_hit": true
+      }
+    ],
+    "fold0_targets_correct_in_existing_clean_diagnostics": 3
+  },
+  "key6": {
+    "higher_gold_mean_logp": 5,
+    "larger_gold_vs_wrong_margin": 4,
+    "rows": 6
+  },
+  "pilot_factored32": {
+    "v1": {
+      "hangul_accuracy": 0.9375,
+      "hangul_correct": 15,
+      "hangul_total": 16,
+      "non_hangul_accuracy": 0.875,
+      "non_hangul_correct": 14,
+      "non_hangul_total": 16,
+      "weighted_accuracy": 0.91875
+    },
+    "v2": {
+      "hangul_accuracy": 0.9375,
+      "hangul_correct": 15,
+      "hangul_total": 16,
+      "non_hangul_accuracy": 0.875,
+      "non_hangul_correct": 14,
+      "non_hangul_total": 16,
+      "weighted_accuracy": 0.91875
+    }
+  },
+  "submission": {
+    "path": "submit_AS-05.zip",
+    "embedded_experiment_id": "AS-HCX-NC-01",
+    "embedded_prompt_version": "catalog-to-observed-name-v1"
+  },
+  "findings": [
+    "Stress benchmark reranks all known baseline errors plus 128 correct rows per preset; routing uses gold correctness.",
+    "Reported fused whole-fold scores copy baseline correctness and set rescued rows true; sampled breaks are not subtracted and untested correct rows are assumed unchanged.",
+    "Stress experiment uses top8 without production score-gap gate, whereas AS-05 uses gated top35.",
+    "Factored matcher includes manually chosen weights, exact-match bonuses, Gaussian-shaped clipped tonnage score and numeric penalty; its 32-row score is not pure neural name accuracy.",
+    "12-case targets are selected from merged all-fold train, rather than val-only; see verified overlap counts.",
+    "V2 changes prompt and augmentation jointly; their isolated contributions cannot be attributed."
+  ],
+  "decision": "Treat V2 as a candidate selective fallback for noisy/ambiguous names; baseline gain on full deployment remains unmeasured.",
+  "next_proposed_check": "Label-independent deterministic gate on a small heldout sample including errors and correct controls, matching submission candidates and scoring; report fixes/breaks and conditional latency. No run performed.",
+  "pilot32_evidence": {
+    "within_previous128_cached_rows": 32,
+    "correct_in_existing_clean_baseline_diagnostics": 32,
+    "rows": 32
+  }
+}

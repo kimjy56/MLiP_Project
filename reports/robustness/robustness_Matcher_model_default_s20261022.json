@@ -1,0 +1,62 @@
+{
+  "timestamp_kst": "2026-10-23T23:38:57.038232+09:00",
+  "model_target": "Matcher_model",
+  "model_dir": "artifacts\\AS-03\\model",
+  "preset": "default",
+  "seed": 20261022,
+  "config": {
+    "description": "실제 현장/대회 평가서버 수준의 종합 현실적 노이즈",
+    "typo_prob": 0.365,
+    "ton_shift_prob": 0.37,
+    "ton_shift_range": [
+      0.03,
+      0.05
+    ],
+    "ton_missing_prob": 0.07,
+    "flag_missing_prob": 0.17,
+    "hangul_meta_noise": true,
+    "hangul_spacing_prob": 0.15
+  },
+  "audit_summary": {
+    "total_rows": 12222,
+    "seed": 20261022,
+    "typo_applied_count": 2642,
+    "typo_applied_rate": 0.2161675666830306,
+    "hangul_spacing_applied_count": 165,
+    "hangul_spacing_applied_rate": 0.013500245459008346,
+    "ton_shift_applied_count": 4270,
+    "ton_shift_applied_rate": 0.34936998854524626,
+    "ton_missing_applied_count": 863,
+    "ton_missing_applied_rate": 0.07061037473408607,
+    "flag_missing_applied_count": 2099,
+    "flag_missing_applied_rate": 0.17173948617247586,
+    "any_noise_applied_count": 7648,
+    "any_noise_applied_rate": 0.625756831942399
+  },
+  "clean_metrics": {
+    "weighted": 0.9862915753565575,
+    "hangul": 0.980688497061293,
+    "hangul_correct": 1168,
+    "hangul_rows": 1191,
+    "non_hangul": 0.9993654247121748,
+    "non_hangul_correct": 11024,
+    "non_hangul_rows": 11031,
+    "total_correct": 12192,
+    "total_rows": 12222
+  },
+  "noisy_metrics": {
+    "weighted": 0.959652840049807,
+    "hangul": 0.9429051217464316,
+    "hangul_correct": 1123,
+    "hangul_rows": 1191,
+    "non_hangul": 0.9987308494243495,
+    "non_hangul_correct": 11017,
+    "non_hangul_rows": 11031,
+    "total_correct": 12140,
+    "total_rows": 12222
+  },
+  "retention_rate_pct": 97.29910140445838,
+  "delta_weighted_pct": -2.663873530675054,
+  "delta_hangul_pct": -3.7783375314861423,
+  "delta_non_hangul_pct": -0.06345752878252897
+}

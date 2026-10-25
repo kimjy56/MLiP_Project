@@ -313,6 +313,9 @@ def main():
     parser.add_argument('--catalog', type=Path, default=ROOT / 'data/vessel_catalog.csv', help='카탈로그 데이터셋')
     parser.add_argument('--model', type=Path, default=None, help='테스트할 표준 Matcher 모델 디렉토리 (예: model)')
     parser.add_argument('--set-model', type=Path, default=None, help='테스트할 SetDecisionModel 디렉토리 (예: artifacts/AS-SET-09/fold_0/set)')
+    parser.add_argument('--ensemble', action='store_true', help='SetDecisionModel + CatBoost 앙상블 평가')
+    parser.add_argument('--cb-model', type=Path, default=ROOT / 'artifacts/AS-03/model', help='CatBoost 모델 경로')
+    parser.add_argument('--ensemble-weights', nargs=2, type=float, default=[0.6, 0.4], help='앙상블 가중치 (Set, CatBoost)')
     parser.add_argument('--sample-limit', type=int, default=None, help='빠른 진단용 표본 수 제한 (예: 500)')
     parser.add_argument('--preset', type=str, default='default', choices=list(PRESETS.keys()), help='노이즈 프리셋')
     parser.add_argument('--seed', type=int, default=20261022, help='노이즈 생성 시드 (학습 시드와 분리 권장)')
@@ -366,11 +369,44 @@ def main():
         set_dir = args.set_model
         if (set_dir / 'fold_0/set').exists():
             set_dir = set_dir / 'fold_0/set'
-        print(f"\n--- SetDecisionModel 로드 및 추론 평가 (대상: {set_dir}) ---")
+        assets_file = (set_dir / 'assets.json') if (set_dir / 'assets.json').exists() else (
+            (set_dir.parent / 'assets.json') if (set_dir.parent / 'assets.json').exists() else (ROOT / 'model/assets.json')
+        )
         set_scorer = SetDecisionModel.load(set_dir, device='cpu')
-        assets_file = ROOT / 'model/assets.json'
-        matcher = DecisionMatcher(cat, assets_file, set_scorer)
-        target_name = f"SetModel_{set_dir.parent.name}"
+        model_dir = set_dir
+
+        if args.ensemble:
+            from catboost import CatBoostClassifier
+            from model.matcher import CatBoostScorer
+            cb_path = args.cb_model / 'catboost.cbm'
+            cb = CatBoostClassifier()
+            cb.load_model(str(cb_path))
+            cb_scorer = CatBoostScorer(cb)
+
+            class SetCatBoostEnsembleScorer:
+                def __init__(self, set_m, cb_s, weights=(0.6, 0.4)):
+                    self.set_model = set_m
+                    self.cb_scorer = cb_s
+                    self.weights = weights
+                    self.feature_names = set_m.feature_names
+
+                def predict_groups(self, x, group_sizes, num_threads=None):
+                    set_s = self.set_model.predict_groups(x, group_sizes, num_threads=num_threads)
+                    cb_s = self.cb_scorer.predict(x, num_threads=num_threads)
+                    w_s, w_c = self.weights
+                    return w_s * set_s + w_c * cb_s
+
+                def predict(self, x, num_threads=None):
+                    return self.cb_scorer.predict(x, num_threads=num_threads)
+
+            scorer = SetCatBoostEnsembleScorer(set_scorer, cb_scorer, weights=args.ensemble_weights)
+            matcher = DecisionMatcher(cat, assets_file, scorer)
+            target_name = f"Ensemble_Set_{args.ensemble_weights[0]}_CB_{args.ensemble_weights[1]}"
+            print(f"\n--- 앙상블 모델 로드 및 추론 평가 (Set: {set_dir}, CB: {cb_path}, 가중치: {args.ensemble_weights}) ---")
+        else:
+            matcher = DecisionMatcher(cat, assets_file, set_scorer)
+            target_name = f"SetModel_{set_dir.parent.name if set_dir.name == 'set' else set_dir.name}"
+            print(f"\n--- SetDecisionModel 로드 및 추론 평가 (대상: {set_dir}) ---")
     else:
         model_dir = args.model or (ROOT / 'model')
         if not (model_dir / 'assets.json').exists():
@@ -425,6 +461,7 @@ def main():
     # 7. 보고서 저장
     report_data = {
         'timestamp_kst': datetime.now(KST).isoformat(),
+        'model_target': target_name,
         'model_dir': str(model_dir),
         'preset': args.preset,
         'seed': args.seed,
@@ -439,7 +476,7 @@ def main():
     }
 
     args.report_dir.mkdir(parents=True, exist_ok=True)
-    report_file = args.report_dir / f"robustness_{model_dir.name}_{args.preset}_s{args.seed}.json"
+    report_file = args.report_dir / f"robustness_{target_name}_{args.preset}_s{args.seed}.json"
     report_file.write_text(json.dumps(report_data, indent=2, ensure_ascii=False), encoding='utf-8')
     print(f"\n[보고서 저장 완료] {report_file}")
 

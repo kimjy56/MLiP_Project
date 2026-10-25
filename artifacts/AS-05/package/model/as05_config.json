@@ -1,0 +1,12 @@
+{
+  "submission_id": "AS-05",
+  "checkpoint_id": "AS-HCX-NC-01",
+  "channel_weight": 0.2,
+  "normalization": "mean_including_EOS",
+  "max_baseline_margin": 1.0,
+  "candidate_limit": 35,
+  "bound_pruning": "candidate baseline score upper-bounds fused score",
+  "cpu_threads": 4,
+  "device": "CUDA float32 when available; CPU float32 otherwise",
+  "row_independence": "no cross-row cache, aggregation or time-adaptive gate"
+}

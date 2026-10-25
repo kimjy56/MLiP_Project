@@ -1,0 +1,11 @@
+﻿sample_id,fold,is_kr,vessel_name,target_vessel_id,pred_vessel_id,gold_rank,error_type,gross_tonnage,flag_name,vessel_type
+TRAIN_01154,0,False,HAFNIA WREN,VESSEL_53035,VESSEL_49662,32,Ranking Error,29765.0,싱가포르,석유제품 운반선
+TRAIN_01462,0,False,FAIRCHEM BRONCO,VESSEL_56340,VESSEL_39889,26,Ranking Error,11647.0,마샬 제도,케미칼 운반선
+TRAIN_06979,0,False,NAVIG8 VICTORIA,VESSEL_26268,VESSEL_46531,23,Ranking Error,29531.0,마샬 제도,석유제품 운반선
+TRAIN_00641,1,False,BOW MERCURY,VESSEL_30168,VESSEL_20841,4,Ranking Error,18287.0,파나마,석유제품 운반선
+TRAIN_09955,1,False,HAFNIA MERLIN,VESSEL_68503,VESSEL_57576,15,Ranking Error,29781.0,싱가포르,케미칼 운반선
+TRAIN_10763,2,False,NOVA BREEZE,VESSEL_18044,VESSEL_18149,4,Ranking Error,25600.0,싱가포르,LPG 운반선
+TRAIN_03895,4,False,CENTRAL PARK,VESSEL_20421,VESSEL_11379,34,Ranking Error,12145.0,라이베리아,석유제품 운반선
+TRAIN_04856,4,False,STREAM PACIFIC,VESSEL_46142,VESSEL_32886,4,Ranking Error,12075.0,마샬 제도,석유제품 운반선
+TRAIN_11243,4,True,마스그라치,VESSEL_76776,VESSEL_75372,2,Ranking Error,9524.0,네덜란드,일반화물선
+TRAIN_11805,4,True,마스그라치,VESSEL_76776,VESSEL_75372,2,Ranking Error,9524.0,네덜란드,일반화물선

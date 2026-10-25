@@ -1,0 +1,126 @@
+{
+  "experiment_id": "AS-NAME-03",
+  "plan_id": "NAME-DECODER-V1",
+  "status": "implementation_completed_execution_blocked",
+  "recorded_at_kst": "2026-10-23T22:20:44.7462823+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "Implement complete catalog-name training and top-1 prediction workflow",
+  "hypothesis": "Explicit training budget and row-normalized loss can be evaluated against the 200-step pilot; improvement unmeasured",
+  "baseline_experiment_id": "AS-NAME-02",
+  "changed_factors": [
+    "explicit epoch-equivalent or step budget",
+    "optional row-normalized token loss",
+    "full-train mode without validation claims",
+    "explicit top-1 catalog-name prediction"
+  ],
+  "fixed_conditions": [
+    "official train/catalog only",
+    "no augmentation",
+    "catalog-constrained generation",
+    "row-independent inference"
+  ],
+  "code": {
+    "git_revision_at_run": "b2efe726ba991628ca76e2d4b417a5c3f92a25f2",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/__main__.py": "73ef908ba6cfefb6e9e051c60a7157d3341caedbc124a84248c17a30001296f0",
+      "experiments/train_name_decoder.py": "2eeba280db368e30c15a06f5b3b6d3d94ec5d47fb56db98f58ea93cab2381b0c",
+      "name_decoder/model.py": "37e2fcec43750e1a6f1187c4e6ebbc3a44951d3632bb7754469cbca03df7c936",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "train_name_decoder.py": "26ef497760070ed8a050e134c1fb810dbda2da0583506425ce7cf39459663896",
+      "tests/test_name_decoder_training.py": "7fd34d86645d5e6105251718d8bd3b9543e3efe861fb5885355bc6abc64d1e79",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "tests/test_name_decoder.py": "c22c6b073a8ce08ea2f342d3047a487b89c47dd6dba412c533cfafa1f1e0d1ba"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c"
+    },
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    "python -m pip install --target .cache/bootstrap uv",
+    "python -m pip install --index-url https://pypi.org/simple --retries 0 --timeout 15 --target .cache/bootstrap uv",
+    "git diff --check"
+  ],
+  "environment": {
+    "gpu_verified": null,
+    "required_interpreter": ".venv-server/Scripts/python.exe",
+    "system_python_observed": "3.11.3 (not used for training/testing)",
+    "required_interpreter_present": false
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [],
+  "error_cases_file": null,
+  "observations": [
+    "Official train/catalog present: 12222 and 78595 rows; inspected via PowerShell, no model execution",
+    "No .venv-server interpreter or ByT5 checkpoint available",
+    "Common group fold file absent",
+    "Git diff whitespace check passed; Python unit/integration tests not run"
+  ],
+  "interpretations": [],
+  "limitations": [
+    "Common fold file, pretrained weights and .venv-server are absent on this PC",
+    "uv bootstrap failed: package server DNS lookup",
+    "No performance or runtime claim before actual execution"
+  ],
+  "failure": {
+    "reason": "Default package index DNS failure; public PyPI retry could not obtain uv",
+    "retry": "Two bootstrap attempts; no Python model execution",
+    "training_started": false,
+    "stage": "environment bootstrap"
+  },
+  "decision": "Implementation saved; no model or accuracy improvement claim until pinned-environment tests and official-data training run",
+  "next_actions": [
+    "Prepare or locate pinned .venv-server",
+    "Run new software tests",
+    "Locate or fetch official ByT5 checkpoint",
+    "Use recovered original G5 fold file",
+    "Reproduce 200-step baseline in new experiment; compare training budget separately"
+  ],
+  "implementation_recorded_at_kst": "2026-10-23T22:28:32.6812334+09:00",
+  "followup_fold_recovery": {
+    "recorded_at_kst": "2026-10-23T22:34:23.5785083+09:00",
+    "original_byte_hash_matches": true,
+    "report": "reports/name_decoder_fold_recovery.json"
+  }
+}

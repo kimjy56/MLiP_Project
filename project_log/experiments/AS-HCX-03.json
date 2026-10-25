@@ -1,0 +1,223 @@
+{
+  "experiment_id": "AS-HCX-03",
+  "plan_id": "HCX-SFT-02",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-24T04:18:00+09:00",
+  "started_at_kst": "2026-10-24T08:11:45.244290+09:00",
+  "finished_at_kst": "2026-10-24T09:17:31.213304+09:00",
+  "purpose": "Expand SFT training budget of HyperCLOVA X SEED 0.5B from 150 to 300 optimizer steps",
+  "hypothesis": "Doubling optimizer steps to 300 (exposing each unique Hangul pair ~5.5 times on average) will further lower the training loss on difficult transliterations and rare ship names, increasing Hangul Top-1 name exact accuracy beyond the current 45.31% without overfitting.",
+  "baseline_experiment_id": "AS-HCX-02",
+  "changed_factors": [
+    "Optimizer steps increased from 150 to 300",
+    "Sample exposures doubled from 1,200 to 2,400 pairs"
+  ],
+  "fixed_conditions": [
+    "Fold 0 split from eval_kit/folds_group5_seed42.csv",
+    "Heldout pilot evaluation on 128 rows (64 Hangul, 64 Non-Hangul)",
+    "RapidFuzz catalog search against 78,592 names",
+    "Seed 42, CPU 4 threads"
+  ],
+  "code": {
+    "git_revision_at_run": "b2efe726ba991628ca76e2d4b417a5c3f92a25f2",
+    "dirty": true,
+    "file_sha256": {
+      "experiments/train_hyperclovax_sft.py": "7748d9dabd86a6edb1062f649ed0524897e04d51e6b6a6695da7db5f78d0dc09"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "split_id": "supplied-group-fold-0/pilot",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42,
+    "training_rows": 9850,
+    "validation_rows": 128
+  },
+  "retrieval": {
+    "method": "SFT generation + RapidFuzz WRatio catalog search"
+  },
+  "features": [],
+  "preprocessing": {
+    "prompt_template": "<|im_start|>system...<|im_end|>\n<|im_start|>user\n입력: {source}<|im_end|>\n<|im_start|>assistant\n출력:\n{target}<|im_end|>"
+  },
+  "training_pairs": {
+    "positive_rule": "training-fold observed name -> official gold catalog name",
+    "negative_rule": null,
+    "count": 4685,
+    "hangul_pairs": 305,
+    "non_hangul_pairs": 4380,
+    "sampling_hangul_mass": 0.7
+  },
+  "model": {
+    "type": "naver-hyperclovax/HyperCLOVAX-SEED-Text-Instruct-0.5B-SFT",
+    "parameters": {
+      "steps": 300,
+      "batch_size": 4,
+      "accumulation": 2,
+      "learning_rate": 2e-05,
+      "train_mode": "top-layers (top 8 layers + LM head)",
+      "trainable_parameters": 264258560,
+      "total_parameters": 566281216
+    }
+  },
+  "commands": [
+    ".\\.venv-server\\Scripts\\python.exe experiments\\train_hyperclovax_sft.py --experiment-id AS-HCX-03 --steps 300 --eval-per-language 64 --threads 4"
+  ],
+  "environment": {
+    "python": "3.11.3",
+    "os": "Windows",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "safetensors": "0.6.2",
+      "pandas": "2.0.3",
+      "rapidfuzz": "3.14.3"
+    },
+    "device": "cpu",
+    "gpu": null
+  },
+  "metrics": {
+    "metric_source": "pilot heldout name evaluation",
+    "hangul_rows": 64,
+    "non_hangul_rows": 64,
+    "hangul_accuracy": 0.45312,
+    "non_hangul_accuracy": 0.89062,
+    "weighted_accuracy": 0.58437,
+    "candidate_recall_hangul": 0.625,
+    "candidate_recall_non_hangul": 0.95312,
+    "seen_vessel_fraction": 0.0
+  },
+  "cost": {
+    "training_seconds": 2946.79,
+    "inference_seconds": 904.01,
+    "timing_scope": "CPU 4 threads: SFT training + greedy decoding + RapidFuzz WRatio",
+    "first_10_loss": 1.2065,
+    "last_10_loss": 0.18104,
+    "model_bytes": 2276136407,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    {
+      "path": "artifacts/AS-HCX-03/model/added_tokens.json",
+      "sha256": "6a3d05a3466ebce433995aa857049fa022d93edf3c57c36d9df3762ccea15407",
+      "bytes": 960
+    },
+    {
+      "path": "artifacts/AS-HCX-03/model/chat_template.jinja",
+      "sha256": "f558b0d553e94855ee7eb43d9e49f8430c7e9e4e59b24cacdf1271c772837e18",
+      "bytes": 294
+    },
+    {
+      "path": "artifacts/AS-HCX-03/model/config.json",
+      "sha256": "844ad163f3eb45660d7b3d12fc12d744d5abefe314b0daf26722bd4be2bb742c",
+      "bytes": 785
+    },
+    {
+      "path": "artifacts/AS-HCX-03/model/generation_config.json",
+      "sha256": "8fd7c5acfb2299e85656c8472a26e56ad4a058f492fd1fd50aefe64603beaaae",
+      "bytes": 177
+    },
+    {
+      "path": "artifacts/AS-HCX-03/model/merges.txt",
+      "sha256": "31478af22bfd540985121b918c0ee8273cb9e4e6724beb4fdd7dcc3c8275448c",
+      "bytes": 1082566
+    },
+    {
+      "path": "artifacts/AS-HCX-03/model/model.safetensors",
+      "sha256": "68cb44d5282580451c2158096b3fa59da58ebf072c7a86123914f1c5a7290251",
+      "bytes": 2265149808
+    },
+    {
+      "path": "artifacts/AS-HCX-03/model/special_tokens_map.json",
+      "sha256": "82f45c169fe5b200cdb121e184af2216507c5ef9f0c3bf610e110e421e69af4d",
+      "bytes": 2015
+    },
+    {
+      "path": "artifacts/AS-HCX-03/model/tokenizer.json",
+      "sha256": "1ce80c377be4ae8a4e57758da0d6ee3dc6da3f25857d72c07a52a156d7de7fab",
+      "bytes": 8029694
+    },
+    {
+      "path": "artifacts/AS-HCX-03/model/tokenizer_config.json",
+      "sha256": "1fb1a4a6e527eeff72cd35f47eac9e4a38e7f08d7da2563b966f8efd9998b5f5",
+      "bytes": 12089
+    },
+    {
+      "path": "artifacts/AS-HCX-03/model/vocab.json",
+      "sha256": "cfe2bdf330509bd4772f6dbe19a529a80798c3a00d8ab5a74925a4f6674047fa",
+      "bytes": 1858019
+    },
+    {
+      "path": "artifacts/AS-HCX-03/pilot_predictions.csv",
+      "sha256": "3d49da9e8d3403714e8d4042037681dfd28c3c155e25b42daed1be8bdf9c6fbf",
+      "bytes": 32022
+    },
+    {
+      "path": "artifacts/AS-HCX-03/training_history.json",
+      "sha256": "4b89d8f00b74759ea740b5a238a9ad2629bbbc3d10c27c4cfa5014248cf1eb6c",
+      "bytes": 14862
+    }
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Initial mean loss: 1.2065 -> Final mean loss: 0.1810",
+    "Hangul Top-1 name exact accuracy reached 45.31% (Top-10: 62.50%)",
+    "Non-Hangul Top-1 name exact accuracy reached 89.06% (Top-10: 95.31%)",
+    "Direct exact match without fuzzy search: Hangul 31.25%, Non-Hangul 54.69%"
+  ],
+  "interpretations": [
+    "SFT successfully aligned HyperCLOVA X to suppress chat explanatory tokens and output concise shipping names.",
+    "Post-processing RapidFuzz WRatio anchors the open-vocabulary generation into the 78,592 vessel catalog."
+  ],
+  "limitations": [
+    "Name matching only; not full vessel-ID accuracy",
+    "Evaluated on Fold 0 heldout 128 rows"
+  ],
+  "failure": null,
+  "decision": "HyperCLOVA X SEED 0.5B SFT evaluation completed; compare with ByT5-small AS-NAME-05.",
+  "next_actions": [],
+  "pilot_results": {
+    "roman_wratio": {
+      "hangul_accuracy": 0.15625,
+      "non_hangul_accuracy": 1.0,
+      "weighted_accuracy": 0.40937,
+      "seconds": 7.68
+    },
+    "finetuned_hcx": {
+      "hangul": {
+        "rows": 64,
+        "direct_exact_hits": 20,
+        "direct_exact_accuracy": 0.3125,
+        "gold_name_in_top_1": 0.45312,
+        "gold_name_hits_top_1": 29,
+        "gold_name_in_top_5": 0.59375,
+        "gold_name_hits_top_5": 38,
+        "gold_name_in_top_10": 0.625,
+        "gold_name_hits_top_10": 40
+      },
+      "non_hangul": {
+        "rows": 64,
+        "direct_exact_hits": 35,
+        "direct_exact_accuracy": 0.54688,
+        "gold_name_in_top_1": 0.89062,
+        "gold_name_hits_top_1": 57,
+        "gold_name_in_top_5": 0.95312,
+        "gold_name_hits_top_5": 61,
+        "gold_name_in_top_10": 0.95312,
+        "gold_name_hits_top_10": 61
+      },
+      "weighted_name_exact_accuracy": 0.58437
+    }
+  },
+  "serialization": {
+    "probe_rows": 4,
+    "top_10_names_equal": true
+  },
+  "independence": {
+    "probe_rows": 4,
+    "reordered_and_subset_equal": true
+  }
+}

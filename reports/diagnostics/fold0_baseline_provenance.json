@@ -1,0 +1,16 @@
+{
+  "provenance_id": "FOLD0-BASELINE-AR06-TOP35",
+  "timestamp": "2026-10-24T22:44:43",
+  "heldout_fold": 0,
+  "fit_rows": 9850,
+  "val_rows": 2372,
+  "source_hashes": {
+    "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+    "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+  },
+  "top_k_per_row": 35,
+  "total_pairs": 83020,
+  "gold_coverage": 1.0,
+  "baseline_accuracy": 0.99874
+}

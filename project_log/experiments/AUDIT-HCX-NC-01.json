@@ -1,0 +1,342 @@
+{
+  "experiment_id": "AUDIT-HCX-NC-01",
+  "plan_id": null,
+  "status": "completed",
+  "recorded_at_kst": "2026-10-24T23:48:12.269362+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": "2026-10-24T23:56:16+09:00",
+  "purpose": "Audit existing reverse-channel records and cached scores to recommend appropriate use",
+  "hypothesis": "Pilot combined accuracy may reflect preservation of baseline answers rather than demonstrated improvement; cross-fold error cases may overlap training.",
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "No model or submission changes; cached-score re-aggregation only"
+  ],
+  "fixed_conditions": [
+    "Existing 128 pilot rows and fixed top-35 candidate cache"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": null,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {
+      "scores": "e078a75649b1c1672f45fa4502a8ba1c8b149988e8cf92f3e99d9b9856be9b97",
+      "train": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+      "catalog": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "training_ids": "f7094848b233532e5000ac39697a10704d0db4860ea25160fa8c1ad598aaeb0e",
+      "errors": "6c81ebfb79feb39fe876043c0239dacd1d53020c0e50aa729be89449bafe37fc",
+      "two_candidate_probe": "bb638831bacfa061ba6f069f9dcc0e7b2e7ab1acfa10ff7c7d077afe01202d30"
+    },
+    "split_id": "folds_group5_seed42.csv",
+    "validation_rows": 128,
+    "heldout_fold": 0
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [],
+  "environment": {},
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "reports/noisy_channel_record_audit.json",
+    "docs/NOISY_CHANNEL_REVIEW.md"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Cached fixed-top35 LM-only ID selection: 63/64 Hangul and 63/64 non-Hangul.",
+    "Baseline and lambda 0.20: 128/128; zero fixes and zero breaks.",
+    "7/10 diagnostic error targets were included in reverse-model fit vessels; all four advertised successes overlap.",
+    "Two-candidate logp diagnostic labels positive differences as fixes without fused reranking."
+  ],
+  "interpretations": [],
+  "limitations": [
+    "No fresh inference, training, full validation or ZIP update."
+  ],
+  "failure": null,
+  "decision": "Prefer selective learned name scoring; heldout improvement over baseline remains unproven.",
+  "next_actions": [
+    "Recommend a small ambiguous heldout set containing both baseline errors and matched correct controls. No execution authorized by this review."
+  ],
+  "results": {
+    "scope": "Re-aggregation of existing 128-row top-35 cache. No new inference or training.",
+    "source_sha256": {
+      "scores": "e078a75649b1c1672f45fa4502a8ba1c8b149988e8cf92f3e99d9b9856be9b97",
+      "train": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+      "catalog": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "training_ids": "f7094848b233532e5000ac39697a10704d0db4860ea25160fa8c1ad598aaeb0e",
+      "errors": "6c81ebfb79feb39fe876043c0239dacd1d53020c0e50aa729be89449bafe37fc",
+      "two_candidate_probe": "bb638831bacfa061ba6f069f9dcc0e7b2e7ab1acfa10ff7c7d077afe01202d30"
+    },
+    "cached_scores_hash_matches_run": true,
+    "pilot_rows": 128,
+    "candidate_pairs": 4480,
+    "pilot_fold_counts": {
+      "0": 128
+    },
+    "pilot_gold_vessels_present_in_reverse_training_ids": 0,
+    "candidate_coverage": 128,
+    "baseline": {
+      "hangul": {
+        "rows": 64,
+        "correct": 64,
+        "accuracy": 1.0
+      },
+      "non_hangul": {
+        "rows": 64,
+        "correct": 64,
+        "accuracy": 1.0
+      },
+      "weighted_accuracy": 1.0,
+      "fixes": 0,
+      "breaks": 0,
+      "changed": 0
+    },
+    "lm_only_within_baseline_top35": {
+      "hangul": {
+        "rows": 64,
+        "correct": 63,
+        "accuracy": 0.984375
+      },
+      "non_hangul": {
+        "rows": 64,
+        "correct": 63,
+        "accuracy": 0.984375
+      },
+      "weighted_accuracy": 0.9843749999999999,
+      "fixes": 0,
+      "breaks": 2,
+      "changed": 2
+    },
+    "lm_only_gold_rank_in_fixed_candidates": {
+      "1": {
+        "hangul_hits": 63,
+        "non_hangul_hits": 63
+      },
+      "3": {
+        "hangul_hits": 63,
+        "non_hangul_hits": 64
+      },
+      "5": {
+        "hangul_hits": 64,
+        "non_hangul_hits": 64
+      },
+      "10": {
+        "hangul_hits": 64,
+        "non_hangul_hits": 64
+      },
+      "35": {
+        "hangul_hits": 64,
+        "non_hangul_hits": 64
+      }
+    },
+    "fusions_mean_logp": {
+      "0.1": {
+        "hangul": {
+          "rows": 64,
+          "correct": 64,
+          "accuracy": 1.0
+        },
+        "non_hangul": {
+          "rows": 64,
+          "correct": 64,
+          "accuracy": 1.0
+        },
+        "weighted_accuracy": 1.0,
+        "fixes": 0,
+        "breaks": 0,
+        "changed": 0
+      },
+      "0.2": {
+        "hangul": {
+          "rows": 64,
+          "correct": 64,
+          "accuracy": 1.0
+        },
+        "non_hangul": {
+          "rows": 64,
+          "correct": 64,
+          "accuracy": 1.0
+        },
+        "weighted_accuracy": 1.0,
+        "fixes": 0,
+        "breaks": 0,
+        "changed": 0
+      },
+      "0.25": {
+        "hangul": {
+          "rows": 64,
+          "correct": 64,
+          "accuracy": 1.0
+        },
+        "non_hangul": {
+          "rows": 64,
+          "correct": 64,
+          "accuracy": 1.0
+        },
+        "weighted_accuracy": 1.0,
+        "fixes": 0,
+        "breaks": 0,
+        "changed": 0
+      },
+      "0.5": {
+        "hangul": {
+          "rows": 64,
+          "correct": 64,
+          "accuracy": 1.0
+        },
+        "non_hangul": {
+          "rows": 64,
+          "correct": 64,
+          "accuracy": 1.0
+        },
+        "weighted_accuracy": 1.0,
+        "fixes": 0,
+        "breaks": 0,
+        "changed": 0
+      },
+      "1.0": {
+        "hangul": {
+          "rows": 64,
+          "correct": 63,
+          "accuracy": 0.984375
+        },
+        "non_hangul": {
+          "rows": 64,
+          "correct": 64,
+          "accuracy": 1.0
+        },
+        "weighted_accuracy": 0.9890625,
+        "fixes": 0,
+        "breaks": 1,
+        "changed": 1
+      }
+    },
+    "pilot_baseline_margin": {
+      "minimum": 0.830705,
+      "median": 5.950106999999999,
+      "count_le_1": 1,
+      "count_le_2": 5
+    },
+    "ten_error_overlap": {
+      "rows": 10,
+      "in_reverse_fit_vessels": 7,
+      "by_fold": [
+        {
+          "fold": 0,
+          "rows": 3,
+          "in_reverse_fit_vessels": 0
+        },
+        {
+          "fold": 1,
+          "rows": 2,
+          "in_reverse_fit_vessels": 2
+        },
+        {
+          "fold": 2,
+          "rows": 1,
+          "in_reverse_fit_vessels": 1
+        },
+        {
+          "fold": 4,
+          "rows": 4,
+          "in_reverse_fit_vessels": 4
+        }
+      ],
+      "reported_success_examples": [
+        {
+          "sample_id": "TRAIN_10763",
+          "fold": 2,
+          "vessel_name": "NOVA BREEZE",
+          "in_reverse_fit_vessels": true
+        },
+        {
+          "sample_id": "TRAIN_03895",
+          "fold": 4,
+          "vessel_name": "CENTRAL PARK",
+          "in_reverse_fit_vessels": true
+        },
+        {
+          "sample_id": "TRAIN_11243",
+          "fold": 4,
+          "vessel_name": "마스그라치",
+          "in_reverse_fit_vessels": true
+        },
+        {
+          "sample_id": "TRAIN_11805",
+          "fold": 4,
+          "vessel_name": "마스그라치",
+          "in_reverse_fit_vessels": true
+        }
+      ]
+    },
+    "probe_semantics": "scratch/test_all_10_errors.py labels positive gold-vs-pred logp differences as +Fix without baseline-score fusion or ranking all candidates.",
+    "cached_inference_seconds": 1705.1144499000002,
+    "mean_seconds_per_row_exhaustive35": 13.321206639843751,
+    "limitations": [
+      "LM-only result is conditional on a baseline-generated top-35 shortlist, not catalog-wide retrieval.",
+      "Pilot baseline is already perfect, so this subset cannot demonstrate fixes.",
+      "Membership in fit data proves split overlap; actual per-pair sampling exposures were not reconstructed.",
+      "Pilot fusion weights have been inspected on the same heldout subset; no independent optimum is established."
+    ],
+    "lm_only_errors_public_examples": [
+      {
+        "sample_id": "TRAIN_00001",
+        "observed_name": "GRAND VICCTORY",
+        "gold_name": "Grand Victory",
+        "lm_choice": "GREAT VICTORY",
+        "baseline_gold_score": 13.072639,
+        "baseline_lm_choice_score": 7.723406,
+        "gold_mean_logp": -3.1590674687564992,
+        "wrong_mean_logp": -2.9499334091087803,
+        "observed_gross_tonnage": "",
+        "gold_gross_tonnage": "59217",
+        "wrong_gross_tonnage": "41872"
+      },
+      {
+        "sample_id": "TRAIN_00082",
+        "observed_name": "펭슈하이",
+        "gold_name": "Feng Xiu Hai",
+        "lm_choice": "FENG SHOU HAI",
+        "baseline_gold_score": 16.914185,
+        "baseline_lm_choice_score": 15.485728,
+        "gold_mean_logp": -4.358177207410336,
+        "wrong_mean_logp": -2.650733341276646,
+        "observed_gross_tonnage": "34967",
+        "gold_gross_tonnage": "36378",
+        "wrong_gross_tonnage": "36378"
+      }
+    ]
+  }
+}

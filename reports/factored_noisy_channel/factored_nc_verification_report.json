@@ -1,0 +1,237 @@
+{
+  "benchmark_id": "FACTORED-NC-VERIFY-01",
+  "timestamp": "2026-10-25T00:45:24",
+  "weights": {
+    "w_name": 1.0,
+    "w_ton": 1.5,
+    "w_flag": 0.8,
+    "w_type": 0.4,
+    "ton_sigma": 0.035
+  },
+  "pilot_results": {
+    "weighted_accuracy": 0.95938,
+    "hangul_accuracy": 0.96875,
+    "non_hangul_accuracy": 0.9375,
+    "correct_count": 61,
+    "total_count": 64,
+    "eval_seconds": 230.85
+  },
+  "target_errors_results": [
+    {
+      "sample_id": "TRAIN_03728",
+      "obs_name": "SC CHONGQING",
+      "gold_name": "SC Chongqing",
+      "gold_vid": "VESSEL_75020",
+      "top1_name": "SC Chongqing",
+      "top1_vid": "VESSEL_75020",
+      "is_correct": true,
+      "gold_rank": 1,
+      "top1_components": {
+        "llm_name_logp": -0.385,
+        "ton_logp": 3.5,
+        "flag_logp": 3.0993,
+        "type_logp": 2.9713,
+        "num_logp": 0.0,
+        "total_logp": 8.5329
+      }
+    },
+    {
+      "sample_id": "TRAIN_03799",
+      "obs_name": "DIOMID",
+      "gold_name": "Diomid",
+      "gold_vid": "VESSEL_62144",
+      "top1_name": "Diomid",
+      "top1_vid": "VESSEL_62144",
+      "is_correct": true,
+      "gold_rank": 1,
+      "top1_components": {
+        "llm_name_logp": -0.8002,
+        "ton_logp": 3.5,
+        "flag_logp": 2.2986,
+        "type_logp": 0.9244,
+        "num_logp": 0.0,
+        "total_logp": 6.6585
+      }
+    },
+    {
+      "sample_id": "TRAIN_05971",
+      "obs_name": "호다카 갤럭시",
+      "gold_name": "Hodaka Galaxy",
+      "gold_vid": "VESSEL_06294",
+      "top1_name": "Hodaka Galaxy",
+      "top1_vid": "VESSEL_06294",
+      "is_correct": true,
+      "gold_rank": 1,
+      "top1_components": {
+        "llm_name_logp": -0.0469,
+        "ton_logp": 3.5,
+        "flag_logp": 3.0173,
+        "type_logp": 2.5447,
+        "num_logp": 0.0,
+        "total_logp": 8.6349
+      }
+    },
+    {
+      "sample_id": "TRAIN_06864",
+      "obs_name": "HONOR GALAXY",
+      "gold_name": "Honor Galaxy",
+      "gold_vid": "VESSEL_57863",
+      "top1_name": "Honor Galaxy",
+      "top1_vid": "VESSEL_57863",
+      "is_correct": true,
+      "gold_rank": 1,
+      "top1_components": {
+        "llm_name_logp": -0.1059,
+        "ton_logp": 3.5,
+        "flag_logp": 3.0173,
+        "type_logp": 2.5447,
+        "num_logp": 0.0,
+        "total_logp": 8.5758
+      }
+    },
+    {
+      "sample_id": "TRAIN_07693",
+      "obs_name": "ALIPNE EAGLE",
+      "gold_name": "Alpine Eagle",
+      "gold_vid": "VESSEL_25718",
+      "top1_name": "Alpine Eagle",
+      "top1_vid": "VESSEL_25718",
+      "is_correct": true,
+      "gold_rank": 1,
+      "top1_components": {
+        "llm_name_logp": -1.5264,
+        "ton_logp": -0.5556,
+        "flag_logp": 3.0173,
+        "type_logp": 2.2664,
+        "num_logp": 0.0,
+        "total_logp": 0.9606
+      }
+    },
+    {
+      "sample_id": "TRAIN_07851",
+      "obs_name": "KAMMOE VICTORIA",
+      "gold_name": "Kamome Victoria",
+      "gold_vid": "VESSEL_26629",
+      "top1_name": "Kamome Victoria",
+      "top1_vid": "VESSEL_26629",
+      "is_correct": true,
+      "gold_rank": 1,
+      "top1_components": {
+        "llm_name_logp": -2.0145,
+        "ton_logp": 0.0,
+        "flag_logp": 2.1031,
+        "type_logp": 1.0792,
+        "num_logp": 0.0,
+        "total_logp": 0.0996
+      }
+    },
+    {
+      "sample_id": "TRAIN_08761",
+      "obs_name": "KULJAK ARROW",
+      "gold_name": "Kuljak Arrow",
+      "gold_vid": "VESSEL_64384",
+      "top1_name": "Kuljak Arrow",
+      "top1_vid": "VESSEL_64384",
+      "is_correct": true,
+      "gold_rank": 1,
+      "top1_components": {
+        "llm_name_logp": -0.1269,
+        "ton_logp": 3.5,
+        "flag_logp": 4.033,
+        "type_logp": -2.5,
+        "num_logp": 0.0,
+        "total_logp": 7.3495
+      }
+    },
+    {
+      "sample_id": "TRAIN_09393",
+      "obs_name": "OCIOS IOAANIS",
+      "gold_name": "Ocios Ioannis",
+      "gold_vid": "VESSEL_37416",
+      "top1_name": "Ocios Ioannis",
+      "top1_vid": "VESSEL_37416",
+      "is_correct": true,
+      "gold_rank": 1,
+      "top1_components": {
+        "llm_name_logp": -1.6431,
+        "ton_logp": -0.4529,
+        "flag_logp": -0.6803,
+        "type_logp": 2.2664,
+        "num_logp": 0.0,
+        "total_logp": -1.9601
+      }
+    },
+    {
+      "sample_id": "TRAIN_10022",
+      "obs_name": "SHAN SHI",
+      "gold_name": "Shan Shi",
+      "gold_vid": "VESSEL_23388",
+      "top1_name": "Shan Shi",
+      "top1_vid": "VESSEL_23388",
+      "is_correct": true,
+      "gold_rank": 1,
+      "top1_components": {
+        "llm_name_logp": -0.6271,
+        "ton_logp": -0.7437,
+        "flag_logp": 2.1203,
+        "type_logp": 1.6224,
+        "num_logp": 0.0,
+        "total_logp": 0.6025
+      }
+    },
+    {
+      "sample_id": "TRAIN_10986",
+      "obs_name": "HANSA TROMSOE",
+      "gold_name": "Hansa Tromsoe",
+      "gold_vid": "VESSEL_23081",
+      "top1_name": "Hansa Tromsoe",
+      "top1_vid": "VESSEL_23081",
+      "is_correct": true,
+      "gold_rank": 1,
+      "top1_components": {
+        "llm_name_logp": -0.2274,
+        "ton_logp": 3.5,
+        "flag_logp": 2.7147,
+        "type_logp": 2.2664,
+        "num_logp": 0.0,
+        "total_logp": 8.1009
+      }
+    },
+    {
+      "sample_id": "TRAIN_11270",
+      "obs_name": "YOGAN OCEAN",
+      "gold_name": "Yongan Ocean",
+      "gold_vid": "VESSEL_33694",
+      "top1_name": "Yongan Ocean",
+      "top1_vid": "VESSEL_33694",
+      "is_correct": true,
+      "gold_rank": 1,
+      "top1_components": {
+        "llm_name_logp": -2.1617,
+        "ton_logp": 0.0,
+        "flag_logp": 2.1031,
+        "type_logp": 2.2538,
+        "num_logp": 0.0,
+        "total_logp": 0.4223
+      }
+    },
+    {
+      "sample_id": "TRAIN_11797",
+      "obs_name": "DONINNGTON",
+      "gold_name": "Donington",
+      "gold_vid": "VESSEL_50958",
+      "top1_name": "Donington",
+      "top1_vid": "VESSEL_50958",
+      "is_correct": true,
+      "gold_rank": 1,
+      "top1_components": {
+        "llm_name_logp": -2.9135,
+        "ton_logp": 3.5,
+        "flag_logp": 0.0,
+        "type_logp": 4.0,
+        "num_logp": 0.0,
+        "total_logp": 3.9365
+      }
+    }
+  ]
+}

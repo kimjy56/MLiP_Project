@@ -8,7 +8,7 @@ import torch
 from transformers import ByT5Tokenizer, T5Config, T5ForConditionalGeneration
 
 from name_decoder.catalog import ByteNameTrie, CatalogNames, canonical_name
-from name_decoder.data import prepare_frames, select_pilot
+from name_decoder.data import prepare_frames, prepare_final_frames, read_frames, select_pilot
 from name_decoder.model import ByT5NameDecoder
 
 
@@ -64,6 +64,28 @@ class CatalogTests(unittest.TestCase):
 
 
 class DataTests(unittest.TestCase):
+    def test_final_training_keeps_all_official_pairs_without_a_split(self):
+        train, catalog, _ = fixtures()
+        pairs, rows, index = prepare_final_frames(train, catalog)
+        self.assertEqual(len(rows), 4)
+        self.assertEqual(len(pairs), 3)
+        self.assertEqual(set(pairs.target), set(index.names))
+        self.assertNotIn("fold", rows.columns)
+
+    def test_final_training_does_not_require_folds_but_evaluation_does(self):
+        train, catalog, _ = fixtures()
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder)
+            train.to_csv(path / "train.csv", index=False)
+            catalog.to_csv(path / "vessel_catalog.csv", index=False)
+            missing = path / "missing.csv"
+            pairs, val, fit, _ = read_frames(path, missing, 0, final_train=True)
+            self.assertTrue(val.empty)
+            self.assertEqual(len(fit), 4)
+            self.assertEqual(len(pairs), 3)
+            with self.assertRaisesRegex(FileNotFoundError, "Common fold file missing"):
+                read_frames(path, missing, 0)
+
     def test_no_heldout_training_and_ambiguous_targets_remain(self):
         pairs, val, fit, catalog = prepare_frames(*fixtures(), heldout_fold=0)
         self.assertEqual(len(pairs), 2)
@@ -112,6 +134,18 @@ class GenerationTests(unittest.TestCase):
             self.assertEqual(len({c.name for c in candidates}), 5)
             for candidate in candidates:
                 self.assertIn(candidate.name, self.decoder.catalog.names)
+
+    def test_top_one_uses_same_search_and_preserves_all_matching_ids(self):
+        from unittest.mock import patch
+        from name_decoder.catalog import NameCandidate
+        ranked = [NameCandidate("ACE", -1.2, ("v1", "v2")),
+                  NameCandidate("B", -2.0, ("v3",))]
+        with patch.object(self.decoder, "decode", return_value=ranked) as decode:
+            result = self.decoder.predict("에이스")
+        decode.assert_called_once_with("에이스", top_k=10)
+        self.assertEqual(result.predicted_name, "ACE")
+        self.assertEqual(result.vessel_ids, ("v1", "v2"))
+        self.assertEqual(result.candidates, tuple(ranked))
 
     def test_invalid_inputs_fail_instead_of_truncating(self):
         for source in ("", "A" * 257):

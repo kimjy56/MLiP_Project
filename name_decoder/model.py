@@ -6,7 +6,7 @@ from pathlib import Path
 import torch
 from transformers import ByT5Tokenizer, T5Config, T5ForConditionalGeneration
 
-from .catalog import ByteNameTrie, NameCandidate, canonical_name
+from .catalog import ByteNameTrie, NameCandidate, NamePrediction, canonical_name
 
 
 class ByT5NameDecoder:
@@ -78,3 +78,17 @@ class ByT5NameDecoder:
     def decode_many(self, names, top_k=10):
         # Single-row execution makes batch/order independence explicit. Optimize later.
         return [self.decode(name, top_k=top_k) for name in names]
+
+    def predict(self, name, top_k=10):
+        """Select rank 1 from the same beam search used for candidate evaluation.
+
+        Keep top_k=10 for the trained workflow: beam width changes can change
+        rank 1. Duplicate catalog IDs are deliberately not resolved by ID order.
+        """
+        candidates = tuple(self.decode(name, top_k=top_k))
+        if not candidates:
+            raise RuntimeError("Decoder returned no catalog name")
+        return NamePrediction(candidates[0].name, candidates[0].vessel_ids, candidates)
+
+    def predict_many(self, names, top_k=10):
+        return [self.predict(name, top_k=top_k) for name in names]

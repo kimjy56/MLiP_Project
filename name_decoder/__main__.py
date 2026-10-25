@@ -24,10 +24,10 @@ def main():
     torch.use_deterministic_algorithms(True)
     torch.backends.cuda.matmul.allow_tf32 = False
     torch.backends.cudnn.allow_tf32 = False
-    catalog = pd.read_csv(args.catalog, keep_default_na=False, dtype={"vessel_id": str})
+    catalog = pd.read_csv(args.catalog, keep_default_na=False, dtype={"vessel_id": str, "vessel_name": str})
     decoder = ByT5NameDecoder.load(args.model, CatalogNames(catalog.to_dict("records")), args.device)
     import json
-    print(json.dumps([asdict(item) for item in decoder.decode(args.name, args.top_k)],
+    print(json.dumps(asdict(decoder.predict(args.name, args.top_k)),
                      ensure_ascii=False, indent=2))
 
 

@@ -22,6 +22,14 @@ class NameCandidate:
     vessel_ids: tuple[str, ...]
 
 
+@dataclass(frozen=True)
+class NamePrediction:
+    """Top-ranked normalized catalog name, not a resolved vessel identity."""
+    predicted_name: str
+    vessel_ids: tuple[str, ...]
+    candidates: tuple[NameCandidate, ...]
+
+
 class CatalogNames:
     def __init__(self, records):
         by_name = {}

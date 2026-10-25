@@ -1,0 +1,268 @@
+{
+  "experiment_id": "AS-HCX-04",
+  "plan_id": "HCX-SCHED-01",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-24T12:07:00+09:00",
+  "started_at_kst": "2026-10-24T12:07:22.914738+09:00",
+  "finished_at_kst": "2026-10-24T13:02:24.600445+09:00",
+  "purpose": "Evaluate learning rate schedule impact (Warmup 15 + Cosine Decay) vs Constant LR on HyperCLOVA X 0.5B SFT under strict identical conditions",
+  "hypothesis": "Applying a 15-step linear warmup followed by cosine decay towards zero allows stable early parameter adjustment and smoother fine-grained convergence on subtle character transliterations, improving Top-1 name exact accuracy and Top-10 inclusion over constant learning rate (AS-HCX-03).",
+  "baseline_experiment_id": "AS-HCX-03",
+  "changed_factors": [
+    "Learning rate scheduler: Constant (2e-5) -> Linear Warmup (15 steps) + Cosine Decay (2e-5 to 0)",
+    "Post-scorer: ratio (benchmark standard)"
+  ],
+  "fixed_conditions": [
+    "Base model checkpoint: artifacts/pretrained/hyperclovax-seed-0.5b",
+    "Fold 0 split from eval_kit/folds_group5_seed42.csv",
+    "Training steps: 300 optimizer steps (batch 4, accumulation 2)",
+    "Sample generator seed: 42 (identical training pair sampling order)",
+    "Heldout pilot evaluation on exact 128 rows (64 Hangul, 64 Non-Hangul)",
+    "RapidFuzz catalog search against 78,592 names using scorer=ratio",
+    "Hardware: CPU 4 threads (OMP/MKL capped, interop=2)"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": true,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {
+      "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "split_id": "supplied-group-fold-0/pilot",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42,
+    "training_rows": 9850,
+    "validation_rows": 128
+  },
+  "retrieval": {
+    "method": "SFT generation + RapidFuzz ratio catalog search",
+    "catalog_scorer": "ratio",
+    "candidate_limit": 10,
+    "tie_break": "lexicographic canonical name",
+    "roman_baseline_scorer": "WRatio"
+  },
+  "features": [],
+  "preprocessing": {
+    "prompt_template": "<|im_start|>system\n한국어 선박명을 국제 카탈로그의 공식 영문 대문자 선박명으로 1:1 변환합니다. 오직 영문 공식 선박명만 대문자로 한 줄로 출력하세요.<|im_end|>\n<|im_start|>user\n입력: {source}<|im_end|>\n<|im_start|>assistant\n출력:\n{target}<|im_end|>"
+  },
+  "training_pairs": {
+    "positive_rule": "training-fold observed name -> official gold catalog name",
+    "negative_rule": null,
+    "count": 4685,
+    "hangul_pairs": 305,
+    "non_hangul_pairs": 4380,
+    "sampling_hangul_mass": 0.7
+  },
+  "model": {
+    "type": "naver-hyperclovax/HyperCLOVAX-SEED-Text-Instruct-0.5B-SFT",
+    "parameters": {
+      "steps": 300,
+      "batch_size": 4,
+      "accumulation": 2,
+      "learning_rate": 2e-05,
+      "lr_scheduler": "cosine",
+      "warmup_steps": 15,
+      "train_mode": "top-layers",
+      "trainable_layers": "top 8 layers + lm_head",
+      "frozen_layers": "bottom 16 layers",
+      "max_input_length": "prompt-bounded",
+      "max_new_tokens": 16,
+      "use_cache": true,
+      "num_beams": 1,
+      "num_return_sequences": 1,
+      "seed": 42,
+      "threads": 4
+    }
+  },
+  "execution": {
+    "command": ".venv-server\\Scripts\\python.exe experiments/train_hyperclovax_sft.py --experiment-id AS-HCX-04 --steps 300 --batch-size 4 --accumulation 2 --learning-rate 2e-5 --lr-scheduler cosine --warmup-steps 15 --threads 4 --catalog-scorer ratio",
+    "environment": {
+      "os": "Windows 11",
+      "python": "3.11.3",
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "rapidfuzz": "3.14.3"
+    },
+    "hardware": {
+      "cpu": "AMD Ryzen 7 5700X 8-Core Processor",
+      "threads_used": 4
+    }
+  },
+  "evaluation": {
+    "scope": "heldout-pilot-128",
+    "rows": 128,
+    "hangul_rows": 64,
+    "non_hangul_rows": 64,
+    "catalog_size": 78592
+  },
+  "results": {
+    "train_loss_initial": 1.28315,
+    "train_loss_final": 0.12861,
+    "train_loss_min": 0.0073,
+    "train_seconds": 2957.78,
+    "eval_seconds": 245.84,
+    "hangul": {
+      "direct_exact_hits": 23,
+      "direct_exact_accuracy": 0.35938,
+      "gold_name_in_top_1": 0.75,
+      "gold_name_hits_top_1": 48,
+      "gold_name_in_top_5": 0.875,
+      "gold_name_hits_top_5": 56,
+      "gold_name_in_top_10": 0.89062,
+      "gold_name_hits_top_10": 57
+    },
+    "non_hangul": {
+      "direct_exact_hits": 36,
+      "direct_exact_accuracy": 0.5625,
+      "gold_name_in_top_1": 0.98438,
+      "gold_name_hits_top_1": 63,
+      "gold_name_in_top_5": 0.98438,
+      "gold_name_hits_top_5": 63,
+      "gold_name_in_top_10": 0.98438,
+      "gold_name_hits_top_10": 63
+    },
+    "weighted_name_exact_accuracy": 0.82031,
+    "serialization_verified": true,
+    "row_independence_verified": true
+  },
+  "interpretation": "Changing only the learning rate scheduler from Constant to Linear Warmup (15 steps) + Cosine Decay produced a dramatic improvement in name exact accuracy: weighted name accuracy surged from 72.34% to 82.03% (+9.69%p). Most notably, Hangul Top-1 exact accuracy jumped from 62.50% (40/64) to 75.00% (48/64, +12.50%p), and Non-Hangul Top-1 reached 98.44% (63/64). Direct exact match without fuzzy post-search also climbed to 35.94% for Hangul and 56.25% for Non-Hangul. The cosine decay schedule allowed the model to fine-tune subtle transliteration boundaries in the later steps without destabilizing parameter updates.",
+  "limitations": "Evaluated on 128 heldout pilot rows (Fold 0 seed 42) for ship name matching; full 5-fold OOF record-linkage end-to-end score with CatBoost/AR feature fusion remains to be measured.",
+
+  "artifacts": [
+    {
+      "path": "artifacts/AS-HCX-04/model/added_tokens.json",
+      "sha256": "6a3d05a3466ebce433995aa857049fa022d93edf3c57c36d9df3762ccea15407",
+      "bytes": 960
+    },
+    {
+      "path": "artifacts/AS-HCX-04/model/chat_template.jinja",
+      "sha256": "f558b0d553e94855ee7eb43d9e49f8430c7e9e4e59b24cacdf1271c772837e18",
+      "bytes": 294
+    },
+    {
+      "path": "artifacts/AS-HCX-04/model/config.json",
+      "sha256": "844ad163f3eb45660d7b3d12fc12d744d5abefe314b0daf26722bd4be2bb742c",
+      "bytes": 785
+    },
+    {
+      "path": "artifacts/AS-HCX-04/model/generation_config.json",
+      "sha256": "8fd7c5acfb2299e85656c8472a26e56ad4a058f492fd1fd50aefe64603beaaae",
+      "bytes": 177
+    },
+    {
+      "path": "artifacts/AS-HCX-04/model/merges.txt",
+      "sha256": "31478af22bfd540985121b918c0ee8273cb9e4e6724beb4fdd7dcc3c8275448c",
+      "bytes": 1082566
+    },
+    {
+      "path": "artifacts/AS-HCX-04/model/model.safetensors",
+      "sha256": "ecb0a1ebec968f4e7cfdb4ee49153cb17915f2f9f108e10d13d2b2e626a6e12d",
+      "bytes": 2265149808
+    },
+    {
+      "path": "artifacts/AS-HCX-04/model/special_tokens_map.json",
+      "sha256": "82f45c169fe5b200cdb121e184af2216507c5ef9f0c3bf610e110e421e69af4d",
+      "bytes": 2015
+    },
+    {
+      "path": "artifacts/AS-HCX-04/model/tokenizer.json",
+      "sha256": "1ce80c377be4ae8a4e57758da0d6ee3dc6da3f25857d72c07a52a156d7de7fab",
+      "bytes": 8029694
+    },
+    {
+      "path": "artifacts/AS-HCX-04/model/tokenizer_config.json",
+      "sha256": "1fb1a4a6e527eeff72cd35f47eac9e4a38e7f08d7da2563b966f8efd9998b5f5",
+      "bytes": 12089
+    },
+    {
+      "path": "artifacts/AS-HCX-04/model/vocab.json",
+      "sha256": "cfe2bdf330509bd4772f6dbe19a529a80798c3a00d8ab5a74925a4f6674047fa",
+      "bytes": 1858019
+    },
+    {
+      "path": "artifacts/AS-HCX-04/pilot_predictions.csv",
+      "sha256": "5d725534c44476aaca58c317640f7160aaf676cc9475006863afc598c5c995a2",
+      "bytes": 37590
+    },
+    {
+      "path": "artifacts/AS-HCX-04/training_history.json",
+      "sha256": "92d4471ba4d7b1df0b0b192b87c9d63bd2c7b347f83b5c48304074056b260ac0",
+      "bytes": 21187
+    }
+  ],
+  "pilot_results": {
+    "roman_wratio": {
+      "hangul_accuracy": 0.15625,
+      "non_hangul_accuracy": 1.0,
+      "weighted_accuracy": 0.40937,
+      "seconds": 8.63
+    },
+    "finetuned_hcx": {
+      "hangul": {
+        "rows": 64,
+        "direct_exact_hits": 23,
+        "direct_exact_accuracy": 0.35938,
+        "gold_name_in_top_1": 0.75,
+        "gold_name_hits_top_1": 48,
+        "gold_name_in_top_5": 0.875,
+        "gold_name_hits_top_5": 56,
+        "gold_name_in_top_10": 0.89062,
+        "gold_name_hits_top_10": 57
+      },
+      "non_hangul": {
+        "rows": 64,
+        "direct_exact_hits": 36,
+        "direct_exact_accuracy": 0.5625,
+        "gold_name_in_top_1": 0.98438,
+        "gold_name_hits_top_1": 63,
+        "gold_name_in_top_5": 0.98438,
+        "gold_name_hits_top_5": 63,
+        "gold_name_in_top_10": 0.98438,
+        "gold_name_hits_top_10": 63
+      },
+      "weighted_name_exact_accuracy": 0.82031
+    }
+  },
+  "metrics": {
+    "metric_source": "pilot heldout name evaluation",
+    "hangul_rows": 64,
+    "non_hangul_rows": 64,
+    "hangul_accuracy": 0.75,
+    "non_hangul_accuracy": 0.98438,
+    "weighted_accuracy": 0.82031,
+    "candidate_recall_hangul": 0.89062,
+    "candidate_recall_non_hangul": 0.98438,
+    "seen_vessel_fraction": 0.0
+  },
+  "cost": {
+    "training_seconds": 2957.78,
+    "inference_seconds": 245.84,
+    "timing_scope": "inference_seconds: CPU 4 threads, greedy decoding + RapidFuzz ratio; excludes training/loading/index construction/saving",
+    "first_10_loss": 1.28315,
+    "last_10_loss": 0.12861,
+    "model_bytes": 2276136407,
+    "submission_zip_bytes": null
+  },
+  "serialization": {
+    "probe_rows": 4,
+    "top_10_names_equal": true
+  },
+  "independence": {
+    "probe_rows": 4,
+    "reordered_and_subset_equal": true
+  },
+  "observations": [
+    "Initial mean loss: 1.2831 -> Final mean loss: 0.1286",
+    "Hangul Top-1 name exact accuracy reached 75.00% (Top-10: 89.06%)",
+    "Non-Hangul Top-1 name exact accuracy reached 98.44% (Top-10: 98.44%)",
+    "Direct exact match without fuzzy search: Hangul 35.94%, Non-Hangul 56.25%"
+  ],
+  "interpretations": [
+    "SFT successfully aligned HyperCLOVA X to suppress chat explanatory tokens and output concise shipping names.",
+    "RapidFuzz ratio anchors generation to 78592 canonical names; this is not vessel-ID evaluation."
+  ],
+  "decision": "HyperCLOVA X SEED 0.5B SFT evaluation completed; compare with ByT5-small AS-NAME-05."
+}

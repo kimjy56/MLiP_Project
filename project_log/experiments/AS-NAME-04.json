@@ -1,0 +1,322 @@
+{
+  "experiment_id": "AS-NAME-04",
+  "plan_id": "NAME-DECODER-V1",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-24T00:30:53.857887+09:00",
+  "started_at_kst": "2026-10-24T00:30:53.862940+09:00",
+  "finished_at_kst": "2026-10-24T00:47:42.234623+09:00",
+  "purpose": "Heldout catalog-name prediction and candidate evaluation",
+  "hypothesis": "Official observed/canonical name pairs teach useful byte-level alternatives",
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "ByT5 fine-tuning",
+    "loss reduction: token"
+  ],
+  "fixed_conditions": [
+    "official full-catalog trie",
+    "10 beams",
+    "seed 42",
+    "name input only; no augmentation"
+  ],
+  "code": {
+    "git_revision_at_run": "b2efe726ba991628ca76e2d4b417a5c3f92a25f2",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/__init__.py": "a2a6ac26e3bbaeb8c7c9d46de55a4091d26c9dceddba1a6f548efe9286436e74",
+      "name_decoder/__main__.py": "73ef908ba6cfefb6e9e051c60a7157d3341caedbc124a84248c17a30001296f0",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "name_decoder/model.py": "37e2fcec43750e1a6f1187c4e6ebbc3a44951d3632bb7754469cbca03df7c936",
+      "experiments/train_name_decoder.py": "2eeba280db368e30c15a06f5b3b6d3d94ec5d47fb56db98f58ea93cab2381b0c"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "split_id": "supplied-group-fold-0/pilot",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42,
+    "training_rows": 9850,
+    "validation_rows": 128,
+    "total_heldout_rows": 2372,
+    "training_vessels": 4680,
+    "training_sample_ids_sha256": "3555e1c76e8880fff5d70c887db095f0724bdb8993996e37acf7c895f5312121",
+    "selected_sample_ids_sha256": "bb5d05c665663627cce980c3cb598b08d33ebdc6af546c0c7205e61f291d302b"
+  },
+  "retrieval": {
+    "catalog_names": 78592,
+    "vessel_ids": 78595,
+    "duplicate_name_groups": 3,
+    "method": "full-catalog byte-prefix-constrained beam search",
+    "num_beams": 10,
+    "length_penalty": 1.0,
+    "training_lookup": false
+  },
+  "features": [],
+  "preprocessing": {
+    "name": "NFC, uppercase, whitespace collapse; retain digits/punctuation",
+    "augmentation": "none"
+  },
+  "training_pairs": {
+    "positive_rule": "training-fold observed name -> official gold catalog name",
+    "negative_rule": null,
+    "count": 4685,
+    "hangul_pairs": 305,
+    "non_hangul_pairs": 4380,
+    "sampling_hangul_mass": 0.7
+  },
+  "model": {
+    "type": "google/byt5-small",
+    "loss": "teacher-forced cross entropy/token",
+    "parameters": {
+      "steps": 200,
+      "batch_size": 8,
+      "epoch_equivalent_requested": null,
+      "sampled_pair_draws": 3200,
+      "loss_reduction": "token",
+      "final_train": false,
+      "accumulation": 2,
+      "learning_rate": 0.0001,
+      "weight_decay": 0.01,
+      "optimizer": "AdamW",
+      "max_grad_norm": 1.0,
+      "training_autocast": "bfloat16 on CUDA",
+      "inference_dtype": "float32",
+      "checkpoint_config": "preserve tie_word_embeddings and scale_decoder_outputs"
+    },
+    "pretrained_manifest": {
+      "repo_id": "google/byt5-small",
+      "revision": "68377bdc18a2ffec8a0533fef03b1c513a4dd49d",
+      "recorded_at_kst": "2026-10-24T00:29:40.968743+09:00",
+      "files": {
+        "config.json": {
+          "sha256": "7845fb21b320f3fa05392ce151143502cf08729c8c89732da3293615885d3e83",
+          "bytes": 698
+        },
+        "generation_config.json": {
+          "sha256": "f5a1c7e2be8092018d8835128987edf0111637dd98e90599cc80310fef75d95a",
+          "bytes": 147
+        },
+        "pytorch_model.bin": {
+          "sha256": "5c5aaf56299d6f2d4eaadad550a40765198828ead4d74f0a15f91cbe0961931a",
+          "bytes": 1198627927
+        },
+        "README.md": {
+          "sha256": "6daea4f59e1a86e7db0a44c488651130cfd39c3b92cf63eead46db865bdabaed",
+          "bytes": 4233
+        },
+        "special_tokens_map.json": {
+          "sha256": "bda1d200ddf8b187ed2f2ff89a69c540e1bfde26993b762d534c20d82bfc8ec8",
+          "bytes": 2503
+        },
+        "tokenizer_config.json": {
+          "sha256": "3b791189b080dc37ab27ebd5cba352720ff150146217f93da1612ee8f41a846e",
+          "bytes": 2593
+        }
+      }
+    },
+    "parameter_count": 299637760
+  },
+  "commands": [
+    "C:\\Users\\jy200\\Documents\\ChatGPT\\실전기계학습\\.venv-server\\Scripts\\python.exe train_name_decoder.py --experiment-id AS-NAME-04 --data-dir .\\data --folds .\\eval_kit\\folds_group5_seed42.csv --fold 0 --steps 200 --loss-reduction token --eval-per-language 64"
+  ],
+  "environment": {
+    "python": "3.11.3",
+    "os": "Windows",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "safetensors": "0.6.2",
+      "pandas": "2.0.3",
+      "rapidfuzz": "3.14.3",
+      "Unidecode": "1.4.0"
+    },
+    "device": "cpu",
+    "gpu": null
+  },
+  "metrics": {
+    "metric_source": "local catalog-name evaluation, not ID accuracy",
+    "hangul_rows": 64,
+    "non_hangul_rows": 64,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": 0.0
+  },
+  "cost": {
+    "training_seconds": 817.690477999975,
+    "inference_seconds": 82.6706594999996,
+    "timing_scope": "inference: tokenization + full-catalog constrained decoding + name/ID mapping; excludes loading, saving",
+    "peak_memory_bytes": null,
+    "model_bytes": 1198607893,
+    "assets_bytes": null,
+    "submission_zip_bytes": null,
+    "loading_and_trie_seconds": 1.9649487999849953,
+    "baseline_seconds": 14.49510790000204,
+    "pretrained_inference_seconds": 78.33129740000004
+  },
+  "artifacts": [
+    {
+      "path": "artifacts/AS-NAME-04/model/added_tokens.json",
+      "sha256": "637ca6c69e56d85a9c6f1f30221c8210ba866a4383ce7261cecbfbc8573984db",
+      "bytes": 3145
+    },
+    {
+      "path": "artifacts/AS-NAME-04/model/config.json",
+      "sha256": "202965d2082d7ab2e84bf56ea5ee0ab2b716e6be3c4aef601c2ede3a27841307",
+      "bytes": 858
+    },
+    {
+      "path": "artifacts/AS-NAME-04/model/generation_config.json",
+      "sha256": "34f49d5043dafc40ac0f60a26f3ba19690bd2f2f4ea4957bdafa51d05feee63e",
+      "bytes": 149
+    },
+    {
+      "path": "artifacts/AS-NAME-04/model/model.safetensors",
+      "sha256": "c2d7e490cc987eff6ec8a1e54ff9695207ecbcd68f61fdc1004f0cfd458f16b9",
+      "bytes": 1198571496
+    },
+    {
+      "path": "artifacts/AS-NAME-04/model/name_decoder_manifest.json",
+      "sha256": "c1d7844e0f8450b341e9f09d09aa04bc3d7d5e5977c9fd8e81d8dfa1f19425f9",
+      "bytes": 2213
+    },
+    {
+      "path": "artifacts/AS-NAME-04/model/special_tokens_map.json",
+      "sha256": "66a8462ea6a3d7acc61b28aa1860a66a7880a029c772acc47cc459045d687e6c",
+      "bytes": 3240
+    },
+    {
+      "path": "artifacts/AS-NAME-04/model/tokenizer_config.json",
+      "sha256": "c726fdfe0f126cc4b110ad48cbd0249420a7a98eada41e0e3153e272a51b701e",
+      "bytes": 26792
+    },
+    {
+      "path": "artifacts/AS-NAME-04/pilot_predictions.csv",
+      "sha256": "c523c5713800cc20d29bb8e74bed29f36fb42fbdd47a809fe182a80f1682b3ad",
+      "bytes": 174701
+    },
+    {
+      "path": "artifacts/AS-NAME-04/training_history.json",
+      "sha256": "26e242090f3a12ee1849b24794bc390e70daaefda5b1a25535d2a239bf8a0a90",
+      "bytes": 5049
+    },
+    {
+      "path": "artifacts/AS-NAME-04/training_pairs.csv",
+      "sha256": "caa269f8273ded42d5816fb035d99c1836b6cbfb1de9d76e45976fcbdee25c08",
+      "bytes": 147408
+    }
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "All outputs restricted to official catalog names; duplicate-name IDs retained",
+    "Mean loss first/last 20 steps: 5.04145/1.37459"
+  ],
+  "interpretations": [],
+  "limitations": [
+    "Name matching only; not full OOF or official ID accuracy",
+    "Known development data, not an untouched final test",
+    "Single-row inference; no server timing claim",
+    "Actual environment versions recorded separately; no automatic server compatibility claim"
+  ],
+  "failure": null,
+  "decision": "Heldout name evaluation completed; no model adoption from a single fold",
+  "next_actions": [
+    "Full G5-s42 name-recall evaluation before selection",
+    "Validate saved model in server environment",
+    "Design metadata-aware ID resolution separately"
+  ],
+  "pilot_results": {
+    "roman_wratio": {
+      "hangul": {
+        "rows": 64,
+        "gold_name_in_top_1": 0.15625,
+        "gold_name_hits_top_1": 10,
+        "gold_name_in_top_5": 0.265625,
+        "gold_name_hits_top_5": 17,
+        "gold_name_in_top_10": 0.484375,
+        "gold_name_hits_top_10": 31,
+        "name_exact_accuracy": 0.15625,
+        "mean_returned_names": 10.0
+      },
+      "non_hangul": {
+        "rows": 64,
+        "gold_name_in_top_1": 1.0,
+        "gold_name_hits_top_1": 64,
+        "gold_name_in_top_5": 1.0,
+        "gold_name_hits_top_5": 64,
+        "gold_name_in_top_10": 1.0,
+        "gold_name_hits_top_10": 64,
+        "name_exact_accuracy": 1.0,
+        "mean_returned_names": 10.0
+      },
+      "weighted_name_exact_accuracy": 0.409375,
+      "scope": "normalized catalog NAME matching; not official vessel-ID accuracy"
+    },
+    "pretrained": {
+      "hangul": {
+        "rows": 64,
+        "gold_name_in_top_1": 0.0,
+        "gold_name_hits_top_1": 0,
+        "gold_name_in_top_5": 0.0,
+        "gold_name_hits_top_5": 0,
+        "gold_name_in_top_10": 0.0,
+        "gold_name_hits_top_10": 0,
+        "name_exact_accuracy": 0.0,
+        "mean_returned_names": 10.0
+      },
+      "non_hangul": {
+        "rows": 64,
+        "gold_name_in_top_1": 0.109375,
+        "gold_name_hits_top_1": 7,
+        "gold_name_in_top_5": 0.125,
+        "gold_name_hits_top_5": 8,
+        "gold_name_in_top_10": 0.125,
+        "gold_name_hits_top_10": 8,
+        "name_exact_accuracy": 0.109375,
+        "mean_returned_names": 10.0
+      },
+      "weighted_name_exact_accuracy": 0.0328125,
+      "scope": "normalized catalog NAME matching; not official vessel-ID accuracy"
+    },
+    "finetuned": {
+      "hangul": {
+        "rows": 64,
+        "gold_name_in_top_1": 0.0,
+        "gold_name_hits_top_1": 0,
+        "gold_name_in_top_5": 0.0,
+        "gold_name_hits_top_5": 0,
+        "gold_name_in_top_10": 0.0,
+        "gold_name_hits_top_10": 0,
+        "name_exact_accuracy": 0.0,
+        "mean_returned_names": 10.0
+      },
+      "non_hangul": {
+        "rows": 64,
+        "gold_name_in_top_1": 0.703125,
+        "gold_name_hits_top_1": 45,
+        "gold_name_in_top_5": 0.71875,
+        "gold_name_hits_top_5": 46,
+        "gold_name_in_top_10": 0.71875,
+        "gold_name_hits_top_10": 46,
+        "name_exact_accuracy": 0.703125,
+        "mean_returned_names": 10.0
+      },
+      "weighted_name_exact_accuracy": 0.2109375,
+      "scope": "normalized catalog NAME matching; not official vessel-ID accuracy"
+    }
+  },
+  "serialization": {
+    "probe_rows": 4,
+    "top_10_names_equal": true
+  },
+  "independence": {
+    "probe_rows": 4,
+    "reordered_and_subset_equal": true,
+    "scope": "top-10 name lists, same process, single-row inference"
+  }
+}

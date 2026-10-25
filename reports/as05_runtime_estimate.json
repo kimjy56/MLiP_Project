@@ -1,0 +1,54 @@
+{
+  "recorded_at_kst": "2026-10-24T23:44:02+09:00",
+  "scope": "small-sample CPU estimate, not full execution or server certification",
+  "sample_rows": 300,
+  "sample_end_to_end_seconds": 12.067788100001053,
+  "sample_eligible_rows": 0,
+  "baseline_seconds_per_row": 0.023771515000019765,
+  "fixed_seconds_including_cold_model_load": 15.677636899999925,
+  "additional_latency_sample_pairs": 8,
+  "additional_ambiguous_rows": 5,
+  "mean_eligible_row_seconds": 0.7868945199996233,
+  "max_eligible_row_seconds": 0.8918781999964267,
+  "mean_pairs_per_eligible_row": 1.8,
+  "max_pairs_per_eligible_row": 2,
+  "formula": "fixed + N * baseline_seconds_per_row + N * rerank_fraction * eligible_row_seconds",
+  "assumptions": [
+    "1% of rows trigger reranking (0/300 triggered in the random sample).",
+    "Candidate difficulty and name lengths resemble the small public samples.",
+    "Conservative column uses maximum observed ambiguous-row time and multiplies the whole estimate by 1.5.",
+    "Row counts are scenarios, not an assertion of private test size.",
+    "No GPU speedup assumed; private distribution/server differences remain unmeasured."
+  ],
+  "estimates": [
+    {
+      "rows_scenario": 8200,
+      "assumed_rerank_fraction": 0.01,
+      "estimated_seconds": 275.1294105401311,
+      "estimated_minutes": 4.585490175668852,
+      "conservative_seconds_with_50pct_margin": 425.60710844980355,
+      "conservative_minutes_with_50pct_margin": 7.093451807496725,
+      "conservative_estimate_under_1800_seconds": true
+    },
+    {
+      "rows_scenario": 10000,
+      "assumed_rerank_fraction": 0.01,
+      "estimated_seconds": 332.08223890015995,
+      "estimated_minutes": 5.534703981669333,
+      "conservative_seconds_with_50pct_margin": 513.8709103497604,
+      "conservative_minutes_with_50pct_margin": 8.564515172496007,
+      "conservative_estimate_under_1800_seconds": true
+    },
+    {
+      "rows_scenario": 30000,
+      "assumed_rerank_fraction": 0.01,
+      "estimated_seconds": 964.8914429004799,
+      "estimated_minutes": 16.081524048341333,
+      "conservative_seconds_with_50pct_margin": 1494.5798203492814,
+      "conservative_minutes_with_50pct_margin": 24.909663672488023,
+      "conservative_estimate_under_1800_seconds": true
+    }
+  ],
+  "zip_modified": false,
+  "full_run_cancelled": "AS-05-RUNTIME-01 stopped at user request before completion"
+}

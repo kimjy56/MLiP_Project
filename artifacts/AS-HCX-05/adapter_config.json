@@ -1,0 +1,309 @@
+{
+  "rank": 16,
+  "alpha": 32.0,
+  "targets": [
+    "q_proj",
+    "v_proj"
+  ],
+  "modules": [
+    {
+      "name": "model.layers.0.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.0.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.1.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.1.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.2.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.2.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.3.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.3.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.4.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.4.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.5.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.5.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.6.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.6.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.7.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.7.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.8.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.8.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.9.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.9.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.10.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.10.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.11.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.11.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.12.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.12.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.13.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.13.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.14.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.14.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.15.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.15.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.16.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.16.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.17.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.17.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.18.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.18.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.19.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.19.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.20.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.20.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.21.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.21.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.22.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.22.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    },
+    {
+      "name": "model.layers.23.self_attn.q_proj",
+      "in_features": 1024,
+      "out_features": 2048,
+      "adapter_parameters": 49152
+    },
+    {
+      "name": "model.layers.23.self_attn.v_proj",
+      "in_features": 1024,
+      "out_features": 1024,
+      "adapter_parameters": 32768
+    }
+  ],
+  "trainable_parameters": 1966080,
+  "total_parameters_with_adapters": 568247296,
+  "direction": "observed_name_to_catalog_name",
+  "base_sha256": {
+    "config.json": "2f7b047eafde467097fddbfa7281da5579c6ad9920af06e52c8666c87729b745",
+    "download_manifest.json": "d32abee557f177f9a1466b7ed619ee33a46479e0afe5d385c0c0fe9c733ba2a3",
+    "model.safetensors": "f40f63fa6a118eb9b59e8910c3ab5a6e6499805966284bb2cd41e197719d156b",
+    "special_tokens_map.json": "ec0481f56b50b66a4723b905c89345c52d45eed6571dd87a023285b99a929cc9",
+    "tokenizer.json": "1ce80c377be4ae8a4e57758da0d6ee3dc6da3f25857d72c07a52a156d7de7fab",
+    "tokenizer_config.json": "64982c20eb3c1ebd5469934a1d576afc17a96e02df0d90c8e1c81233d27047e2"
+  }
+}

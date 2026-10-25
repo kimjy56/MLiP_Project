@@ -1,0 +1,14 @@
+[
+  {
+    "step": 1,
+    "loss": 5.21026611328125,
+    "learning_rate_used": 0.0002,
+    "gradient_norm_before_clip": 9.152307510375977
+  },
+  {
+    "step": 2,
+    "loss": 5.859059572219849,
+    "learning_rate_used": 0.0001,
+    "gradient_norm_before_clip": 9.429047584533691
+  }
+]

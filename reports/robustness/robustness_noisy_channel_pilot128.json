@@ -1,0 +1,28 @@
+{
+  "benchmark_id": "ROBUSTNESS-NC-PILOT128-01",
+  "timestamp": "2026-10-24T23:50:36",
+  "noise_preset": "default",
+  "noise_seed": 20261022,
+  "sample_size": 128,
+  "perturbed_rows_count": 78,
+  "perturbed_rows_rate": 0.609375,
+  "lambda": 0.2,
+  "metrics": {
+    "clean_baseline_weighted": 1.0,
+    "clean_baseline_hangul": 1.0,
+    "clean_baseline_non_hangul": 1.0,
+    "noisy_baseline_weighted": 1.0,
+    "noisy_baseline_hangul": 1.0,
+    "noisy_baseline_non_hangul": 1.0,
+    "noisy_fused_weighted": 1.0,
+    "noisy_fused_hangul": 1.0,
+    "noisy_fused_non_hangul": 1.0,
+    "retention_baseline": 100.0,
+    "retention_fused": 100.0,
+    "rescues_count": 0,
+    "breaks_count": 0,
+    "net_gain": 0
+  },
+  "rescues": [],
+  "breaks": []
+}

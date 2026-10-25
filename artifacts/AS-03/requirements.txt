@@ -1,0 +1,4 @@
+# All runtime dependencies are preinstalled in the competition image:
+# numpy==1.26.4 pandas==2.0.3 lightgbm==4.6.0 catboost==1.2.8
+# rapidfuzz==3.14.3 Unidecode==1.4.0
+# scipy==1.15.3 scikit-learn==1.5.2 (catalog-only character TF-IDF index)

@@ -1,0 +1,91 @@
+{
+  "benchmark_id": "BENCH-HCX-BEAM-02",
+  "started_at_kst": "2026-10-24T13:04:23.411251+09:00",
+  "finished_at_kst": "2026-10-24T13:20:51.273383+09:00",
+  "threads": 4,
+  "max_new_tokens": 20,
+  "catalog_scorer": "ratio",
+  "comparison": {
+    "greedy": {
+      "hangul": {
+        "rows": 64,
+        "direct_exact_hits": 23,
+        "direct_exact_accuracy": 0.35938,
+        "gold_name_in_top_1": 0.75,
+        "gold_name_hits_top_1": 48,
+        "gold_name_in_top_5": 0.875,
+        "gold_name_hits_top_5": 56,
+        "gold_name_in_top_10": 0.89062,
+        "gold_name_hits_top_10": 57
+      },
+      "non_hangul": {
+        "rows": 64,
+        "direct_exact_hits": 36,
+        "direct_exact_accuracy": 0.5625,
+        "gold_name_in_top_1": 0.98438,
+        "gold_name_hits_top_1": 63,
+        "gold_name_in_top_5": 0.98438,
+        "gold_name_hits_top_5": 63,
+        "gold_name_in_top_10": 0.98438,
+        "gold_name_hits_top_10": 63
+      },
+      "weighted_name_exact_accuracy": 0.82031,
+      "total_seconds": 297.67,
+      "avg_seconds_per_row": 2.326
+    },
+    "beam4_top1": {
+      "hangul": {
+        "rows": 64,
+        "direct_exact_hits": 23,
+        "direct_exact_accuracy": 0.35938,
+        "gold_name_in_top_1": 0.6875,
+        "gold_name_hits_top_1": 44,
+        "gold_name_in_top_5": 0.78125,
+        "gold_name_hits_top_5": 50,
+        "gold_name_in_top_10": 0.8125,
+        "gold_name_hits_top_10": 52
+      },
+      "non_hangul": {
+        "rows": 64,
+        "direct_exact_hits": 35,
+        "direct_exact_accuracy": 0.54688,
+        "gold_name_in_top_1": 0.98438,
+        "gold_name_hits_top_1": 63,
+        "gold_name_in_top_5": 0.98438,
+        "gold_name_hits_top_5": 63,
+        "gold_name_in_top_10": 0.98438,
+        "gold_name_hits_top_10": 63
+      },
+      "weighted_name_exact_accuracy": 0.77656,
+      "total_seconds": 689.11,
+      "avg_seconds_per_row": 5.384
+    },
+    "beam4_return4_aggregated": {
+      "hangul": {
+        "rows": 64,
+        "direct_exact_hits": 30,
+        "direct_exact_accuracy": 0.46875,
+        "gold_name_in_top_1": 0.76562,
+        "gold_name_hits_top_1": 49,
+        "gold_name_in_top_5": 0.82812,
+        "gold_name_hits_top_5": 53,
+        "gold_name_in_top_10": 0.90625,
+        "gold_name_hits_top_10": 58
+      },
+      "non_hangul": {
+        "rows": 64,
+        "direct_exact_hits": 40,
+        "direct_exact_accuracy": 0.625,
+        "gold_name_in_top_1": 0.98438,
+        "gold_name_hits_top_1": 63,
+        "gold_name_in_top_5": 0.98438,
+        "gold_name_hits_top_5": 63,
+        "gold_name_in_top_10": 0.98438,
+        "gold_name_hits_top_10": 63
+      },
+      "weighted_name_exact_accuracy": 0.83125,
+      "total_seconds": 689.11,
+      "avg_seconds_per_row": 5.384
+    }
+  }
+}
