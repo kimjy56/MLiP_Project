@@ -21,6 +21,27 @@ CATALOG_NORMALIZATION = "NFC-uppercase-collapse-whitespace"
 MANIFEST_NAME = "noisy_channel_manifest.json"
 
 
+def load_channel_tokenizer(checkpoint):
+    """Load local fast-tokenizer metadata across the v4/v5 backend rename."""
+    from transformers import AutoTokenizer, PreTrainedTokenizerFast
+    checkpoint = Path(checkpoint)
+    config = json.loads((checkpoint / 'tokenizer_config.json').read_text(encoding='utf-8-sig'))
+    if config.get('tokenizer_class') == 'TokenizersBackend':
+        # v5 renamed PreTrainedTokenizerFast; use the same tokenizer.json,
+        # special tokens and chat template without editing downloaded files.
+        tokenizer = PreTrainedTokenizerFast.from_pretrained(checkpoint, local_files_only=True, extra_special_tokens={})
+    else:
+        tokenizer = AutoTokenizer.from_pretrained(checkpoint, local_files_only=True)
+    if getattr(tokenizer, 'chat_template', None) is None:
+        tokenizer.chat_template = (
+            "{% for m in messages %}{% if m['role'] == 'user' %}[|user|]\n{{ m['content'] }}\n[|assistant|]\n"
+            "{% elif m['role'] == 'assistant' %}{{ m['content'] }}[|endofturn|]\n{% endif %}{% endfor %}"
+        )
+    if tokenizer.pad_token_id is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    return tokenizer
+
+
 def normalize_observed(value):
     if not isinstance(value, str):
         raise TypeError("Observed name must be a string")
@@ -79,6 +100,12 @@ def encode_channel_example(tokenizer, catalog_name, observed_name, max_length=25
         payload = {"task": task, "catalog_name": name}
     else:
         payload = {"catalog_name": name}
+
+    if getattr(tokenizer, 'chat_template', None) is None:
+        tokenizer.chat_template = (
+            "{% for m in messages %}{% if m['role'] == 'user' %}[|user|]\n{{ m['content'] }}\n[|assistant|]\n"
+            "{% elif m['role'] == 'assistant' %}{{ m['content'] }}[|endofturn|]\n{% endif %}{% endfor %}"
+        )
 
     prompt_ids = tokenizer.apply_chat_template([
         {"role": "user", "content": (
@@ -164,7 +191,7 @@ class NoisyChannelScorer:
                 digest = hashlib.file_digest(stream, "sha256").hexdigest()
             if digest != expected_hash:
                 raise ValueError(f"Checkpoint hash mismatch: {relative}")
-        tokenizer = AutoTokenizer.from_pretrained(checkpoint, local_files_only=True)
+        tokenizer = load_channel_tokenizer(checkpoint)
         if tokenizer.eos_token_id != manifest.get("eos_token_id"):
             raise ValueError("Checkpoint EOS differs from its training manifest")
         model = AutoModelForCausalLM.from_pretrained(

@@ -46,23 +46,51 @@ class LoRALinear(nn.Module):
         return self.base
 
 
+SUPPORTED_LORA_TARGETS = {
+    "q_proj", "k_proj", "v_proj", "o_proj", "out_proj",
+    "in_proj", "w1", "w2", "w3", "gate_proj", "up_proj", "down_proj",
+}
+ATTN_ONLY_TARGETS = {"q_proj", "k_proj", "v_proj", "o_proj", "out_proj"}
+
+
 def inject_attention_lora(model, rank=16, alpha=32.0, targets=("q_proj", "v_proj")):
-    """Freeze ALL base parameters, then adapt every selected attention projection."""
+    """Freeze ALL base parameters, then adapt every selected linear projection."""
     targets = tuple(targets)
     if not targets or len(set(targets)) != len(targets):
         raise ValueError("targets must be nonempty and unique")
-    if not set(targets) <= {"q_proj", "k_proj", "v_proj", "o_proj"}:
-        raise ValueError("Only Llama attention projections are supported")
+    if not set(targets) <= SUPPORTED_LORA_TARGETS:
+        raise ValueError(f"Unsupported LoRA targets: {set(targets) - SUPPORTED_LORA_TARGETS}")
     if any(isinstance(module, LoRALinear) for module in model.modules()):
         raise ValueError("Model already has LoRA adapters")
-    selected = [(name, module) for name, module in model.named_modules()
-                if ".self_attn." in name and name.rsplit(".", 1)[-1] in targets]
+
+    attn_only = set(targets) <= ATTN_ONLY_TARGETS and "in_proj" not in targets
+    selected = []
+    for name, module in model.named_modules():
+        if not isinstance(module, nn.Linear):
+            continue
+        leaf = name.rsplit(".", 1)[-1]
+        if leaf not in targets:
+            continue
+        if attn_only and ".self_attn." not in name:
+            continue
+        selected.append((name, module))
+
+    if not selected:
+        raise ValueError(f"No matching Linear modules found for targets={targets}")
+
     layers = getattr(model.config, "num_hidden_layers", None)
-    for target in targets:
-        if sum(name.endswith("." + target) for name, _ in selected) != layers:
-            raise ValueError(f"Expected one {target} per model layer")
-    if not all(isinstance(module, nn.Linear) for _, module in selected):
-        raise TypeError("Selected projections must be unquantized Linear layers")
+    if getattr(model.config, "model_type", None) == "lfm2":
+        layer_types = getattr(model.config, "layer_types", None)
+        if not layer_types or len(layer_types) != layers:
+            raise ValueError("Invalid LFM2 layer_types")
+        layers = sum(kind == "full_attention" for kind in layer_types)
+        if not layers:
+            raise ValueError("LFM2 needs attention layers for q/v LoRA")
+    if attn_only:
+        for target in targets:
+            if sum(name.endswith("." + target) for name, _ in selected) != layers:
+                raise ValueError(f"Expected one {target} per attention layer")
+
     model.requires_grad_(False)
     entries = []
     for name, module in selected:
@@ -76,7 +104,7 @@ def inject_attention_lora(model, rank=16, alpha=32.0, targets=("q_proj", "v_proj
     trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
     if expected != trainable:
         raise RuntimeError("Unexpected trainable base parameters")
-    return {"rank": rank, "alpha": alpha, "targets": list(targets), "modules": entries,
+    return {"rank": rank, "alpha": alpha, "model_type": getattr(model.config, "model_type", None), "attention_layer_count": layers, "targets": list(targets), "modules": entries,
             "trainable_parameters": trainable,
             "total_parameters_with_adapters": sum(p.numel() for p in model.parameters())}
 
@@ -89,7 +117,7 @@ def adapter_state_dict(model):
             if module.merged:
                 raise ValueError("Save adapters before merging")
             for attr in ("lora_A", "lora_B"):
-                result[f"{name}.{attr}"] = getattr(module, attr).detach().cpu().contiguous()
+                result[f"{name}.{attr}"] = getattr(module, attr).detach().cpu().contiguous().clone()
     if not result:
         raise ValueError("No unmerged adapters found")
     return result

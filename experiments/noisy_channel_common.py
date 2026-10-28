@@ -11,7 +11,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 KST = timezone(timedelta(hours=9))
-CODE_FILES = ["name_decoder/lora.py", "name_decoder/noisy_channel.py",
+CODE_FILES = ["name_decoder/channel_training.py", "name_decoder/noise_augmenter.py", "name_decoder/lora.py", "name_decoder/noisy_channel.py",
               "name_decoder/catalog.py", "name_decoder/data.py",
               "experiments/noisy_channel_common.py",
               "experiments/train_noisy_channel.py",
@@ -27,12 +27,20 @@ def sha256(path):
         return hashlib.file_digest(stream, "sha256").hexdigest()
 
 
+def _json_scalar(value):
+    # NumPy counters may otherwise break both result and failure reporting.
+    import numpy as np
+    if isinstance(value, np.generic):
+        return value.item()
+    raise TypeError(f"Object of type {type(value).__name__} is not JSON serializable")
+
+
 def write_json(path, content):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(path.name + ".tmp")
     temporary.write_text(json.dumps(content, ensure_ascii=False, indent=2,
-                                    allow_nan=False) + "\n", encoding="utf-8")
+                                    allow_nan=False, default=_json_scalar) + "\n", encoding="utf-8")
     temporary.replace(path)
 
 
@@ -42,6 +50,7 @@ def configure_cpu(threads):
     for name in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS",
                  "NUMEXPR_NUM_THREADS", "VECLIB_MAXIMUM_THREADS"):
         os.environ[name] = str(threads)
+    os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
     os.environ["TOKENIZERS_PARALLELISM"] = "false"
     os.environ["HF_HUB_OFFLINE"] = "1"
     os.environ["TRANSFORMERS_OFFLINE"] = "1"

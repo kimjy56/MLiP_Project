@@ -126,7 +126,7 @@ def augment_hangul_name(name: str, rng: random.Random) -> str:
 
     if op == "particle_drop":
         # Trailing syllable / particle variations
-        suffixes = ["호", "호선", "1호", "2호"]
+        suffixes = ["호선", "호"]
         for s in suffixes:
             if name.endswith(s) and len(name) > len(s) + 2:
                 return name[:-len(s)].strip()
@@ -163,6 +163,8 @@ def generate_augmented_pairs(
         else:
             noisy_obs = augment_english_name(obs_name, rng)
 
+        if (re.findall(r"\d+", noisy_obs) != re.findall(r"\d+", obs_name)):
+            continue
         if noisy_obs and noisy_obs != obs_name:
             augmented.append((cat_name, noisy_obs))
 
