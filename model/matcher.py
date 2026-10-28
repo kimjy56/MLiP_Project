@@ -72,15 +72,22 @@ FEATURES = [
     'type_probability', 'flag_probability',
     'flag_missing', 'is_hangul', 'name_length', 'catalog_name_length',
 ]
+DENSE_FEATURES = [
+    'dense_sim', 'dense_rank_recip', 'dense_zscore', 'dense_margin_top1',
+]
 QUERY_COLUMNS = ['sample_id', 'vessel_name', 'call_sign', 'gross_tonnage',
                  'international_gross_tonnage', 'flag_name', 'vessel_type']
 
 
-def feature_names(mode='baseline'):
-    if mode not in {'baseline', 'structure', 'all'}:
+def feature_names(mode='baseline', include_dense=False):
+    valid_modes = {'baseline', 'structure', 'all', 'dense', 'dense_all'}
+    if mode not in valid_modes:
         raise ValueError(f'Unknown name feature mode: {mode}')
-    return FEATURES + (STRUCTURE_FEATURES if mode != 'baseline' else []) + (
-        PHONETIC_FEATURES if mode == 'all' else [])
+    has_dense = include_dense or mode.startswith('dense')
+    base_mode = 'all' if mode == 'dense_all' else ('baseline' if mode == 'dense' else mode)
+    base_feats = FEATURES + (STRUCTURE_FEATURES if base_mode != 'baseline' else []) + (
+        PHONETIC_FEATURES if base_mode == 'all' else [])
+    return base_feats + (DENSE_FEATURES if has_dense else [])
 
 
 def norm(value):
@@ -137,7 +144,7 @@ def text(value):
 
 def make_assets(train, catalog, name_mode='baseline', phonetic_search=0, retrieval_channels=None,
                 use_train_lookup=True, relax_tonnage_penalty=False, hangul_ignore_type_flag=False,
-                korean_expansion=False, hangul_soft_meta=False):
+                korean_expansion=False, hangul_soft_meta=False, include_dense=False, dense_top_k=35):
     """Must be called on a training fold only during validation."""
     c = catalog.set_index('vessel_id')
     calls, names = defaultdict(set), defaultdict(set)
@@ -158,12 +165,15 @@ def make_assets(train, catalog, name_mode='baseline', phonetic_search=0, retriev
                        for q, v in counts.items()}
     if not isinstance(use_train_lookup, bool):
         raise ValueError('use_train_lookup must be a boolean')
-    return {'version': 5, 'search_algorithm': os.environ.get('VESSEL_SEARCH_ALGORITHM', 'rapidfuzz'), 'features': feature_names(name_mode),
+    return {'version': 5, 'search_algorithm': os.environ.get('VESSEL_SEARCH_ALGORITHM', 'rapidfuzz'),
+            'features': feature_names(name_mode, include_dense=include_dense),
             'use_train_lookup': use_train_lookup,
             'relax_tonnage_penalty': bool(relax_tonnage_penalty),
             'hangul_ignore_type_flag': bool(hangul_ignore_type_flag),
             'hangul_soft_meta': bool(hangul_soft_meta),
             'korean_expansion': bool(korean_expansion),
+            'include_dense': bool(include_dense),
+            'dense_top_k': int(dense_top_k),
             'name_mode': name_mode, 'phonetic_search': int(phonetic_search),
             'retrieval_channels': validate_channels(retrieval_channels),
             'calls': {k: next(iter(v)) for k, v in calls.items() if len(v) == 1},
@@ -173,7 +183,8 @@ def make_assets(train, catalog, name_mode='baseline', phonetic_search=0, retriev
 class CatalogIndex:
     def __init__(self, catalog, assets, use_train_lookup=None,
                  relax_tonnage_penalty=None, hangul_ignore_type_flag=None,
-                 korean_expansion=None, hangul_soft_meta=None):
+                 korean_expansion=None, hangul_soft_meta=None,
+                 dense_matcher=None):
         required = {'vessel_id', 'vessel_name', 'gross_tonnage', 'vessel_type', 'flag_name'}
         if not required.issubset(catalog.columns):
             raise ValueError('Catalog schema is incomplete')
@@ -195,12 +206,19 @@ class CatalogIndex:
                                  if hangul_soft_meta is None else hangul_soft_meta) or (os.environ.get('VESSEL_HANGUL_SOFT_META', '0') == '1')
         self.korean_expansion = (assets.get('korean_expansion', False)
                                  if korean_expansion is None else korean_expansion) or (os.environ.get('VESSEL_KOREAN_EXPANSION', '0') == '1')
+        self.dense_matcher = dense_matcher
+        self.include_dense = (
+            assets.get('include_dense', False)
+            if self.dense_matcher is None
+            else True
+        ) or (os.environ.get('VESSEL_INCLUDE_DENSE', '0') == '1')
+        self.dense_top_k = int(assets.get('dense_top_k', 35))
         self.name_mode = assets.get('name_mode', 'baseline')
         self.phonetic_search = assets.get('phonetic_search', 0)
         self.retrieval_channels = validate_channels(assets.get('retrieval_channels'))
         if not isinstance(self.phonetic_search, int) or self.phonetic_search < 0:
             raise ValueError('phonetic_search must be a nonnegative integer')
-        self.feature_names = feature_names(self.name_mode)
+        self.feature_names = feature_names(self.name_mode, include_dense=self.include_dense)
         self.ids = self.catalog.vessel_id.astype(str).tolist()
         self.lookup = {v: i for i, v in enumerate(self.ids)}
         self.names = [norm(x) for x in self.catalog.vessel_name]
@@ -383,6 +401,17 @@ class CatalogIndex:
         chosen = [c_i for _, c_i in scored[:max_candidates]]
         return sorted(chosen)
 
+    def _retrieve_dense_map(self, row):
+        """Map one row's dense hits to catalog indices, preserving cache semantics."""
+        dense_map = {}
+        q_name = str(row.get('vessel_name', '')).strip()
+        if q_name:
+            dense_cands = self.dense_matcher.retrieve_dense_candidates(q_name, top_k=self.dense_top_k)
+            dense_map = {self.lookup[dc['vessel_id']]: dc for dc in dense_cands
+                         if dc['vessel_id'] in self.lookup}
+            row['_dense_map'] = dense_map
+        return dense_map
+
     def candidates(self, row, use_aliases=True, max_candidates=None):
         result = set()
         channels = ('S', 'P', 'T') if self.retrieval_channels is None else self.retrieval_channels
@@ -391,6 +420,8 @@ class CatalogIndex:
         if self.use_train_lookup and use_aliases:
             result.update(self.lookup[v] for v in self.assets['aliases'].get(norm(row.get('vessel_name')), [])
                           if v in self.lookup)
+        if self.dense_matcher is not None:
+            result.update(self._retrieve_dense_map(row))
         if not result:
             return [0]
         if max_candidates is None:
@@ -468,9 +499,27 @@ class CatalogIndex:
             np.full(n, not text(row.get('flag_name'))), np.full(n, hangul(name)),
             np.full(n, len(q)), self.name_lengths[candidates],
         ]).astype(np.float32)
-        if self.name_mode == 'baseline' or not include_name_features:
-            return base
-        return np.column_stack([base, self.name_index.features(name, candidates, self.name_mode, query=row['_view'])])
+        if self.name_mode != 'baseline' and include_name_features:
+            base = np.column_stack([base, self.name_index.features(name, candidates, self.name_mode, query=row['_view'])])
+        if self.include_dense:
+            dense_map = row.get('_dense_map', {})
+            if not dense_map and self.dense_matcher is not None:
+                dense_map = self._retrieve_dense_map(row)
+            dense_rows = []
+            for c_i in candidates:
+                if c_i in dense_map:
+                    dc = dense_map[c_i]
+                    dense_rows.append([
+                        dc.get('dense_sim', 0.0),
+                        dc.get('dense_rank_recip', 0.0),
+                        dc.get('dense_zscore', 0.0),
+                        dc.get('dense_margin_top1', 0.0),
+                    ])
+                else:
+                    dense_rows.append([0.0, 0.0, 0.0, 0.0])
+            dense_arr = np.array(dense_rows, dtype=np.float32)
+            base = np.column_stack([base, dense_arr])
+        return base
 
 
 def _similarity_cdist(query, choices, scorer):
@@ -577,16 +626,19 @@ class Matcher:
     @threadpool_limits.wrap(limits=1)
     def __init__(self, catalog, model_dir, use_train_lookup=None,
                  relax_tonnage_penalty=None, hangul_ignore_type_flag=None,
-                 korean_expansion=None, hangul_soft_meta=None):
+                 korean_expansion=None, hangul_soft_meta=None,
+                 dense_matcher=None):
         model_dir = Path(model_dir)
         assets = json.loads((model_dir / 'assets.json').read_text(encoding='utf-8'))
-        if assets['features'] != feature_names(assets.get('name_mode', 'baseline')):
+        include_dense = assets.get('include_dense', False) or (dense_matcher is not None)
+        if assets['features'] != feature_names(assets.get('name_mode', 'baseline'), include_dense=include_dense):
             raise ValueError('Feature version mismatch')
         self.index = CatalogIndex(catalog, assets, use_train_lookup=use_train_lookup,
                                   relax_tonnage_penalty=relax_tonnage_penalty,
                                   hangul_ignore_type_flag=hangul_ignore_type_flag,
                                   korean_expansion=korean_expansion,
-                                  hangul_soft_meta=hangul_soft_meta)
+                                  hangul_soft_meta=hangul_soft_meta,
+                                  dense_matcher=dense_matcher)
         self.model = load_decision_model(model_dir, assets)
 
     def predict(self, queries, use_direct=True, diagnostics=False):

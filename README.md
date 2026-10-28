@@ -1,5 +1,9 @@
 # 선박 정보 매칭 프로젝트
 
+현재 실행 경로와 동작 보존 리팩토링 범위·검증 명령은
+[검색 리팩토링 기록](docs/REFACTOR_RETRIEVAL_03.md)을 참고하세요.
+eval_kit README 실제 버전(1.0)과 요청 기준(1.1), 로컬/목표 환경 차이는 이 기록에 분리했습니다.
+
 팀 규칙 v4에 맞춘 조회 설정·고정 5-fold OOF 실행 방법은
 [모델 코드 적용 안내](docs/TEAM_RULES_IMPLEMENTATION.md)를 참고하세요.
 팀 공통 OOF 생성은 `train_oof.py`, 기존 개발 holdout·최종 학습은 `train.py`입니다.
@@ -19,7 +23,7 @@
    └─ ranker.txt                 # 학습 산출물: Git 제외
 ```
 
-현재 PC에는 빈 data/와 모델 코드가 준비되어 있다. CSV와 학습 산출물은 별도로 준비한다.
+각 PC의 data/와 모델 산출물 존재 여부를 확인하고, 없는 CSV·가중치는 해당 PC에 별도로 준비한다.
 .venv-server/는 environment/setup_windows.ps1을 실행하면 실제 환경과 함께 생성된다.
 모델 파일 구분은 [model/README.md](model/README.md)를 참고한다.
 
@@ -27,7 +31,7 @@
 [다중 PC 작업 안내](docs/MULTI_PC_SETUP.md)를 참고하세요.
 Windows 설치는 `environment/setup_windows.ps1`을 사용합니다.
 
-팀 운영·공통 검증 기준은 [TEAM_RULES.md](TEAM_RULES.md), 이번 정리 내역은
+팀 운영·공통 검증 기준은 [TEAM_RULES.md](docs/TEAM_RULES.md), 이번 정리 내역은
 [팀 규칙 변경 기록](docs/TEAM_RULES_CHANGES.md)에서 확인합니다.
 공통 평가 묶음 안내는 [eval_kit/README.md](eval_kit/README.md)에 정리했습니다.
 현재는 안내 문서만 있으며 평가기·고정 fold 등은 별도로 받아야 합니다.
@@ -79,7 +83,7 @@ python verify_submission.py
 이 저장소에는 코드, 분석 리포트, 집계 통계와 그래프를 포함합니다. 원본 데이터,
 학습 가중치·매핑 사전, 제출 ZIP, 행 단위 예측 파일은 Git에서 제외합니다.
 재현하려면 공식 `open.zip`의 CSV를 `data/`에 배치한 뒤 아래 학습 명령을 실행합니다.
-제출 ZIP은 학습 후 생성되는 산출물입니다.
+제출 ZIP은 사용자가 명시적으로 생성·갱신을 요청할 때만 만듭니다.
 
 최신 종합 분석은 `analysis/REPORT_8_SECTIONS.md`, 재현 코드는
 `analysis/eda.py`, `analysis/comprehensive_analysis.py`,
