@@ -1,0 +1,386 @@
+{
+  "clean": {
+    "noise_summary": null,
+    "legacy": {
+      "rows": 2372,
+      "hangul_rows": 239,
+      "non_hangul_rows": 2133,
+      "hangul_correct": 239,
+      "non_hangul_correct": 2130,
+      "hangul_accuracy": 1.0,
+      "non_hangul_accuracy": 0.9985935302390999,
+      "weighted_accuracy": 0.9995780590717299,
+      "candidate_inclusion_hangul": 1.0,
+      "candidate_inclusion_non_hangul": 1.0,
+      "retrieval_failures": 0,
+      "selection_failures": 3,
+      "prediction_seconds": 52.09107999992557,
+      "candidate_count_mean": 1751.712900505902,
+      "candidate_count_p95": 4267.0,
+      "prediction_file_sha256": "005247c47e6e37b2a30832b558ca478e67198f6cad19c82e57780c56a298084d"
+    },
+    "separate": {
+      "rows": 2372,
+      "hangul_rows": 239,
+      "non_hangul_rows": 2133,
+      "hangul_correct": 239,
+      "non_hangul_correct": 2130,
+      "hangul_accuracy": 1.0,
+      "non_hangul_accuracy": 0.9985935302390999,
+      "weighted_accuracy": 0.9995780590717299,
+      "candidate_inclusion_hangul": 1.0,
+      "candidate_inclusion_non_hangul": 1.0,
+      "retrieval_failures": 0,
+      "selection_failures": 3,
+      "prediction_seconds": 49.991674500051886,
+      "candidate_count_mean": 1751.712900505902,
+      "candidate_count_p95": 4267.0,
+      "prediction_file_sha256": "005247c47e6e37b2a30832b558ca478e67198f6cad19c82e57780c56a298084d"
+    },
+    "candidate_sets_equal": true,
+    "candidate_sets_sha256": "148188fee3a3494d8d3d3e49d6f9f94605d5473468ddb58e23dc7d56f937c988",
+    "paired": {
+      "all": {
+        "fixes": 0,
+        "breaks": 0,
+        "changed_predictions": 0
+      },
+      "hangul": {
+        "fixes": 0,
+        "breaks": 0,
+        "changed_predictions": 0
+      },
+      "non_hangul": {
+        "fixes": 0,
+        "breaks": 0,
+        "changed_predictions": 0
+      }
+    },
+    "official": {
+      "score": {
+        "h": 1.0,
+        "nh": 0.9985935302390999,
+        "w": 0.99957805907173,
+        "n_h": 239,
+        "n_nh": 2133
+      },
+      "boot": {
+        "h": {
+          "est": 1.0,
+          "lo": 1.0,
+          "hi": 1.0,
+          "se": 0.0
+        },
+        "nh": {
+          "est": 0.9985935302390999,
+          "lo": 0.9967042149130168,
+          "hi": 1.0,
+          "se": 0.000823313919710626
+        },
+        "w": {
+          "est": 0.99957805907173,
+          "lo": 0.999011264473905,
+          "hi": 1.0,
+          "se": 0.00024699417591318886
+        }
+      },
+      "compare": {
+        "d": {
+          "h": 0.0,
+          "nh": 0.0,
+          "w": 0.0
+        },
+        "boot": {
+          "h": {
+            "est": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "se": 0.0
+          },
+          "nh": {
+            "est": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "se": 0.0
+          },
+          "w": {
+            "est": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "se": 0.0
+          }
+        },
+        "verdict": "동등",
+        "n_common": 2372
+      },
+      "warnings": [],
+      "folds": "G5-s42"
+    }
+  },
+  "default": {
+    "noise_summary": {
+      "total_rows": 2372,
+      "seed": 20261022,
+      "typo_applied_count": 519,
+      "typo_applied_rate": 0.2188026981450253,
+      "hangul_spacing_applied_count": 29,
+      "hangul_spacing_applied_rate": 0.012225969645868466,
+      "ton_shift_applied_count": 866,
+      "ton_shift_applied_rate": 0.3650927487352445,
+      "ton_missing_applied_count": 152,
+      "ton_missing_applied_rate": 0.06408094435075885,
+      "flag_missing_applied_count": 404,
+      "flag_missing_applied_rate": 0.1703204047217538,
+      "any_noise_applied_count": 1497,
+      "any_noise_applied_rate": 0.6311129848229342
+    },
+    "legacy": {
+      "rows": 2372,
+      "hangul_rows": 239,
+      "non_hangul_rows": 2133,
+      "hangul_correct": 239,
+      "non_hangul_correct": 2129,
+      "hangul_accuracy": 1.0,
+      "non_hangul_accuracy": 0.9981247069854665,
+      "weighted_accuracy": 0.99943741209564,
+      "candidate_inclusion_hangul": 1.0,
+      "candidate_inclusion_non_hangul": 0.9995311767463666,
+      "retrieval_failures": 1,
+      "selection_failures": 3,
+      "prediction_seconds": 48.033047599950805,
+      "candidate_count_mean": 1710.0096964586846,
+      "candidate_count_p95": 4049.249999999999,
+      "prediction_file_sha256": "cc2b3396986969aab79a5c7b948a7f5442120479a1b101f669036bff844f2591"
+    },
+    "separate": {
+      "rows": 2372,
+      "hangul_rows": 239,
+      "non_hangul_rows": 2133,
+      "hangul_correct": 239,
+      "non_hangul_correct": 2129,
+      "hangul_accuracy": 1.0,
+      "non_hangul_accuracy": 0.9981247069854665,
+      "weighted_accuracy": 0.99943741209564,
+      "candidate_inclusion_hangul": 1.0,
+      "candidate_inclusion_non_hangul": 0.9995311767463666,
+      "retrieval_failures": 1,
+      "selection_failures": 3,
+      "prediction_seconds": 46.247087299940176,
+      "candidate_count_mean": 1710.0096964586846,
+      "candidate_count_p95": 4049.249999999999,
+      "prediction_file_sha256": "cc2b3396986969aab79a5c7b948a7f5442120479a1b101f669036bff844f2591"
+    },
+    "candidate_sets_equal": true,
+    "candidate_sets_sha256": "1cef1e062cb1b152b5052c6ebabfd6fc795a16ed7d5a3bea2cf59e13571fe4ff",
+    "paired": {
+      "all": {
+        "fixes": 0,
+        "breaks": 0,
+        "changed_predictions": 0
+      },
+      "hangul": {
+        "fixes": 0,
+        "breaks": 0,
+        "changed_predictions": 0
+      },
+      "non_hangul": {
+        "fixes": 0,
+        "breaks": 0,
+        "changed_predictions": 0
+      }
+    },
+    "official": {
+      "score": {
+        "h": 1.0,
+        "nh": 0.9981247069854665,
+        "w": 0.99943741209564,
+        "n_h": 239,
+        "n_nh": 2133
+      },
+      "boot": {
+        "h": {
+          "est": 1.0,
+          "lo": 1.0,
+          "hi": 1.0,
+          "se": 0.0
+        },
+        "nh": {
+          "est": 0.9981247069854665,
+          "lo": 0.9961420168669383,
+          "hi": 0.9995427891005898,
+          "se": 0.0009428464276923521
+        },
+        "w": {
+          "est": 0.99943741209564,
+          "lo": 0.9988426050600815,
+          "hi": 0.9998628367301768,
+          "se": 0.0002828539283077073
+        }
+      },
+      "compare": {
+        "d": {
+          "h": 0.0,
+          "nh": 0.0,
+          "w": 0.0
+        },
+        "boot": {
+          "h": {
+            "est": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "se": 0.0
+          },
+          "nh": {
+            "est": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "se": 0.0
+          },
+          "w": {
+            "est": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "se": 0.0
+          }
+        },
+        "verdict": "동등",
+        "n_common": 2372
+      },
+      "warnings": [],
+      "folds": "G5-s42"
+    }
+  },
+  "severe": {
+    "noise_summary": {
+      "total_rows": 2372,
+      "seed": 20261022,
+      "typo_applied_count": 700,
+      "typo_applied_rate": 0.2951096121416526,
+      "hangul_spacing_applied_count": 62,
+      "hangul_spacing_applied_rate": 0.026138279932546374,
+      "ton_shift_applied_count": 979,
+      "ton_shift_applied_rate": 0.4127318718381113,
+      "ton_missing_applied_count": 468,
+      "ton_missing_applied_rate": 0.1973018549747049,
+      "flag_missing_applied_count": 716,
+      "flag_missing_applied_rate": 0.30185497470489037,
+      "any_noise_applied_count": 1904,
+      "any_noise_applied_rate": 0.8026981450252951
+    },
+    "legacy": {
+      "rows": 2372,
+      "hangul_rows": 239,
+      "non_hangul_rows": 2133,
+      "hangul_correct": 226,
+      "non_hangul_correct": 2127,
+      "hangul_accuracy": 0.9456066945606695,
+      "non_hangul_accuracy": 0.9971870604781997,
+      "weighted_accuracy": 0.9610808043359285,
+      "candidate_inclusion_hangul": 1.0,
+      "candidate_inclusion_non_hangul": 0.9995311767463666,
+      "retrieval_failures": 1,
+      "selection_failures": 18,
+      "prediction_seconds": 46.409054399933666,
+      "candidate_count_mean": 1622.0489038785836,
+      "candidate_count_p95": 3717.45,
+      "prediction_file_sha256": "51054e164566e1c35fb7f6eb93a112459b97fb704bef129f9868b4413672bd30"
+    },
+    "separate": {
+      "rows": 2372,
+      "hangul_rows": 239,
+      "non_hangul_rows": 2133,
+      "hangul_correct": 231,
+      "non_hangul_correct": 2127,
+      "hangul_accuracy": 0.9665271966527197,
+      "non_hangul_accuracy": 0.9971870604781997,
+      "weighted_accuracy": 0.9757251558003637,
+      "candidate_inclusion_hangul": 1.0,
+      "candidate_inclusion_non_hangul": 0.9995311767463666,
+      "retrieval_failures": 1,
+      "selection_failures": 13,
+      "prediction_seconds": 43.157588099944405,
+      "candidate_count_mean": 1622.0489038785836,
+      "candidate_count_p95": 3717.45,
+      "prediction_file_sha256": "6b266bb9921a4cb768788eaab25efa95e5b6d8e1f91c557347a036468a129a88"
+    },
+    "candidate_sets_equal": true,
+    "candidate_sets_sha256": "43109c9b0bb725d7fe3370169ed54db050b71b999d02e71280c33901a2970fe2",
+    "paired": {
+      "all": {
+        "fixes": 6,
+        "breaks": 1,
+        "changed_predictions": 11
+      },
+      "hangul": {
+        "fixes": 6,
+        "breaks": 1,
+        "changed_predictions": 11
+      },
+      "non_hangul": {
+        "fixes": 0,
+        "breaks": 0,
+        "changed_predictions": 0
+      }
+    },
+    "official": {
+      "score": {
+        "h": 0.9665271966527197,
+        "nh": 0.9971870604781997,
+        "w": 0.9757251558003637,
+        "n_h": 239,
+        "n_nh": 2133
+      },
+      "boot": {
+        "h": {
+          "est": 0.9665271966527197,
+          "lo": 0.94308675652546,
+          "hi": 0.9873962765022327,
+          "se": 0.01128730034415893
+        },
+        "nh": {
+          "est": 0.9971870604781997,
+          "lo": 0.9947766418344164,
+          "hi": 0.9990804808895506,
+          "se": 0.001150492101478071
+        },
+        "w": {
+          "est": 0.9757251558003637,
+          "lo": 0.9592824877789099,
+          "hi": 0.9904248887442858,
+          "se": 0.007918618876979516
+        }
+      },
+      "compare": {
+        "d": {
+          "h": 0.02092050209205021,
+          "nh": 0.0,
+          "w": 0.014644351464435212
+        },
+        "boot": {
+          "h": {
+            "est": 0.02092050209205021,
+            "lo": 0.0,
+            "hi": 0.04701257861635218,
+            "se": 0.012143251634230804
+          },
+          "nh": {
+            "est": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "se": 0.0
+          },
+          "w": {
+            "est": 0.014644351464435212,
+            "lo": 0.0,
+            "hi": 0.03290880503144652,
+            "se": 0.00850027614396156
+          }
+        },
+        "verdict": "동등",
+        "n_common": 2372
+      },
+      "warnings": [],
+      "folds": "G5-s42"
+    }
+  }
+}

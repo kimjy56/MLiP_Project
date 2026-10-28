@@ -1,0 +1,215 @@
+{
+  "experiment_id": "RESTORE-AS05-ORIGINAL-01",
+  "plan_id": null,
+  "status": "blocked_missing_original_assets",
+  "recorded_at_kst": "2026-10-28T23:29:32.675098+09:00",
+  "started_at_kst": "2026-10-28T23:29:32.675098+09:00",
+  "finished_at_kst": "2026-10-28T23:33:42+09:00",
+  "purpose": "Restore user-requested original AS-05 submission using historical byte hashes",
+  "hypothesis": "Existing exact source and model snapshots may permit original package restoration",
+  "baseline_experiment_id": "AS-05-PACKAGE-01",
+  "changed_factors": [
+    "archive restoration only"
+  ],
+  "fixed_conditions": [
+    "AS-05 original code hashes, configuration and checkpoint hashes",
+    "preserve existing assets and historical records",
+    "no fitting, conversion, upload or submit.zip replacement"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "model/as05_reranker.py": "4e384f6ef0b50ba3b2db02bb5fe6061b9fd143bf29270436371ffa4a404b71cc",
+      "model/channel/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "model/channel/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "model/channel/noisy_channel.py": "969b7f48c0072239fc321f465d3a2d8f02ed5316d7b633d79e6069cf40a59496",
+      "script.py": "0e862acfbc01e372a755e0af5fb753713a8473e0775d82e4a6e503d5006dd780"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "Original AS-HCX-NC-01 merged HyperCLOVA X 0.5B",
+    "parameters": {
+      "channel_weight": 0.2,
+      "normalization": "mean_including_EOS",
+      "max_baseline_margin": 1.0,
+      "candidate_limit": 35,
+      "bound_pruning": "candidate baseline score upper-bounds fused score",
+      "cpu_threads": 4,
+      "device": "CUDA float32 when available; CPU float32 otherwise",
+      "row_independence": "no cross-row cache, aggregation or time-adaptive gate"
+    },
+    "loss": null
+  },
+  "commands": [
+    "Read-only filesystem and archive inventory plus SHA256 comparison using .venv-server/Scripts/python.exe -B -X utf8"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "executable": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe"
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "project_log\\experiments\\RESTORE-AS05-ORIGINAL-01.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Root submit_AS-05.zip absent",
+    "Original AS-HCX-NC-01 model.safetensors absent in source and all three AS05 package copies",
+    "Two package source hashes differ from historical packaging record; LF/CRLF, BOM and terminal newline normalization did not recover the expected hashes",
+    "Four same-size later HCX checkpoints hashed; none match the original",
+    "21 backup ZIP central directories inspected across available backup locations; no AS05/original checkpoint member found",
+    "Historical source path explicitly tested and absent",
+    "Additional historical checkpoint small-file hash mismatches: merges.txt, tokenizer.json"
+  ],
+  "interpretations": [],
+  "limitations": [
+    "Search covers accessible project and named local backup locations, not all possible devices or remote backups",
+    "No runtime or accuracy evaluation; no complete original package exists to evaluate",
+    "Original archive metadata may also be unavailable even if member content is recovered"
+  ],
+  "failure": {
+    "type": "OriginalAssetsMissing",
+    "missing_weight": "artifacts/AS-HCX-NC-01/model/model.safetensors",
+    "expected_weight_sha256": "2231185285a52ca5ba167573486da83f3895201dd9303c1e4e4a66c74ddeb9d3",
+    "changed_code_members": [
+      "model/as05_reranker.py",
+      "model/channel/noisy_channel.py"
+    ]
+  },
+  "decision": "Do not produce an incomplete or substituted ZIP under the original submission filename. Await original ZIP or complete historical backup path.",
+  "next_actions": [
+    "User supplies location of original submit_AS-05.zip or complete AS05 backup including original code and merged checkpoint",
+    "Compare original expected ZIP hash or all available member hashes before restoration; preserve current assets and submit.zip"
+  ],
+  "restore_audit": {
+    "original_archive": {
+      "path": "submit_AS-05.zip",
+      "sha256": "d11f56f18de8cdb966e0eb8158e216fa9feb3f834f89785445f5e6218be1a5eb",
+      "bytes": 2276905967,
+      "member_count": 20
+    },
+    "code_members": {
+      "model/as05_reranker.py": {
+        "expected": "af58c38727afaf1fd889e39002c97ed019d03630eb5b5f0e209a8e9899e34cbe",
+        "actual": "4e384f6ef0b50ba3b2db02bb5fe6061b9fd143bf29270436371ffa4a404b71cc"
+      },
+      "model/channel/__init__.py": {
+        "expected": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "actual": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "model/channel/catalog.py": {
+        "expected": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+        "actual": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863"
+      },
+      "model/channel/noisy_channel.py": {
+        "expected": "4fec13387db17128afacea36ff48ddc4ebba08c7dec29b82fa423d93a5e0b738",
+        "actual": "969b7f48c0072239fc321f465d3a2d8f02ed5316d7b633d79e6069cf40a59496"
+      },
+      "script.py": {
+        "expected": "0e862acfbc01e372a755e0af5fb753713a8473e0775d82e4a6e503d5006dd780",
+        "actual": "0e862acfbc01e372a755e0af5fb753713a8473e0775d82e4a6e503d5006dd780"
+      }
+    },
+    "checkpoint_members": {
+      "added_tokens.json": {
+        "expected": "6a3d05a3466ebce433995aa857049fa022d93edf3c57c36d9df3762ccea15407",
+        "exists": true,
+        "actual": "6a3d05a3466ebce433995aa857049fa022d93edf3c57c36d9df3762ccea15407"
+      },
+      "chat_template.jinja": {
+        "expected": "f558b0d553e94855ee7eb43d9e49f8430c7e9e4e59b24cacdf1271c772837e18",
+        "exists": true,
+        "actual": "f558b0d553e94855ee7eb43d9e49f8430c7e9e4e59b24cacdf1271c772837e18"
+      },
+      "config.json": {
+        "expected": "f12c9535f0b3e806dc6e9fdbe1fa332395e415045d45b80d18ae891fcc57ac91",
+        "exists": true,
+        "actual": "f12c9535f0b3e806dc6e9fdbe1fa332395e415045d45b80d18ae891fcc57ac91"
+      },
+      "generation_config.json": {
+        "expected": "8fd7c5acfb2299e85656c8472a26e56ad4a058f492fd1fd50aefe64603beaaae",
+        "exists": true,
+        "actual": "8fd7c5acfb2299e85656c8472a26e56ad4a058f492fd1fd50aefe64603beaaae"
+      },
+      "merges.txt": {
+        "expected": "31478af22bfd540985121b918c0ee8273cb9e4e6724beb4fdd7dcc3c8275448c",
+        "exists": true,
+        "actual": "a25907d2a7813b9bf86529185417ff3d5fee72fcd65c653e54f515bea6e7d10c"
+      },
+      "model.safetensors": {
+        "expected": "2231185285a52ca5ba167573486da83f3895201dd9303c1e4e4a66c74ddeb9d3",
+        "exists": false,
+        "actual": null
+      },
+      "special_tokens_map.json": {
+        "expected": "82f45c169fe5b200cdb121e184af2216507c5ef9f0c3bf610e110e421e69af4d",
+        "exists": true,
+        "actual": "82f45c169fe5b200cdb121e184af2216507c5ef9f0c3bf610e110e421e69af4d"
+      },
+      "tokenizer.json": {
+        "expected": "1ce80c377be4ae8a4e57758da0d6ee3dc6da3f25857d72c07a52a156d7de7fab",
+        "exists": true,
+        "actual": "8f0315bdb48efd1e154beb40a265b09961d0162766bc0daa72a296993b49004a"
+      },
+      "tokenizer_config.json": {
+        "expected": "1fb1a4a6e527eeff72cd35f47eac9e4a38e7f08d7da2563b966f8efd9998b5f5",
+        "exists": true,
+        "actual": "1fb1a4a6e527eeff72cd35f47eac9e4a38e7f08d7da2563b966f8efd9998b5f5"
+      },
+      "vocab.json": {
+        "expected": "cfe2bdf330509bd4772f6dbe19a529a80798c3a00d8ab5a74925a4f6674047fa",
+        "exists": true,
+        "actual": "cfe2bdf330509bd4772f6dbe19a529a80798c3a00d8ab5a74925a4f6674047fa"
+      }
+    },
+    "later_candidate_hashes": {
+      "artifacts/LM-HCX-BEST-R24-20261025-230147/model/model.safetensors": "2222713dd7bc5772b5a96225f356eb41ce8cf2f4a3411b0cb707920b13f98ea6",
+      "artifacts/LM-RANK-GPU-02/model/model.safetensors": "8e8b3ceacad202dd902cb193502f2e2892035ceb861778af17dea6a6ecb7d8ed",
+      "artifacts/LM-RANK-GPU-03/model/model.safetensors": "0899a3d348051a0245de46f81094b7cebc97cdbd985f11dc52e34364b23411a9",
+      "artifacts/LM-RANK-GPU-04/model/model.safetensors": "8be38457bd2276a3cba156e13e56d94a89ebbbe48a2ef5b980d9c7cec00b8b45"
+    },
+    "current_submit_zip_sha256": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325",
+    "new_archive_created": false,
+    "existing_assets_modified": false,
+    "changed_checkpoint_small_members": [
+      "merges.txt",
+      "tokenizer.json"
+    ]
+  }
+}

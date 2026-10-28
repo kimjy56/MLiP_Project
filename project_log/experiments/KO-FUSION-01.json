@@ -1,0 +1,82 @@
+{
+  "experiment_id": "KO-FUSION-01",
+  "plan_id": "SPEC-KO-FUSION-01",
+  "status": "evaluated_single_fold",
+  "recorded_at_kst": "2026-10-29T01:07:19.552169+09:00",
+  "started_at_kst": "2026-10-29T01:07:18.863016+09:00",
+  "finished_at_kst": "2026-10-29T01:07:19.552169+09:00",
+  "purpose": "Korean candidate selection score learning with LightGBM LambdaRank",
+  "hypothesis": "Learning combination of 28 candidate features improves Korean top-1 selection over fixed rule weights.",
+  "baseline_experiment_id": "AS-09",
+  "changed_factors": [
+    "Learned LightGBM 4.6.0 LambdaRank on Korean candidate features",
+    "Fixed AS-09 candidate set and unrounded float64 legacy scores",
+    "Nested cross-fit model selection on Inner B"
+  ],
+  "fixed_conditions": [
+    "clean heldout fold 0",
+    "AS-09 bi-encoder dense top-35",
+    "AS-09 lexical retrieval rules",
+    "AS-09 lookup early return bypass",
+    "non-hangul predictions strictly unchanged"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552f",
+    "file_sha256": {
+      "as09_adapter.py": "3b515637cc34675290786cce23fdbc62c759fb9376a0e741dda5ac17e70eebe1",
+      "features.py": "58ad0664bb6e3bfa89f64d9b95a9a1773e8d406c8b5980d2b9222b6ba2a0c3da",
+      "cache.py": "1881a12b306649deb3bd8def9aacad07c28283c6689b63bdd627d927d5f9f178",
+      "ranker.py": "03955a3df52ad58b6b28c0ae3102a56b139bafea75e8a08b232625777f5b2a81"
+    }
+  },
+  "data": {
+    "split_id": "folds_group5_seed42 fold0",
+    "seed": 42,
+    "validation_rows": 2372,
+    "hangul_rows": 239,
+    "non_hangul_rows": 2133
+  },
+  "model": {
+    "type": "LightGBM LambdaRank",
+    "selected_config": {
+      "reg_lambda": 30.0,
+      "n_estimators": 32
+    },
+    "feature_count": 28,
+    "ranker_manifest": "C:\\Projects\\ML_midterm\\artifacts\\KO-FUSION-01\\outer_0\\ranker_manifest.json"
+  },
+  "metrics": {
+    "baseline": {
+      "hangul_correct": 239,
+      "hangul_rows": 239,
+      "hangul_accuracy": 1.0,
+      "non_hangul_correct": 2130,
+      "non_hangul_rows": 2133,
+      "non_hangul_accuracy": 0.9985935302390999,
+      "weighted_accuracy": 0.9995780590717299
+    },
+    "ranker": {
+      "hangul_correct": 225,
+      "hangul_rows": 239,
+      "hangul_accuracy": 0.9414225941422594,
+      "non_hangul_correct": 2130,
+      "non_hangul_rows": 2133,
+      "non_hangul_accuracy": 0.9985935302390999,
+      "weighted_accuracy": 0.9585738749713115,
+      "hangul_fixes": 0,
+      "hangul_breaks": 14,
+      "hangul_net": -14
+    },
+    "net_difference": {
+      "weighted_accuracy_delta": -0.041004184100418395,
+      "hangul_accuracy_delta": -0.05857740585774063
+    }
+  },
+  "cost": {
+    "total_seconds": 0.6897881000768393
+  },
+  "artifacts": [
+    "C:\\Projects\\ML_midterm\\artifacts\\KO-FUSION-01\\outer_0\\predictions",
+    "C:\\Projects\\ML_midterm\\artifacts\\KO-FUSION-01\\outer_0\\ranker.txt"
+  ]
+}

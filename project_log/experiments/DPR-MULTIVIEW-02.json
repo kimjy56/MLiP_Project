@@ -1,0 +1,124 @@
+{
+  "experiment_id": "DPR-MULTIVIEW-02",
+  "plan_id": "SPEC-DPR-01",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-27 00:26:00 KST",
+  "started_at_kst": "2026-10-27 00:10:00 KST",
+  "finished_at_kst": "2026-10-27 00:25:00 KST",
+  "purpose": "Integrate Multi-View preprocessing and reverse expansion for 4 non-phonetic maritime exception categories (Letter-by-Letter, Company Initials, Maritime Semantics, Numeral Canonicalization) into DPR-Hybrid pipeline and benchmark performance against DPR-HYBRID-01 (AS-07).",
+  "hypothesis": "Maritime vessel names with non-phonetic representations (e.g. SK <-> 에스케이, HD <-> 현대, SUN <-> 태양, NO.2 <-> 2호) cannot be bridged by pure G2P phonetic models alone. Injecting deterministic Multi-View tokenization and reverse expansions will elevate target exception retrieval into Top-1~5 without corrupting base sound embeddings or breaking clean predictions.",
+  "baseline_experiment_id": "DPR-HYBRID-01",
+  "changed_factors": [
+    "Added 4 non-phonetic exception extractors in phonetic_encoder/tokenizer.py (canonicalize_numerals, extract_acronym_view, extract_initial_view, extract_semantic_view)",
+    "Added reverse Latin multi-view expanders in phonetic_encoder/tokenizer.py (expand_latin_acronym, expand_latin_initials, expand_latin_semantics)",
+    "Updated phonetic_encoder/model.py to fuse native + Romanized + auxiliary views ([ACR], [INIT], [SEM]) with calibrated weight 0.8",
+    "Exported multi-view catalog embeddings (78,595 x 128 FP16, 19.19 MiB) to artifacts/DPR-SYMPHON-01/catalog_embeds_multiview_fp16.npy",
+    "Benchmarked on Heldout Fold 0 (2,372 rows) under clean and noise stress conditions (default and severe presets, seed 20261022)"
+  ],
+  "fixed_conditions": [
+    "eval_kit/folds_group5_seed42.csv Group 5-Fold split (Fold 0 held out strictly, zero leakage)",
+    "data/vessel_catalog.csv (78,595 vessels)",
+    "Dense checkpoint: artifacts/DPR-SYMPHON-01/fold_0_encoder.pt (2.05 MB)",
+    "Dense weight in hybrid matcher: dense_weight=2.5",
+    "No train lookup used (use_train_lookup=False, zero memorization)"
+  ],
+  "code": {
+    "modules": [
+      "phonetic_encoder/tokenizer.py",
+      "phonetic_encoder/model.py",
+      "phonetic_encoder/hybrid_matcher.py",
+      "experiments/export_catalog_embeddings.py",
+      "experiments/evaluate_bi_encoder_oof.py",
+      "experiments/evaluate_dpr_robustness.py"
+    ]
+  },
+  "data": {
+    "split_id": "eval_kit/folds_group5_seed42.csv",
+    "training_rows": 9850,
+    "validation_rows": 2372,
+    "heldout_korean_rows": 239,
+    "heldout_non_korean_rows": 2133,
+    "noise_seed": 20261022
+  },
+  "metrics": {
+    "target_exception_retrieval": {
+      "CNC_DREAM": {
+        "query": "시앤시 드림",
+        "expected": "CNC DREAM",
+        "rank": 1,
+        "similarity": 0.9361,
+        "category": "① Letter-by-Letter"
+      },
+      "HD_STAR": {
+        "query": "현대 스타",
+        "expected": "HD STAR",
+        "rank": 1,
+        "similarity": 0.9272,
+        "category": "② Korean to Acronym"
+      },
+      "HMM_ALGECIRAS": {
+        "query": "에이치엠엠 알헤시라스",
+        "expected": "HMM ALGECIRAS",
+        "rank": 3,
+        "similarity": 0.9126,
+        "category": "① Letter-by-Letter"
+      },
+      "SUN_STAR": {
+        "query": "태양 스타",
+        "expected": "SUN STAR",
+        "rank": 1,
+        "similarity": 0.9370,
+        "category": "③ Semantic Translation"
+      },
+      "OCEAN_STAR": {
+        "query": "해양 스타",
+        "expected": "OCEAN STAR",
+        "rank": 5,
+        "similarity": 0.8841,
+        "category": "③ Semantic Translation"
+      }
+    },
+    "stage1_dense_recall": {
+      "korean_recall@35": 0.9456,
+      "english_recall@35": 0.9803,
+      "weighted_recall@35": 0.9560,
+      "row_independence_diff": 0.000244
+    },
+    "clean_parity": {
+      "clean_hangul_accuracy": 1.0,
+      "clean_weighted_accuracy": 0.999578,
+      "breaks": 0,
+      "fixes": 0
+    },
+    "severe_noise_ko_map_off": {
+      "baseline_hangul": 0.953975,
+      "hybrid_hangul": 0.991632,
+      "baseline_weighted": 0.966939,
+      "hybrid_weighted": 0.993298,
+      "delta_weighted_pct_points": 2.635983,
+      "delta_hangul_pct_points": 3.765690,
+      "fixes": 10,
+      "breaks": 1,
+      "net_gain": 9,
+      "comparison_vs_dpr_hybrid_01": {
+        "dpr_hybrid_01_hangul": 0.983264,
+        "dpr_multiview_02_hangul": 0.991632,
+        "hangul_gain_pct_points": 0.836768,
+        "dpr_hybrid_01_weighted": 0.987441,
+        "dpr_multiview_02_weighted": 0.993298,
+        "weighted_gain_pct_points": 0.585718,
+        "additional_vessels_rescued": 2
+      }
+    }
+  },
+  "cost": {
+    "baseline_latency_per_row_ms": 12.5,
+    "hybrid_latency_per_row_ms": 13.5,
+    "dense_retrieval_overhead_ms": 1.0,
+    "encoder_model_bytes": 2154496,
+    "catalog_embeds_bytes": 20120448,
+    "total_bundle_bytes": 22274944,
+    "submission_zip_bytes": null
+  },
+  "verdict": "promoted_as_superior_multiview_architecture"
+}

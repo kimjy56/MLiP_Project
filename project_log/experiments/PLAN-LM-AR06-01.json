@@ -1,0 +1,123 @@
+{
+  "experiment_id": "PLAN-LM-AR06-01",
+  "plan_id": null,
+  "status": "planned",
+  "recorded_at_kst": "2026-10-25T19:41:49.9636991+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "Improve language-model candidate discrimination and deployable vessel-ID contribution; proposal only.",
+  "hypothesis": "Hard-negative ranking, better pair coverage and Korean transliteration diversity may improve fixed-candidate ranking; OOF fusion and constrained forward decoding may turn this into ID accuracy.",
+  "baseline_experiment_id": "AS-HCX-NC-02",
+  "changed_factors": [
+    "Separate proposed comparisons: within-language sampling without replacement; row-mean CE; hard-negative ranking; Korean augmentation; HCX catalog-constrained decoding; cross-fitted score fusion."
+  ],
+  "fixed_conditions": [
+    "No new model training/inference or ZIP generation in this planning task.",
+    "Fit-fold-only dictionaries, mining, augmentation and tuning; official catalog only.",
+    "Keep retrieval, base matcher assets and candidate budgets fixed for the first reverse-model comparisons."
+  ],
+  "code": {
+    "dirty": true,
+    "file_sha256": {
+      "project_log/experiments/AS-HCX-NC-02.json": "1d459c7a7e2cec87d65c6461790ab71364cab97addc3e1e6999efd8744e8e24b",
+      "experiments/as05_reranker.py": "4e384f6ef0b50ba3b2db02bb5fe6061b9fd143bf29270436371ffa4a404b71cc",
+      "experiments/train_noisy_channel.py": "9fed05b2153a66bfafa9a39abec84d6d8501ca91a51ed3b21562fc00e24ad791",
+      "project_log/experiments/AS-HCX-05.json": "4abf72623d4d257d070cb166f94869f03dc21da7a397ea7623dcb4be7e845e1d",
+      "name_decoder/model.py": "37e2fcec43750e1a6f1187c4e6ebbc3a44951d3632bb7754469cbca03df7c936",
+      "name_decoder/noisy_channel.py": "3b93cfd728376e90540e39ffef23079a245a00e8a3f1f80ab0becc21a33f5082",
+      "name_decoder/noise_augmenter.py": "0fc0f7ac82f75ea67c7c864c44abd068a4a6d9369308403261f5573e6f1f2f18",
+      "name_decoder/hyperclova.py": "e8b03c05a4f94a270e4c066ea515fd1c4b7a49365f04cea13e97365a3c81c1a0"
+    },
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388"
+  },
+  "data": {
+    "source_files_sha256": {},
+    "training_rows": null,
+    "validation_rows": null,
+    "split_id": "G5-s42; planned outer regression and fit-internal tuning",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "negative_rule": "planned: competing distinct catalog names from fit-only retrieval; exclude all same-name IDs",
+    "positive_rule": "fit-fold observed name -> official catalog name",
+    "count": null
+  },
+  "model": {
+    "loss": "planned: retained SFT plus listwise rank loss; row-mean CE as a separate ablation",
+    "type": "HyperCLOVA X 0.5B forward/reverse LoRA; existing ByT5 as a later controlled representation comparison",
+    "parameters": {
+      "ranking_beta_initial": 0.1,
+      "values_are_proposed": true,
+      "negative_names_initial": 2,
+      "ranking_temperature_initial": 1
+    }
+  },
+  "commands": [
+    "PowerShell Get-Content/ConvertFrom-Json on existing experiment records and source; no Python execution."
+  ],
+  "environment": {
+    "required_windows_python_exists": false,
+    "inspection": "PowerShell source/JSON reads; primary-paper browsing",
+    "python_executed": false
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "docs/LM_IMPROVEMENT_PLAN.md"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Existing V2 records: 6814 pairs, 2400 replacement draws, 1700 Korean/700 non-Korean.",
+    "Korean pairs increased from 305 to 367; non-Korean from 4380 to 6447.",
+    "No hard-negative training in current conditional LM CE.",
+    "HCX-05 evaluation subobject records Korean generated exact 23/64 and post-generation catalog-name search Top1 46/64, Top10 55/64.",
+    "ByT5 already implements a byte-token trie; HCX currently free-generates then performs approximate catalog search."
+  ],
+  "interpretations": [
+    "Uneven coverage is an exposure diagnosis, not proof of underfitting.",
+    "Ranking objectives are the top proposed model change; existing results do not prove official-score improvement."
+  ],
+  "limitations": [
+    "No new accuracy, timing or retrieval measurements.",
+    "Proposed hyperparameters are initial comparisons, not validated optima.",
+    "Same-name IDs cannot be resolved using a name-only likelihood.",
+    "Outer/inner cross-fitting is necessary for learned score fusion.",
+    "Historical severe scores use gold-selected errors and partial Break checks; use the audit interpretation."
+  ],
+  "failure": null,
+  "decision": "Plan recorded; prioritize deployable V1/V2 diagnosis then isolated coverage/loss/ranking changes. Preserve existing source, model assets and archives.",
+  "next_actions": [
+    "Prepare the required server-compatible environment before execution.",
+    "Use a new run ID and predeclared paired comparison for each implemented change.",
+    "Evaluate name candidate inclusion, conditional LM rank, final ID Fix/Break, language metrics and cost separately."
+  ],
+  "external_sources": [
+    "https://research.google/pubs/rankt5-fine-tuning-t5-for-text-ranking-with-ranking-losses/",
+    "https://aclanthology.org/2022.acl-long.207/",
+    "https://arxiv.org/abs/2010.00904",
+    "https://github.com/facebookresearch/GENRE",
+    "https://aclanthology.org/2022.tacl-1.17/"
+  ]
+}

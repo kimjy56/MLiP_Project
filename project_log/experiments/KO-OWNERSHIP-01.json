@@ -1,0 +1,159 @@
+{
+  "experiment_id": "KO-OWNERSHIP-01",
+  "plan_id": "PLAN-MATCHING-IMPROVE-01",
+  "status": "generated_unvalidated",
+  "recorded_at_kst": "2026-10-26T21:42:02+09:00",
+  "started_at_kst": "2026-10-26T21:42:02+09:00",
+  "finished_at_kst": "2026-10-26T21:42:52+09:00",
+  "purpose": "Apply nearest-original-pronunciation ownership guard to optional additions",
+  "hypothesis": "Discarding optional added pronunciations whose closest baseline pronunciation belongs equally or more strongly to another name may reduce false matches.",
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "Filter new variants only, requiring unique closest original owner within normalized-number group."
+  ],
+  "fixed_conditions": [
+    "Original variants remain untouched",
+    "Same AS-06 legacy score and lookupoff",
+    "No private data, neural training or ZIP",
+    "Same fold0 clean/default/severe3seed conditions"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/channel_training.py": "02529ee98ed73cd57facd326d61344c9f92d6fe04a0f54e3ca03d5c27ee6e3eb",
+      "name_decoder/noise_augmenter.py": "51315596aad8ac26f358d3f44fd94780714c99dc8423dde02446c167b6d7e3d5",
+      "name_decoder/lora.py": "ef6d92c25fd5297f2131a7d2fa995cebc61fc617ff9cb9a4b9732d0d7e0b6587",
+      "name_decoder/noisy_channel.py": "36c88596b2334bf0f8d5f332229abedfbeccb9e939a36eca197f58c4c9874f8f",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "experiments/noisy_channel_common.py": "d55c127ca5581abf8631ce67de441e21585f6c4dc7d2dc5deb7591d50c1098c8",
+      "experiments/train_noisy_channel.py": "e1c591c5698972b7b72d910ece8bdd87d131bc46ada0a7a558f7352c99bbbc91",
+      "experiments/score_noisy_channel_candidates.py": "47d1053c1ac9acafa4e85061934cdad3b495c4286ea37358ed5f071d02c4992a",
+      "name_decoder/pronunciation_ownership.py": "a29194af20bc387cc5a60a909a080019d21a219e997f07195959e76709009f22",
+      "experiments/filter_catalog_hangul_ownership.py": "0bc9c72c6c9e132835b1de0e8bea59e2a1461db5d4367be177fb4a58990a5486",
+      "artifacts/AS-06/script.py": "9045ca7ed4a2832e78e814a615d857b61d48d64c809322a7bce61dff35323b88"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    "experiments/filter_catalog_hangul_ownership.py"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "safetensors": "0.8.0",
+      "pandas": "2.0.3",
+      "numpy": "1.26.4"
+    },
+    "device": "cpu"
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "filtering_seconds": 49.530165800009854,
+    "timing_scope": "load/index/global OSA ownership checks/save; no neural training"
+  },
+  "artifacts": [
+    "C:\\Projects\\ML_midterm\\artifacts\\KO-OWNERSHIP-01"
+  ],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "Checks against baseline pronunciations, which may themselves be wrong or ambiguous.",
+    "The guard is label-free but was proposed after aggregate development results; not independent confirmation."
+  ],
+  "failure": null,
+  "decision": "Postprocessing only; compare fixed-engine accuracy before considering use.",
+  "next_actions": [],
+  "development_bias": "Follow-up proposed after inspecting aggregate Pronunciation map regression. No individual heldout error labels used by filter; repeated outerfold development is not independent confirmation.",
+  "policy": {
+    "owner_similarity": "normalized Jamo OSA",
+    "number_group": "same engine-normalized number signature",
+    "acceptance": "own best similarity strictly greater than every other baseline name; reject ties",
+    "scope": "new additions only",
+    "training_labels_used": false,
+    "fitted_thresholds": false
+  },
+  "diagnostics": {
+    "processed_scope_complete": true,
+    "all_original_variants_preserved": true,
+    "checked_additions": 4327,
+    "accepted_additions": 2998,
+    "removed_additions": 1329,
+    "reasons": {
+      "unique_closest_original_owner": 2998,
+      "competing_owner_beats_or_ties": 1326,
+      "no_original_anchor": 3
+    },
+    "new_map_entries": 78586,
+    "names_with_added_variants": 1940,
+    "variant_count_histogram": {
+      "2": 75363,
+      "1": 2408,
+      "3": 572,
+      "4": 243
+    }
+  },
+  "artifact_sha256": {
+    "catalog_full_ko_map.json": "faf9f7827576edf2ad75430de18f1b9227829083a8b230b5dce7eefedfcd0f91",
+    "generation_config.json": "d4143c0e921b22ec3bc4392dbe7cdf1fdf70c24369875321593e2fe4320ca2f2"
+  },
+  "baseline_submission_filename": "submit_AS-06.zip",
+  "baseline_artifact_record": "project_log/experiments/AS-06.json",
+  "naming_correction": {
+    "corrected_at_kst": "2026-10-26T22:17:00+09:00",
+    "legacy_id": "AS08-KO-OWNERSHIP-01",
+    "same_execution_not_a_new_experiment": true,
+    "original_record_path": "project_log/naming_history/20261026T221700/records/AS08-KO-OWNERSHIP-01.json",
+    "original_record_sha256": "c6c930d0e8ac53a8454b3a93ea27b737b2e598053d449dab37a54cbfcf7a9b0f",
+    "reason": "AS is a submission ZIP filename prefix; experimental runs use descriptive IDs.",
+    "preserved_execution_fields": [
+      "commands",
+      "cost",
+      "data",
+      "diagnostics",
+      "metrics",
+      "model",
+      "phase_results",
+      "preprocessing",
+      "retrieval",
+      "training_pairs",
+      "validation"
+    ],
+    "path_alias_registry": "project_log/EXPERIMENT_NAMING.json"
+  }
+}

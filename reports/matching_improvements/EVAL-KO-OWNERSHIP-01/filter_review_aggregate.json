@@ -1,0 +1,22 @@
+{
+  "clean": {
+    "expanded_correct_guarded_wrong": 0,
+    "gold_name_had_removed_variants": 0
+  },
+  "default": {
+    "expanded_correct_guarded_wrong": 0,
+    "gold_name_had_removed_variants": 0
+  },
+  "severe": {
+    "expanded_correct_guarded_wrong": 1,
+    "gold_name_had_removed_variants": 1
+  },
+  "severe_20261026": {
+    "expanded_correct_guarded_wrong": 1,
+    "gold_name_had_removed_variants": 1
+  },
+  "severe_20261027": {
+    "expanded_correct_guarded_wrong": 0,
+    "gold_name_had_removed_variants": 0
+  }
+}

@@ -1,0 +1,21 @@
+test_catboost_scorer_predict_shape_and_empty (tests.test_matcher_refactor.MatcherRefactorTests.test_catboost_scorer_predict_shape_and_empty) ... ok
+test_ensemble_scorer_weighting_and_empty (tests.test_matcher_refactor.MatcherRefactorTests.test_ensemble_scorer_weighting_and_empty) ... ok
+test_hangul_flag_domain_improvements (tests.test_matcher_refactor.MatcherRefactorTests.test_hangul_flag_domain_improvements) ... ok
+test_hangul_soft_meta_dictionary_compatibility (tests.test_matcher_refactor.MatcherRefactorTests.test_hangul_soft_meta_dictionary_compatibility) ... ok
+test_matcher_e2e_with_synthetic_fixture (tests.test_matcher_refactor.MatcherRefactorTests.test_matcher_e2e_with_synthetic_fixture) ... ok
+test_similarity_cdist_empty_and_valid (tests.test_matcher_refactor.MatcherRefactorTests.test_similarity_cdist_empty_and_valid) ... ok
+test_tonnage_gap_exact_values (tests.test_matcher_refactor.MatcherRefactorTests.test_tonnage_gap_exact_values) ... ok
+test_baseline_features_and_candidates_unchanged (tests.test_name_processing.NameContracts.test_baseline_features_and_candidates_unchanged) ... ok
+test_discriminative_tokens_and_empty_names (tests.test_name_processing.NameContracts.test_discriminative_tokens_and_empty_names) ... ok
+test_normalization_and_number_boundaries (tests.test_name_processing.NameContracts.test_normalization_and_number_boundaries) ... ok
+test_phonetic_costs (tests.test_name_processing.NameContracts.test_phonetic_costs) ... ok
+test_all_sixteen_unions_and_empty_fallback (tests.test_retrieval_channels.RetrievalContracts.test_all_sixteen_unions_and_empty_fallback) ... ok
+test_ngram_ties_missing_and_query_independence (tests.test_retrieval_channels.RetrievalContracts.test_ngram_ties_missing_and_query_independence) ... ok
+test_hangul_ignore_type_flag_switch (tests.test_switches.TestSwitches.test_hangul_ignore_type_flag_switch) ... ok
+test_korean_expansion_switch (tests.test_switches.TestSwitches.test_korean_expansion_switch) ... ok
+test_use_train_lookup_switch (tests.test_switches.TestSwitches.test_use_train_lookup_switch) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.081s
+
+OK

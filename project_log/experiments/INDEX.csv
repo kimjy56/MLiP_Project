@@ -74,3 +74,77 @@ AUDIT-HCX-NC-01,Reverse-channel cached score evidence audit,completed,fixed top3
 AUDIT-HCX-NC-02,Reverse-channel V2 evidence and evaluation-scope audit,completed,existing records only; no new inference,,experiments/AUDIT-HCX-NC-02.json
 ANALYSIS-AS05-SERVER-01,official score and package audit,completed,user-reported server scores; public-data aggregates only,,experiments/ANALYSIS-AS05-SERVER-01.json
 PLAN-RETRIEVAL-AR06-01,retrieval augmentation proposal,planned,no new evaluation,,experiments/PLAN-RETRIEVAL-AR06-01.json
+AUDIT-AR06-PROPOSAL-01,source and asset proposal audit,completed,no model performance measurement,,experiments/AUDIT-AR06-PROPOSAL-01.json
+PLAN-LM-AR06-01,language model improvement plan,planned,no new model evaluation,,experiments/PLAN-LM-AR06-01.json
+LM-RANK-GPU-03,reverse LM budget1200,trained_unvalidated,fold0 training,,experiments/LM-RANK-GPU-03.json
+EVAL-LM-RANK-02,matched LM budget evaluation,evaluated_single_fold,clean fold0 only,0.9782320851649806,experiments/EVAL-LM-RANK-02.json
+INNER-CONFUSIONS-01,inner AR06 cross-fit mining,mined_untrained,external fit folds1-4,,experiments/INNER-CONFUSIONS-01.json
+LM-RANK-GPU-04,inner confusion rank LM,trained_unvalidated,outer fold0 heldout,,experiments/LM-RANK-GPU-04.json
+EVAL-LM-RANK-03,inner-confusion matched evaluation,evaluated_single_fold,clean fold0 only,0.9872999899958217,experiments/EVAL-LM-RANK-03.json
+LM-LFM25-03,LFM2.5 reverse LM training,trained_unvalidated,outer fold0 heldout,,experiments/LM-LFM25-03.json
+EVAL-LFM25-03,LFM2.5 matched evaluation,evaluated_single_fold,clean fold0 only,0.9790759670215207,experiments/EVAL-LFM25-03.json
+IMPL-INTERNAL-BEST-01,internal best checkpoint implementation,implemented_tested,correctness only,,experiments/IMPL-INTERNAL-BEST-01.json
+SUB-115506,official server result,completed_user_reported_server_result,user-reported DACON leaderboard,0.9122153056,experiments/SUB-115506.json
+PLAN-MATCHING-IMPROVE-01,matching improvement plan,planned,not evaluated,,experiments/PLAN-MATCHING-IMPROVE-01.json
+AUDIT-GENERATOR-LINEAGE-01,artifact lineage audit,completed,no accuracy measured,,experiments/AUDIT-GENERATOR-LINEAGE-01.json
+JAMO-SCORE-01,separate Jamo scoring,completed_not_promoted,fold0 clean/default/severe,,experiments/JAMO-SCORE-01.json
+JAMO-SCORE-02,fixed setting seed check,completed_not_promoted,fold0 severe two additional seeds,,experiments/JAMO-SCORE-02.json
+REVIEW-JAMO-SCORE-01,Jamo score adoption review,completed_review,no new evaluation,,experiments/REVIEW-JAMO-SCORE-01.json
+KO-DIVERSE-PILOT01,generation pilot,pilot_generated_unvalidated,64 public catalog names; no accuracy,,experiments/KO-DIVERSE-PILOT01.json
+KO-DIVERSE-01,deficient pronunciation repair,generated_unvalidated,4354 public catalog names; no accuracy,,experiments/KO-DIVERSE-01.json
+EVAL-KO-DIVERSE-01,fixed engine map comparison,completed_not_promoted,outerfold0 five conditions,,experiments/EVAL-KO-DIVERSE-01.json
+KO-OWNERSHIP-01,optional variant ownership filter,generated_unvalidated,4327optional variants; no accuracy,,experiments/KO-OWNERSHIP-01.json
+EVAL-KO-OWNERSHIP-01,ownership map comparison,completed_not_promoted,outerfold0 five conditions,,experiments/EVAL-KO-OWNERSHIP-01.json
+REVIEW-PRONUNCIATION-01,pronunciation policy review,completed_review,no new accuracy evaluation,,experiments/REVIEW-PRONUNCIATION-01.json
+NAMING-CORRECTION-01,experiment/submission naming correction,completed_documentation_correction,no new model experiment,,experiments/NAMING-CORRECTION-01.json
+DPR-SYMPHON-01,lightweight bi-encoder dense phonetic retrieval,completed,5-fold group OOF standalone,0.96063414,experiments/DPR-SYMPHON-01.json
+DPR-HYBRID-01,dpr-hybrid matcher and noise robustness benchmark,completed,outer fold0 clean and noise stress,0.999437,experiments/DPR-HYBRID-01.json
+AS-07,official DACON submission package (DPR-Hybrid),completed_local_checks,public probe verification passed (0 fails 0 warns),,experiments/AS-07.json
+DPR-MULTIVIEW-02,multi-view exception expansion (4 categories) and robustness benchmark,completed,outer fold0 clean and noise stress,0.999578,experiments/DPR-MULTIVIEW-02.json
+DPR-ABLATE-LEXICON-01,manual lexicon (IDEA_B_WORD_VARS) ablation study,completed,heldout fold0 clean and severe,0.999578,experiments/DPR-ABLATE-LEXICON-01.json
+AS-08,official DACON submission package (Multi-View V2 + Lexicon Ablated + ko_map OFF),completed_local_checks,check_submission.py passed (0 fails 0 warns),0.999578,experiments/AS-08.json
+SUB-116338,official server result,completed_user_reported_server_result,user-reported DACON leaderboard,0.9122153056,experiments/SUB-116338.json
+REFACTOR-RETRIEVAL-03,behavior-preserving retrieval refactor,completed,exact compatibility; not accuracy,,experiments/REFACTOR-RETRIEVAL-03.json
+SUB-117501,official server result,completed_user_reported_server_result,user-reported DACON leaderboard,0.9003732004,experiments/SUB-117501.json
+ANALYSIS-AS08-SERVER-01,archive dependency and validation-evidence audit,completed,isolated import only; not accuracy,,experiments/ANALYSIS-AS08-SERVER-01.json
+PLAN-SERVER-RECOVERY-01,controlled Dense recovery plan,planned,not executed,,experiments/PLAN-SERVER-RECOVERY-01.json
+AUDIT-AS08-REMAINING-01,remaining AS08 matching paths audit,completed_static_audit,asset counts and mathematical bound; not accuracy,,experiments/AUDIT-AS08-REMAINING-01.json
+EXAONE-DATA-AUDIT-01,EXAONE legacy-free lexicon,completed_data_audit,Data isolation/count audit only; no model training or accuracy,,experiments/EXAONE-DATA-AUDIT-01.json
+LEX-EXAONE-PURE-01,EXAONE legacy-free lexicon,blocked_missing_base,not evaluated,,experiments/LEX-EXAONE-PURE-01.json
+EXAONE-BASE-FETCH-01,EXAONE legacy-free lexicon,blocked_network_or_missing_base,not evaluated,,experiments/EXAONE-BASE-FETCH-01.json
+EXAONE-DATA-AUDIT-02,EXAONE legacy-free lexicon,completed_data_audit,Data isolation/count audit only; no model training or accuracy,,experiments/EXAONE-DATA-AUDIT-02.json
+LEX-EXAONE-GENERATE-01,EXAONE legacy-free lexicon,generated_unvalidated,Generation coverage/quality only; no matching accuracy,,experiments/LEX-EXAONE-GENERATE-01.json
+EVAL-EXAONE-PURE-01,EXAONE legacy-free lexicon,evaluated_development,existing evaluator + public OOF/subset development; not official server,0.8654,experiments/EVAL-EXAONE-PURE-01.json
+IMPL-EXAONE-LEX-01,EXAONE legacy-free lexicon implementation,completed_implementation_blocked_model,functional32pass; real accuracy unmeasured,,experiments/IMPL-EXAONE-LEX-01.json
+DPR-SYMPHON-02,next-gen bi-encoder (1D-CNN + MultiQuery + Gated Tail Fusion + CosFace),completed,5-fold group OOF standalone,0.959815,experiments/DPR-SYMPHON-02.json
+NET-EXAONE-01,network diagnosis,diagnosed_blocked_by_execution_permissions,DNS/IP/token checks; no model execution,,experiments/NET-EXAONE-01.json
+AS-09,official DACON submission package (DPR-SYMPHON-02 full fit + complete package),completed_local_checks,check_submission.py passed (0 fails 0 warns),0.999578,experiments/AS-09.json
+SUB-117799,official server result (AS-09),completed_user_reported_server_result,user-reported DACON leaderboard,0.9201100425,experiments/SUB-117799.json
+VERIFY-AS09-RESULT-01,submission result verification,completed_static_verification,same submission117799; no new accuracy run,,experiments/VERIFY-AS09-RESULT-01.json
+SUB-117597,official server result (AS-08 fixed),completed_user_reported_server_result,user-reported DACON leaderboard,0.9082679372,experiments/SUB-117597.json
+VERIFY-AS08-FIXED-RESULT-01,fixed AS08 result reconciliation,completed_result_reconciliation,same submission117597; exact comparisons; no new accuracy run,,experiments/VERIFY-AS08-FIXED-RESULT-01.json
+EXAONE-BASE-FETCH-02,EXAONE legacy-free lexicon,base_available_unvalidated,not evaluated,,experiments/EXAONE-BASE-FETCH-02.json
+EXAONE-DATA-AUDIT-03,EXAONE legacy-free lexicon,completed_data_audit,Data isolation/count audit only; no model training or accuracy,,experiments/EXAONE-DATA-AUDIT-03.json
+LEX-EXAONE-PURE-02,EXAONE legacy-free lexicon,trained_unvalidated,training loss only; no heldout accuracy measurement,,experiments/LEX-EXAONE-PURE-02.json
+LEX-EXAONE-PILOT-01,EXAONE legacy-free lexicon,generated_unvalidated,Generation coverage/quality only; no matching accuracy,,experiments/LEX-EXAONE-PILOT-01.json
+DPR-SYMPHON-03,SPEC-DPR-03,trained_development_selected,training and outer-fold checkpoint selection; not untouched validation,,experiments/DPR-SYMPHON-03.json
+EXPORT-DPR-SYMPHON-03,SPEC-DPR-03,exported_unvalidated,catalog embedding export only; no accuracy evaluation,,experiments/EXPORT-DPR-SYMPHON-03.json
+EVAL-DPR-SYMPHON-03,SPEC-DPR-03,failed,not evaluated,,experiments/EVAL-DPR-SYMPHON-03.json
+EVAL-DPR-SYMPHON-03-RECHECK-01,SPEC-DPR-03,failed,not evaluated,,experiments/EVAL-DPR-SYMPHON-03-RECHECK-01.json
+EVAL-DPR-SYMPHON-03-RECHECK-02,SPEC-DPR-03,evaluated_development_selected,development-selected standalone retrieval,,experiments/EVAL-DPR-SYMPHON-03-RECHECK-02.json
+BENCH-DPR03-LATENCY-01,SPEC-DPR-03,benchmarked_local_cpu,matched-checkpoint local CPU latency; no accuracy or server inference,,experiments/BENCH-DPR03-LATENCY-01.json
+DPR-HYBRID-03,SPEC-DPR-03,evaluated_development_selected,"outer-fold development-selected hybrid benchmark; official local evaluator, not server",,experiments/DPR-HYBRID-03.json
+VERIFY-DPR03-01,SPEC-DPR-03,verified_native_no_zip,"native row-independence and asset verification, no new accuracy experiment",,experiments/VERIFY-DPR03-01.json
+ANALYZE-DPR03-01,SPEC-DPR-03,analyzed_saved_development_outputs,derived analysis of saved public-fold predictions and official paired evaluator; no new model inference,,experiments/ANALYZE-DPR03-01.json
+EXAONE-REV-DATA-AUDIT-02,EXAONE legacy-free lexicon,completed_data_audit,Data isolation/count audit only; no model training or accuracy,,experiments/EXAONE-REV-DATA-AUDIT-02.json
+IMPL-DPR-SYMPHON-03,SPEC-DPR-03,completed_implementation_and_experiments,18 behavioral checks passed; native 300-row checks passed; performance experiments are separate run IDs,,experiments/IMPL-DPR-SYMPHON-03.json
+LEX-EXAONE-REV-01,EXAONE legacy-free lexicon,trained_unvalidated,training loss only; no heldout accuracy measurement,,experiments/LEX-EXAONE-REV-01.json
+EVAL-EXAONE-REV-01,EXAONE legacy-free lexicon,evaluated_development,existing evaluator + public OOF/subset development; not official server,0.82597,experiments/EVAL-EXAONE-REV-01.json
+EXPORT-LFM-HANDOFF-01,checkpoint export and source handoff,completed_artifact_export,exact serialization and synthetic embeddings only,,experiments/EXPORT-LFM-HANDOFF-01.json
+PACK-BI-ENCODER-01,Bi-Encoder-only packaging,completed_packaging,copied-byte and isolated-loader checks only,,experiments/PACK-BI-ENCODER-01.json
+PLAN-AS09-IMPROVE-01,plan,planned,static source audit and improvement proposals; no new performance evaluation,,docs/AS09_IMPROVEMENT_PLAN.md
+LM-EXAONE-01,EXAONE noisy channel likelihood,trained_unvalidated,training loss and internal dev selection only; no heldout accuracy,,experiments/LM-EXAONE-01.json
+EVAL-LM-EXAONE-01,EXAONE noisy channel likelihood,failed,batch tolerance exceeded 1e-4 preflight; no completed evaluation,,experiments/EVAL-LM-EXAONE-01.json
+EVAL-LM-EXAONE-02,EXAONE noisy channel likelihood,completed,clean fold0 fixed-candidate evaluation,0.9840898257507547,experiments/EVAL-LM-EXAONE-02.json
+SPEC-KO-FUSION-01,specification,specification_completed,documentation and static validation only; training planned,,docs/SPEC_KO_FUSION_01.md
+KO-FUSION-01,LightGBM LambdaRank Korean candidate selection,completed,heldout fold0,0.9585738749713115,experiments/KO-FUSION-01.json

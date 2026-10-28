@@ -1,0 +1,100 @@
+{
+  "experiment_id": "PLAN-SERVER-RECOVERY-01",
+  "plan_id": null,
+  "status": "planned",
+  "recorded_at_kst": "2026-10-27T23:03:45+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "Restore verifiable Dense execution and evaluate score recovery without simultaneously removing baseline Korean support",
+  "hypothesis": "Correctly packaged Dense retrieval can be tested fairly only with legacy support preserved and candidate/scoring changes separated",
+  "baseline_experiment_id": "SUB-115506",
+  "changed_factors": [
+    "planned dependency/activation verification",
+    "planned Dense candidate union only",
+    "planned gated Dense score combination",
+    "planned single-factor Korean-support ablations",
+    "planned auxiliary-view retrieval"
+  ],
+  "fixed_conditions": [
+    "Existing distributed folds; fold-specific fitted dictionaries/maps/preprocessing",
+    "Fit-inner checkpoint selection and gate tuning; do not select on outerfold",
+    "Official metric unchanged; separate Hangul/non-Hangul/seen-unseen/variable candidate inclusion",
+    "No ZIP creation unless user explicitly requests; no automatic training/commit/push"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": null,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [],
+  "environment": {},
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "docs/AS08_SERVER_ANALYSIS.md",
+    "project_log/experiments/ANALYSIS-AS08-SERVER-01.json"
+  ],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "All proposed score gains and costs unmeasured; no recovery guarantee",
+    "Fold-specific map/generator lineage and exact-version environment may need preparation"
+  ],
+  "failure": null,
+  "decision": "Planning only; no proposed experiment started",
+  "next_actions": [],
+  "proposed_experiment_ids": [
+    "VERIFY-DENSE-BUNDLE-01",
+    "RETRIEVAL-DENSE-ONLY-01",
+    "RANK-DENSE-GATED-01",
+    "ABLATE-KO-SUPPORT-01",
+    "VIEW-AUX-RETRIEVAL-01"
+  ],
+  "acceptance_criteria": [
+    "Intentional Dense mode imports/loads and is positively invoked on eligible label-free public probes",
+    "Source/checkpoint/catalog-order/embedding hashes bound; input/order-independent results",
+    "AS06 support retained for candidate-only baseline",
+    "Paired official weighted score and vessel-bootstrap CI plus per-fold/language Fix/Break",
+    "Whole OOF has fold-isolated assets; repeated fold0 diagnostics not called independent final tests"
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "experiment_id": "AS-08",
+  "plan_id": "SPEC-DPR-01",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-27T01:25:00+09:00",
+  "started_at_kst": "2026-10-27T01:24:00+09:00",
+  "finished_at_kst": "2026-10-27T01:25:37+09:00",
+  "purpose": "Official DACON submission package AS-08 integrating DPR-Hybrid with Multi-View V2 exception retrieval, ablated manual dictionary, excised 2D DP lattice loop, and disabled synthetic Hangul catalog dictionary (ko_map OFF).",
+  "hypothesis": "Removing 299 hand-crafted manual words and the 78,586-entry synthetic Hangul dictionary eliminates training-set memorization and lexical distractor collisions, allowing Multi-View V2 Bi-Encoder ([ACR], [INIT], [SEM], [NUM]) to directly retrieve and rank novel foreign vessel names with state-of-the-art accuracy and lower latency.",
+  "baseline_experiment_id": "AS-07",
+  "changed_factors": [
+    "Multi-View V2 Bi-Encoder expansion with 4-category exception views ([ACR], [INIT], [SEM], [NUM]) (DPR-MULTIVIEW-02)",
+    "Manual dictionary IDEA_B_WORD_VARS completely removed (0 words, DPR-ABLATE-LEXICON-01)",
+    "2D DP Dynamic Programming lattice loop (lattice_word_similarity) excised from top-1 selection",
+    "Synthetic Hangul catalog dictionary (catalog_full_ko_map.json) permanently disabled (USE_FULL_KO_MAP=False)",
+    "Bundled Multi-View full catalog embeddings (78,595 x 128 FP16, 19.19 MiB) into model/catalog_embeds_full_fp16.npy",
+    "Full thread capping removed, enabling unthrottled inference on CPU/GPU"
+  ],
+  "fixed_conditions": [
+    "DACON 236771 (0.7 Hangul + 0.3 Non-Hangul weighted accuracy)",
+    "Row independence: 100% strict single vs batch inference invariance (LayerNorm-only, zero BatchNorm)",
+    "Zero network calls, zero external AI API, zero disk write during test inference"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552f",
+    "dirty": true,
+    "file_sha256": {
+      "submit_AS-08.zip": "76f6dfe0be29dd52540fe687ae73ebee5f454eea2e269f60bd0e68be0153791e",
+      "submit.zip": "76f6dfe0be29dd52540fe687ae73ebee5f454eea2e269f60bd0e68be0153791e"
+    }
+  },
+  "submission_package": {
+    "zip_name": "submit_AS-08.zip",
+    "zip_bytes": 20939264,
+    "uncompressed_bytes": 24420000,
+    "files": [
+      "script.py",
+      "requirements.txt",
+      "model/model.json",
+      "model/__init__.py",
+      "model/full_encoder.pt",
+      "model/catalog_embeds_full_fp16.npy",
+      "model/phonetic_encoder/__init__.py",
+      "model/phonetic_encoder/model.py",
+      "model/phonetic_encoder/tokenizer.py",
+      "model/phonetic_encoder/hybrid_matcher.py",
+      "model/phonetic_encoder/dataset.py",
+      "model/phonetic_encoder/loss.py",
+      "model/phonetic_encoder/retrieval.py"
+    ]
+  },
+  "verification": {
+    "checker": "eval_kit/check_submission.py 1.0",
+    "passed": true,
+    "failures": 0,
+    "warnings": 0,
+    "row_independence_checks": {
+      "shuffled_mismatch": 0,
+      "subset_mismatch": 0,
+      "single_row_mismatch": 0
+    },
+    "estimated_latency": "4s for 3,000 rows, 11s for 30,000 rows (DACON limit: 1,200s)"
+  },
+  "environment": {
+    "python": ".venv-server (Python 3.11.15, PyTorch 2.7.1+cu128, RapidFuzz 3.14.3, Pandas 2.0.3, NumPy 1.26.4)"
+  }
+}

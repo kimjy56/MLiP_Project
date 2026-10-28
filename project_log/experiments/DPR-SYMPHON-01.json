@@ -1,0 +1,110 @@
+{
+  "experiment_id": "DPR-SYMPHON-01",
+  "plan_id": "SPEC-DPR-01",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-26 22:52:00 KST",
+  "started_at_kst": "2026-10-26 22:30:00 KST",
+  "finished_at_kst": "2026-10-26 22:51:30 KST",
+  "purpose": "Build and evaluate lightweight Char-Phonetic Bi-Encoder (Dense Phonetic Retrieval) based on docuracy/symphonym-v8 architecture with Hangul/Jamo/Romanization multi-view fusion for Unseen Korean vessel retrieval.",
+  "hypothesis": "Distilling universal phonetic embeddings into a 148-vocab trimmed 2-layer BiLSTM encoder with multi-view fusion and curriculum contrastive training achieves >= 94% standalone Recall@35 on Unseen Korean vessels across 78,595 catalog ships with < 1.1ms latency and < 22MB disk footprint, fully guaranteeing row-independence.",
+  "baseline_experiment_id": "AS-06",
+  "changed_factors": [
+    "Replaced 2.28GB decoder LM reranker with lightweight (2.05MB) 128-d Bi-Encoder",
+    "Introduced full-catalog (78,595 vessels) dot product dense phonetic retrieval",
+    "Implemented dual multi-view fusion (Hangul Jamo + Revised Romanization)",
+    "Applied 2-stage curriculum training (Stage A 100k synthetic pairs + Stage B Group 5-Fold contrastive fine-tuning)"
+  ],
+  "fixed_conditions": [
+    "eval_kit/folds_group5_seed42.csv Group 5-Fold split (Fold 0 held out strictly, zero leakage)",
+    "data/vessel_catalog.csv (78,595 vessels canonical catalog)",
+    "torch.amp enabled on CUDA, LayerNorm only (zero BatchNorm, 100% row independent)"
+  ],
+  "code": {
+    "modules": [
+      "phonetic_encoder/__init__.py",
+      "phonetic_encoder/tokenizer.py",
+      "phonetic_encoder/model.py",
+      "phonetic_encoder/loss.py",
+      "phonetic_encoder/dataset.py",
+      "phonetic_encoder/hybrid_matcher.py",
+      "experiments/build_synthetic_phonetic.py",
+      "experiments/train_bi_encoder.py",
+      "experiments/export_catalog_embeddings.py",
+      "experiments/evaluate_bi_encoder_oof.py",
+      "tests/test_phonetic_encoder.py"
+    ]
+  },
+  "data": {
+    "split_id": "eval_kit/folds_group5_seed42.csv",
+    "training_rows": 9850,
+    "validation_rows": 2372,
+    "heldout_korean_rows": 239,
+    "heldout_non_korean_rows": 2133,
+    "synthetic_pairs": 100000
+  },
+  "model": {
+    "architecture": "UniversalEncoder (BiLSTM + SelfAttention + AttentionPooling + LayerNorm + L2Norm)",
+    "vocab_size": 148,
+    "embed_dim": 128,
+    "hidden_dim": 128,
+    "weights_source": "docuracy/symphonym-v8 trimmed",
+    "loss": "SymmetricInfoNCELoss (tau=0.05) + TripletMarginLoss (margin=0.15, lambda=0.5)"
+  },
+  "metrics": {
+    "metric_source": "reports/dpr_symphon_evaluation.json",
+    "hangul_rows": 239,
+    "non_hangul_rows": 2133,
+    "standalone_recall_at_1_hangul": 0.57740586,
+    "standalone_recall_at_5_hangul": 0.83263598,
+    "standalone_recall_at_10_hangul": 0.88284519,
+    "standalone_recall_at_35_hangul": 0.94979079,
+    "standalone_mrr_hangul": 0.6905,
+    "standalone_recall_at_1_non_hangul": 0.94421003,
+    "standalone_recall_at_5_non_hangul": 0.96718237,
+    "standalone_recall_at_10_non_hangul": 0.97327707,
+    "standalone_recall_at_35_non_hangul": 0.98593530,
+    "standalone_mrr_non_hangul": 0.9545,
+    "weighted_recall_at_35": 0.96063414,
+    "row_independence_verified": true
+  },
+  "cost": {
+    "stage_a_pretrain_seconds": 58.1,
+    "stage_b_finetune_seconds": 14.2,
+    "catalog_encode_seconds": 1.57,
+    "latency_per_row_ms": 1.06,
+    "encoder_model_bytes": 2154496,
+    "catalog_embeds_bytes": 20120448,
+    "total_bundle_bytes": 22274944,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "artifacts/DPR-SYMPHON-01/fold_0_encoder.pt",
+    "artifacts/DPR-SYMPHON-01/catalog_embeds_fp16.npy",
+    "artifacts/DPR-SYMPHON-01/catalog_embeds_fp16.json",
+    "data/synthetic_phonetic_100k.json.gz",
+    "reports/dpr_symphon_evaluation.json"
+  ],
+  "observations": [
+    "Standalone Dense Recall@35 reached 94.98% (227/239) on heldout Fold 0 Korean queries without any manual dictionary.",
+    "Non-Korean Recall@35 reached 98.59% (2,103/2,133) with MRR 0.9545.",
+    "Official weighted Recall@35 reached 96.06%.",
+    "Analysis of the 12 missed Korean rows revealed only 3 unique vessel names: Bow Cecil (ranked 42, barely missed Top-35), CNC Dream (English acronym CNC), and Keoyoung Star 3 (domestic company name Keoyoung).",
+    "All 3 missed names are already captured by Stage-1 lexical rules, yielding near 100% hybrid union coverage.",
+    "Model weights (2.05 MB) and catalog embeddings (19.19 MiB) total 21.24 MiB, satisfying the <= 35MB requirement.",
+    "Inference latency is 1.06 ms/row, enabling sub-second total runtime for the entire test set."
+  ],
+  "interpretations": [
+    "Distilled phonetic pretraining with multi-view Jamo + Romanization successfully bridges the cross-script gap between Hangul queries and English catalog entries.",
+    "Full-catalog dot product provides an effective safety net for unseen foreign vessel names that previously failed lexical fuzzy retrieval."
+  ],
+  "limitations": [
+    "Tested on Fold 0 heldout data. Complete 5-fold cross-validation required to produce full out-of-fold indices.",
+    "English company acronyms (e.g. CNC) require lexical union or acronym expansion rules for complete dense alignment."
+  ],
+  "decision": "Adopt DPR-SYMPHON-01 as the core dense phonetic retrieval backbone for Stage-1 hybrid union and Stage-2 similarity feature injection.",
+  "next_actions": [
+    "Integrate HybridDenseLexicalMatcher into main inference pipeline",
+    "Run full 5-fold training to export fold 1-4 models for full OOF scoring",
+    "Inject dense similarity features into Stage-2 reranker"
+  ]
+}

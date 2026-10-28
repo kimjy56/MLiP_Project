@@ -1,0 +1,2 @@
+Computed native full prediction for 300 public rows
+{'rows': 300, 'hangul_rows': 150, 'reverse_mismatches': 0, 'subset_rows': 150, 'subset_mismatches': 0, 'single_rows': 3, 'single_mismatches': 0, 'repeat_mismatches': 0, 'empty_pass': True, 'selected_epoch': 5, 'selected_weights_match_archived_epoch': True, 'protected_files_verified': 35, 'embedding_checkpoint_provenance_verified': True, 'scope': 'native source and selected model on public fold0; official ZIP checker not executed'}

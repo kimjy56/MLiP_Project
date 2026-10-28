@@ -1,0 +1,26 @@
+{
+  "recorded_at_kst": "2026-10-27T23:04:46+09:00",
+  "passed": true,
+  "archive_checks": [
+    {
+      "package": "07",
+      "original_import_failed": true,
+      "two_temporary_repairs_imported": true,
+      "model_loads": 0
+    },
+    {
+      "package": "08",
+      "original_import_failed": true,
+      "two_temporary_repairs_imported": true,
+      "model_loads": 0
+    }
+  ],
+  "protected_unique_files_unchanged": 231,
+  "data_models_snapshots_evaluation_files_preserved": true,
+  "report_links_and_json_index": true,
+  "audit_script_compile_help": true,
+  "git_diff_check": true,
+  "new_model_predictions": false,
+  "new_model_training": false,
+  "new_or_updated_submission_zip": false
+}

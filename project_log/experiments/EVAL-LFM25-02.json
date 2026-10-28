@@ -1,0 +1,121 @@
+{
+  "experiment_id": "EVAL-LFM25-02",
+  "plan_id": null,
+  "status": "failed",
+  "recorded_at_kst": "2026-10-25T21:18:36+09:00",
+  "started_at_kst": "2026-10-25T21:18:36+09:00",
+  "finished_at_kst": "2026-10-25T21:18:46+09:00",
+  "purpose": "Clean heldout fold0 LM ranking evaluation",
+  "hypothesis": "Evaluate new reverse LM standalone and fixed AS05 fusion without tuning.",
+  "baseline_experiment_id": null,
+  "changed_factors": [],
+  "fixed_conditions": [
+    "clean full fold0",
+    "AR06/EN_V3 fit only fold != 0",
+    "lookup disabled",
+    "top35 fixed shortlist",
+    "fusion weight 0.20; gate margin <=1.0"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/channel_training.py": "02529ee98ed73cd57facd326d61344c9f92d6fe04a0f54e3ca03d5c27ee6e3eb",
+      "name_decoder/noise_augmenter.py": "51315596aad8ac26f358d3f44fd94780714c99dc8423dde02446c167b6d7e3d5",
+      "name_decoder/lora.py": "f33f07c58dbec2766c08bbba53c94946e7c24fee6bbaf3a96f4547f7b4b55804",
+      "name_decoder/noisy_channel.py": "36c88596b2334bf0f8d5f332229abedfbeccb9e939a36eca197f58c4c9874f8f",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "experiments/noisy_channel_common.py": "d55c127ca5581abf8631ce67de441e21585f6c4dc7d2dc5deb7591d50c1098c8",
+      "experiments/train_noisy_channel.py": "37c911d38682388f878847109f50ee051361941afe9972b9c3927f521f3acb6f",
+      "experiments/score_noisy_channel_candidates.py": "47d1053c1ac9acafa4e85061934cdad3b495c4286ea37358ed5f071d02c4992a",
+      "experiments/evaluate_lm_rank_gpu.py": "66305485ca3255681c6a552eae0059bb50038671a55fed4d1cd74edee73be695"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    },
+    "split_id": "G5-s42 fold0 only",
+    "seed": 42,
+    "validation_rows": 2372,
+    "training_rows": 9850,
+    "scope": "single_fold_not_full_OOF",
+    "seen_vessels": 0
+  },
+  "retrieval": {
+    "count_max": 35,
+    "candidate_pairs": 83020,
+    "candidate_sha256": "f0b2573281c7644932592970959ae7dae1258c8f94fe695d730be30f1dd7b99e",
+    "gold_injected": false,
+    "fit_fold_verified": true,
+    "baseline_code_sha256": "44ee368a55c490dd66b43d521bce82c3851e9aeb10f07b84897d87956b174e54"
+  },
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "checkpoint": "artifacts\\LM-LFM25-03\\model",
+    "manifest_sha256": "e7f6816962493667b233bcbf6536d87e4c491773e419848f1161ed977957e9ae"
+  },
+  "commands": [
+    "experiments/evaluate_lm_rank_gpu.py --experiment-id EVAL-LFM25-02 --model-path artifacts/LM-LFM25-03/model --candidates-csv reports/noisy_channel/EVAL-LM-RANK-01/candidates.csv"
+  ],
+  "environment": {
+    "python": "3.11.15 (main, Mar  3 2026, 14:55:34) [MSC v.1944 64 bit (AMD64)]",
+    "torch": "2.7.1+cu128",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 5080"
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null,
+    "baseline_index_fit_seconds": null,
+    "baseline_inference_seconds": null,
+    "model_load_seconds": 1.51988070004154
+  },
+  "artifacts": [],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "Not an untouched final test; public train already explored.",
+    "Previous LM weights unavailable: no direct V1/V2 improvement claim.",
+    "Fold0 only; not five-fold OOF.",
+    "Combined changes cannot isolate individual factor effects."
+  ],
+  "failure": {
+    "type": "RuntimeError",
+    "message": "Batch/single likelihood mismatch: 0.0001758347664564397",
+    "retry": "Use a new experiment ID; partial outputs are preserved."
+  },
+  "decision": null,
+  "next_actions": [],
+  "fixed_candidate_source": {
+    "path": "reports\\noisy_channel\\EVAL-LM-RANK-01\\candidates.csv",
+    "sha256": "f0b2573281c7644932592970959ae7dae1258c8f94fe695d730be30f1dd7b99e",
+    "retrieval_recomputed": false
+  }
+}

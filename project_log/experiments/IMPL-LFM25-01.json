@@ -1,0 +1,103 @@
+{
+  "experiment_id": "IMPL-LFM25-01",
+  "plan_id": null,
+  "status": "implemented_weights_download_blocked",
+  "recorded_at_kst": "2026-10-25T21:06:46+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "Switch reverse LM default from HyperCLOVA X to user-selected LiquidAI/LFM2.5-350M",
+  "hypothesis": null,
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "base model default",
+    "hybrid attention-only q/v LoRA count validation",
+    "new pinned-revision downloader and launcher"
+  ],
+  "fixed_conditions": [],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": null,
+    "file_sha256": {
+      "name_decoder\\lora.py": "f33f07c58dbec2766c08bbba53c94946e7c24fee6bbaf3a96f4547f7b4b55804",
+      "experiments\\train_noisy_channel.py": "0ba7802857489139d593ff8d6770d17e767b1f7fe9baeb65c8d05e258b0d088a",
+      "tools\\start_lm_gpu.ps1": "45005f3b0467d7e9b1513d582ef0c0e84ccfa1a93da8880edf0ebb6ce6769b6d",
+      "tools\\fetch_lfm25.py": "1a05000307b37f1bfd155a059add5ac0ee8701297199dedc81871fb51de83dd4",
+      "tests\\test_lfm_lora.py": "e25051f7d4b1a3070bb1fd5efc591ff40f4b83c6b2417d4d5bbad9df5a211676"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    ".\\.venv\\Scripts\\python.exe -m unittest discover -s tests -p test_lfm_lora.py -v",
+    ".\\.venv\\Scripts\\python.exe -m unittest discover -s tests -p \"test_*channel*.py\" -v"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "torch": "2.7.1+cu128",
+    "transformers": "4.57.6",
+    "gpu": "RTX5080"
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [],
+  "error_cases_file": null,
+  "observations": [
+    "Installed transformers4.57.6 provides native Lfm2ForCausalLM.",
+    "Tiny hybrid LFM2 GPU training, merge and reload test passed.",
+    "11 channel regression tests passed.",
+    "Real model weights download fails on huggingface.co DNS; actual350M tokenizer/checkpoint compatibility not verified."
+  ],
+  "interpretations": [],
+  "limitations": [
+    "Tiny model verification is implementation compatibility only, not performance or real350M verification.",
+    "Official config declares transformers5.0.0rc1; native4.57.6 must be checked with actual checkpoint/tokenizer before claiming full compatibility.",
+    "No training/accuracy/ZIP for actual350M model."
+  ],
+  "failure": {
+    "stage": "official checkpoint download",
+    "error": "huggingface.co DNS resolution failed",
+    "retry": "Normal local PowerShell launcher prepared; no sandbox bypass attempted."
+  },
+  "decision": null,
+  "next_actions": [
+    "Run tools/start_lm_gpu.ps1 from ordinary local PowerShell to download/hash resolved immutable revision and train under fresh LM-LFM25-01.",
+    "Evaluate real trained model on exact cached fold0 candidates before adoption."
+  ]
+}

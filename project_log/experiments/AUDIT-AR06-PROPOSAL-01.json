@@ -1,0 +1,180 @@
+{
+  "experiment_id": "AUDIT-AR06-PROPOSAL-01",
+  "plan_id": null,
+  "status": "completed",
+  "recorded_at_kst": "2026-10-25T19:26:57.2566433+09:00",
+  "started_at_kst": "2026-10-25T19:26:57.2566433+09:00",
+  "finished_at_kst": "2026-10-25T19:30:14.3908937+09:00",
+  "purpose": "Review the three AR-06 improvement claims against source, saved assets, and official public training aggregates.",
+  "hypothesis": "Some proposals already exist; lookup safety and global phonetic retrieval require separate designs and measurement.",
+  "baseline_experiment_id": "ANALYSIS-AS05-SERVER-01",
+  "changed_factors": [],
+  "fixed_conditions": [
+    "Read-only audit; no fitting, matcher execution, inference, or ZIP generation."
+  ],
+  "code": {
+    "dirty_scope": "Source, assets and ZIPs unchanged; new audit documentation and aggregates added.",
+    "dirty": true,
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "file_sha256": {
+      "AR-06/script.py": "44ee368a55c490dd66b43d521bce82c3851e9aeb10f07b84897d87956b174e54",
+      "AR-06/run_ar06.py": "320665f213fa57cd029e1eb362302178faa13add02c8b97bb73a009448f9ca3e",
+      "AR-06/train_AR-06/script.py": "048bb67be4a504a65e5dddb95a47b2ce735bd5b1b30205a9ae8b697d5c01c90f",
+      "AR-06/model/model.json": "5a70a74ec75e33d03ba1e676559d95183f7a091b3a38926c30f4e7792346e650",
+      "AR-06/train_AR-06/model/model.json": "5a70a74ec75e33d03ba1e676559d95183f7a091b3a38926c30f4e7792346e650",
+      "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "eval_kit/folds_group5_seed42.csv": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+      "eval_kit/aux/folds_row5_seed42.csv": "b0b3b9b2f5c31dee9cba8dc4c309ff9ec748c5628c67536ae21fba454cad9526"
+    },
+    "dirty_at_session_start": false
+  },
+  "data": {
+    "training_rows": null,
+    "public_train_rows_inspected": 12222,
+    "split_id": "G5-s42 and row5-s42 auxiliary; structure inspection only",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42,
+    "source_files_sha256": {
+      "catalog": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "train": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c"
+    },
+    "validation_rows": null
+  },
+  "retrieval": {
+    "existing_hangul_tonnage_rel_tol": 0.098,
+    "max_candidates": null,
+    "indexes": "exact, name prefix, skeleton prefix, phonetic prefix, word prefix, number; not a global all-position n-gram index",
+    "new_retrieval_executed": false
+  },
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "parameters": {
+      "kr_mode": "AR06",
+      "use_train_lookup_default": false,
+      "en_mode": "EN_V3"
+    },
+    "loss": null,
+    "type": "AR-06 rule matcher; inspected, not executed"
+  },
+  "commands": [
+    "PowerShell 7: Import-Csv public train; trim/uppercase callsign; count distinct target IDs per key and compare every row with saved callsign_lookup.",
+    "PowerShell 7: group fixed G5 and row5 split rows by target ID; count distinct folds per ID.",
+    "PowerShell 7: Get-Content source and model JSON; Get-FileHash SHA256 for code/data/folds/assets.",
+    "git diff --no-index -- AR-06/train_AR-06/script.py AR-06/script.py"
+  ],
+  "environment": {
+    "shell": "7.6.5",
+    "server_python_exists": false,
+    "python_executed": false,
+    "os": "Windows"
+  },
+  "metrics": {
+    "hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "seen_vessel_fraction": null,
+    "non_hangul_accuracy": null,
+    "candidate_recall_non_hangul": null,
+    "candidate_recall_hangul": null
+  },
+  "cost": {
+    "timing_scope": "No training or inference",
+    "inference_seconds": null,
+    "assets_bytes": 642910,
+    "training_seconds": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "docs/AR06_PROPOSAL_REVIEW.md",
+    "reports/ar06_proposal_audit.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Current JSON false overrides a changed USE_TRAIN_LOOKUP fallback constant.",
+    "Current lookup stores majority IDs and returns immediately; not an implemented safe lookup policy.",
+    "5851 distinct training callsigns; zero multi-ID keys or saved lookup disagreements across 12222 rows.",
+    "Hangul retrieval already unions unlimited GT and IGT windows at rel_tol 0.098.",
+    "Skeleton and phonetic compatibility mappings already exist; global all-position n-grams would be a distinct addition.",
+    "Saved assets include train word/syllable maps and callsign/name lookup; both current JSON copies have equal hashes.",
+    "Tonnage <=1.5 percent already receives positive scores; an extra conditioned bonus is a separate hypothesis."
+  ],
+  "interpretations": [
+    "The three claims do not establish causes of the official leaderboard plateau.",
+    "Prioritize explicit safe lookup policy and global retrieval comparisons; keep tonnage interaction as a separate factor."
+  ],
+  "limitations": [
+    "Private test overlap and failure causes cannot be established from leaderboard score.",
+    "Current Windows .venv-server is absent; the historical Linux environment report does not establish the current PC environment."
+  ],
+  "failure": null,
+  "decision": "Complete source/asset audit and corrected implementation design; preserve current matcher, model assets and ZIPs. No unrequested model experiment.",
+  "next_actions": [
+    "If implementation is requested, separate run_ar06 ZIP creation from evaluation and fitting.",
+    "Implement fold-fitted safe lookup schema and explicit policy; validate G5 regression and row5 seen/unseen slices separately.",
+    "Compare global character n-gram union with the existing scorer fixed, then global skeleton retrieval as another factor.",
+    "Compare conditioned tonnage/meta bonus only with fixed candidates."
+  ],
+  "results": {
+    "audit_id": "AUDIT-AR06-PROPOSAL-01",
+    "recorded_at_kst": "2026-10-25T19:27:34.6309025+09:00",
+    "scope": "Static source and JSON audit; public-training and split aggregate checks in PowerShell only. No model execution or private test inspection.",
+    "git_revision": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "source_files_sha256": {
+      "AR-06/script.py": "44ee368a55c490dd66b43d521bce82c3851e9aeb10f07b84897d87956b174e54",
+      "AR-06/run_ar06.py": "320665f213fa57cd029e1eb362302178faa13add02c8b97bb73a009448f9ca3e",
+      "AR-06/train_AR-06/script.py": "048bb67be4a504a65e5dddb95a47b2ce735bd5b1b30205a9ae8b697d5c01c90f",
+      "AR-06/model/model.json": "5a70a74ec75e33d03ba1e676559d95183f7a091b3a38926c30f4e7792346e650",
+      "AR-06/train_AR-06/model/model.json": "5a70a74ec75e33d03ba1e676559d95183f7a091b3a38926c30f4e7792346e650",
+      "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "eval_kit/folds_group5_seed42.csv": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+      "eval_kit/aux/folds_row5_seed42.csv": "b0b3b9b2f5c31dee9cba8dc4c309ff9ec748c5628c67536ae21fba454cad9526"
+    },
+    "public_train": {
+      "callsign_lookup_disagreement_rows": 0,
+      "vessels": 5851,
+      "hangul_rows": 1191,
+      "callsign_nonempty_rows": 12222,
+      "callsign_keys": 5851,
+      "callsign_ambiguous_keys": 0,
+      "callsign_keys_not_in_current_train": 0,
+      "rows": 12222
+    },
+    "saved_model": {
+      "learned_syl_top3": 271,
+      "name_lookup": 5857,
+      "learned_word_map": 466,
+      "use_train_lookup_default": false,
+      "version": "1022-AR06",
+      "callsign_lookup": 5851
+    },
+    "splits": {
+      "row_split_seen_rows": 8702,
+      "row_split_seen_fraction": 0.7119947635411553,
+      "group_rows": 12222,
+      "row_split_rows": 12222,
+      "group_vessels_in_multiple_folds": 0
+    },
+    "environment": {
+      "shell": "7.6.5",
+      "server_python_exists": false,
+      "python_executed": false,
+      "os": "Windows"
+    },
+    "performance_metrics": {
+      "weighted_accuracy": null,
+      "private_test_seen_fraction": null,
+      "candidate_recall": null,
+      "non_hangul_accuracy": null,
+      "hangul_accuracy": null
+    }
+  }
+}

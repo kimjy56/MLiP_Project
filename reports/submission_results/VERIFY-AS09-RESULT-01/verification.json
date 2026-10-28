@@ -1,0 +1,174 @@
+{
+  "verification_id": "VERIFY-AS09-RESULT-01",
+  "checked_at_kst": "2026-10-28T22:06:06+09:00",
+  "submission_id": 117799,
+  "submission_time_kst": "2026-10-28T00:54:00+09:00",
+  "source": "User-pasted leaderboard row; existing SUB-117799 checked, no duplicate submission created",
+  "score_text": "0.9201100425",
+  "displayed_duration_seconds": 497,
+  "comparisons": [
+    {
+      "submission": "AS-06",
+      "record_id": "SUB-115506",
+      "score": "0.9122153056",
+      "displayed_duration_seconds": 366,
+      "score_delta": "0.0078947369",
+      "percentage_point_delta": "0.7894736900",
+      "duration_delta_seconds": 131
+    },
+    {
+      "submission": "AS-07",
+      "record_id": "SUB-116338",
+      "score": "0.9122153056",
+      "displayed_duration_seconds": 372,
+      "score_delta": "0.0078947369",
+      "percentage_point_delta": "0.7894736900",
+      "duration_delta_seconds": 125
+    },
+    {
+      "submission": "AS-08",
+      "record_id": "SUB-117501",
+      "score": "0.9003732004",
+      "displayed_duration_seconds": 236,
+      "score_delta": "0.0197368421",
+      "percentage_point_delta": "1.9736842100",
+      "duration_delta_seconds": 261
+    }
+  ],
+  "archive": {
+    "path": "submit_AS-09.zip",
+    "sha256": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325",
+    "bytes": 22798425,
+    "crc_check_passed": true,
+    "matches_historical_local_package_hash": true,
+    "server_uploaded_hash_verified": null,
+    "members": {
+      "model/__init__.py": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "model/catalog_embeds_full_fp16.npy": {
+        "bytes": 20120448,
+        "sha256": "2a9bbdd55ac89f9c7cf219371fc0f0ded9450a825a3a9a44664c288212067191"
+      },
+      "model/full_encoder.pt": {
+        "bytes": 2773947,
+        "sha256": "ec69eb5959dc414953eb66efbdde69274e5170bb8cddd29bacafbe9d8520d489"
+      },
+      "model/model.json": {
+        "bytes": 5330875,
+        "sha256": "26787c8e722266f328acc8e995b4a2e0fb33bd8c22892755f591e8ea92ae6b93"
+      },
+      "model/phonetic_encoder/__init__.py": {
+        "bytes": 746,
+        "sha256": "c075ac45fbe6fd33b16f9211269b49f7cf4834f18ed3568d52add2002cc00aa1"
+      },
+      "model/phonetic_encoder/dataset.py": {
+        "bytes": 7053,
+        "sha256": "defb522d806fbbe8207ae84161aba18e0ab1d756380831f7236f037deb9a8605"
+      },
+      "model/phonetic_encoder/hybrid_matcher.py": {
+        "bytes": 7931,
+        "sha256": "550738ed54bae9047a8e5c8a1d491b37dcb2dee63c81b5e7cb1894744015832f"
+      },
+      "model/phonetic_encoder/loss.py": {
+        "bytes": 8000,
+        "sha256": "a438e9cff9c2bfe7a3a076f173495e2f53b8fcb650b39ca87effbe86412f47db"
+      },
+      "model/phonetic_encoder/model.py": {
+        "bytes": 21503,
+        "sha256": "38dcd2dbec779b5cd24449a5e91122a042f2654d74d0c948441457530a0ef0b8"
+      },
+      "model/phonetic_encoder/retrieval.py": {
+        "bytes": 565,
+        "sha256": "be0c40292691c3f6a4b02c51581a266db66eaf3bdd79c01e4568def4aff42633"
+      },
+      "model/phonetic_encoder/tokenizer.py": {
+        "bytes": 21275,
+        "sha256": "e19e1c9c4a59444be881c285ced063a0f17a9a9ddd19b52cd19953a3e5b7af14"
+      },
+      "requirements.txt": {
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "script.py": {
+        "bytes": 83409,
+        "sha256": "c14d5afbbf48c00df8c4df4fc2d315700f8ef0fc036e4ead5b1f53ad9a18fe15"
+      }
+    },
+    "configuration": {
+      "dense_mode": "hybrid",
+      "dense_weight": 2.5,
+      "use_full_ko_map": true,
+      "use_train_lookup_default": true,
+      "kr_mode": "AR06",
+      "en_mode": "EN_V3",
+      "manual_word_variants_count": 0,
+      "catalog_full_ko_map_entries": 78586,
+      "callsign_lookup_entries": 5851,
+      "name_lookup_entries": 5857,
+      "learned_word_entries": 466,
+      "dense_applied_to": "Hangul rows only at predict_rows dense candidate branch",
+      "dense_device": "cpu"
+    },
+    "source_line_evidence": {
+      "34": "USE_FULL_KO_MAP: bool = True  # Enabled: High-confidence baseline map paired with DPR-SYMPHON-02 dense scoring",
+      "337": "    if not USE_FULL_KO_MAP:",
+      "1586": "        if dense_matcher is not None and dense_mode == \"hybrid\" and kr_flag:",
+      "1832": "                    dense_weight * d_sim",
+      "1900": "    req_dense = (model.get(\"dense_mode\") == \"hybrid\") or (enc_path.exists() and npy_path.exists())",
+      "1905": "                f\"[FATAL CONFIG ERROR] Hybrid dense matching is required, but HybridDenseLexicalMatcher failed to import! \"",
+      "1913": "                device=\"cpu\",",
+      "1916": "            raise RuntimeError(f\"[FATAL INIT ERROR] Failed to instantiate HybridDenseLexicalMatcher from {enc_path}: {e}\") from e"
+    }
+  },
+  "limitations": [
+    "User-provided leaderboard row was not independently fetched; Public/Private partition, row counts and language accuracies are unknown.",
+    "Local ZIP hash matches the historical local package record. Uploaded server ZIP bytes/hash were not independently obtained; submitted_zip_hash_verified=true in the prior record overstates the available evidence.",
+    "Static ZIP inspection establishes Dense configuration, dependency inclusion and fatal initialization guards. Server Dense activation is strongly supported conditional on the server using these same bytes, but server logs and per-row route evidence are unavailable.",
+    "AS09 changes encoder, packaging, normalization and synthetic catalog-map availability together. Component accuracy gains and statistical significance cannot be isolated from the aggregate score.",
+    "No current model inference or row-independence test was rerun. Prior AS09 local checker claims are historical reported checks, not new verification results.",
+    "The latest user-provided server guide recorded in EVALUATION_CRITERIA.md and TEAM_RULES is 1800 seconds, not the older 1200 seconds quoted in AS09/SUB117799. Displayed leaderboard time scope is unknown; no measured stage headroom is claimed.",
+    "TEAM_RULES v4 is present; actual eval_kit README is 1.0, requested 1.1 unavailable. Current Windows Python3.11.15 differs from target3.11.17; reports/server_environment.json is historical Linux environment.",
+    "DPR-SYMPHON-02 record describes fold0 with 2372 rows. The INDEX wording 5-fold group OOF standalone is not established by that record and is not reused as verified full OOF."
+  ],
+  "operations": {
+    "training": false,
+    "inference": false,
+    "zip_creation_or_update": false,
+    "private_test_data_access": false
+  },
+  "protected_before_sha256": {
+    "project_log/experiments/SUB-117799.json": "cf523c8e08dddbe1c8b001322208e39a0e70e3d79aedc10eb6f18f9794385fb3",
+    "project_log/experiments/AS-09.json": "dd2e2c9f124cebed91e44312442ddd541509fad7c9a8556e8099a183a7cc58c0",
+    "project_log/experiments/SUB-117501.json": "1e5b63ad895a7101703b49ecf3e552c4a8d2af8e4016e8ea38b24b55786f9bf7",
+    "project_log/experiments/SUB-116338.json": "d58f9e61205e528aa4eeb87541ca867d8151b25b9be92ad052d0488c66218ace",
+    "project_log/experiments/SUB-115506.json": "a10ced8eb1413282857fb552433c326b44f98c5fcf77e265062ed3a9d926a59b",
+    "submit_AS-09.zip": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325",
+    "submit_AS-08.zip": "76f6dfe0be29dd52540fe687ae73ebee5f454eea2e269f60bd0e68be0153791e",
+    "submit_AS-07.zip": "6cc36d661e59057922ec6472ba50796477a668c1a6a0e9b1dcc8de1c74b4b079",
+    "submit_AS-06.zip": "b028d8e283775a1e420534c98f20eff431c34339f2d4a471ef756d00d2971e22",
+    "submit.zip": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325",
+    "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+    "eval_kit/folds_group5_seed42.csv": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "eval_kit/evaluate.py": "2c728b357727f8e3962128030dde3bcb6fc6b230fcde287e336d3e0eb6c9f38e"
+  },
+  "protected_after_sha256": {
+    "project_log/experiments/SUB-117799.json": "cf523c8e08dddbe1c8b001322208e39a0e70e3d79aedc10eb6f18f9794385fb3",
+    "project_log/experiments/AS-09.json": "dd2e2c9f124cebed91e44312442ddd541509fad7c9a8556e8099a183a7cc58c0",
+    "project_log/experiments/SUB-117501.json": "1e5b63ad895a7101703b49ecf3e552c4a8d2af8e4016e8ea38b24b55786f9bf7",
+    "project_log/experiments/SUB-116338.json": "d58f9e61205e528aa4eeb87541ca867d8151b25b9be92ad052d0488c66218ace",
+    "project_log/experiments/SUB-115506.json": "a10ced8eb1413282857fb552433c326b44f98c5fcf77e265062ed3a9d926a59b",
+    "submit_AS-09.zip": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325",
+    "submit_AS-08.zip": "76f6dfe0be29dd52540fe687ae73ebee5f454eea2e269f60bd0e68be0153791e",
+    "submit_AS-07.zip": "6cc36d661e59057922ec6472ba50796477a668c1a6a0e9b1dcc8de1c74b4b079",
+    "submit_AS-06.zip": "b028d8e283775a1e420534c98f20eff431c34339f2d4a471ef756d00d2971e22",
+    "submit.zip": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325",
+    "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+    "eval_kit/folds_group5_seed42.csv": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "eval_kit/evaluate.py": "2c728b357727f8e3962128030dde3bcb6fc6b230fcde287e336d3e0eb6c9f38e"
+  },
+  "protected_files_unchanged": true
+}

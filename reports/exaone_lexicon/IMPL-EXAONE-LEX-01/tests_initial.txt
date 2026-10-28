@@ -1,0 +1,17 @@
+test_hangul_mask_and_eos (tests.test_exaone_lexicon.DecoderContracts.test_hangul_mask_and_eos) ... ok
+test_supervised_mask_and_padding (tests.test_exaone_lexicon.DecoderContracts.test_supervised_mask_and_padding) ... ok
+test_tiny_exaone_lora_gradient_and_reload (tests.test_exaone_lexicon.DecoderContracts.test_tiny_exaone_lora_gradient_and_reload) ... ok
+test_bounded_composition_and_diversity (tests.test_exaone_lexicon.RulesAndData.test_bounded_composition_and_diversity) ... ok
+test_fit_only_descendants_and_rule_pairs (tests.test_exaone_lexicon.RulesAndData.test_fit_only_descendants_and_rule_pairs) ... ok
+test_general_spelling_and_not_company_aliases (tests.test_exaone_lexicon.RulesAndData.test_general_spelling_and_not_company_aliases) ... ok
+test_group_mismatch_duplicate_and_full_train (tests.test_exaone_lexicon.RulesAndData.test_group_mismatch_duplicate_and_full_train) ... ok
+{'phase': 'batches', 'completed': 2, 'total': 2, 'physical_batch': 2}
+{'phase': 'batches', 'completed': 2, 'total': 2, 'physical_batch': 2}
+test_generation_cache_resume_rejects_changed_inputs (tests.test_exaone_lexicon.StaticMatcherContracts.test_generation_cache_resume_rejects_changed_inputs) ... ok
+test_no_legacy_files_labels_and_row_independence (tests.test_exaone_lexicon.StaticMatcherContracts.test_no_legacy_files_labels_and_row_independence) ... ok
+test_runtime_import_is_llm_free_and_legacy_api_lazy (tests.test_exaone_lexicon.StaticMatcherContracts.test_runtime_import_is_llm_free_and_legacy_api_lazy) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 1.374s
+
+OK

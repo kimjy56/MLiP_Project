@@ -1,0 +1,53 @@
+{
+  "recorded_at_kst": "2026-10-28T00:40:14+09:00",
+  "dns": {
+    "localhost": {
+      "ok": true,
+      "addresses": [
+        "127.0.0.1",
+        "::1"
+      ]
+    },
+    "huggingface.co": {
+      "ok": false,
+      "errno": 11001,
+      "winerror": null,
+      "message": "[Errno 11001] getaddrinfo failed"
+    },
+    "pypi.org": {
+      "ok": false,
+      "errno": 11001,
+      "winerror": null,
+      "message": "[Errno 11001] getaddrinfo failed"
+    },
+    "www.microsoft.com": {
+      "ok": false,
+      "errno": 11001,
+      "winerror": null,
+      "message": "[Errno 11001] getaddrinfo failed"
+    }
+  },
+  "tcp": {
+    "1.1.1.1": {
+      "ok": false,
+      "errno": 13,
+      "winerror": 10013,
+      "message": "[WinError 10013] 액세스 권한에 의해 숨겨진 소켓에 액세스를 시도했습니다",
+      "seconds": 0.0
+    },
+    "8.8.8.8": {
+      "ok": false,
+      "errno": 13,
+      "winerror": 10013,
+      "message": "[WinError 10013] 액세스 권한에 의해 숨겨진 소켓에 액세스를 시도했습니다",
+      "seconds": 0.016
+    }
+  },
+  "system_settings_modified": false,
+  "process_is_appcontainer": true,
+  "configured_workspace_network_access": true,
+  "configured_windows_sandbox": "elevated",
+  "diagnosis": "sandbox_network_access_denied",
+  "resolution_scope": "Active execution permissions, not a DNS-server replacement",
+  "ready_for_model_download": false
+}

@@ -1,0 +1,145 @@
+{
+  "reports/dpr_symphon_evaluation.json": {
+    "sha256": "9d7dd72f4d0cdd0dcfc98aacf1a0460655f24967a4609aba033cc739847e336c",
+    "fold": 0,
+    "checkpoint_path": "artifacts/DPR-SYMPHON-01/fold_0_encoder.pt",
+    "language_metrics": {
+      "korean_metrics": {
+        "rows": 239,
+        "recall@1": {
+          "value": 0.5774058577405857,
+          "correct": 138
+        },
+        "recall@35": {
+          "value": 0.9497907949790795,
+          "correct": 227
+        }
+      },
+      "english_metrics": {
+        "rows": 2133,
+        "recall@1": {
+          "value": 0.9442100328176277,
+          "correct": 2014
+        },
+        "recall@35": {
+          "value": 0.9859353023909986,
+          "correct": 2103
+        }
+      }
+    }
+  },
+  "reports/dpr_multiview_evaluation.json": {
+    "sha256": "5334a6319566ba33d8d9b1975cfc09ad718227937054f50ee458bd5ae3f6d6bb",
+    "fold": 0,
+    "checkpoint_path": "artifacts/DPR-SYMPHON-01/fold_0_encoder.pt",
+    "language_metrics": {
+      "korean_metrics": {
+        "rows": 239,
+        "recall@1": {
+          "value": 0.6150627615062761,
+          "correct": 147
+        },
+        "recall@35": {
+          "value": 0.9456066945606695,
+          "correct": 226
+        }
+      },
+      "english_metrics": {
+        "rows": 2133,
+        "recall@1": {
+          "value": 0.9010782934833568,
+          "correct": 1922
+        },
+        "recall@35": {
+          "value": 0.980309423347398,
+          "correct": 2091
+        }
+      }
+    }
+  },
+  "reports/matching_improvements/DPR-MULTIVIEW-02/lexicon_ablation_study.json": {
+    "sha256": "187e07c428b9010088659701f3eb5226076696e1ef601212d66d16f570c8bf6a",
+    "manual_dict_size": 299,
+    "phases": {
+      "clean": {
+        "retained": {
+          "hangul_correct": 239,
+          "hangul_rows": 239,
+          "non_hangul_correct": 2130,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9995780590717299
+        },
+        "ablated": {
+          "hangul_correct": 239,
+          "hangul_rows": 239,
+          "non_hangul_correct": 2130,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9995780590717299
+        }
+      },
+      "severe": {
+        "retained": {
+          "hangul_correct": 237,
+          "hangul_rows": 239,
+          "non_hangul_correct": 2127,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9932983775576858
+        },
+        "ablated": {
+          "hangul_correct": 237,
+          "hangul_rows": 239,
+          "non_hangul_correct": 2127,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9932983775576858
+        }
+      }
+    }
+  },
+  "reports/matching_improvements/DPR-HYBRID-01/dpr_hybrid_robustness_benchmark.json": {
+    "sha256": "cd321c62e3c110aea6fc29a68105638b1a18fb053a0f2bd4c54f1724e4b9b73e",
+    "fold": 0,
+    "seed": 20261022,
+    "top_level_fields": [
+      "experiment_id",
+      "heldout_fold",
+      "rows",
+      "seed",
+      "dense_weight",
+      "results",
+      "clean_results"
+    ]
+  },
+  "experiments/train_bi_encoder.py": {
+    "sha256": "bba7cf6fe840e6f5ba4ebf8ff94a14090f4af54c76fae3284552e91d40d54cc4"
+  },
+  "experiments/evaluate_dpr_robustness.py": {
+    "sha256": "eb4aac7729c8c9565bd17b089bfb487c5cd005c939b18d4f1b609213b99766cf"
+  },
+  "experiments/evaluate_lexicon_ablation.py": {
+    "sha256": "2fef286922c5b5ff5c0002bbf91783f986e43de6128b523c33d7de1e60e3d01f"
+  },
+  "experiments/build_submit_as07.py": {
+    "sha256": "df90b9674371de9947332ee1d1f27c1e1c0ccd7b042141c61347d8ed33fbeef3"
+  },
+  "experiments/build_submit_as08.py": {
+    "sha256": "4235cf12330dfe25d345e78665097e28b55ada64cb9e29fefad6311acb369bb4"
+  },
+  "eval_kit/check_submission.py": {
+    "sha256": "c916f13f4e1cf7afe61e6eb49fdcc5fe11798bb2058029ec810783b2783388e9"
+  },
+  "validation_design_findings": {
+    "training_code_selects_best_on_outer_fold_recall35": true,
+    "outer_checkpoint_selection_lines": [
+      337,
+      341,
+      343
+    ],
+    "robustness_cache_validates_source_data_checkpoint_hashes": false,
+    "robustness_cache_key_scope": "clean/noise preset and ko_map; source/model/file hashes not included",
+    "local_evaluation_loads_repository_phonetic_package_directly": true,
+    "submission_checker_asserts_dense_activation": false,
+    "synthetic_dictionary_fit_membership_bound_to_each_fold": null,
+    "historical_executed_sources_match_current_files": null,
+    "all_claims_scope": "Inspected current source, unless separately supported by immutable archive or saved report"
+  }
+}

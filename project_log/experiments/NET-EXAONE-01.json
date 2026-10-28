@@ -1,0 +1,159 @@
+{
+  "experiment_id": "NET-EXAONE-01",
+  "plan_id": null,
+  "status": "diagnosed_blocked_by_execution_permissions",
+  "recorded_at_kst": "2026-10-28T00:41:43+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": "2026-10-28T00:41:43+09:00",
+  "purpose": "Resolve EXAONE download failure by distinguishing DNS/proxy/endpoint failure from sandbox network denial",
+  "hypothesis": "Execution sandbox denies network rather than a Hugging Face-only DNS failure",
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "Read-only diagnostic helper and documentation; OS/network/permission settings not modified"
+  ],
+  "fixed_conditions": [
+    "No model fitting/ZIP creation",
+    "Do not disable TLS/firewall or change global DNS",
+    "Do not self-escalate/escape execution sandbox",
+    "Preserve user and concurrent work"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": null,
+    "file_sha256": {
+      "tools/check_network.py": "845bba322b09a3d57a531e54385f909d8e328ae605a6293fb0b74343508cb39d",
+      "docs/EXAONE_NETWORK_DIAGNOSIS.md": "987210df52c2402ad8bafb1bc6f66fd9e497502e19ccd5f3f31317436909adc6"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    ".\\.venv-server\\Scripts\\python.exe -B -X utf8 tools/check_network.py --output reports/network/NET-EXAONE-01/diagnosis.json"
+  ],
+  "environment": {
+    "executable": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+    "python": "3.11.15 (main, Mar  3 2026, 14:55:34) [MSC v.1944 64 bit (AMD64)]",
+    "configured_network_access": true,
+    "effective_network": "restricted"
+  },
+  "metrics": {
+    "metric_source": "Network diagnostics only, no model metrics",
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "tools/check_network.py",
+    "docs/EXAONE_NETWORK_DIAGNOSIS.md",
+    "reports/network/NET-EXAONE-01/diagnosis.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Direct IP TCP denied10013 as well as all public DNS11001",
+    "Process AppContainer=True",
+    "User workspace network setting already true",
+    "Proxy/offline overrides unset",
+    "Network CIM/Resolve-DnsName access denied"
+  ],
+  "interpretations": [
+    "Changing DNS server alone cannot resolve observed socket permission denial",
+    "Active session network permission needs host/app handling; ordinary host PowerShell can be tested separately"
+  ],
+  "limitations": [
+    "Host outside-sandbox network not tested",
+    "No successful model download or training in current session",
+    "No permission escalation attempted; current runtime blocks sandbox approval expansion"
+  ],
+  "failure": null,
+  "decision": "Record actual permission block; do not modify PC DNS without host evidence",
+  "next_actions": [
+    "User/app must allow network for a new execution session, or run the scoped existing downloader from ordinary host PowerShell",
+    "After official base exists, resume separate EXAONE training under new experiment ID"
+  ],
+  "diagnosis": {
+    "recorded_at_kst": "2026-10-28T00:40:14+09:00",
+    "dns": {
+      "localhost": {
+        "ok": true,
+        "addresses": [
+          "127.0.0.1",
+          "::1"
+        ]
+      },
+      "huggingface.co": {
+        "ok": false,
+        "errno": 11001,
+        "winerror": null,
+        "message": "[Errno 11001] getaddrinfo failed"
+      },
+      "pypi.org": {
+        "ok": false,
+        "errno": 11001,
+        "winerror": null,
+        "message": "[Errno 11001] getaddrinfo failed"
+      },
+      "www.microsoft.com": {
+        "ok": false,
+        "errno": 11001,
+        "winerror": null,
+        "message": "[Errno 11001] getaddrinfo failed"
+      }
+    },
+    "tcp": {
+      "1.1.1.1": {
+        "ok": false,
+        "errno": 13,
+        "winerror": 10013,
+        "message": "[WinError 10013] 액세스 권한에 의해 숨겨진 소켓에 액세스를 시도했습니다",
+        "seconds": 0.0
+      },
+      "8.8.8.8": {
+        "ok": false,
+        "errno": 13,
+        "winerror": 10013,
+        "message": "[WinError 10013] 액세스 권한에 의해 숨겨진 소켓에 액세스를 시도했습니다",
+        "seconds": 0.016
+      }
+    },
+    "system_settings_modified": false,
+    "process_is_appcontainer": true,
+    "configured_workspace_network_access": true,
+    "configured_windows_sandbox": "elevated",
+    "diagnosis": "sandbox_network_access_denied",
+    "resolution_scope": "Active execution permissions, not a DNS-server replacement",
+    "ready_for_model_download": false
+  }
+}

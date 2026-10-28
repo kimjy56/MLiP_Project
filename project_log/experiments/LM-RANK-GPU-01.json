@@ -1,0 +1,105 @@
+{
+  "experiment_id": "LM-RANK-GPU-01",
+  "plan_id": "PLAN-LM-AR06-01",
+  "status": "blocked_preflight",
+  "recorded_at_kst": "2026-10-25T20:01:29+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "GPU training requested after transformers reinstall",
+  "hypothesis": "Combined rank loss, cycle coverage and Hangul augmentation may improve name disambiguation; unmeasured.",
+  "baseline_experiment_id": "AS-HCX-NC-02",
+  "changed_factors": [
+    "rank beta 0.1 temperature 1 negatives 2",
+    "row-mean CE",
+    "language cycles",
+    "fit-learned Hangul augmentation"
+  ],
+  "fixed_conditions": [],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": null,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": "folds_group5_seed42.csv; heldout fold 0",
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "HyperCLOVA X reverse q/v LoRA",
+    "parameters": {
+      "steps": 300,
+      "batch_size": 4,
+      "accumulation": 2,
+      "rank": 16,
+      "learning_rate": 0.0002,
+      "seed": 42
+    },
+    "loss": "row CE + 0.1 listwise rank CE"
+  },
+  "commands": [
+    ".\\.venv\\Scripts\\python.exe -m unittest discover -s tests -p \"test_*channel*.py\" -v"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "transformers": "4.57.6",
+    "torch": "2.7.1+cu128",
+    "device": "cuda",
+    "gpu": "RTX 5080",
+    "venv": ".venv",
+    "user_authorized_existing_env": true
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [],
+  "error_cases_file": null,
+  "observations": [
+    "All 9 channel-related tests pass after reinstall.",
+    "Base config/tokenizer exists, but original model.safetensors absent. No matching local cache found.",
+    "Pinned revision download attempted; huggingface.co DNS fails."
+  ],
+  "interpretations": [],
+  "limitations": [
+    "No optimizer step run.",
+    "Python 3.11.15 differs from server 3.11.17."
+  ],
+  "failure": {
+    "stage": "preflight / missing original base weights",
+    "error": "Hugging Face DNS resolution failed",
+    "retry": "Download retries stopped after repeated identical DNS failures."
+  },
+  "decision": null,
+  "next_actions": [
+    "Place original pinned model.safetensors in artifacts/pretrained/hyperclovax-seed-0.5b and verify manifest SHA256.",
+    "Resume this preflight record only after marking it planned; launch GPU 300 steps under this ID."
+  ]
+}

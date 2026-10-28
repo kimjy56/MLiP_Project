@@ -1,0 +1,25 @@
+{
+  "recorded_at_kst": "2026-10-28T00:17:57+09:00",
+  "implementation_checks_passed": true,
+  "compiled_sources": 13,
+  "cli_help": {
+    "experiments/train_exaone_translit.py": true,
+    "experiments/build_exaone_ko_lexicon.py": true,
+    "experiments/evaluate_pure_exaone_oof.py": true,
+    "experimental_matchers/exaone_lexicon.py": true,
+    "tools/fetch_exaone.py": true
+  },
+  "functional_tests_passed": 32,
+  "real_generated_case_tests_skipped": 3,
+  "official_data_fold_hashes_unchanged": true,
+  "new_source_hashes_verified": true,
+  "documentation_links_and_json_index": true,
+  "new_source_whitespace": true,
+  "global_historical_preservation_check_passed": false,
+  "global_preservation_exception": "Concurrent external AS08 ZIP/completed-record and DPR-source changes; recorded without revert",
+  "concurrent_changes_evidence": "reports/exaone_lexicon/IMPL-EXAONE-LEX-01/concurrent_changes.json",
+  "actual_training_optimizer_steps": 0,
+  "actual_generated_lexicon": false,
+  "accuracy_goals_measured": false,
+  "zip_writes_by_this_EXAONE_task": false
+}

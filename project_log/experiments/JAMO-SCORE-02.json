@@ -1,0 +1,400 @@
+{
+  "experiment_id": "JAMO-SCORE-02",
+  "plan_id": "PLAN-MATCHING-IMPROVE-01",
+  "status": "completed_not_promoted",
+  "recorded_at_kst": "2026-10-26T00:55:14+09:00",
+  "started_at_kst": "2026-10-26T00:55:14+09:00",
+  "finished_at_kst": "2026-10-26T00:58:18+09:00",
+  "purpose": "Secondary severe-noise check on two seeds; no parameter changes",
+  "hypothesis": "The fixed separate1.8 Jamo channel may improve severe-noise selection beyond the first noise seed.",
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "Noise seed20261022 ->20261026 and20261027; scoring candidate remains identical to experiment01."
+  ],
+  "fixed_conditions": [
+    "fold0 only; same fit model, map, source and candidate sets",
+    "severe preset only",
+    "No tuning or model training",
+    "Both language groups, all2372 rows",
+    "No ZIP"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/channel_training.py": "02529ee98ed73cd57facd326d61344c9f92d6fe04a0f54e3ca03d5c27ee6e3eb",
+      "name_decoder/noise_augmenter.py": "51315596aad8ac26f358d3f44fd94780714c99dc8423dde02446c167b6d7e3d5",
+      "name_decoder/lora.py": "ef6d92c25fd5297f2131a7d2fa995cebc61fc617ff9cb9a4b9732d0d7e0b6587",
+      "name_decoder/noisy_channel.py": "36c88596b2334bf0f8d5f332229abedfbeccb9e939a36eca197f58c4c9874f8f",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "experiments/noisy_channel_common.py": "d55c127ca5581abf8631ce67de441e21585f6c4dc7d2dc5deb7591d50c1098c8",
+      "experiments/train_noisy_channel.py": "e1c591c5698972b7b72d910ece8bdd87d131bc46ada0a7a558f7352c99bbbc91",
+      "experiments/score_noisy_channel_candidates.py": "47d1053c1ac9acafa4e85061934cdad3b495c4286ea37358ed5f071d02c4992a",
+      "experimental_matchers/jamo_scoring/script.py": "1424834b99026af167abdd8edf231801eea8f96021332c1448c647480a911710",
+      "experiments/evaluate_jamo_scoring.py": "b841a58847dc2ad590648d722842de5b88760b12db3e4b7c83300d39a4d17753",
+      "experiments/evaluate_jamo_scoring_seeds.py": "995da9f861106b473a8bf91801d25af2b3755b2f122f3bae28823580049fc9c9"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    },
+    "split_id": "folds_group5_seed42.csv/fold0",
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": 9850,
+    "validation_rows": 2372,
+    "noise_seeds": [
+      20261026,
+      20261027
+    ]
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    "experiments/evaluate_as07_jamo_seeds.py"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "safetensors": "0.8.0",
+      "pandas": "2.0.3",
+      "numpy": "1.26.4"
+    },
+    "device": "cpu",
+    "threads": 2
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "total_seconds": 183.67354089999571,
+    "timing_scope": "Load/index, predictions including candidate hashes, official bootstrap and saving; CPU, not server timing."
+  },
+  "artifacts": [
+    "C:\\Projects\\ML_midterm\\reports\\matching_improvements\\JAMO-SCORE-02",
+    "C:\\Projects\\ML_midterm\\artifacts\\JAMO-SCORE-02"
+  ],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "Historical miner source snapshot was not saved; CSV/record hashes and current source membership checks do not re-prove every historical miner fit.",
+    "Public train and outer fold0 were already explored in previous development; this is not an untouched final test.",
+    "Manual lexicon history is not fold-isolated. Shared lexicon stays fixed in this paired comparison.",
+    "Historical AS-06 record declaration and matching map hash only; no generation-side model/seed manifest exists.",
+    "One fold and one noise seed; not a full5fold or official server improvement.",
+    "Secondary seeds were selected before execution but after observing primary results.",
+    "Repeated transformations of the same vessels are correlated; no independent sample-size increase claimed."
+  ],
+  "failure": null,
+  "decision": "Retain as an experimental candidate only; no automatic production promotion or ZIP.",
+  "next_actions": [],
+  "evaluation_plan": {
+    "seeds": [
+      20261026,
+      20261027
+    ],
+    "preset": "severe",
+    "primary_experiment": "JAMO-SCORE-01",
+    "analysis": "Per-seed official subset paired vessel bootstrap2000 seed0. Do not treat repeated transformations as new independent vessels.",
+    "selection_bias": "Secondary check initiated after seeing primary gain; not an untouched confirmatory test."
+  },
+  "phase_results": {
+    "severe_20261026": {
+      "seed": 20261026,
+      "noise_summary": {
+        "total_rows": 2372,
+        "seed": 20261026,
+        "typo_applied_count": 696,
+        "typo_applied_rate": 0.2934232715008432,
+        "hangul_spacing_applied_count": 85,
+        "hangul_spacing_applied_rate": 0.03583473861720068,
+        "ton_shift_applied_count": 925,
+        "ton_shift_applied_rate": 0.3899662731871838,
+        "ton_missing_applied_count": 515,
+        "ton_missing_applied_rate": 0.21711635750421585,
+        "flag_missing_applied_count": 747,
+        "flag_missing_applied_rate": 0.3149241146711636,
+        "any_noise_applied_count": 1952,
+        "any_noise_applied_rate": 0.8229342327150084
+      },
+      "legacy": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 229,
+        "non_hangul_correct": 2124,
+        "hangul_accuracy": 0.9581589958158996,
+        "non_hangul_accuracy": 0.9957805907172996,
+        "weighted_accuracy": 0.9694454742863194,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 0.9995311767463666,
+        "retrieval_failures": 1,
+        "selection_failures": 18,
+        "prediction_seconds": 41.518988399999216,
+        "prediction_file_sha256": "a4fc8e434d3059a8072aa18074672912dc72c3d921c5abf784b55575664f03e5"
+      },
+      "separate": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 228,
+        "non_hangul_correct": 2124,
+        "hangul_accuracy": 0.9539748953974896,
+        "non_hangul_accuracy": 0.9957805907172996,
+        "weighted_accuracy": 0.9665166039934325,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 0.9995311767463666,
+        "retrieval_failures": 1,
+        "selection_failures": 19,
+        "prediction_seconds": 40.21150380000472,
+        "prediction_file_sha256": "8c9ce5952cf0cb07c358030530b606e4002032d55b0cfd502ad3b22c2fe003ec"
+      },
+      "candidate_sets_equal": true,
+      "candidate_sets_sha256": "64030c86e336fddc1e79d729662d5e1fef2f3e91391ee8e10ac0a9c56b86dcd0",
+      "paired": {
+        "hangul": {
+          "fixes": 4,
+          "breaks": 5
+        },
+        "non_hangul": {
+          "fixes": 0,
+          "breaks": 0
+        }
+      },
+      "official": {
+        "score": {
+          "h": 0.9539748953974896,
+          "nh": 0.9957805907172996,
+          "w": 0.9665166039934325,
+          "n_h": 239,
+          "n_nh": 2133
+        },
+        "boot": {
+          "h": {
+            "est": 0.9539748953974896,
+            "lo": 0.9059767759562841,
+            "hi": 0.9914529914529915,
+            "se": 0.02201831492724978
+          },
+          "nh": {
+            "est": 0.9957805907172996,
+            "lo": 0.9923716223211513,
+            "hi": 0.9986014148945184,
+            "se": 0.0015731051654789907
+          },
+          "w": {
+            "est": 0.9665166039934325,
+            "lo": 0.9323920760115304,
+            "hi": 0.9927836983700529,
+            "se": 0.01540975535365439
+          }
+        },
+        "compare": {
+          "d": {
+            "h": -0.004184100418409997,
+            "nh": 0.0,
+            "w": -0.0029288702928870203
+          },
+          "boot": {
+            "h": {
+              "est": -0.004184100418409997,
+              "lo": -0.0464283782321757,
+              "hi": 0.026667938931297704,
+              "se": 0.0190559984552565
+            },
+            "nh": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            },
+            "w": {
+              "est": -0.0029288702928870203,
+              "lo": -0.032499864762522986,
+              "hi": 0.018667557251908395,
+              "se": 0.01333919891867955
+            }
+          },
+          "verdict": "동등",
+          "n_common": 2372
+        },
+        "warnings": [],
+        "folds": "G5-s42"
+      }
+    },
+    "severe_20261027": {
+      "seed": 20261027,
+      "noise_summary": {
+        "total_rows": 2372,
+        "seed": 20261027,
+        "typo_applied_count": 713,
+        "typo_applied_rate": 0.3005902192242833,
+        "hangul_spacing_applied_count": 64,
+        "hangul_spacing_applied_rate": 0.026981450252951095,
+        "ton_shift_applied_count": 911,
+        "ton_shift_applied_rate": 0.38406408094435074,
+        "ton_missing_applied_count": 456,
+        "ton_missing_applied_rate": 0.19224283305227655,
+        "flag_missing_applied_count": 691,
+        "flag_missing_applied_rate": 0.29131534569983136,
+        "any_noise_applied_count": 1878,
+        "any_noise_applied_rate": 0.7917369308600337
+      },
+      "legacy": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 230,
+        "non_hangul_correct": 2126,
+        "hangul_accuracy": 0.9623430962343096,
+        "non_hangul_accuracy": 0.9967182372245663,
+        "weighted_accuracy": 0.9726556385313865,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 0.9990623534927332,
+        "retrieval_failures": 2,
+        "selection_failures": 14,
+        "prediction_seconds": 43.928084400016814,
+        "prediction_file_sha256": "a6f0366bda465162a19bf931b958f993727763d468cd9be05ce00e48127c09e0"
+      },
+      "separate": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 230,
+        "non_hangul_correct": 2126,
+        "hangul_accuracy": 0.9623430962343096,
+        "non_hangul_accuracy": 0.9967182372245663,
+        "weighted_accuracy": 0.9726556385313865,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 0.9990623534927332,
+        "retrieval_failures": 2,
+        "selection_failures": 14,
+        "prediction_seconds": 42.668421100010164,
+        "prediction_file_sha256": "76bcf698a4cb74f229c006e532d3cd6d4442b2b42125afdab783ea3bb851787d"
+      },
+      "candidate_sets_equal": true,
+      "candidate_sets_sha256": "1c8eb95d2d77bffbe477ef3aed073328e24cd56ccbd756269591b1c8601bc5b4",
+      "paired": {
+        "hangul": {
+          "fixes": 3,
+          "breaks": 3
+        },
+        "non_hangul": {
+          "fixes": 0,
+          "breaks": 0
+        }
+      },
+      "official": {
+        "score": {
+          "h": 0.9623430962343096,
+          "nh": 0.9967182372245663,
+          "w": 0.9726556385313866,
+          "n_h": 239,
+          "n_nh": 2133
+        },
+        "boot": {
+          "h": {
+            "est": 0.9623430962343096,
+            "lo": 0.9339189907266152,
+            "hi": 0.9869607202836349,
+            "se": 0.013334225560668413
+          },
+          "nh": {
+            "est": 0.9967182372245663,
+            "lo": 0.9942581668703273,
+            "hi": 0.9990324724994536,
+            "se": 0.001227822368283835
+          },
+          "w": {
+            "est": 0.9726556385313866,
+            "lo": 0.9529059553321192,
+            "hi": 0.9900212063441004,
+            "se": 0.009326167429023991
+          }
+        },
+        "compare": {
+          "d": {
+            "h": 0.0,
+            "nh": 0.0,
+            "w": 0.0
+          },
+          "boot": {
+            "h": {
+              "est": 0.0,
+              "lo": -0.02575107296137339,
+              "hi": 0.022321428571428572,
+              "se": 0.012162818219775311
+            },
+            "nh": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            },
+            "w": {
+              "est": 0.0,
+              "lo": -0.018025751072961373,
+              "hi": 0.015625,
+              "se": 0.008513972753842717
+            }
+          },
+          "verdict": "동등",
+          "n_common": 2372
+        },
+        "warnings": [],
+        "folds": "G5-s42"
+      }
+    }
+  },
+  "baseline_submission_filename": "submit_AS-06.zip",
+  "baseline_artifact_record": "project_log/experiments/AS-06.json",
+  "naming_correction": {
+    "corrected_at_kst": "2026-10-26T22:17:00+09:00",
+    "legacy_id": "AS07-JAMO-SCORE-02",
+    "same_execution_not_a_new_experiment": true,
+    "original_record_path": "project_log/naming_history/20261026T221700/records/AS07-JAMO-SCORE-02.json",
+    "original_record_sha256": "2fe63377556a5ce876226bec8dd98a5e2d57bea80897d355dcd7a14a9c4d042a",
+    "reason": "AS is a submission ZIP filename prefix; experimental runs use descriptive IDs.",
+    "preserved_execution_fields": [
+      "commands",
+      "cost",
+      "data",
+      "diagnostics",
+      "metrics",
+      "model",
+      "phase_results",
+      "preprocessing",
+      "retrieval",
+      "training_pairs",
+      "validation"
+    ],
+    "path_alias_registry": "project_log/EXPERIMENT_NAMING.json"
+  }
+}

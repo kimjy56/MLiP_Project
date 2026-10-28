@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "C:\Projects\ML_midterm\tools\verify_retrieval_refactor.py", line 264, in <module>
+    main()
+  File "C:\Projects\ML_midterm\tools\verify_retrieval_refactor.py", line 260, in main
+    verify(parser.parse_args())
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\ML_midterm\tools\verify_retrieval_refactor.py", line 181, in verify
+    states = [step_state(m, e.index, e.model, queries) for m, e in zip((old[0], new[0]), engines)]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\ML_midterm\tools\verify_retrieval_refactor.py", line 181, in <listcomp>
+    states = [step_state(m, e.index, e.model, queries) for m, e in zip((old[0], new[0]), engines)]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\ML_midterm\tools\verify_retrieval_refactor.py", line 133, in step_state
+    scores = scorer.predict(features, num_threads=1)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\ML_midterm\decision_models\set_model.py", line 200, in predict
+    raise ValueError('Set scorer requires query boundaries; use predict_group or predict_groups')
+ValueError: Set scorer requires query boundaries; use predict_group or predict_groups

@@ -1,0 +1,61 @@
+{
+  "experiment_id": "AS-07",
+  "plan_id": "SPEC-DPR-01",
+  "status": "completed",
+  "recorded_at_kst": "2026-10-26T23:56:00+09:00",
+  "started_at_kst": "2026-10-26T23:54:00+09:00",
+  "finished_at_kst": "2026-10-26T23:56:15+09:00",
+  "purpose": "Official DACON submission package AS-07 integrating DPR-Hybrid (Bi-Encoder Dense Phonetic Retrieval + Stage-2 4-feature scoring).",
+  "hypothesis": "Connecting lightweight Bi-Encoder (DPR-SYMPHON-01) Top-35 candidates into Stage-1 retrieval and injecting 4 dense features into Stage-2 eliminates candidate dropouts on unseen foreign/noisy Hangul vessel names without throughput bottleneck.",
+  "baseline_experiment_id": "AS-06",
+  "changed_factors": [
+    "Integrated HybridDenseLexicalMatcher into script.py Stage-1 retrieval (Top-35 dense candidates union)",
+    "Injected 4 phonetic similarity features (dense_sim, dense_rank_recip, dense_zscore, dense_margin_top1) into Stage-2 scorer",
+    "Bundled 2.05MB PyTorch Bi-Encoder (full_encoder.pt) and 20.12MB catalog embeddings (catalog_embeds_full_fp16.npy) inside model/",
+    "Preserved AR-06 lexical lookup, tonnage gating, and synthetic Hangul map (catalog_full_ko_map.json)"
+  ],
+  "fixed_conditions": [
+    "DACON 236771 (0.7 Hangul + 0.3 Non-Hangul weighted accuracy)",
+    "Row independence: 100% strict single vs batch inference invariance",
+    "Max 2 CPU threads capping during inference"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552f",
+    "dirty": true,
+    "file_sha256": {
+      "submit_AS-07.zip": "6cc36d661e59057922ec6472ba50796477a668c1a6a0e9b1dcc8de1c74b4b079",
+      "submit.zip": "6cc36d661e59057922ec6472ba50796477a668c1a6a0e9b1dcc8de1c74b4b079"
+    }
+  },
+  "submission_package": {
+    "zip_name": "submit_AS-07.zip",
+    "zip_bytes": 22160000,
+    "uncompressed_bytes": 28994000,
+    "files": [
+      "script.py",
+      "requirements.txt",
+      "model/model.json",
+      "model/full_encoder.pt",
+      "model/catalog_embeds_full_fp16.npy",
+      "model/phonetic_encoder/__init__.py",
+      "model/phonetic_encoder/model.py",
+      "model/phonetic_encoder/tokenizer.py",
+      "model/phonetic_encoder/hybrid_matcher.py"
+    ]
+  },
+  "verification": {
+    "checker": "eval_kit/check_submission.py 1.0",
+    "passed": true,
+    "failures": 0,
+    "warnings": 0,
+    "row_independence_checks": {
+      "shuffled_mismatch": 0,
+      "subset_mismatch": 0,
+      "single_row_mismatch": 0
+    },
+    "estimated_latency": "8s for 3,000 rows (DACON limit: 1,200s)"
+  },
+  "environment": {
+    "python": ".venv-server (Python 3.11.15, PyTorch 2.7.1+cu128, RapidFuzz 3.14.3, Pandas 2.0.3, NumPy 1.26.4)"
+  }
+}

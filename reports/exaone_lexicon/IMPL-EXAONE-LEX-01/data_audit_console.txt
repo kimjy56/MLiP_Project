@@ -1,0 +1,1 @@
+{'data_audit': True, 'pairs': 1573, 'catalog_words': 35418, 'fit_rows': 9850, 'validation_rows': 2372}

@@ -1,0 +1,592 @@
+{
+  "experiment_id": "LM-EXAONE-01",
+  "plan_id": null,
+  "status": "trained_unvalidated",
+  "recorded_at_kst": "2026-10-28T23:56:17+09:00",
+  "started_at_kst": "2026-10-28T23:56:17+09:00",
+  "finished_at_kst": "2026-10-29T00:04:55+09:00",
+  "purpose": "Reverse name-channel LoRA training",
+  "hypothesis": "A reverse name likelihood may add candidate-ranking information.",
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "lexical confusion listwise ranking",
+    "language cycle sampling",
+    "row-mean CE",
+    "fit-learned Hangul augmentation",
+    "explicit CUDA placement",
+    "candidate learning rate 2e-4 (unless overridden)",
+    "observation normalization preserves case and internal spaces"
+  ],
+  "fixed_conditions": [],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/channel_training.py": "02529ee98ed73cd57facd326d61344c9f92d6fe04a0f54e3ca03d5c27ee6e3eb",
+      "name_decoder/noise_augmenter.py": "51315596aad8ac26f358d3f44fd94780714c99dc8423dde02446c167b6d7e3d5",
+      "name_decoder/lora.py": "ef6d92c25fd5297f2131a7d2fa995cebc61fc617ff9cb9a4b9732d0d7e0b6587",
+      "name_decoder/noisy_channel.py": "b02acce9c6c91c8363c8d062e407505acd4d1f5c4c05fab507ac8717abcf6a91",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "experiments/noisy_channel_common.py": "d55c127ca5581abf8631ce67de441e21585f6c4dc7d2dc5deb7591d50c1098c8",
+      "experiments/train_noisy_channel.py": "e1c591c5698972b7b72d910ece8bdd87d131bc46ada0a7a558f7352c99bbbc91",
+      "experiments/score_noisy_channel_candidates.py": "47d1053c1ac9acafa4e85061934cdad3b495c4286ea37358ed5f071d02c4992a"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    },
+    "split_id": "folds_group5_seed42.csv",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42,
+    "heldout_fold": 0,
+    "training_rows": 9560,
+    "validation_rows": 2372,
+    "training_vessels": 4552,
+    "validation_is_independent_final_test": false,
+    "training_vessel_ids_sha256": "66ea69eb5da31a0c19f7fa370919a2d07dd77b41bdff5e556a98be37050ff0a8"
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {
+    "catalog": "NFC-uppercase-collapse-whitespace",
+    "observed": "NFC-strip-preserve-case-internal-space-digits-punctuation",
+    "deduplicate": [
+      "catalog_name",
+      "observed_name"
+    ],
+    "pair_sort_order": [
+      "catalog_name",
+      "observed_name"
+    ],
+    "prompt_version": "catalog-to-observed-name-v2-task-prefix",
+    "max_length": 256,
+    "truncation": "error",
+    "prompt_labels": -100,
+    "padding_labels": -100,
+    "target": "separately tokenized observed name plus EOS"
+  },
+  "training_pairs": {
+    "positive_rule": "training-fold target ID -> catalog name; raw observed name normalized",
+    "negative_rule": "inner-cross-fitted AR06 confusions, exact original pair; lexical fallback",
+    "count": 7068,
+    "raw_pairs_count": 4556,
+    "augmented_pairs_count": 2512,
+    "augment_factor": 0.5,
+    "hangul_pairs": 769,
+    "non_hangul_pairs": 6299,
+    "ordered_pairs_sha256": "159d748c35c79df6907f6d6b2b9ebb1eba88f80ca14473ef8c8d0523ea2d51d9",
+    "sampling": "cycle",
+    "learned_hangul_token_count": 290,
+    "hangul_probability_mass": 0.7,
+    "draws_planned": 2400,
+    "mining_policy": "recomputed after internal vessel split; supplied outer-fit CSV NOT reused",
+    "internal_confusions_sha256": "654ca45bf979ae072edec6e49c2bbe39eff8054171a198574b6527b19c5fd5f0",
+    "miner_fit_audit_sha256": "985e8c19aa1f1eaa910d43cab7c484cf95c48ef011515e8e96588220535271db",
+    "confusions_sha256": "fe63c9dc3dbb20749d4360a551c77483b138a7e855e1515dfbc99136678a66af",
+    "confusions_record_sha256": "e1e339ba685f857005f15bdf1d078844a870a89127b5cfda52afb520889d9187",
+    "pairs_with_mined_negatives": 4556,
+    "mined_negative_slots": 9112,
+    "lexical_fallback_slots": 5024,
+    "negative_names_sha256": "e9529fd598117f45c0dfeae8a42f5d21360e4ce1a7bbdc5b53ea83afe45aeabe",
+    "coverage": {
+      "unique_pairs_seen": 1449,
+      "hangul_unique_seen": 769,
+      "non_hangul_unique_seen": 680,
+      "max_repetitions": 3,
+      "target_tokens_seen": 12514
+    },
+    "sampled_indices_sha256": "6675eb64ab7e81603334c21da49f537a6399e93818e981dbccb8dadf685ad035",
+    "hangul_draws": 1720,
+    "non_hangul_draws": 680
+  },
+  "model": {
+    "type": "exaone4 causal LM with plain PyTorch linear LoRA",
+    "base_path": "C:\\Projects\\ML_midterm\\artifacts\\pretrained\\exaone-4.0-1.2b",
+    "base_sha256": {
+      "config.json": "ad7066d57fbcd93591fa0c6bc96953a58c7b890c25e62f64721cedb023a7de8f",
+      "generation_config.json": "425292e9803c79d440d3bfbf02b71a301ca3db439371161fc4388e1f076dfb82",
+      "model.safetensors": "fa02ceaa9abd917c7421a05e05a02dba7e3f23008e72270a7e766d44fc8b168c",
+      "special_tokens_map.json": "b91ce1519418fce1756efb80de1459069887df7b73a6b6bf08da6cd62ce62f37",
+      "tokenizer.json": "523b110391fc95d5c90ee3eaa05d65d21da1ef25b5766254307aceda9eb24a5b",
+      "tokenizer_config.json": "541bbf1dcafbe5e26b015eacdb785a2758e99f9a15e3b7fd548866311e62eda7",
+      "vocab.json": "b2044b7b1c5109cf181ac11967b8617d67b48ca571fbc5ebff996be75f9d64b2"
+    },
+    "parameters": {
+      "rank": 16,
+      "alpha": 32.0,
+      "model_type": "exaone4",
+      "attention_layer_count": 30,
+      "targets": [
+        "q_proj",
+        "v_proj"
+      ],
+      "modules": [
+        {
+          "name": "model.layers.0.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.0.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.1.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.1.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.2.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.2.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.3.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.3.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.4.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.4.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.5.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.5.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.6.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.6.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.7.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.7.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.8.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.8.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.9.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.9.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.10.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.10.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.11.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.11.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.12.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.12.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.13.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.13.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.14.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.14.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.15.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.15.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.16.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.16.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.17.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.17.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.18.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.18.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.19.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.19.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.20.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.20.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.21.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.21.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.22.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.22.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.23.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.23.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.24.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.24.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.25.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.25.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.26.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.26.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.27.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.27.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.28.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.28.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        },
+        {
+          "name": "model.layers.29.self_attn.q_proj",
+          "in_features": 2048,
+          "out_features": 2048,
+          "adapter_parameters": 65536
+        },
+        {
+          "name": "model.layers.29.self_attn.v_proj",
+          "in_features": 2048,
+          "out_features": 512,
+          "adapter_parameters": 40960
+        }
+      ],
+      "trainable_parameters": 3194880,
+      "total_parameters_with_adapters": 1282586368,
+      "steps": 300,
+      "batch_size": 4,
+      "accumulation": 2,
+      "learning_rate": 0.0002,
+      "scheduler": "warmup_cosine",
+      "warmup_steps": 15,
+      "weight_decay": 0.01,
+      "gradient_clip_norm": 1.0
+    },
+    "loss": {
+      "sft_reduction": "row",
+      "rank_beta": 0.1,
+      "rank_temperature": 1.0,
+      "negative_count": 2
+    }
+  },
+  "commands": [
+    "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe experiments/train_noisy_channel.py --experiment-id LM-EXAONE-01 --device cuda --steps 300 --pretrained artifacts/pretrained/exaone-4.0-1.2b --confusions-csv artifacts/INNER-CONFUSIONS-01/confusions.csv --confusions-record project_log/experiments/INNER-CONFUSIONS-01.json"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "safetensors": "0.8.0",
+      "pandas": "2.0.3",
+      "numpy": "1.26.4"
+    },
+    "device": "cuda",
+    "cuda": "12.8",
+    "gpu_name": "NVIDIA GeForce RTX 5080",
+    "threads": 2
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": 223.32011520047672,
+    "inference_seconds": null,
+    "timing_scope": "preparation includes hashes/data/tokenization/load; training is optimizer loop excluding internal dev/snapshot blocks; internal_dev_seconds includes validation and best snapshots; saving includes adapters/merge/tokenizer/checkpoint hashing",
+    "peak_memory_bytes": 10160643072,
+    "model_bytes": 5128791196,
+    "assets_bytes": null,
+    "submission_zip_bytes": null,
+    "preparation_seconds": 207.06212910008617,
+    "optimization_loop_seconds": 300.1475176999811,
+    "internal_dev_seconds": 76.82740249950439,
+    "saving_seconds": 5.811751999892294,
+    "total_seconds": 513.0244831000455,
+    "adapter_bytes": 12792568
+  },
+  "artifacts": [
+    "C:\\Projects\\ML_midterm\\artifacts\\LM-EXAONE-01"
+  ],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "Not a LoRA-only ablation against AS-HCX-04.",
+    "No accuracy, merge equivalence, throughput or memory claim without separate verification.",
+    "A name-only model cannot distinguish IDs with the same catalog name.",
+    "Public train was previously explored; heldout is not an untouched final test."
+  ],
+  "failure": null,
+  "decision": "Do not promote until the separate validation agent reports.",
+  "next_actions": [],
+  "checkpoint_selection": {
+    "method": "internal-best",
+    "dev_every": 25,
+    "split_sha256": "2f03693cfc8f9c4a6627b885108c23263b7fa319b815a9c8f1df9401807d3b30",
+    "dev_rows": 290,
+    "dev_vessels": 128,
+    "actual_dev_vessel_fraction": 0.02735042735042735,
+    "best_step": 125,
+    "best_dev_loss": 1.4342331731673619,
+    "criterion": "0.7/0.3 (or hangul-mass) language weighted SFT+rank; matching row/token SFT reduction",
+    "dev_augmentation": false,
+    "external_heldout_used_for_selection": false,
+    "dev_pairs": 129,
+    "dev_pairs_sha256": "65cfc65b293de0ddf1c090b14c51f26b04c93665d9fa5f617d9404819d2b16ab",
+    "dev_negatives_sha256": "972652ca928f5fb8c72d711a2953890551d0cf9593c60c4acb3b8989c0987e1a",
+    "dev_negative_policy": "fixed catalog lexical candidates; no fitted dev miner",
+    "saved_step": 125
+  },
+  "completed_optimizer_steps": 300,
+  "validation_status": "pending_external_agent",
+  "artifact_sha256": {
+    "adapter.safetensors": "e68533b35496d1aaf9c25ffcffe0059493e53d19ed0f6683a434c211e8f322ce",
+    "adapter_config.json": "e294d18b4d7cefb2cbca24f5bdf225566c72d931447424b7915053f73aab1a98",
+    "model/noisy_channel_manifest.json": "7c0509bb393b757e26e65821d5e40beedbc933bb91de0ed4feaf0347ec2f39cb",
+    "training_history.json": "da352530bb2bfb9e00e2b97231067d2b4d18d389a6d795019b4d34c2678b7c60"
+  }
+}

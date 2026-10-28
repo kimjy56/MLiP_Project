@@ -1,0 +1,148 @@
+{
+  "experiment_id": "SUB-115506",
+  "plan_id": null,
+  "status": "completed_user_reported_server_result",
+  "recorded_at_kst": "2026-10-26T00:31:33+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "Record user-reported AS-06 DACON submission result and compare previously reported AR-06/AS-05 scores.",
+  "hypothesis": "The AS-06 package may improve server matching; individual component contributions remain unidentified.",
+  "baseline_experiment_id": "AR-06",
+  "changed_factors": [
+    "AS-06 package as previously documented; submitted archive identity not independently verified in this task."
+  ],
+  "fixed_conditions": [
+    "User-provided official weighted metric: 0.7 Hangul accuracy + 0.3 non-Hangul accuracy."
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "git_revision_at_recording": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty_at_recording": true,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": "DACON leaderboard evaluation; exact server subset/version unverified",
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "AS-06 matching package; offline synthetic Hangul retrieval/scoring and lookup described in AS-06.json",
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [],
+  "environment": {},
+  "metrics": {
+    "metric_source": "Official server result pasted by user; not independently fetched from DACON",
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": 0.9122153056,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": "Leaderboard displayed duration: 366 seconds. Exact included server stages and evaluation row count unavailable; inference_seconds remains null.",
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "project_log/experiments/AS-06.json",
+    "project_log/experiments/ANALYSIS-AS05-SERVER-01.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "AS-06 score 0.9122153056 exceeds previously reported AR-06 0.9056363583 and AS-05 0.9054976988.",
+    "AS-06 displayed duration 366s versus AR-06 234s and AS-05 769s.",
+    "The new server result supersedes the prior knowledge state of no server evidence; historical local OOF leakage warnings remain valid."
+  ],
+  "interpretations": [
+    "Package-level leaderboard gain is observed in user-reported results.",
+    "Among these three reported submissions, AS-06 is the leading score reference for future comparisons.",
+    "No language-specific, retrieval-specific, lookup-specific or LoRA-specific gain can be isolated from this aggregate result."
+  ],
+  "limitations": [
+    "No private input, label or row-level prediction inspected.",
+    "Hangul/non-Hangul accuracies, counts, seen/unseen breakdown, candidate inclusion, paired uncertainty and exact server subset/version are unavailable.",
+    "No matched component ablation; cannot attribute the entire gain to synthetic Hangul or Safe Lookup.",
+    "Submitted archive hash is not available from the user table; local historical hash is provenance only.",
+    "Local AS-06 OOF/noise leakage warnings are not resolved by an official aggregate score."
+  ],
+  "failure": null,
+  "decision": "Use AS-06 as the score-leading reference among the three reported server submissions; preserve historical records and local validation caveats. No training, code edits, ZIP creation or upload requested/performed.",
+  "next_actions": [
+    "For a subsequent improvement task, separate retrieval/scoring/lookup contributions with controlled comparisons and audit synthetic-map fold provenance.",
+    "Preserve submitted AS-06 assets before further changes; do not regenerate the ZIP without explicit request."
+  ],
+  "submission": {
+    "submission_id": 115506,
+    "filename": "submit_AS-06.zip",
+    "submitted_at_kst": "2026-10-25T23:49:32+09:00",
+    "displayed_score_text": "0.9122153056",
+    "displayed_duration_text": "6분 6초",
+    "displayed_duration_seconds": 366,
+    "leaderboard_partition": null,
+    "source": "User-provided leaderboard row in current conversation",
+    "locally_recorded_zip_sha256": "B028D8E283775A1E420534C98F20EFF431C34339F2D4A471EF756D00D2971E22",
+    "submitted_zip_hash_verified": false
+  },
+  "comparisons": [
+    {
+      "submission_id": 114681,
+      "filename": "submit_AS-05.zip",
+      "weighted_accuracy": 0.9054976988,
+      "displayed_duration_seconds": 769,
+      "score_delta": 0.0067176068,
+      "percentage_point_delta": 0.67176068,
+      "displayed_duration_delta_seconds": -403
+    },
+    {
+      "submission_id": 113038,
+      "filename": "submit_AR-06.zip",
+      "weighted_accuracy": 0.9056363583,
+      "displayed_duration_seconds": 234,
+      "score_delta": 0.0065789473,
+      "percentage_point_delta": 0.65789473,
+      "displayed_duration_delta_seconds": 132
+    }
+  ],
+  "naming_correction": {
+    "corrected_at_kst": "2026-10-26T22:17:00+09:00",
+    "legacy_id": "SUB-AS06-115506",
+    "same_execution_not_a_new_experiment": true,
+    "original_record_path": "project_log/naming_history/20261026T221700/records/SUB-AS06-115506.json",
+    "original_record_sha256": "9d9e3ec79167b3b4ab97568ca8a7db08cdbf3888c2ae35d0d7e1894dfae94d9e",
+    "reason": "AS is a submission ZIP filename prefix; experimental runs use descriptive IDs.",
+    "preserved_execution_fields": [
+      "commands",
+      "cost",
+      "data",
+      "diagnostics",
+      "metrics",
+      "model",
+      "phase_results",
+      "preprocessing",
+      "retrieval",
+      "training_pairs",
+      "validation"
+    ],
+    "path_alias_registry": "project_log/EXPERIMENT_NAMING.json"
+  }
+}

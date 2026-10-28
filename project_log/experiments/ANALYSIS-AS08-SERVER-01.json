@@ -1,0 +1,333 @@
+{
+  "experiment_id": "ANALYSIS-AS08-SERVER-01",
+  "plan_id": null,
+  "status": "completed",
+  "recorded_at_kst": "2026-10-27T22:55:44+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": "2026-10-27T23:03:45+09:00",
+  "purpose": "Audit actual AS06/07/08 submitted-package structure and saved evaluation evidence; identify recovery priorities",
+  "hypothesis": "Server loss may arise from packaging/runtime fallback and simultaneous removals rather than the encoder's standalone retrieval ability",
+  "baseline_experiment_id": "SUB-115506",
+  "changed_factors": [
+    "Read-only archive/code/evidence audit; documentation and improvement plan only"
+  ],
+  "fixed_conditions": [
+    "All prior archives/weights/data/completed JSON preserved",
+    "No training/tuning/new model performance experiment/no new ZIP",
+    "No private input/label/row-prediction logging",
+    "Official metric unchanged; package-level score evidence separated from hypotheses"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "submit_AS-06.zip": "b028d8e283775a1e420534c98f20eff431c34339f2d4a471ef756d00d2971e22",
+      "submit_AS-07.zip": "6cc36d661e59057922ec6472ba50796477a668c1a6a0e9b1dcc8de1c74b4b079",
+      "submit_AS-08.zip": "a2e6e6d380910a7cdfa99587135d04e59af4e7844b6666c6f47aa2b63e5a6d9e"
+    },
+    "audit_source_sha256": {
+      "experiments/analyze_as08_server_result.py": "05e1fbf836d8b27dbed8e3cbd837901bddcc50818481da658120e4867c1d852b"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    ".\\.venv-server\\Scripts\\python.exe -B -X utf8 experiments/analyze_as08_server_result.py --output reports/as08_server_analysis/archive_audit.json"
+  ],
+  "environment": {
+    "python": "3.11.15 (main, Mar  3 2026, 14:55:34) [MSC v.1944 64 bit (AMD64)]",
+    "executable": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+    "target_python": "3.11.17",
+    "model_execution": false,
+    "probe_isolation": "-I -B; repo root absent; sockets and torch.load blocked",
+    "version_differences": "Current3.11.15; prior environment audit records five package differences",
+    "prior_environment_report": "reports/refactoring/REFACTOR-RETRIEVAL-03/environment.json"
+  },
+  "metrics": {
+    "metric_source": "Archive/import audit only; no new accuracy or candidate-inclusion measurements",
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "docs/AS08_SERVER_ANALYSIS.md",
+    "experiments/analyze_as08_server_result.py",
+    "reports/as08_server_analysis/archive_audit.json",
+    "reports/as08_server_analysis/evidence_review.json",
+    "project_log/experiments/PLAN-SERVER-RECOVERY-01.json",
+    "reports/as08_server_analysis/validation.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Both AS07 and AS08 archive Python packages import .loss but omit loss.py",
+    "Isolated entrypoint import sets Dense class unavailable for both exact archive source sets",
+    "Adding loss.py or using inference-only __init__ in temporary sources makes both imports available",
+    "AS07 and AS08 have identical full_encoder.pt hashes; tokenizer/model representations and catalog embedding hashes differ",
+    "AS07/08 changed common JSON key is catalog_full_ko_map; map78586->0, manual lexicon299->0, lattice removed",
+    "Existing multiview standalone report: Hangul Top1 138->147/239 but Recall@35 227->226/239; not new inference"
+  ],
+  "interpretations": [
+    "Deployment dependency/fallback mismatch is the first issue to resolve before judging Dense utility",
+    "AS07 score equality with AS06 is consistent with fallback, but does not prove identical private predictions",
+    "AS08 may have lost legacy Korean support without an active Dense replacement; separate component contributions unmeasured",
+    "Old local checker/row-independence success does not verify intended Dense activation"
+  ],
+  "limitations": [
+    "No actual server logs or hidden test data; server Dense activation and per-language error causes unavailable",
+    "No new model load/inference/fitting/tuning or archive creation; import repair is not end-to-end correctness",
+    "Historical standalone/ablation scores are stored reports, not newly verified controlled comparisons",
+    "Current training source selects best checkpoint using outer fold Recall35; historical checkpoint provenance incomplete",
+    "Current robustness baseline cache lacks source/model/data/order hashes; historical cache validity unverified",
+    "Original code and completed experiment JSON are preserved, including superseded broad claims"
+  ],
+  "failure": null,
+  "decision": "Keep AS06/07 score reference; prioritize inference packaging/activation checks and preserved-legacy Dense-only comparison",
+  "next_actions": [
+    "Follow planned P0 package activation verification without creating a ZIP",
+    "Only when implementation/evaluation is requested, compare candidate union and scoring separately with fold-specific assets",
+    "Do not overwrite old submissions or retune on outerfold0"
+  ],
+  "validation_plan": [
+    "Archive file/import dependency audit, saved asset hash/name/schema comparison",
+    "Isolated import-only probes of archive Python modules without loading models or executing main",
+    "Review local validation folds, checkpoint selection and cached-baseline lineage",
+    "Exact decimal server-score comparison; propose fixed-factor paired comparisons"
+  ],
+  "verification_attempts": [
+    {
+      "status": "failed",
+      "phase": "import-only probe setup",
+      "error": "PermissionError creating/cleaning default sandbox temp directory",
+      "retry": "Explicit temporary directories under verified workspace scratch root; archive expectations unchanged"
+    }
+  ],
+  "package_import_results": {
+    "07": {
+      "direct_package_import": {
+        "passed": false,
+        "type": "ModuleNotFoundError",
+        "message": "No module named 'model.phonetic_encoder.loss'"
+      },
+      "entrypoint_dense_class_available": false,
+      "loaded_module_path": null,
+      "model_load_calls": 0,
+      "repository_path_available": false
+    },
+    "08": {
+      "direct_package_import": {
+        "passed": false,
+        "type": "ModuleNotFoundError",
+        "message": "No module named 'model.phonetic_encoder.loss'"
+      },
+      "entrypoint_dense_class_available": false,
+      "loaded_module_path": null,
+      "model_load_calls": 0,
+      "repository_path_available": false
+    }
+  },
+  "comparisons": {
+    "06_07": {
+      "same_model_keys": [
+        "callsign_lookup",
+        "catalog_full_ko_map",
+        "en_mode",
+        "flag_log_lift",
+        "flag_trans_prob",
+        "kr_mode",
+        "learned_syl_top2",
+        "learned_syl_top3",
+        "learned_word_map",
+        "learned_word_top2",
+        "name_lookup",
+        "type_log_lift",
+        "type_trans_prob",
+        "unique_callsign_lookup",
+        "unique_name_lookup",
+        "use_train_lookup_default",
+        "version"
+      ],
+      "changed_model_keys": [],
+      "model_keys_added": [
+        "dense_mode",
+        "dense_weight"
+      ],
+      "model_keys_removed": [],
+      "changed_definitions": [
+        "main",
+        "predict_rows"
+      ],
+      "definitions_added": [],
+      "definitions_removed": [],
+      "changed_constants": {}
+    },
+    "07_08": {
+      "same_model_keys": [
+        "callsign_lookup",
+        "dense_mode",
+        "dense_weight",
+        "en_mode",
+        "flag_log_lift",
+        "flag_trans_prob",
+        "kr_mode",
+        "learned_syl_top2",
+        "learned_syl_top3",
+        "learned_word_map",
+        "learned_word_top2",
+        "name_lookup",
+        "type_log_lift",
+        "type_trans_prob",
+        "unique_callsign_lookup",
+        "unique_name_lookup",
+        "use_train_lookup_default",
+        "version"
+      ],
+      "changed_model_keys": [
+        "catalog_full_ko_map"
+      ],
+      "model_keys_added": [],
+      "model_keys_removed": [],
+      "changed_definitions": [
+        "load_default_full_ko_map",
+        "main",
+        "predict_rows"
+      ],
+      "definitions_added": [],
+      "definitions_removed": [
+        "lattice_word_similarity"
+      ],
+      "changed_constants": {
+        "IDEA_B_WORD_VARS": {
+          "before": {
+            "length": 299,
+            "ast_sha256": "7d4a8e60a002e26bac2e1c24a35e92eff9a503ee304e8da83471063f83f5f5f5"
+          },
+          "after": {
+            "length": 0,
+            "ast_sha256": "0155f1e9b79e0a9466ae5e1efd72faa45619b4c1c2ac86a6c91d7c2a5cd1f2a6"
+          }
+        },
+        "USE_FULL_KO_MAP": {
+          "before": null,
+          "after": false
+        }
+      }
+    },
+    "06_08": {
+      "same_model_keys": [
+        "callsign_lookup",
+        "en_mode",
+        "flag_log_lift",
+        "flag_trans_prob",
+        "kr_mode",
+        "learned_syl_top2",
+        "learned_syl_top3",
+        "learned_word_map",
+        "learned_word_top2",
+        "name_lookup",
+        "type_log_lift",
+        "type_trans_prob",
+        "unique_callsign_lookup",
+        "unique_name_lookup",
+        "use_train_lookup_default",
+        "version"
+      ],
+      "changed_model_keys": [
+        "catalog_full_ko_map"
+      ],
+      "model_keys_added": [
+        "dense_mode",
+        "dense_weight"
+      ],
+      "model_keys_removed": [],
+      "changed_definitions": [
+        "load_default_full_ko_map",
+        "main",
+        "predict_rows"
+      ],
+      "definitions_added": [],
+      "definitions_removed": [
+        "lattice_word_similarity"
+      ],
+      "changed_constants": {
+        "IDEA_B_WORD_VARS": {
+          "before": {
+            "length": 299,
+            "ast_sha256": "7d4a8e60a002e26bac2e1c24a35e92eff9a503ee304e8da83471063f83f5f5f5"
+          },
+          "after": {
+            "length": 0,
+            "ast_sha256": "0155f1e9b79e0a9466ae5e1efd72faa45619b4c1c2ac86a6c91d7c2a5cd1f2a6"
+          }
+        },
+        "USE_FULL_KO_MAP": {
+          "before": null,
+          "after": false
+        }
+      }
+    }
+  },
+  "server_score_comparison": {
+    "score_delta": "-0.0118421052",
+    "percentage_point_delta": "-1.1842105200",
+    "duration_delta_vs_AS07_seconds": -136
+  },
+  "verification": {
+    "recorded_at_kst": "2026-10-27T23:04:46+09:00",
+    "passed": true,
+    "archive_checks": [
+      {
+        "package": "07",
+        "original_import_failed": true,
+        "two_temporary_repairs_imported": true,
+        "model_loads": 0
+      },
+      {
+        "package": "08",
+        "original_import_failed": true,
+        "two_temporary_repairs_imported": true,
+        "model_loads": 0
+      }
+    ],
+    "protected_unique_files_unchanged": 231,
+    "data_models_snapshots_evaluation_files_preserved": true,
+    "report_links_and_json_index": true,
+    "audit_script_compile_help": true,
+    "git_diff_check": true,
+    "new_model_predictions": false,
+    "new_model_training": false,
+    "new_or_updated_submission_zip": false
+  }
+}

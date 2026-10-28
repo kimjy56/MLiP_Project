@@ -1,0 +1,69 @@
+{
+  "experiment_id": "DPR-ABLATE-LEXICON-01",
+  "heldout_fold": 0,
+  "rows": 2372,
+  "seed": 20261022,
+  "dense_weight": 2.5,
+  "manual_dict_size": 299,
+  "evaluations": {
+    "clean": {
+      "retained": {
+        "hangul_accuracy": 1.0,
+        "hangul_correct": 239,
+        "hangul_rows": 239,
+        "non_hangul_accuracy": 0.9985935302390999,
+        "non_hangul_correct": 2130,
+        "non_hangul_rows": 2133,
+        "weighted_accuracy": 0.9995780590717299,
+        "inference_time_sec": 38.97447350004222
+      },
+      "ablated": {
+        "hangul_accuracy": 1.0,
+        "hangul_correct": 239,
+        "hangul_rows": 239,
+        "non_hangul_accuracy": 0.9985935302390999,
+        "non_hangul_correct": 2130,
+        "non_hangul_rows": 2133,
+        "weighted_accuracy": 0.9995780590717299,
+        "inference_time_sec": 38.48205969994888
+      },
+      "diff": {
+        "num_fixes": 0,
+        "num_breaks": 0,
+        "net_gain": 0,
+        "fixes": [],
+        "breaks": []
+      }
+    },
+    "severe": {
+      "noise_applied_rate": 0.8026981450252951,
+      "retained": {
+        "hangul_accuracy": 0.9916317991631799,
+        "hangul_correct": 237,
+        "hangul_rows": 239,
+        "non_hangul_accuracy": 0.9971870604781997,
+        "non_hangul_correct": 2127,
+        "non_hangul_rows": 2133,
+        "weighted_accuracy": 0.9932983775576858,
+        "inference_time_sec": 32.346873999922536
+      },
+      "ablated": {
+        "hangul_accuracy": 0.9916317991631799,
+        "hangul_correct": 237,
+        "hangul_rows": 239,
+        "non_hangul_accuracy": 0.9971870604781997,
+        "non_hangul_correct": 2127,
+        "non_hangul_rows": 2133,
+        "weighted_accuracy": 0.9932983775576858,
+        "inference_time_sec": 32.24510770000052
+      },
+      "diff": {
+        "num_fixes": 0,
+        "num_breaks": 0,
+        "net_gain": 0,
+        "fixes": [],
+        "breaks": []
+      }
+    }
+  }
+}

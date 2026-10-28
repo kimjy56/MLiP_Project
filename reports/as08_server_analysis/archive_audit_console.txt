@@ -1,0 +1,42 @@
+Traceback (most recent call last):
+  File "C:\Projects\ML_midterm\experiments\analyze_as08_server_result.py", line 96, in isolated_probe
+    target.parent.mkdir(parents=True, exist_ok=True)
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\pathlib.py", line 1116, in mkdir
+    os.mkdir(self, mode)
+PermissionError: [WinError 5] ?≪꽭?ㅺ? 嫄곕??섏뿀?듬땲?? 'C:\\Users\\jy200\\AppData\\Local\\Packages\\sandbox.{63ae605d-5800-496d-9d3c-9620f3f51cdd}\\AC\\Temp\\vessel-archive-import-vx3avbim\\bundle'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\shutil.py", line 636, in _rmtree_unsafe
+    os.rmdir(path)
+PermissionError: [WinError 5] ?≪꽭?ㅺ? 嫄곕??섏뿀?듬땲?? 'C:\\Users\\jy200\\AppData\\Local\\Packages\\sandbox.{63ae605d-5800-496d-9d3c-9620f3f51cdd}\\AC\\Temp\\vessel-archive-import-vx3avbim'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Projects\ML_midterm\experiments\analyze_as08_server_result.py", line 170, in <module>
+    main()
+  File "C:\Projects\ML_midterm\experiments\analyze_as08_server_result.py", line 130, in main
+    item["isolated_import"]=isolated_probe(archive)
+                            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\ML_midterm\experiments\analyze_as08_server_result.py", line 86, in isolated_probe
+    with tempfile.TemporaryDirectory(prefix="vessel-archive-import-") as temp:
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\tempfile.py", line 943, in __exit__
+    self.cleanup()
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\tempfile.py", line 947, in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\tempfile.py", line 929, in _rmtree
+    _shutil.rmtree(name, onerror=onerror)
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\shutil.py", line 787, in rmtree
+    return _rmtree_unsafe(path, onerror)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\shutil.py", line 638, in _rmtree_unsafe
+    onerror(os.rmdir, path, sys.exc_info())
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\tempfile.py", line 890, in onerror
+    _resetperms(path)
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\tempfile.py", line 287, in _resetperms
+    _dont_follow_symlinks(_os.chmod, path, 0o700)
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\tempfile.py", line 278, in _dont_follow_symlinks
+    func(path, *args)
+PermissionError: [WinError 5] ?≪꽭?ㅺ? 嫄곕??섏뿀?듬땲?? 'C:\\Users\\jy200\\AppData\\Local\\Packages\\sandbox.{63ae605d-5800-496d-9d3c-9620f3f51cdd}\\AC\\Temp\\vessel-archive-import-vx3avbim'

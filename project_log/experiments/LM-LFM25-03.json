@@ -1,0 +1,293 @@
+{
+  "experiment_id": "LM-LFM25-03",
+  "plan_id": null,
+  "status": "trained_unvalidated",
+  "recorded_at_kst": "2026-10-25T21:13:25+09:00",
+  "started_at_kst": "2026-10-25T21:13:25+09:00",
+  "finished_at_kst": "2026-10-25T21:16:07+09:00",
+  "purpose": "Reverse name-channel LoRA training",
+  "hypothesis": "LFM2.5 may improve name discrimination; unmeasured.",
+  "baseline_experiment_id": "LM-RANK-GPU-04",
+  "changed_factors": [
+    "base model/tokenizer: LFM2.5-350M",
+    "attention-only q/v LoRA on hybrid blocks"
+  ],
+  "fixed_conditions": [
+    "outer fold0 heldout",
+    "300steps seed42 batch4 accum2 rank16 alpha32",
+    "same positives/augmentations and inner AR06 negatives; rowCE beta0.1 tau1",
+    "existing transformers4.57.6; no dependency upgrade"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/channel_training.py": "02529ee98ed73cd57facd326d61344c9f92d6fe04a0f54e3ca03d5c27ee6e3eb",
+      "name_decoder/noise_augmenter.py": "51315596aad8ac26f358d3f44fd94780714c99dc8423dde02446c167b6d7e3d5",
+      "name_decoder/lora.py": "f33f07c58dbec2766c08bbba53c94946e7c24fee6bbaf3a96f4547f7b4b55804",
+      "name_decoder/noisy_channel.py": "36c88596b2334bf0f8d5f332229abedfbeccb9e939a36eca197f58c4c9874f8f",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "experiments/noisy_channel_common.py": "d55c127ca5581abf8631ce67de441e21585f6c4dc7d2dc5deb7591d50c1098c8",
+      "experiments/train_noisy_channel.py": "37c911d38682388f878847109f50ee051361941afe9972b9c3927f521f3acb6f",
+      "experiments/score_noisy_channel_candidates.py": "47d1053c1ac9acafa4e85061934cdad3b495c4286ea37358ed5f071d02c4992a"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    },
+    "split_id": "folds_group5_seed42.csv",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42,
+    "heldout_fold": 0,
+    "training_rows": 9850,
+    "validation_rows": 2372,
+    "training_vessels": 4680,
+    "validation_is_independent_final_test": false,
+    "training_vessel_ids_sha256": "f7094848b233532e5000ac39697a10704d0db4860ea25160fa8c1ad598aaeb0e"
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {
+    "catalog": "NFC-uppercase-collapse-whitespace",
+    "observed": "NFC-strip-preserve-case-internal-space-digits-punctuation",
+    "deduplicate": [
+      "catalog_name",
+      "observed_name"
+    ],
+    "pair_sort_order": [
+      "catalog_name",
+      "observed_name"
+    ],
+    "prompt_version": "catalog-to-observed-name-v2-task-prefix",
+    "max_length": 256,
+    "truncation": "error",
+    "prompt_labels": -100,
+    "padding_labels": -100,
+    "target": "separately tokenized observed name plus EOS"
+  },
+  "training_pairs": {
+    "positive_rule": "training-fold target ID -> catalog name; raw observed name normalized",
+    "negative_rule": "inner-cross-fitted AR06 confusions, exact original pair; lexical fallback",
+    "count": 7265,
+    "raw_pairs_count": 4685,
+    "augmented_pairs_count": 2580,
+    "augment_factor": 0.5,
+    "hangul_pairs": 819,
+    "non_hangul_pairs": 6446,
+    "ordered_pairs_sha256": "02a099cc6fdebf3c0946e0fd67c20c599a0bfd21da55261696bb8f7a08f52754",
+    "sampling": "cycle",
+    "learned_hangul_token_count": 304,
+    "hangul_probability_mass": 0.7,
+    "draws_planned": 2400,
+    "confusions_sha256": "fe63c9dc3dbb20749d4360a551c77483b138a7e855e1515dfbc99136678a66af",
+    "confusions_record_sha256": "e1e339ba685f857005f15bdf1d078844a870a89127b5cfda52afb520889d9187",
+    "pairs_with_mined_negatives": 4685,
+    "mined_negative_slots": 9370,
+    "lexical_fallback_slots": 5160,
+    "negative_names_sha256": "c28b40406053240440438a85fec5d5f7c69e8f92762b65583f4759b03ff81034",
+    "coverage": {
+      "unique_pairs_seen": 1502,
+      "hangul_unique_seen": 819,
+      "non_hangul_unique_seen": 683,
+      "max_repetitions": 3,
+      "target_tokens_seen": 17163
+    },
+    "sampled_indices_sha256": "ad8373c6839343e76215d46905e955dba1ca2800458ae8b7764ee157d1316720",
+    "hangul_draws": 1717,
+    "non_hangul_draws": 683
+  },
+  "model": {
+    "type": "lfm2 causal LM with plain PyTorch q_proj/v_proj LoRA",
+    "base_path": "C:\\Projects\\ML_midterm\\artifacts\\pretrained\\lfm2.5-350m",
+    "base_sha256": {
+      "config.json": "720b43d6ddc2ed25be23eed355aefcf342434a176dedad23dbe0a5e3ac24bbb8",
+      "download_manifest.json": "4eb0d5f69e5fad5102108be0333ac64cf83c53ebafd5fbf0c2bdef24b66a14ba",
+      "generation_config.json": "0ec7d228c4de7e3453e98bf6910c7eb7841e87fede63ea11c0f75a5c64e1c3c3",
+      "model.safetensors": "1c9c77a4471a7f590f85240f74ed1fc26df7fbde88c3006724e2f93ca993ea4e",
+      "tokenizer.json": "df1d8d5ec5d091b460562ffd545e4a5e91d17d4a0db7ebe733be34ed374377bd",
+      "tokenizer_config.json": "3701f370c70034d06e28947ff51c1063983393319f429e3ce58f06a45fae67cc"
+    },
+    "parameters": {
+      "rank": 16,
+      "alpha": 32.0,
+      "model_type": "lfm2",
+      "attention_layer_count": 6,
+      "targets": [
+        "q_proj",
+        "v_proj"
+      ],
+      "modules": [
+        {
+          "name": "model.layers.2.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.2.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 512,
+          "adapter_parameters": 24576
+        },
+        {
+          "name": "model.layers.5.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.5.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 512,
+          "adapter_parameters": 24576
+        },
+        {
+          "name": "model.layers.8.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.8.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 512,
+          "adapter_parameters": 24576
+        },
+        {
+          "name": "model.layers.10.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.10.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 512,
+          "adapter_parameters": 24576
+        },
+        {
+          "name": "model.layers.12.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.12.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 512,
+          "adapter_parameters": 24576
+        },
+        {
+          "name": "model.layers.14.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 32768
+        },
+        {
+          "name": "model.layers.14.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 512,
+          "adapter_parameters": 24576
+        }
+      ],
+      "trainable_parameters": 344064,
+      "total_parameters_with_adapters": 354828032,
+      "steps": 300,
+      "batch_size": 4,
+      "accumulation": 2,
+      "learning_rate": 0.0002,
+      "scheduler": "warmup_cosine",
+      "warmup_steps": 15,
+      "weight_decay": 0.01,
+      "gradient_clip_norm": 1.0
+    },
+    "loss": {
+      "sft_reduction": "row",
+      "rank_beta": 0.1,
+      "rank_temperature": 1.0,
+      "negative_count": 2
+    }
+  },
+  "commands": [
+    "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe experiments/train_noisy_channel.py --experiment-id LM-LFM25-03 --device cuda --steps 300 --pretrained artifacts/pretrained/lfm2.5-350m --confusions-csv artifacts/INNER-CONFUSIONS-01/confusions.csv --confusions-record project_log/experiments/INNER-CONFUSIONS-01.json"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "safetensors": "0.8.0",
+      "pandas": "2.0.3",
+      "numpy": "1.26.4"
+    },
+    "device": "cuda",
+    "cuda": "12.8",
+    "gpu_name": "NVIDIA GeForce RTX 5080",
+    "threads": 2
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": 89.72952279995661,
+    "inference_seconds": null,
+    "timing_scope": "preparation includes hashes/data/tokenization/load; training is optimizer loop; saving includes adapters/merge/tokenizer/checkpoint hashing",
+    "peak_memory_bytes": 3821118976,
+    "model_bytes": 1422794149,
+    "assets_bytes": null,
+    "submission_zip_bytes": null,
+    "preparation_seconds": 64.1140453000553,
+    "saving_seconds": 1.4620477999560535,
+    "total_seconds": 155.30838689999655,
+    "adapter_bytes": 1378824
+  },
+  "artifacts": [
+    "C:\\Projects\\ML_midterm\\artifacts\\LM-LFM25-03"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "LFM25-01 failed on v5 tokenizer class name; LFM25-02 failed on empty-list extra_special_tokens v5/v4 mismatch.",
+    "Compatibility loader uses same tokenizer files with PreTrainedTokenizerFast and empty v4 token mapping; actual EOS7 confirmed."
+  ],
+  "interpretations": [],
+  "limitations": [
+    "Not a LoRA-only ablation against AS-HCX-04.",
+    "No accuracy, merge equivalence, throughput or memory claim without separate verification.",
+    "A name-only model cannot distinguish IDs with the same catalog name.",
+    "Public train was previously explored; heldout is not an untouched final test."
+  ],
+  "failure": null,
+  "decision": "No fixed-fusion gain; LFM retained as research checkpoint.",
+  "next_actions": [
+    "Verify actual checkpoint load/training/save/reload; accuracy pending."
+  ],
+  "completed_optimizer_steps": 300,
+  "validation_status": "clean_fold0_evaluated",
+  "artifact_sha256": {
+    "adapter.safetensors": "438640c587185918c581dbb37fbca0fc65b603dbd387178c4b1353cb2c6f50fe",
+    "adapter_config.json": "8ee232f46bb6dd231b0b6b002a3e0783256900d87eb56706542ce50737cc8f3c",
+    "model/noisy_channel_manifest.json": "e7f6816962493667b233bcbf6536d87e4c491773e419848f1161ed977957e9ae",
+    "training_history.json": "7d4314e32d225536a4795edf7ea2c065684f6b2157f7fa093866e93c7dd4013f"
+  },
+  "checkpoint_verification": {
+    "checked_at_kst": "2026-10-25T21:16:31+09:00",
+    "manifest_hashes_verified": true,
+    "reloaded_actual_model_type": "lfm2",
+    "synthetic_cuda_score_finite": true,
+    "accuracy_evaluated": false
+  },
+  "evaluation_experiment_id": "EVAL-LFM25-03"
+}

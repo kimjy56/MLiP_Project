@@ -1,0 +1,121 @@
+{
+  "experiment_id": "VERIFY-AS08-FIXED-RESULT-01",
+  "plan_id": null,
+  "status": "completed_result_reconciliation",
+  "recorded_at_kst": "2026-10-28T22:09:58+09:00",
+  "started_at_kst": "2026-10-28T22:09:58+09:00",
+  "finished_at_kst": "2026-10-28T22:09:58+09:00",
+  "purpose": "Reconcile user-reported fixed AS08 submission117597 separately from original117501 and correct the AS09 comparison baseline.",
+  "hypothesis": "Fixed AS08 has a higher aggregate score than original AS08; the reported score/time alone cannot isolate Dense or dictionary causal contributions.",
+  "baseline_experiment_id": "SUB-117501",
+  "changed_factors": [
+    "Documentation and result reconciliation only"
+  ],
+  "fixed_conditions": [
+    "Keep completed submission records and ZIP bytes unchanged",
+    "No training, inference, ZIP generation or private test input access",
+    "Official metric unchanged"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "project_log/experiments/SUB-117501.json": "1e5b63ad895a7101703b49ecf3e552c4a8d2af8e4016e8ea38b24b55786f9bf7",
+      "project_log/experiments/SUB-117597.json": "921b50dd7c11f782b28b77d3fd85c93128b4af439df7cec9779100e51a048b19",
+      "project_log/experiments/SUB-117799.json": "f93f7c68b0eff10852a3dad21f0d071ff41fd3dfe382811dc6cc686fff9f5446",
+      "project_log/experiments/AS-08.json": "b72204ac230221683f82031e81ddfe871960a3f2c0d9d60dfd46067e2099958e",
+      "project_log/experiments/AS-09.json": "dd2e2c9f124cebed91e44312442ddd541509fad7c9a8556e8099a183a7cc58c0",
+      "project_log/experiments/VERIFY-AS09-RESULT-01.json": "98f654a485074d12a45f03d3b2502ebb2f349e50a31f6defa116f34411a1df74",
+      "submit_AS-08.zip": "76f6dfe0be29dd52540fe687ae73ebee5f454eea2e269f60bd0e68be0153791e",
+      "submit_AS-09.zip": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325",
+      "submit.zip": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    ".venv-server/Scripts/python.exe -B -X utf8 (Decimal, JSON, archive metadata and SHA256 verification)"
+  ],
+  "environment": {
+    "executable": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+    "python": "3.11.15",
+    "target_python": "3.11.17",
+    "environment_matches_target": false,
+    "model_execution_performed": false
+  },
+  "metrics": {
+    "metric_source": "Verification of already recorded user-reported server result; no new accuracy evaluation",
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": "User row displays327seconds; timing stage scope unknown, not a new timing run",
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "reports/submission_results/VERIFY-AS08-FIXED-RESULT-01/verification.json",
+    "project_log/experiments/SUB-117597.json",
+    "docs/AS09_SERVER_RESULT.md",
+    "docs/AS08_SERVER_ANALYSIS.md"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "User row exactly matches existing SUB117597; no duplicate submission created.",
+    "Original117501 and corrected117597 remain separate despite identical ZIP filename.",
+    "AS09 minus corrected AS08 equals0.0118421053; displayed time delta170seconds."
+  ],
+  "interpretations": [
+    "Recovery after reported packaging correction is observed at package level; isolated Dense contribution is not established."
+  ],
+  "limitations": [
+    "Official values are user-reported; no independent site fetch or server logs.",
+    "Same ZIP filename represents separate submissions117501 and117597. Server-uploaded bytes cannot be bound to the current local ZIP by the leaderboard row alone.",
+    "The result is consistent with recovery after the reported packaging fix; aggregate score and increased duration do not directly prove Dense activation or isolate its causal gain.",
+    "The remaining difference from AS06/07 does not prove that removing manual/catalog dictionaries caused loss. Architecture, normalization, retrieval, scoring and packaging confounds remain.",
+    "Language-specific accuracy/counts, candidate inclusion, seen/unseen, Fix/Break, confidence intervals and timing stages remain unmeasured.",
+    "Existing SUB117597 causal-confirmation phrases are historical claims; this scoped verification qualifies them without overwriting completed JSON.",
+    "TEAM_RULES v4 is present; eval_kit README actual1.0 differs from requested1.1. Windows Python3.11.15 differs from target3.11.17; historical server_environment.json describes Linux."
+  ],
+  "failure": null,
+  "decision": "Use corrected117597 for latest-AS08 comparisons; retain original records and AS09 as highest observed score.",
+  "next_actions": [
+    "Component comparisons only in a separate authorized improvement task."
+  ],
+  "verification": {
+    "protected_files_unchanged": true,
+    "protected_count": 9,
+    "submission_deduplicated": true,
+    "exact_decimal_comparison_passed": true,
+    "model_execution_performed": false
+  }
+}

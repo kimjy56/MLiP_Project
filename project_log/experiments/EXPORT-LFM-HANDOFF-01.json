@@ -1,0 +1,194 @@
+{
+  "experiment_id": "EXPORT-LFM-HANDOFF-01",
+  "status": "completed_artifact_export",
+  "purpose": "Answer LFM catalog-map provenance and train-name use; export the AS-09 DPR-SYMPHON-02 full_encoder.pt to safetensors and provide related source code.",
+  "hypothesis": "A serialization-only export can preserve every tensor, tokenizer vocabulary, configuration and encoded output.",
+  "baseline_experiment_id": "DPR-SYMPHON-02",
+  "changed_factors": [
+    "Checkpoint serialization and a separate source-code handoff only"
+  ],
+  "fixed_conditions": [
+    "Original checkpoint bytes remain untouched",
+    "No training, score comparison or submission ZIP generation"
+  ],
+  "planned_validation": [
+    "Source checkpoint SHA256 versus AS-09 package",
+    "Exact tensor and metadata round-trip",
+    "Embeddings from original PT and safetensors using the AS-09 source snapshot",
+    "Source syntax and CLI help checks"
+  ],
+  "metrics": {
+    "metric_source": "serialization and synthetic-input compatibility checks only",
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "limitations": [
+    "Historical generation has no generation-side manifest binding the catalog map to its model; distinguish recorded lineage from an independently reproduced generation.",
+    "Current training sources differ from historical source hashes; preserve and label source versions.",
+    "Actual environment Python3.11.15 and safetensors0.8.0 differ from target3.11.17/0.6.2; no dependency changes.",
+    "No new training, official evaluation, full map regeneration, server execution, submission ZIP creation, upload or message send.",
+    "Closest retained DPR02 training snapshot and current LFM training sources are labeled; no byte-identical historical training-source claim."
+  ],
+  "decision": "Deliver AS-09 encoder safetensors plus generator and training source bundle; preserve original models and best-submission decisions.",
+  "recorded_at_kst": "2026-10-28T23:26:26+09:00",
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "tools/export_encoder_safetensors.py": "eefc32145885a93220339e7d5e44d0a7a0a4f804b7d37554f50d831ecb35d2b4"
+    }
+  },
+  "started_at_kst": "2026-10-28T23:26:26+09:00",
+  "finished_at_kst": "2026-10-28T23:31:20+09:00",
+  "data": {
+    "source_files_sha256": {},
+    "split_id": "historical generator G5-s42 fold0; no new fit or scoring",
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "preprocessing": {
+    "checkpoint": "No value/dtype changes; encoder/fusion tensors flattened with separate prefixes; original metadata embedded as JSON"
+  },
+  "model": {
+    "type": "AS-09 DPR-SYMPHON-02 phonetic bi-encoder; separate from LiquidAI/LFM2.5-350M catalog generator",
+    "parameters": {
+      "tensor_count": 61,
+      "tensor_elements": 1375976
+    },
+    "loss": null
+  },
+  "commands": [
+    {
+      "interpreter": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+      "method": "stdin Python orchestration",
+      "operation": "copy explicitly selected sources; call tools.export_encoder_safetensors.export_checkpoint(train_AS-09/model/full_encoder.pt, handoff/LFM_HANDOFF_20261028/full_encoder.safetensors)"
+    },
+    {
+      "interpreter": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+      "method": "stdin Python verification in handoff/LFM_HANDOFF_20261028",
+      "operation": "Exact checkpoint roundtrip, frozen AS-09 query/catalog embeddings comparison on 3 synthetic names each; AST parse and four CLI --help checks"
+    },
+    {
+      "method": "Python zipfile",
+      "operation": "Create handoff/LFM_HANDOFF_20261028.zip from handoff directory; CRC and raw-input absence checks"
+    }
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "torch": "2.7.1+cu128",
+    "numpy": "1.26.4",
+    "safetensors": "0.8.0",
+    "transformers": "4.57.6",
+    "device": "cpu",
+    "compute_dtype_for_embedding_comparison": "float32",
+    "checkpoint_dtype_preserved": "float16"
+  },
+  "diagnostics": {
+    "source_sha256": "ec69eb5959dc414953eb66efbdde69274e5170bb8cddd29bacafbe9d8520d489",
+    "output_sha256": "e73567af6ebd3bd32489e3993eefc4858a1b9d7c3ada6563a58e3c22cc700ff0",
+    "source_bytes": 2773947,
+    "output_bytes": 2759992,
+    "tensor_count": 61,
+    "tensor_elements": 1375976,
+    "exact_tensor_roundtrip": true,
+    "exact_metadata_roundtrip": true,
+    "as09_artifact_checkpoint_matches": true,
+    "as09_zip_checkpoint_matches": true,
+    "embedding_checks": {
+      "queries": {
+        "rows": 3,
+        "dimension": 128,
+        "max_absolute_difference": 0.0,
+        "exact_equal": true
+      },
+      "catalog": {
+        "rows": 3,
+        "dimension": 128,
+        "max_absolute_difference": 0.0,
+        "exact_equal": true
+      }
+    },
+    "source_syntax_count": 24,
+    "cli_help": {
+      "experiments/train_bi_encoder.py": true,
+      "experiments/train_noisy_channel.py": true,
+      "experiments/build_catalog_full_hangul.py": true,
+      "tools/export_encoder_safetensors.py": true
+    },
+    "environment": {
+      "python": "3.11.15",
+      "torch": "2.7.1+cu128",
+      "numpy": "1.26.4",
+      "safetensors": "0.8.0",
+      "transformers": "4.57.6",
+      "device": "cpu",
+      "compute_dtype_for_embedding_comparison": "float32",
+      "checkpoint_dtype_preserved": "float16"
+    },
+    "verification_seconds": 13.674079300137237,
+    "timing_scope": "checkpoint loading, embedding comparisons, source syntax and CLI help; excludes original training and catalog-map generation"
+  },
+  "provenance_findings": {
+    "catalog_map": {
+      "path": "AR-06/catalog_full_ko_map.json",
+      "sha256": "e5a3ed8ce2b8eedfb499f09307e04ccd178992d838091a7e091cddc0c6fc06a4",
+      "entries": 78586,
+      "generator_base": "LiquidAI/LFM2.5-350M",
+      "generator_run": "LM-LFM25-FULL-R24-01",
+      "historical_generation_binding": "AS-06 record declaration plus matching map hash; no generation-side model/seed manifest",
+      "generator_fit_rows": 9850,
+      "generator_heldout_fold": 0,
+      "direct_train_merge_in_generation_code": false,
+      "real_train_names_used_in_generator_training": true,
+      "matches_recorded_as06_sha256": true
+    },
+    "historical_training_code_hashes_differ": true,
+    "source_manifest": "handoff/LFM_HANDOFF_20261028/source_manifest.json"
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "verification_seconds": 13.674079300137237,
+    "timing_scope": "checkpoint loading, embedding comparisons, source syntax and CLI help; excludes original training and catalog-map generation",
+    "model_bytes": 2759992,
+    "assets_bytes": null,
+    "submission_zip_bytes": null,
+    "code_handoff_zip_bytes": 2646042
+  },
+  "artifacts": [
+    "C:\\Projects\\ML_midterm\\handoff\\LFM_HANDOFF_20261028\\full_encoder.safetensors",
+    "C:\\Projects\\ML_midterm\\handoff\\LFM_HANDOFF_20261028\\full_encoder.config.json",
+    "C:\\Projects\\ML_midterm\\handoff\\LFM_HANDOFF_20261028\\source_manifest.json",
+    "C:\\Projects\\ML_midterm\\handoff\\LFM_HANDOFF_20261028\\verification.json",
+    "C:\\Projects\\ML_midterm\\handoff\\LFM_HANDOFF_20261028.zip"
+  ],
+  "artifact_sha256": {
+    "handoff/LFM_HANDOFF_20261028/full_encoder.safetensors": "e73567af6ebd3bd32489e3993eefc4858a1b9d7c3ada6563a58e3c22cc700ff0",
+    "handoff/LFM_HANDOFF_20261028/full_encoder.config.json": "0260f6e8b33a5ab19033cc96fee147d929c198ed2b4fcfdfb44224e16b4a5f80",
+    "handoff/LFM_HANDOFF_20261028/source_manifest.json": "b9200a664938f69b65061c1b9e0c73d6eb82aa02dacd2d01ec1d9ade3661052b",
+    "handoff/LFM_HANDOFF_20261028/verification.json": "d3467114e80a8c2db0991f5fe08eac9360d4415e6099c55fbbd84cdcea4dda31",
+    "handoff/LFM_HANDOFF_20261028.zip": "e4a9e17e759deced8b95327410ca9e6476d48454106c619bb4698a42ab3fbe2d"
+  },
+  "observations": [
+    "61 tensors and metadata exactly preserved; synthetic embeddings exact for 3 queries and 3 catalog names.",
+    "Original PT matches artifact and AS-09 ZIP checkpoint SHA256.",
+    "24 Python sources parse; four CLI help checks pass.",
+    "Code handoff ZIP passes CRC and contains no raw CSV, OOF or source PT."
+  ],
+  "interpretations": [
+    "Existing lineage says map generation used locally fine-tuned LFM, not an external chat service.",
+    "Training used real train observed names; generator script itself does not directly merge train names.",
+    "Historical generator fit excludes fold0 (9850 rows), despite FULL in run name."
+  ],
+  "failure": null,
+  "next_actions": [
+    "No pending action for this request. If exact historical retraining is requested, first reconcile source snapshots and initialization/confusion assets."
+  ]
+}

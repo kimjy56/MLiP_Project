@@ -1,0 +1,19 @@
+Loading original symphonym-v8: C:\Users\jy200\.cache\huggingface\hub\models--docuracy--symphonym-v8\snapshots\dca7d287265e049b8410738c813ce03499926dd5
+Original-snapshot baseline: {'recall@1': 0.05439330543933055, 'recall@5': 0.08368200836820083, 'recall@10': 0.14225941422594143, 'recall@35': 0.2175732217573222, 'recall@60': 0.27615062761506276, 'num_samples': 239, 'eval_count': 239, 'mrr': 0.08181146351390668, 'mrr@35': 0.07816086159609872, 'correct_counts': {'recall@1': 13, 'recall@5': 20, 'recall@10': 34, 'recall@35': 52, 'recall@60': 66}, 'rank_definition': 'full catalog by score descending, vessel_id ascending; exact ID match'}
+  [Mining] Encoding 78,595 catalog vessels for hard negative extraction...
+  [Mining] Encoding 4,685 unique training queries...
+  [Mining] Computing global similarity matrix & extracting Top-15 confusions...
+  [Mining] Assigned 39,400 hard negatives across 9,850 samples in 12.1s.
+Epoch 1/8: loss=1.19517, composite=3.9634958701330065; best=1
+Epoch 2/8: loss=0.55975, composite=4.338347397193742; best=2
+Epoch 3/8: loss=0.43637, composite=4.859183524725208; best=3
+Epoch 4/8: loss=0.37313, composite=4.9686496120207355; best=4
+  [Mining] Encoding 78,595 catalog vessels for hard negative extraction...
+  [Mining] Encoding 4,685 unique training queries...
+  [Mining] Computing global similarity matrix & extracting Top-15 confusions...
+  [Mining] Assigned 39,400 hard negatives across 9,850 samples in 12.0s.
+Epoch 5/8: loss=1.27318, composite=5.817622001869808; best=5
+Epoch 6/8: loss=0.85849, composite=4.587273308635682; best=5
+Epoch 7/8: loss=0.67206, composite=4.2064829208964305; best=5
+Epoch 8/8: loss=0.59403, composite=3.9339746740582124; best=5
+Saved selected checkpoint: C:\Projects\ML_midterm\artifacts\DPR-SYMPHON-03\fold_0_encoder.pt

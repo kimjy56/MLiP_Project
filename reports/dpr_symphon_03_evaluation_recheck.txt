@@ -1,0 +1,25 @@
+Row independence test: max abs diff = 1.64e-07 (tolerance = 1e-06)
+Traceback (most recent call last):
+  File "C:\Projects\ML_midterm\experiments\evaluate_bi_encoder_oof.py", line 145, in <module>
+    main()
+  File "C:\Projects\ML_midterm\experiments\evaluate_bi_encoder_oof.py", line 132, in main
+    write_json(args.output_json,report)
+  File "C:\Projects\ML_midterm\experiments\dpr03_common.py", line 41, in write_json
+    temp.write_text(json.dumps(value, indent=2, ensure_ascii=False, allow_nan=False) + '\n', encoding='utf-8')
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\json\__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\json\encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\json\encoder.py", line 432, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\json\encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\json\encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "C:\Users\jy200\AppData\Roaming\uv\python\cpython-3.11-windows-x86_64-none\Lib\json\encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type bool_ is not JSON serializable

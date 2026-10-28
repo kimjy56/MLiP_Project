@@ -1,0 +1,63 @@
+{
+  "experiment_id": "PACK-BI-ENCODER-01",
+  "status": "completed_packaging",
+  "recorded_at_kst": "2026-10-28T23:37:46+09:00",
+  "purpose": "User requested Bi-Encoder-only handoff extracted from the existing LFM handoff.",
+  "changed_factors": [
+    "Package selection only"
+  ],
+  "fixed_conditions": [
+    "Reuse previously verified AS-09/DPR-SYMPHON-02 safetensors without changing tensor values",
+    "No training, map generation or submission ZIP creation"
+  ],
+  "planned_validation": [
+    "All copied bytes match the prior handoff",
+    "ZIP CRC and exact file allowlist",
+    "Isolated load with the included safetensors loader"
+  ],
+  "metrics": {
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null
+  },
+  "baseline_experiment_id": "EXPORT-LFM-HANDOFF-01",
+  "finished_at_kst": "2026-10-28T23:38:42+09:00",
+  "artifacts": [
+    "C:\\Projects\\ML_midterm\\handoff\\BI_ENCODER_HANDOFF_20261028.zip",
+    "C:\\Projects\\ML_midterm\\handoff\\BI_ENCODER_HANDOFF_20261028"
+  ],
+  "artifact_sha256": {
+    "handoff/BI_ENCODER_HANDOFF_20261028.zip": "f8f676e722b93ca886b5484bb2fcaa94f185de788aad02ecbdf2870b0d08d784",
+    "handoff/BI_ENCODER_HANDOFF_20261028/full_encoder.safetensors": "e73567af6ebd3bd32489e3993eefc4858a1b9d7c3ada6563a58e3c22cc700ff0"
+  },
+  "commands": [
+    {
+      "method": "Python stdin via .venv-server/Scripts/python.exe",
+      "operation": "Copy explicit Bi-Encoder allowlist from previous handoff; verify copied hashes; isolated python -I loader smoke; zipfile ZIP creation and exact inventory/CRC checks."
+    }
+  ],
+  "diagnostics": {
+    "package_files": 15,
+    "copied_files": 11,
+    "zip_crc": true,
+    "exact_allowlist": true,
+    "isolated_safetensors_load": true,
+    "shape": [
+      1,
+      128
+    ],
+    "finite": true
+  },
+  "cost": {
+    "code_handoff_zip_bytes": 2573865,
+    "training_seconds": null,
+    "inference_seconds": null,
+    "submission_zip_bytes": null
+  },
+  "limitations": [
+    "Packaging only; prior tensor and embedding comparisons are inherited and labeled.",
+    "Historical training source hash mismatch remains; no new training/performance measurement."
+  ],
+  "decision": "Deliver separate Bi-Encoder-only handoff; original combined handoff preserved.",
+  "next_actions": []
+}

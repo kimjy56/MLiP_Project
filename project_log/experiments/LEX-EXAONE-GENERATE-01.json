@@ -1,0 +1,194 @@
+{
+  "experiment_id": "LEX-EXAONE-GENERATE-01",
+  "plan_id": null,
+  "status": "generated_unvalidated",
+  "recorded_at_kst": "2026-10-28T22:38:24+09:00",
+  "started_at_kst": "2026-10-28T22:38:24+09:00",
+  "finished_at_kst": "2026-10-28T22:59:36+09:00",
+  "purpose": "New EXAONE-only word + full-name catalog generation",
+  "hypothesis": "Pending real EXAONE weights; no measured score gain",
+  "baseline_experiment_id": null,
+  "changed_factors": [],
+  "fixed_conditions": [
+    "No legacy dictionaries",
+    "Use existing fold file and fold-bound assets",
+    "No ZIP creation"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/deterministic_ko_rules.py": "e819974c699e94aad0aaa9072b8ec21e9fd6d92524c5da5581850d3c7d8b0b8d",
+      "name_decoder/exaone_data.py": "ffa6c49720a24555642930f9379987f13b6823b7a4b86b0ce9e9564fd4fbdafc",
+      "name_decoder/exaone_translit.py": "b15bda96b33748cb16db7b75a5f1ce042444881bbc4d7ce7cf51e0e1aa5ffb84",
+      "name_decoder/exaone_lexicon.py": "6e8f20fabac10982e9b4cb96b42ac374e88636501ae11095da627ca6de792399",
+      "experiments/exaone_common.py": "3e7a5d9b8bb9ff39465a832a48352d88fe37d8b2e2c43fef28c508911fbc4c78",
+      "experiments/train_exaone_translit.py": "54dbf99ad8df50515e8ec3091dbee657d9677ca45f81ebd4952ba5bbd78c9109",
+      "experiments/build_exaone_ko_lexicon.py": "b124bf63b132b4f2ec67dc0870f9a97a9c08656bc628b967d29ad64dae393c4a",
+      "experiments/evaluate_pure_exaone_oof.py": "607d131f4f4e527361350f33b346f298c7a8a495f0cbaa0ca9278a01f8a834bd",
+      "experimental_matchers/exaone_lexicon.py": "6965add2dbab3be10a94b9939ddcea03d2ae18aa713872a058714c2d13151e49",
+      "tools/fetch_exaone.py": "d5215b030860ac3658e9ae6133549b331cf358ff84ecdfc9cbe034594ef01731",
+      "name_decoder/__init__.py": "206796a86d6258efa7a24352de3459802a496b9cfd45daed59ba097baba47ca3"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    },
+    "split_id": "G5-s42 fold0",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42,
+    "training_rows": 9850,
+    "validation_rows": 2372,
+    "fit_vessel_ids_sha256": "8accecf30d2f8451ed7deb0641f41d71eff81360022e416bfdc548c97c434564",
+    "heldout_vessel_ids_sha256": "cc21fb59956f0862a2c19e8d54791bf3399b27182e6bc8657f8c2b465548b27b",
+    "fit_pairs_sha256": "2787f86169e27fb579102108b94db8744a6c3695f0204ad471a2ed47291c232f",
+    "pair_counts": {
+      "general_rule": 976,
+      "aligned_word": 328,
+      "full_name": 269
+    },
+    "catalog_rows": 78595,
+    "catalog_unique_names": 78592,
+    "catalog_unique_words": 35418,
+    "legacy_assets_read": []
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe experiments/build_exaone_ko_lexicon.py --experiment-id LEX-EXAONE-GENERATE-01 --checkpoint artifacts/LEX-EXAONE-PURE-02/fold_0_lora --catalog-csv data/vessel_catalog.csv --batch-size 128"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "executable": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "target_python": "3.11.17"
+  },
+  "metrics": {
+    "metric_source": "Generation coverage/quality only; no matching accuracy",
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": 1271.875,
+    "timing_scope": "offline model load, word/full generation, combination, hash and saving",
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "C:\\Projects\\ML_midterm\\artifacts\\LEX-EXAONE-GENERATE-01\\catalog_exaone_ko_map.json",
+    "C:\\Projects\\ML_midterm\\artifacts\\LEX-EXAONE-GENERATE-01\\word_exaone_lexicon.json",
+    "C:\\Projects\\ML_midterm\\artifacts\\LEX-EXAONE-GENERATE-01\\catalog_exaone_ko_map.manifest.json"
+  ],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "Not started; no generation or matching accuracy measured"
+  ],
+  "failure": null,
+  "decision": null,
+  "next_actions": [
+    "Obtain official base in artifacts/pretrained/exaone-4.0-1.2b, train under a new ID, then supply resulting checkpoint/map"
+  ],
+  "blocked_dependency": "No EXAONE base/adapter is available; training attempt LEX-EXAONE-PURE-01 was blocked before optimizer steps",
+  "generation": {
+    "schema_version": 1,
+    "generator": "EXAONE-only",
+    "model_id": "LGAI-EXAONE/EXAONE-4.0-1.2B",
+    "config": {
+      "checkpoint_manifest_sha256": "38481939a5c7ad58a1a23cb5d428ef90963cbc2cb95cc94c94ea458705af055f",
+      "adapter_sha256": "ac719b1b9938c65dc6ab009ee85196b02b98e346184af5b1caeada6331490f72",
+      "catalog_sha256": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "source_names_sha256": "f6df052c8718327dc4d28f10b56f8c6025b23a6deaa7cca78e58168345a4f751",
+      "source_words_sha256": "a8fe4176dfd9130f1203725b0721e920b7fdf7dfd5133840434b377cf81818fb",
+      "source_count": 78592,
+      "batch_size": 128,
+      "beam_count": 4,
+      "word_returns": 3,
+      "full_returns": 2,
+      "max_new_tokens": 48,
+      "max_cands": 4,
+      "seed": 42,
+      "code_sha256": {
+        "name_decoder/deterministic_ko_rules.py": "e819974c699e94aad0aaa9072b8ec21e9fd6d92524c5da5581850d3c7d8b0b8d",
+        "name_decoder/exaone_data.py": "ffa6c49720a24555642930f9379987f13b6823b7a4b86b0ce9e9564fd4fbdafc",
+        "name_decoder/exaone_translit.py": "b15bda96b33748cb16db7b75a5f1ce042444881bbc4d7ce7cf51e0e1aa5ffb84",
+        "name_decoder/exaone_lexicon.py": "6e8f20fabac10982e9b4cb96b42ac374e88636501ae11095da627ca6de792399",
+        "experiments/exaone_common.py": "3e7a5d9b8bb9ff39465a832a48352d88fe37d8b2e2c43fef28c508911fbc4c78",
+        "experiments/train_exaone_translit.py": "54dbf99ad8df50515e8ec3091dbee657d9677ca45f81ebd4952ba5bbd78c9109",
+        "experiments/build_exaone_ko_lexicon.py": "b124bf63b132b4f2ec67dc0870f9a97a9c08656bc628b967d29ad64dae393c4a",
+        "experiments/evaluate_pure_exaone_oof.py": "607d131f4f4e527361350f33b346f298c7a8a495f0cbaa0ca9278a01f8a834bd",
+        "experimental_matchers/exaone_lexicon.py": "6965add2dbab3be10a94b9939ddcea03d2ae18aa713872a058714c2d13151e49",
+        "tools/fetch_exaone.py": "d5215b030860ac3658e9ae6133549b331cf358ff84ecdfc9cbe034594ef01731",
+        "name_decoder/__init__.py": "206796a86d6258efa7a24352de3459802a496b9cfd45daed59ba097baba47ca3"
+      },
+      "legacy_policy": {
+        "manual_IDEA_B": false,
+        "old_catalog_map": false,
+        "old_learned_lexicons": false
+      }
+    },
+    "training_data": {
+      "source_files_sha256": {
+        "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+        "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+        "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+      },
+      "split_id": "G5-s42 fold0",
+      "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+      "seed": 42,
+      "training_rows": 9850,
+      "validation_rows": 2372,
+      "fit_vessel_ids_sha256": "8accecf30d2f8451ed7deb0641f41d71eff81360022e416bfdc548c97c434564",
+      "heldout_vessel_ids_sha256": "cc21fb59956f0862a2c19e8d54791bf3399b27182e6bc8657f8c2b465548b27b",
+      "fit_pairs_sha256": "2787f86169e27fb579102108b94db8744a6c3695f0204ad471a2ed47291c232f",
+      "pair_counts": {
+        "general_rule": 976,
+        "aligned_word": 328,
+        "full_name": 269
+      },
+      "catalog_rows": 78595,
+      "catalog_unique_names": 78592,
+      "catalog_unique_words": 35418,
+      "legacy_assets_read": []
+    },
+    "checkpoint": "artifacts\\LEX-EXAONE-PURE-02\\fold_0_lora",
+    "checkpoint_manifest_sha256": "38481939a5c7ad58a1a23cb5d428ef90963cbc2cb95cc94c94ea458705af055f",
+    "catalog_rows": 78595,
+    "unique_catalog_names": 78592,
+    "generated_names": 78592,
+    "full_catalog": true,
+    "word_lexicon_sha256": "eb405e688d84e154ef13bf1d4127d850b8e8f83b105a3859a5fe809ebb0cf7f4",
+    "catalog_map_sha256": "ff1977fc0ba47b7fbc0eb2c955d48ff2ad737448d970f42bd94bb572ee6c8f71",
+    "word_lexicon_bytes": 2693072,
+    "catalog_map_bytes": 9641223,
+    "word_missing": 1,
+    "catalog_missing": 5,
+    "max_candidates": 4,
+    "legacy_assets_read": [],
+    "sequence_score_type": "beam rank; no probabilistic confidence claim"
+  }
+}

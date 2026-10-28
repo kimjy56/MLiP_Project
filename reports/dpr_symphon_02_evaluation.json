@@ -1,0 +1,30 @@
+{
+  "experiment_id": "DPR-SYMPHON-02",
+  "heldout_fold": 0,
+  "checkpoint": "artifacts/DPR-SYMPHON-02/fold_0_encoder.pt",
+  "korean_metrics": {
+    "num_samples": 239,
+    "recall@1": 0.6150627615062761,
+    "recall@5": 0.8451882845188284,
+    "recall@10": 0.8661087866108786,
+    "recall@35": 0.9456066945606695,
+    "mrr": 0.7102104543527138,
+    "encode_time_sec": 0.2779109477996826,
+    "dot_time_sec": 0.010506153106689453,
+    "latency_per_row_ms": 1.2067661125789626
+  },
+  "english_metrics": {
+    "num_samples": 2133,
+    "recall@1": 0.9526488513830286,
+    "recall@5": 0.9732770745428974,
+    "recall@10": 0.9831223628691983,
+    "recall@35": 0.9929676511954993,
+    "mrr": 0.9635221061989416,
+    "encode_time_sec": 0.18251490592956543,
+    "dot_time_sec": 0.10751962661743164,
+    "latency_per_row_ms": 0.13597493321471968
+  },
+  "weighted_recall@35": 0.9598149815511183,
+  "row_independence_verified": true,
+  "evaluated_at": "2026-10-28 00:32:40 KST"
+}

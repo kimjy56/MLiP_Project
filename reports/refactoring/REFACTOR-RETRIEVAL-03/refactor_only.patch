@@ -1,0 +1,91 @@
+--- before/model/matcher.py
++++ after/model/matcher.py
+@@ -401,6 +401,17 @@
+         chosen = [c_i for _, c_i in scored[:max_candidates]]
+         return sorted(chosen)
+ 
++    def _retrieve_dense_map(self, row):
++        """Map one row's dense hits to catalog indices, preserving cache semantics."""
++        dense_map = {}
++        q_name = str(row.get('vessel_name', '')).strip()
++        if q_name:
++            dense_cands = self.dense_matcher.retrieve_dense_candidates(q_name, top_k=self.dense_top_k)
++            dense_map = {self.lookup[dc['vessel_id']]: dc for dc in dense_cands
++                         if dc['vessel_id'] in self.lookup}
++            row['_dense_map'] = dense_map
++        return dense_map
++
+     def candidates(self, row, use_aliases=True, max_candidates=None):
+         result = set()
+         channels = ('S', 'P', 'T') if self.retrieval_channels is None else self.retrieval_channels
+@@ -410,16 +421,7 @@
+             result.update(self.lookup[v] for v in self.assets['aliases'].get(norm(row.get('vessel_name')), [])
+                           if v in self.lookup)
+         if self.dense_matcher is not None:
+-            q_name = str(row.get('vessel_name', '')).strip()
+-            if q_name:
+-                dense_cands = self.dense_matcher.retrieve_dense_candidates(q_name, top_k=self.dense_top_k)
+-                dense_map = {}
+-                for dc in dense_cands:
+-                    c_i = self.lookup.get(dc['vessel_id'])
+-                    if c_i is not None:
+-                        result.add(c_i)
+-                        dense_map[c_i] = dc
+-                row['_dense_map'] = dense_map
++            result.update(self._retrieve_dense_map(row))
+         if not result:
+             return [0]
+         if max_candidates is None:
+@@ -502,11 +504,7 @@
+         if self.include_dense:
+             dense_map = row.get('_dense_map', {})
+             if not dense_map and self.dense_matcher is not None:
+-                q_name = str(row.get('vessel_name', '')).strip()
+-                if q_name:
+-                    dense_cands = self.dense_matcher.retrieve_dense_candidates(q_name, top_k=self.dense_top_k)
+-                    dense_map = {self.lookup[dc['vessel_id']]: dc for dc in dense_cands if dc['vessel_id'] in self.lookup}
+-                    row['_dense_map'] = dense_map
++                dense_map = self._retrieve_dense_map(row)
+             dense_rows = []
+             for c_i in candidates:
+                 if c_i in dense_map:
+--- before/experiments/train_bi_encoder.py
++++ after/experiments/train_bi_encoder.py
+@@ -34,6 +34,7 @@
+ from phonetic_encoder.dataset import PhoneticPairDataset, make_collate_fn
+ from phonetic_encoder.loss import HybridContrastiveLoss
+ from phonetic_encoder.model import CharPhoneticBiEncoder
++from phonetic_encoder.retrieval import top_score_indices
+ 
+ 
+ def set_seed(seed: int = 42):
+@@ -80,8 +81,7 @@
+         row_sims = sims[i]
+ 
+         # Top 35 indices
+-        top35_idx = np.argpartition(row_sims, -35)[-35:]
+-        top35_sorted = top35_idx[np.argsort(-row_sims[top35_idx])]
++        top35_sorted = top_score_indices(row_sims, 35)
+ 
+         # Check rank
+         for k in [1, 5, 10, 35]:
+--- before/experiments/evaluate_bi_encoder_oof.py
++++ after/experiments/evaluate_bi_encoder_oof.py
+@@ -24,6 +24,7 @@
+ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+ 
+ from phonetic_encoder.model import CharPhoneticBiEncoder
++from phonetic_encoder.retrieval import top_score_indices
+ 
+ 
+ def evaluate_dense_retrieval(
+@@ -61,8 +62,7 @@
+         gold_idx = id_to_idx[gold_vid]
+ 
+         row_sims = sim_matrix[i]
+-        top35_idx = np.argpartition(row_sims, -35)[-35:]
+-        top35_sorted = top35_idx[np.argsort(-row_sims[top35_idx])]
++        top35_sorted = top_score_indices(row_sims, 35)
+ 
+         for k in [1, 5, 10, 35]:
+             if gold_idx in top35_sorted[:k]:

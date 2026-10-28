@@ -1,0 +1,151 @@
+{
+  "experiment_id": "REVIEW-JAMO-SCORE-01",
+  "plan_id": "PLAN-MATCHING-IMPROVE-01",
+  "status": "completed_review",
+  "recorded_at_kst": "2026-10-26T01:01:06+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "Review completed fixed-setting Jamo score comparisons and decide whether to adopt.",
+  "hypothesis": null,
+  "baseline_experiment_id": null,
+  "changed_factors": [],
+  "fixed_conditions": [],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": null,
+    "file_sha256": {
+      "experimental_matchers/jamo_scoring/script.py": "1424834b99026af167abdd8edf231801eea8f96021332c1448c647480a911710",
+      "experimental_matchers/jamo_scoring/README.md": "ff1253f1a6e2e253d00f99bea7cb648861639aa1945b61ee79d410f0977f6e3a",
+      "experiments/audit_generator_lineage.py": "73234acba9dc8e521f983123e9ee464f49d2b0e2a5ef82fae882322baf65e72d",
+      "experiments/evaluate_jamo_scoring.py": "b841a58847dc2ad590648d722842de5b88760b12db3e4b7c83300d39a4d17753",
+      "experiments/evaluate_jamo_scoring_seeds.py": "995da9f861106b473a8bf91801d25af2b3755b2f122f3bae28823580049fc9c9",
+      "experiments/summarize_jamo_scoring.py": "7f43a67d53d17e6e9b1d7e2495531b4b6e644aaacee8f1d796f4a0304e124612",
+      "tests/test_jamo_scoring.py": "61f05823f2ed281ebe7151cc445524c9fe61c7f037fe6a718a7a002f7debaa05",
+      "docs/JAMO_SCORE_RESULTS.md": "ebbf11cdaead51979f1e7df1ab0c38fa171834589501d0e13971c669cbf490d1"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [],
+  "environment": {},
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "docs/JAMO_SCORE_RESULTS.md",
+    "C:\\Projects\\ML_midterm\\artifacts\\JAMO-SCORE-01\\implementation"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Clean/default predictions unchanged.",
+    "Primary severe seed20261022: Hangul226->231, fixes6/breaks1.",
+    "Secondary severe seed20261026: Hangul229->228, fixes4/breaks5.",
+    "Secondary severe seed20261027: Hangul230->230, fixes3/breaks3.",
+    "Candidate sets matched in all5 conditions; non-Hangul predictions unchanged."
+  ],
+  "interpretations": [
+    "The benefit is not consistent across noise seeds; no universal score reduction recommendation is supported.",
+    "Observed Hangul differences are candidate selection errors in these conditions, not retrieval recovery."
+  ],
+  "limitations": [
+    "Historical miner source snapshot was not saved; CSV/record hashes and current source membership checks do not re-prove every historical miner fit.",
+    "Public train and outer fold0 were already explored in previous development; this is not an untouched final test.",
+    "Manual lexicon history is not fold-isolated. Shared lexicon stays fixed in this paired comparison.",
+    "Historical AS-06 record declaration and matching map hash only; no generation-side model/seed manifest exists.",
+    "One fold and one noise seed; not a full5fold or official server improvement.",
+    "Secondary seeds were selected before execution but after observing primary results.",
+    "Repeated transformations of the same vessels are correlated; no independent sample-size increase claimed."
+  ],
+  "failure": null,
+  "decision": "Do not adopt separate1.8 Jamo score as default. Keep AS-06 unchanged and retain experimental_matchers/jamo_scoring as experimental code.",
+  "next_actions": [
+    "Use fit-inner isolated generator/map lineage before selecting pronunciation reliability or feature-combination settings.",
+    "Do not retune1.8 on already-observed externalfold0 or repeat Public submissions to select a weight."
+  ],
+  "reviewed_experiments": [
+    "AUDIT-GENERATOR-LINEAGE-01",
+    "JAMO-SCORE-01",
+    "JAMO-SCORE-02"
+  ],
+  "validation": {
+    "synthetic_tests_passed": 5,
+    "real_reference_parity_rows": 64,
+    "real_reference_topk": 5,
+    "row_independence": {
+      "legacy": {
+        "rows": 12,
+        "reverse_differences": 0,
+        "single_differences": 0
+      },
+      "separate": {
+        "rows": 12,
+        "reverse_differences": 0,
+        "single_differences": 0
+      }
+    },
+    "official_evaluator_comparisons": 5,
+    "bootstrap_repetitions_per_comparison": 2000,
+    "bootstrap_seed": 0,
+    "original_assets_sha256_unchanged": true
+  },
+  "baseline_submission_filename": "submit_AS-06.zip",
+  "baseline_artifact_record": "project_log/experiments/AS-06.json",
+  "naming_correction": {
+    "corrected_at_kst": "2026-10-26T22:17:00+09:00",
+    "legacy_id": "REVIEW-AS07-JAMO-01",
+    "same_execution_not_a_new_experiment": true,
+    "original_record_path": "project_log/naming_history/20261026T221700/records/REVIEW-AS07-JAMO-01.json",
+    "original_record_sha256": "97dd1260e2d43a804e33eb575bb189f38325573dcf6faee74f95bc426dc426f8",
+    "reason": "AS is a submission ZIP filename prefix; experimental runs use descriptive IDs.",
+    "preserved_execution_fields": [
+      "commands",
+      "cost",
+      "data",
+      "diagnostics",
+      "metrics",
+      "model",
+      "phase_results",
+      "preprocessing",
+      "retrieval",
+      "training_pairs",
+      "validation"
+    ],
+    "path_alias_registry": "project_log/EXPERIMENT_NAMING.json"
+  }
+}

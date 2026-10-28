@@ -1,0 +1,8 @@
+test_catalog_index_with_dense (tests.test_dense_features.TestDenseFeatures.test_catalog_index_with_dense) ... ok
+test_feature_names (tests.test_dense_features.TestDenseFeatures.test_feature_names) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 1.108s
+
+OK
+TestDenseFeatures: All assertions passed successfully!

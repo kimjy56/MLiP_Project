@@ -1,0 +1,55 @@
+{
+  "audit_id": "AUDIT-AR06-PROPOSAL-01",
+  "recorded_at_kst": "2026-10-25T19:27:34.6309025+09:00",
+  "scope": "Static source and JSON audit; public-training and split aggregate checks in PowerShell only. No model execution or private test inspection.",
+  "git_revision": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+  "source_files_sha256": {
+    "AR-06/script.py": "44ee368a55c490dd66b43d521bce82c3851e9aeb10f07b84897d87956b174e54",
+    "AR-06/run_ar06.py": "320665f213fa57cd029e1eb362302178faa13add02c8b97bb73a009448f9ca3e",
+    "AR-06/train_AR-06/script.py": "048bb67be4a504a65e5dddb95a47b2ce735bd5b1b30205a9ae8b697d5c01c90f",
+    "AR-06/model/model.json": "5a70a74ec75e33d03ba1e676559d95183f7a091b3a38926c30f4e7792346e650",
+    "AR-06/train_AR-06/model/model.json": "5a70a74ec75e33d03ba1e676559d95183f7a091b3a38926c30f4e7792346e650",
+    "data/train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "data/vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+    "eval_kit/folds_group5_seed42.csv": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "eval_kit/aux/folds_row5_seed42.csv": "b0b3b9b2f5c31dee9cba8dc4c309ff9ec748c5628c67536ae21fba454cad9526"
+  },
+  "public_train": {
+    "callsign_lookup_disagreement_rows": 0,
+    "vessels": 5851,
+    "hangul_rows": 1191,
+    "callsign_nonempty_rows": 12222,
+    "callsign_keys": 5851,
+    "callsign_ambiguous_keys": 0,
+    "callsign_keys_not_in_current_train": 0,
+    "rows": 12222
+  },
+  "saved_model": {
+    "learned_syl_top3": 271,
+    "name_lookup": 5857,
+    "learned_word_map": 466,
+    "use_train_lookup_default": false,
+    "version": "1022-AR06",
+    "callsign_lookup": 5851
+  },
+  "splits": {
+    "row_split_seen_rows": 8702,
+    "row_split_seen_fraction": 0.7119947635411553,
+    "group_rows": 12222,
+    "row_split_rows": 12222,
+    "group_vessels_in_multiple_folds": 0
+  },
+  "environment": {
+    "shell": "7.6.5",
+    "server_python_exists": false,
+    "python_executed": false,
+    "os": "Windows"
+  },
+  "performance_metrics": {
+    "weighted_accuracy": null,
+    "private_test_seen_fraction": null,
+    "candidate_recall": null,
+    "non_hangul_accuracy": null,
+    "hangul_accuracy": null
+  }
+}

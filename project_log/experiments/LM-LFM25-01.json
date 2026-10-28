@@ -1,0 +1,147 @@
+{
+  "experiment_id": "LM-LFM25-01",
+  "plan_id": null,
+  "status": "failed",
+  "recorded_at_kst": "2026-10-25T21:07:33+09:00",
+  "started_at_kst": "2026-10-25T21:07:33+09:00",
+  "finished_at_kst": "2026-10-25T21:07:39+09:00",
+  "purpose": "Reverse name-channel LoRA training",
+  "hypothesis": "A reverse name likelihood may add candidate-ranking information.",
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "lexical confusion listwise ranking",
+    "language cycle sampling",
+    "row-mean CE",
+    "fit-learned Hangul augmentation",
+    "explicit CUDA placement",
+    "candidate learning rate 2e-4 (unless overridden)",
+    "observation normalization preserves case and internal spaces"
+  ],
+  "fixed_conditions": [],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/channel_training.py": "02529ee98ed73cd57facd326d61344c9f92d6fe04a0f54e3ca03d5c27ee6e3eb",
+      "name_decoder/noise_augmenter.py": "51315596aad8ac26f358d3f44fd94780714c99dc8423dde02446c167b6d7e3d5",
+      "name_decoder/lora.py": "f33f07c58dbec2766c08bbba53c94946e7c24fee6bbaf3a96f4547f7b4b55804",
+      "name_decoder/noisy_channel.py": "3b93cfd728376e90540e39ffef23079a245a00e8a3f1f80ab0becc21a33f5082",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "experiments/noisy_channel_common.py": "d55c127ca5581abf8631ce67de441e21585f6c4dc7d2dc5deb7591d50c1098c8",
+      "experiments/train_noisy_channel.py": "0ba7802857489139d593ff8d6770d17e767b1f7fe9baeb65c8d05e258b0d088a",
+      "experiments/score_noisy_channel_candidates.py": "47d1053c1ac9acafa4e85061934cdad3b495c4286ea37358ed5f071d02c4992a"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    },
+    "split_id": "folds_group5_seed42.csv",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42,
+    "heldout_fold": 0,
+    "training_rows": 9850,
+    "validation_rows": 2372,
+    "training_vessels": 4680,
+    "validation_is_independent_final_test": false,
+    "training_vessel_ids_sha256": "f7094848b233532e5000ac39697a10704d0db4860ea25160fa8c1ad598aaeb0e"
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {
+    "catalog": "NFC-uppercase-collapse-whitespace",
+    "observed": "NFC-strip-preserve-case-internal-space-digits-punctuation",
+    "deduplicate": [
+      "catalog_name",
+      "observed_name"
+    ],
+    "pair_sort_order": [
+      "catalog_name",
+      "observed_name"
+    ],
+    "prompt_version": "catalog-to-observed-name-v2-task-prefix",
+    "max_length": 256,
+    "truncation": "error",
+    "prompt_labels": -100,
+    "padding_labels": -100,
+    "target": "separately tokenized observed name plus EOS"
+  },
+  "training_pairs": {
+    "positive_rule": "training-fold target ID -> catalog name; raw observed name normalized",
+    "negative_rule": "public catalog lexical confusions; exclude same name and fit-known positives",
+    "count": 7265,
+    "raw_pairs_count": 4685,
+    "augmented_pairs_count": 2580,
+    "augment_factor": 0.5,
+    "hangul_pairs": 819,
+    "non_hangul_pairs": 6446,
+    "ordered_pairs_sha256": "02a099cc6fdebf3c0946e0fd67c20c599a0bfd21da55261696bb8f7a08f52754",
+    "sampling": "cycle",
+    "learned_hangul_token_count": 304,
+    "hangul_probability_mass": 0.7,
+    "draws_planned": 2400
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe experiments/train_noisy_channel.py --experiment-id LM-LFM25-01 --device cuda --steps 300 --pretrained artifacts/pretrained/lfm2.5-350m --confusions-csv artifacts/INNER-CONFUSIONS-01/confusions.csv --confusions-record project_log/experiments/INNER-CONFUSIONS-01.json"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "safetensors": "0.8.0",
+      "pandas": "2.0.3",
+      "numpy": "1.26.4"
+    },
+    "device": "cuda",
+    "cuda": "12.8",
+    "gpu_name": "NVIDIA GeForce RTX 5080",
+    "threads": 2
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "Not a LoRA-only ablation against AS-HCX-04.",
+    "No accuracy, merge equivalence, throughput or memory claim without separate verification.",
+    "A name-only model cannot distinguish IDs with the same catalog name.",
+    "Public train was previously explored; heldout is not an untouched final test."
+  ],
+  "failure": {
+    "type": "ValueError",
+    "message": "Tokenizer class TokenizersBackend does not exist or is not currently imported.",
+    "retry": "Use a new experiment ID; partial outputs are preserved."
+  },
+  "decision": null,
+  "next_actions": []
+}

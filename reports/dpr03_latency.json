@@ -1,0 +1,47 @@
+{
+  "recorded_at_kst": "2026-10-28T22:52:24+09:00",
+  "device": "cpu",
+  "threads": 6,
+  "rows": 32,
+  "checkpoint_sha256": "0f5a0f20d841d7653d78a099178f783142d57a2c882a1df48a7a6d6ae6c5c418",
+  "source_parity_max_abs_diff": 7.450580596923828e-08,
+  "encoding_before": {
+    "rows": 32,
+    "mean_ms": 8.443287530099042,
+    "median_ms": 7.350050029344857,
+    "p95_ms": 11.525675072334705,
+    "encoder_forwards": 96,
+    "encoder_forwards_per_row": 3.0
+  },
+  "encoding_after": {
+    "rows": 32,
+    "mean_ms": 3.3826468788902275,
+    "median_ms": 3.346299985423684,
+    "p95_ms": 4.249770008027554,
+    "encoder_forwards": 32,
+    "encoder_forwards_per_row": 1.0
+  },
+  "retrieval_before_top35": {
+    "rows": 32,
+    "mean_ms": 30.864496853610035,
+    "median_ms": 31.870450009591877,
+    "p95_ms": 36.76253992598504,
+    "encoder_forwards": 276,
+    "encoder_forwards_per_row": 8.625
+  },
+  "retrieval_after_top60": {
+    "rows": 32,
+    "mean_ms": 12.920003144245129,
+    "median_ms": 12.937749968841672,
+    "p95_ms": 14.894150057807565,
+    "encoder_forwards": 32,
+    "encoder_forwards_per_row": 1.0
+  },
+  "encoding_mean_speedup": 2.496059397387971,
+  "retrieval_mean_speedup": 2.388892363958735,
+  "scope": "same FP32 model/checkpoint/catalog on local CPU; loading excluded; warmup3; public fold0 first Hangul rows",
+  "limitations": [
+    "Not an L4/6vCPU server reproduction; no extrapolation to the 497s server display.",
+    "Retrieval also removes unused per-row tail-candidate re-encoding; K changes35 to60."
+  ]
+}

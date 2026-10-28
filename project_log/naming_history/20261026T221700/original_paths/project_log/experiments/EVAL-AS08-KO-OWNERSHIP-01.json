@@ -1,0 +1,801 @@
+{
+  "experiment_id": "EVAL-AS08-KO-OWNERSHIP-01",
+  "plan_id": "PLAN-AS06-IMPROVE-01",
+  "status": "completed_not_promoted",
+  "recorded_at_kst": "2026-10-26T21:43:30+09:00",
+  "started_at_kst": "2026-10-26T21:43:30+09:00",
+  "finished_at_kst": "2026-10-26T21:48:26+09:00",
+  "purpose": "Compare fixed AS-06 legacy scoring with old and repaired pronunciation maps",
+  "hypothesis": "Discarding optional added pronunciations whose closest baseline pronunciation belongs equally or more strongly to another name may reduce false matches.",
+  "baseline_experiment_id": "AS-06",
+  "changed_factors": [
+    "Filter new variants only, requiring unique closest original owner within normalized-number group."
+  ],
+  "fixed_conditions": [
+    "Original variants remain untouched",
+    "Same AS-06 legacy score and lookupoff",
+    "No private data, neural training or ZIP",
+    "Same fold0 clean/default/severe3seed conditions"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/channel_training.py": "02529ee98ed73cd57facd326d61344c9f92d6fe04a0f54e3ca03d5c27ee6e3eb",
+      "name_decoder/noise_augmenter.py": "51315596aad8ac26f358d3f44fd94780714c99dc8423dde02446c167b6d7e3d5",
+      "name_decoder/lora.py": "ef6d92c25fd5297f2131a7d2fa995cebc61fc617ff9cb9a4b9732d0d7e0b6587",
+      "name_decoder/noisy_channel.py": "36c88596b2334bf0f8d5f332229abedfbeccb9e939a36eca197f58c4c9874f8f",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "experiments/noisy_channel_common.py": "d55c127ca5581abf8631ce67de441e21585f6c4dc7d2dc5deb7591d50c1098c8",
+      "experiments/train_noisy_channel.py": "e1c591c5698972b7b72d910ece8bdd87d131bc46ada0a7a558f7352c99bbbc91",
+      "experiments/score_noisy_channel_candidates.py": "47d1053c1ac9acafa4e85061934cdad3b495c4286ea37358ed5f071d02c4992a",
+      "experiments/evaluate_as08_ko_map.py": "079206ee1d93572f436ca16bfd924c4986c8e3d91cab969205e2ae1f9743f5de",
+      "AS-07/script.py": "1424834b99026af167abdd8edf231801eea8f96021332c1448c647480a911710",
+      "eval_kit/robustness.py": "65a574da60188ca6fa1d660108a1705dc5bd446d0ac150c0f4d1b915d716d230"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    },
+    "split_id": "folds_group5_seed42.csv/fold0",
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": 9850,
+    "validation_rows": 2372,
+    "noise_seeds": [
+      20261022,
+      20261026,
+      20261027
+    ]
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    "experiments/evaluate_as08_ko_map.py --experiment-id EVAL-AS08-KO-OWNERSHIP-01 --map-experiment-id AS08-KO-OWNERSHIP-01"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "safetensors": "0.8.0",
+      "pandas": "2.0.3",
+      "numpy": "1.26.4"
+    },
+    "device": "cpu",
+    "threads": 2
+  },
+  "metrics": {
+    "metric_source": "Fold0 clean development; not official server",
+    "hangul_rows": 239,
+    "non_hangul_rows": 2133,
+    "hangul_accuracy": 1.0,
+    "non_hangul_accuracy": 0.9985935302390999,
+    "weighted_accuracy": 0.9995780590717299,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": "CPU matching/map indexing, cache verification, official evaluation and saving; not server runtime.",
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null,
+    "index_seconds_both_maps": 11.336025300086476,
+    "total_seconds": 296.18324359995313
+  },
+  "artifacts": [
+    "C:\\Projects\\ML_midterm\\reports\\as06_improvements\\EVAL-AS08-KO-OWNERSHIP-01",
+    "C:\\Projects\\ML_midterm\\artifacts\\EVAL-AS08-KO-OWNERSHIP-01"
+  ],
+  "error_cases_file": "C:\\Projects\\ML_midterm\\artifacts\\EVAL-AS08-KO-OWNERSHIP-01\\public_heldout_errors.json",
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "One previously explored outerfold0, not untouched final test/full5fold/server score.",
+    "Map-generation/filter rules use public catalog and original map only; earlier aggregate development results informed follow-up selection.",
+    "Fixed rules jointly filter and diversify samples; not separate ablations of every filter.",
+    "Existing baseline map historical generation provenance/manual lexicon limits remain.",
+    "Cached old-map results have source/model/file hashes and64-row per-phase parity checks; timing is not an old/new speed comparison."
+  ],
+  "failure": null,
+  "decision": "Keep AS-06; repaired-map candidate regressed on: default,severe,severe_20261027",
+  "next_actions": [],
+  "development_bias": "Follow-up proposed after inspecting aggregate AS08 map regression. No individual heldout error labels used by filter; repeated outerfold development is not independent confirmation.",
+  "policy": {
+    "owner_similarity": "normalized Jamo OSA",
+    "number_group": "same engine-normalized number signature",
+    "acceptance": "own best similarity strictly greater than every other baseline name; reject ties",
+    "scope": "new additions only",
+    "training_labels_used": false,
+    "fitted_thresholds": false
+  },
+  "generation_experiment_id": "AS08-KO-OWNERSHIP-01",
+  "map_hashes": {
+    "old": "e5a3ed8ce2b8eedfb499f09307e04ccd178992d838091a7e091cddc0c6fc06a4",
+    "new": "faf9f7827576edf2ad75430de18f1b9227829083a8b230b5dce7eefedfcd0f91"
+  },
+  "phase_results": {
+    "clean": {
+      "noise_summary": null,
+      "old": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 239,
+        "non_hangul_correct": 2130,
+        "hangul_accuracy": 1.0,
+        "non_hangul_accuracy": 0.9985935302390999,
+        "weighted_accuracy": 0.9995780590717299,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 1.0,
+        "retrieval_failures": 0,
+        "selection_failures": 3,
+        "candidate_count_mean": 1751.712900505902,
+        "candidate_count_p95": 4267.0,
+        "prediction_file_sha256": "005247c47e6e37b2a30832b558ca478e67198f6cad19c82e57780c56a298084d"
+      },
+      "new": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 239,
+        "non_hangul_correct": 2130,
+        "hangul_accuracy": 1.0,
+        "non_hangul_accuracy": 0.9985935302390999,
+        "weighted_accuracy": 0.9995780590717299,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 1.0,
+        "retrieval_failures": 0,
+        "selection_failures": 3
+      },
+      "baseline_cache_verified": true,
+      "old_recompute_seconds": null,
+      "new_prediction_seconds": 52.22726890002377,
+      "new_candidate_count_mean": 1752.3397976391232,
+      "new_candidate_count_p95": 4276.0,
+      "prediction_sha256": {
+        "old": "005247c47e6e37b2a30832b558ca478e67198f6cad19c82e57780c56a298084d",
+        "new": "005247c47e6e37b2a30832b558ca478e67198f6cad19c82e57780c56a298084d"
+      },
+      "paired": {
+        "hangul": {
+          "fixes": 0,
+          "breaks": 0,
+          "prediction_changes": 0,
+          "newly_retrieved": 0,
+          "lost_from_candidates": 0
+        },
+        "non_hangul": {
+          "fixes": 0,
+          "breaks": 0,
+          "prediction_changes": 0,
+          "newly_retrieved": 0,
+          "lost_from_candidates": 0
+        }
+      },
+      "official": {
+        "score": {
+          "h": 1.0,
+          "nh": 0.9985935302390999,
+          "w": 0.99957805907173,
+          "n_h": 239,
+          "n_nh": 2133
+        },
+        "boot": {
+          "h": {
+            "est": 1.0,
+            "lo": 1.0,
+            "hi": 1.0,
+            "se": 0.0
+          },
+          "nh": {
+            "est": 0.9985935302390999,
+            "lo": 0.9967042149130168,
+            "hi": 1.0,
+            "se": 0.000823313919710626
+          },
+          "w": {
+            "est": 0.99957805907173,
+            "lo": 0.999011264473905,
+            "hi": 1.0,
+            "se": 0.00024699417591318886
+          }
+        },
+        "compare": {
+          "d": {
+            "h": 0.0,
+            "nh": 0.0,
+            "w": 0.0
+          },
+          "boot": {
+            "h": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            },
+            "nh": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            },
+            "w": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            }
+          },
+          "verdict": "동등",
+          "n_common": 2372
+        },
+        "warnings": [],
+        "folds": "G5-s42"
+      }
+    },
+    "default": {
+      "noise_summary": {
+        "total_rows": 2372,
+        "seed": 20261022,
+        "typo_applied_count": 519,
+        "typo_applied_rate": 0.2188026981450253,
+        "hangul_spacing_applied_count": 29,
+        "hangul_spacing_applied_rate": 0.012225969645868466,
+        "ton_shift_applied_count": 866,
+        "ton_shift_applied_rate": 0.3650927487352445,
+        "ton_missing_applied_count": 152,
+        "ton_missing_applied_rate": 0.06408094435075885,
+        "flag_missing_applied_count": 404,
+        "flag_missing_applied_rate": 0.1703204047217538,
+        "any_noise_applied_count": 1497,
+        "any_noise_applied_rate": 0.6311129848229342
+      },
+      "old": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 239,
+        "non_hangul_correct": 2129,
+        "hangul_accuracy": 1.0,
+        "non_hangul_accuracy": 0.9981247069854665,
+        "weighted_accuracy": 0.99943741209564,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 0.9995311767463666,
+        "retrieval_failures": 1,
+        "selection_failures": 3,
+        "candidate_count_mean": 1710.0096964586846,
+        "candidate_count_p95": 4049.249999999999,
+        "prediction_file_sha256": "cc2b3396986969aab79a5c7b948a7f5442120479a1b101f669036bff844f2591"
+      },
+      "new": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 238,
+        "non_hangul_correct": 2129,
+        "hangul_accuracy": 0.99581589958159,
+        "non_hangul_accuracy": 0.9981247069854665,
+        "weighted_accuracy": 0.9965085418027528,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 0.9995311767463666,
+        "retrieval_failures": 1,
+        "selection_failures": 4
+      },
+      "baseline_cache_verified": true,
+      "old_recompute_seconds": null,
+      "new_prediction_seconds": 50.69606900005601,
+      "new_candidate_count_mean": 1710.6357504215853,
+      "new_candidate_count_p95": 4051.8999999999996,
+      "prediction_sha256": {
+        "old": "cc2b3396986969aab79a5c7b948a7f5442120479a1b101f669036bff844f2591",
+        "new": "40c2afe0342295786276fa06147430d9331da1ebdc4e0f501bf589193a6422a1"
+      },
+      "paired": {
+        "hangul": {
+          "fixes": 0,
+          "breaks": 1,
+          "prediction_changes": 1,
+          "newly_retrieved": 0,
+          "lost_from_candidates": 0
+        },
+        "non_hangul": {
+          "fixes": 0,
+          "breaks": 0,
+          "prediction_changes": 0,
+          "newly_retrieved": 0,
+          "lost_from_candidates": 0
+        }
+      },
+      "official": {
+        "score": {
+          "h": 0.99581589958159,
+          "nh": 0.9981247069854665,
+          "w": 0.996508541802753,
+          "n_h": 239,
+          "n_nh": 2133
+        },
+        "boot": {
+          "h": {
+            "est": 0.99581589958159,
+            "lo": 0.987012987012987,
+            "hi": 1.0,
+            "se": 0.0040659369972937745
+          },
+          "nh": {
+            "est": 0.9981247069854665,
+            "lo": 0.9961420168669383,
+            "hi": 0.9995427891005898,
+            "se": 0.0009428464276923521
+          },
+          "w": {
+            "est": 0.996508541802753,
+            "lo": 0.9902950418313061,
+            "hi": 0.999857214246867,
+            "se": 0.0028583314870646997
+          }
+        },
+        "compare": {
+          "d": {
+            "h": -0.004184100418409997,
+            "nh": 0.0,
+            "w": -0.0029288702928870203
+          },
+          "boot": {
+            "h": {
+              "est": -0.004184100418409997,
+              "lo": -0.012987012987012988,
+              "hi": 0.0,
+              "se": 0.004065936997293777
+            },
+            "nh": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            },
+            "w": {
+              "est": -0.0029288702928870203,
+              "lo": -0.00909090909090909,
+              "hi": 0.0,
+              "se": 0.0028461558981056436
+            }
+          },
+          "verdict": "동등",
+          "n_common": 2372
+        },
+        "warnings": [],
+        "folds": "G5-s42"
+      }
+    },
+    "severe": {
+      "noise_summary": {
+        "total_rows": 2372,
+        "seed": 20261022,
+        "typo_applied_count": 700,
+        "typo_applied_rate": 0.2951096121416526,
+        "hangul_spacing_applied_count": 62,
+        "hangul_spacing_applied_rate": 0.026138279932546374,
+        "ton_shift_applied_count": 979,
+        "ton_shift_applied_rate": 0.4127318718381113,
+        "ton_missing_applied_count": 468,
+        "ton_missing_applied_rate": 0.1973018549747049,
+        "flag_missing_applied_count": 716,
+        "flag_missing_applied_rate": 0.30185497470489037,
+        "any_noise_applied_count": 1904,
+        "any_noise_applied_rate": 0.8026981450252951
+      },
+      "old": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 226,
+        "non_hangul_correct": 2127,
+        "hangul_accuracy": 0.9456066945606695,
+        "non_hangul_accuracy": 0.9971870604781997,
+        "weighted_accuracy": 0.9610808043359285,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 0.9995311767463666,
+        "retrieval_failures": 1,
+        "selection_failures": 18,
+        "candidate_count_mean": 1622.0489038785836,
+        "candidate_count_p95": 3717.45,
+        "prediction_file_sha256": "51054e164566e1c35fb7f6eb93a112459b97fb704bef129f9868b4413672bd30"
+      },
+      "new": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 225,
+        "non_hangul_correct": 2127,
+        "hangul_accuracy": 0.9414225941422594,
+        "non_hangul_accuracy": 0.9971870604781997,
+        "weighted_accuracy": 0.9581519340430414,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 0.9995311767463666,
+        "retrieval_failures": 1,
+        "selection_failures": 19
+      },
+      "baseline_cache_verified": true,
+      "old_recompute_seconds": null,
+      "new_prediction_seconds": 47.3296564000193,
+      "new_candidate_count_mean": 1622.6758010118044,
+      "new_candidate_count_p95": 3718.45,
+      "prediction_sha256": {
+        "old": "51054e164566e1c35fb7f6eb93a112459b97fb704bef129f9868b4413672bd30",
+        "new": "d6b131b65b553db12ebfcda671c58749c003d97509935abc0cfb19edcecabf1f"
+      },
+      "paired": {
+        "hangul": {
+          "fixes": 0,
+          "breaks": 1,
+          "prediction_changes": 2,
+          "newly_retrieved": 0,
+          "lost_from_candidates": 0
+        },
+        "non_hangul": {
+          "fixes": 0,
+          "breaks": 0,
+          "prediction_changes": 0,
+          "newly_retrieved": 0,
+          "lost_from_candidates": 0
+        }
+      },
+      "official": {
+        "score": {
+          "h": 0.9414225941422594,
+          "nh": 0.9971870604781997,
+          "w": 0.9581519340430416,
+          "n_h": 239,
+          "n_nh": 2133
+        },
+        "boot": {
+          "h": {
+            "est": 0.9414225941422594,
+            "lo": 0.9035016977928693,
+            "hi": 0.9747925530044653,
+            "se": 0.01803743913660342
+          },
+          "nh": {
+            "est": 0.9971870604781997,
+            "lo": 0.9947766418344164,
+            "hi": 0.9990804808895506,
+            "se": 0.001150492101478071
+          },
+          "w": {
+            "est": 0.9581519340430416,
+            "lo": 0.9317832757408583,
+            "hi": 0.9814836788150799,
+            "se": 0.012635778326925244
+          }
+        },
+        "compare": {
+          "d": {
+            "h": -0.004184100418410108,
+            "nh": 0.0,
+            "w": -0.0029288702928869093
+          },
+          "boot": {
+            "h": {
+              "est": -0.004184100418410108,
+              "lo": -0.012987012987012988,
+              "hi": 0.0,
+              "se": 0.004065936997293777
+            },
+            "nh": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            },
+            "w": {
+              "est": -0.0029288702928869093,
+              "lo": -0.00909090909090909,
+              "hi": 0.0,
+              "se": 0.0028461558981056436
+            }
+          },
+          "verdict": "동등",
+          "n_common": 2372
+        },
+        "warnings": [],
+        "folds": "G5-s42"
+      }
+    },
+    "severe_20261026": {
+      "noise_summary": {
+        "total_rows": 2372,
+        "seed": 20261026,
+        "typo_applied_count": 696,
+        "typo_applied_rate": 0.2934232715008432,
+        "hangul_spacing_applied_count": 85,
+        "hangul_spacing_applied_rate": 0.03583473861720068,
+        "ton_shift_applied_count": 925,
+        "ton_shift_applied_rate": 0.3899662731871838,
+        "ton_missing_applied_count": 515,
+        "ton_missing_applied_rate": 0.21711635750421585,
+        "flag_missing_applied_count": 747,
+        "flag_missing_applied_rate": 0.3149241146711636,
+        "any_noise_applied_count": 1952,
+        "any_noise_applied_rate": 0.8229342327150084
+      },
+      "old": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 229,
+        "non_hangul_correct": 2124,
+        "hangul_accuracy": 0.9581589958158996,
+        "non_hangul_accuracy": 0.9957805907172996,
+        "weighted_accuracy": 0.9694454742863194,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 0.9995311767463666,
+        "retrieval_failures": 1,
+        "selection_failures": 18,
+        "prediction_file_sha256": "a4fc8e434d3059a8072aa18074672912dc72c3d921c5abf784b55575664f03e5"
+      },
+      "new": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 229,
+        "non_hangul_correct": 2124,
+        "hangul_accuracy": 0.9581589958158996,
+        "non_hangul_accuracy": 0.9957805907172996,
+        "weighted_accuracy": 0.9694454742863194,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 0.9995311767463666,
+        "retrieval_failures": 1,
+        "selection_failures": 18
+      },
+      "baseline_cache_verified": true,
+      "old_recompute_seconds": null,
+      "new_prediction_seconds": 43.35036620008759,
+      "new_candidate_count_mean": 1600.2352445193928,
+      "new_candidate_count_p95": 3681.0,
+      "prediction_sha256": {
+        "old": "a4fc8e434d3059a8072aa18074672912dc72c3d921c5abf784b55575664f03e5",
+        "new": "be9177f519445a21834f2876b07afd040e05ab1fbfebbbcc42f9ec27af653465"
+      },
+      "paired": {
+        "hangul": {
+          "fixes": 0,
+          "breaks": 0,
+          "prediction_changes": 1,
+          "newly_retrieved": 0,
+          "lost_from_candidates": 0
+        },
+        "non_hangul": {
+          "fixes": 0,
+          "breaks": 0,
+          "prediction_changes": 0,
+          "newly_retrieved": 0,
+          "lost_from_candidates": 0
+        }
+      },
+      "official": {
+        "score": {
+          "h": 0.9581589958158996,
+          "nh": 0.9957805907172996,
+          "w": 0.9694454742863196,
+          "n_h": 239,
+          "n_nh": 2133
+        },
+        "boot": {
+          "h": {
+            "est": 0.9581589958158996,
+            "lo": 0.9234147609147609,
+            "hi": 0.9868995633187773,
+            "se": 0.015962056821831185
+          },
+          "nh": {
+            "est": 0.9957805907172996,
+            "lo": 0.9923716223211513,
+            "hi": 0.9986014148945184,
+            "se": 0.0015731051654789907
+          },
+          "w": {
+            "est": 0.9694454742863196,
+            "lo": 0.9446855438116774,
+            "hi": 0.9894181941716775,
+            "se": 0.01117124697591906
+          }
+        },
+        "compare": {
+          "d": {
+            "h": 0.0,
+            "nh": 0.0,
+            "w": 0.0
+          },
+          "boot": {
+            "h": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            },
+            "nh": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            },
+            "w": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            }
+          },
+          "verdict": "동등",
+          "n_common": 2372
+        },
+        "warnings": [],
+        "folds": "G5-s42"
+      }
+    },
+    "severe_20261027": {
+      "noise_summary": {
+        "total_rows": 2372,
+        "seed": 20261027,
+        "typo_applied_count": 713,
+        "typo_applied_rate": 0.3005902192242833,
+        "hangul_spacing_applied_count": 64,
+        "hangul_spacing_applied_rate": 0.026981450252951095,
+        "ton_shift_applied_count": 911,
+        "ton_shift_applied_rate": 0.38406408094435074,
+        "ton_missing_applied_count": 456,
+        "ton_missing_applied_rate": 0.19224283305227655,
+        "flag_missing_applied_count": 691,
+        "flag_missing_applied_rate": 0.29131534569983136,
+        "any_noise_applied_count": 1878,
+        "any_noise_applied_rate": 0.7917369308600337
+      },
+      "old": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 230,
+        "non_hangul_correct": 2126,
+        "hangul_accuracy": 0.9623430962343096,
+        "non_hangul_accuracy": 0.9967182372245663,
+        "weighted_accuracy": 0.9726556385313865,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 0.9990623534927332,
+        "retrieval_failures": 2,
+        "selection_failures": 14,
+        "prediction_file_sha256": "a6f0366bda465162a19bf931b958f993727763d468cd9be05ce00e48127c09e0"
+      },
+      "new": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 229,
+        "non_hangul_correct": 2126,
+        "hangul_accuracy": 0.9581589958158996,
+        "non_hangul_accuracy": 0.9967182372245663,
+        "weighted_accuracy": 0.9697267682384996,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 0.9990623534927332,
+        "retrieval_failures": 2,
+        "selection_failures": 15
+      },
+      "baseline_cache_verified": true,
+      "old_recompute_seconds": null,
+      "new_prediction_seconds": 47.49710389995016,
+      "new_candidate_count_mean": 1617.1580944350758,
+      "new_candidate_count_p95": 3728.0,
+      "prediction_sha256": {
+        "old": "a6f0366bda465162a19bf931b958f993727763d468cd9be05ce00e48127c09e0",
+        "new": "bda896c3d6c4f78f82200ac8a924ab0181d922783a276831b451fab3319887ed"
+      },
+      "paired": {
+        "hangul": {
+          "fixes": 0,
+          "breaks": 1,
+          "prediction_changes": 1,
+          "newly_retrieved": 0,
+          "lost_from_candidates": 0
+        },
+        "non_hangul": {
+          "fixes": 0,
+          "breaks": 0,
+          "prediction_changes": 0,
+          "newly_retrieved": 0,
+          "lost_from_candidates": 0
+        }
+      },
+      "official": {
+        "score": {
+          "h": 0.9581589958158996,
+          "nh": 0.9967182372245663,
+          "w": 0.9697267682384996,
+          "n_h": 239,
+          "n_nh": 2133
+        },
+        "boot": {
+          "h": {
+            "est": 0.9581589958158996,
+            "lo": 0.9270361769259411,
+            "hi": 0.9831950353363101,
+            "se": 0.014773062781842785
+          },
+          "nh": {
+            "est": 0.9967182372245663,
+            "lo": 0.9942581668703273,
+            "hi": 0.9990324724994536,
+            "se": 0.001227822368283835
+          },
+          "w": {
+            "est": 0.9697267682384996,
+            "lo": 0.9477648811184909,
+            "hi": 0.9873222129779443,
+            "se": 0.010338520226510248
+          }
+        },
+        "compare": {
+          "d": {
+            "h": -0.004184100418409997,
+            "nh": 0.0,
+            "w": -0.0029288702928870203
+          },
+          "boot": {
+            "h": {
+              "est": -0.004184100418409997,
+              "lo": -0.012987012987012988,
+              "hi": 0.0,
+              "se": 0.004065936997293777
+            },
+            "nh": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            },
+            "w": {
+              "est": -0.0029288702928870203,
+              "lo": -0.00909090909090909,
+              "hi": 0.0,
+              "se": 0.0028461558981056436
+            }
+          },
+          "verdict": "동등",
+          "n_common": 2372
+        },
+        "warnings": [],
+        "folds": "G5-s42"
+      }
+    }
+  },
+  "baseline_cache_checks": {
+    "same_fit_model": true,
+    "same_inputs": true,
+    "robustness_matches_historical_git_blob": true,
+    "per_condition_probe_rows": 64
+  },
+  "row_independence": {
+    "rows": 8,
+    "reverse_differences": 0,
+    "single_differences": 0
+  }
+}

@@ -1,0 +1,38 @@
+test_hangul_mask_and_eos (tests.test_exaone_lexicon.DecoderContracts.test_hangul_mask_and_eos) ... ok
+test_supervised_mask_and_padding (tests.test_exaone_lexicon.DecoderContracts.test_supervised_mask_and_padding) ... ok
+test_tiny_exaone_lora_gradient_and_reload (tests.test_exaone_lexicon.DecoderContracts.test_tiny_exaone_lora_gradient_and_reload) ... ok
+test_dense_only_candidates_still_get_lexicon_score (tests.test_exaone_lexicon.ProvenanceContracts.test_dense_only_candidates_still_get_lexicon_score) ... ok
+test_fold_map_manifest_and_tamper_rejection (tests.test_exaone_lexicon.ProvenanceContracts.test_fold_map_manifest_and_tamper_rejection) ... ok
+test_generation_groups_and_truncation_rejection (tests.test_exaone_lexicon.ProvenanceContracts.test_generation_groups_and_truncation_rejection) ... ok
+test_bounded_composition_and_diversity (tests.test_exaone_lexicon.RulesAndData.test_bounded_composition_and_diversity) ... ok
+test_fit_only_descendants_and_rule_pairs (tests.test_exaone_lexicon.RulesAndData.test_fit_only_descendants_and_rule_pairs) ... ok
+test_general_spelling_and_not_company_aliases (tests.test_exaone_lexicon.RulesAndData.test_general_spelling_and_not_company_aliases) ... ok
+test_group_mismatch_duplicate_and_full_train (tests.test_exaone_lexicon.RulesAndData.test_group_mismatch_duplicate_and_full_train) ... ok
+{'phase': 'batches', 'completed': 2, 'total': 2, 'physical_batch': 2}
+{'phase': 'batches', 'completed': 2, 'total': 2, 'physical_batch': 2}
+test_generation_cache_resume_rejects_changed_inputs (tests.test_exaone_lexicon.StaticMatcherContracts.test_generation_cache_resume_rejects_changed_inputs) ... ok
+test_no_legacy_files_labels_and_row_independence (tests.test_exaone_lexicon.StaticMatcherContracts.test_no_legacy_files_labels_and_row_independence) ... ok
+test_runtime_import_is_llm_free_and_legacy_api_lazy (tests.test_exaone_lexicon.StaticMatcherContracts.test_runtime_import_is_llm_free_and_legacy_api_lazy) ... ok
+test_invalid_configuration (tests.test_catalog_search.CatalogSearchTests.test_invalid_configuration) ... ok
+test_order_independence_and_catalog_membership (tests.test_catalog_search.CatalogSearchTests.test_order_independence_and_catalog_membership) ... ok
+test_short_partial_match (tests.test_catalog_search.CatalogSearchTests.test_short_partial_match) ... ok
+test_duplicate_ids_are_rejected (tests.test_name_decoder.CatalogTests.test_duplicate_ids_are_rejected) ... ok
+test_name_keys_preserve_numbers_and_punctuation (tests.test_name_decoder.CatalogTests.test_name_keys_preserve_numbers_and_punctuation) ... ok
+test_same_name_keeps_every_id (tests.test_name_decoder.CatalogTests.test_same_name_keeps_every_id) ... ok
+test_terminal_is_not_confused_with_a_longer_name (tests.test_name_decoder.CatalogTests.test_terminal_is_not_confused_with_a_longer_name) ... ok
+test_unicode_bytes_match_tokenizer (tests.test_name_decoder.CatalogTests.test_unicode_bytes_match_tokenizer) ... ok
+test_cross_fold_vessel_is_rejected (tests.test_name_decoder.DataTests.test_cross_fold_vessel_is_rejected) ... ok
+test_final_training_does_not_require_folds_but_evaluation_does (tests.test_name_decoder.DataTests.test_final_training_does_not_require_folds_but_evaluation_does) ... ok
+test_final_training_keeps_all_official_pairs_without_a_split (tests.test_name_decoder.DataTests.test_final_training_keeps_all_official_pairs_without_a_split) ... ok
+test_mismatched_fold_labels_are_rejected (tests.test_name_decoder.DataTests.test_mismatched_fold_labels_are_rejected) ... ok
+test_no_heldout_training_and_ambiguous_targets_remain (tests.test_name_decoder.DataTests.test_no_heldout_training_and_ambiguous_targets_remain) ... ok
+test_pilot_selection_does_not_depend_on_input_order (tests.test_name_decoder.DataTests.test_pilot_selection_does_not_depend_on_input_order) ... ok
+test_constrained_decoding_and_row_independence (tests.test_name_decoder.GenerationTests.test_constrained_decoding_and_row_independence) ... ok
+test_invalid_inputs_fail_instead_of_truncating (tests.test_name_decoder.GenerationTests.test_invalid_inputs_fail_instead_of_truncating) ... ok
+test_top_one_uses_same_search_and_preserves_all_matching_ids (tests.test_name_decoder.GenerationTests.test_top_one_uses_same_search_and_preserves_all_matching_ids) ... ok
+test_untied_checkpoint_preserves_config_weights_and_candidate_names (tests.test_name_decoder.GenerationTests.test_untied_checkpoint_preserves_config_weights_and_candidate_names) ... ok
+
+----------------------------------------------------------------------
+Ran 31 tests in 0.411s
+
+OK

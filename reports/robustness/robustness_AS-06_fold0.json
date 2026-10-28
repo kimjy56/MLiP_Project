@@ -1,0 +1,77 @@
+{
+  "fold": 0,
+  "rows": 2372,
+  "seed": 20261022,
+  "results": {
+    "default": {
+      "noise_applied_rate": 0.6311129848229342,
+      "ko_map_on/clean": {
+        "hangul": 1.0,
+        "hangul_rows": 239,
+        "non_hangul": 0.9985935302390999,
+        "non_hangul_rows": 2133,
+        "weighted": 0.9995780590717299,
+        "seconds": 53.036836199928075
+      },
+      "ko_map_on/noisy": {
+        "hangul": 1.0,
+        "hangul_rows": 239,
+        "non_hangul": 0.9981247069854665,
+        "non_hangul_rows": 2133,
+        "weighted": 0.99943741209564,
+        "seconds": 49.91660200001206
+      },
+      "ko_map_off/clean": {
+        "hangul": 1.0,
+        "hangul_rows": 239,
+        "non_hangul": 0.9985935302390999,
+        "non_hangul_rows": 2133,
+        "weighted": 0.9995780590717299,
+        "seconds": 38.19030860008206
+      },
+      "ko_map_off/noisy": {
+        "hangul": 0.99581589958159,
+        "hangul_rows": 239,
+        "non_hangul": 0.9981247069854665,
+        "non_hangul_rows": 2133,
+        "weighted": 0.9965085418027528,
+        "seconds": 35.43960069993045
+      }
+    },
+    "severe": {
+      "noise_applied_rate": 0.8026981450252951,
+      "ko_map_on/clean": {
+        "hangul": 1.0,
+        "hangul_rows": 239,
+        "non_hangul": 0.9985935302390999,
+        "non_hangul_rows": 2133,
+        "weighted": 0.9995780590717299,
+        "seconds": 54.68590599996969
+      },
+      "ko_map_on/noisy": {
+        "hangul": 0.9456066945606695,
+        "hangul_rows": 239,
+        "non_hangul": 0.9971870604781997,
+        "non_hangul_rows": 2133,
+        "weighted": 0.9610808043359285,
+        "seconds": 47.94864900002722
+      },
+      "ko_map_off/clean": {
+        "hangul": 1.0,
+        "hangul_rows": 239,
+        "non_hangul": 0.9985935302390999,
+        "non_hangul_rows": 2133,
+        "weighted": 0.9995780590717299,
+        "seconds": 37.98501760000363
+      },
+      "ko_map_off/noisy": {
+        "hangul": 0.9539748953974896,
+        "hangul_rows": 239,
+        "non_hangul": 0.9971870604781997,
+        "non_hangul_rows": 2133,
+        "weighted": 0.9669385449217025,
+        "seconds": 30.631918199942447
+      }
+    }
+  }
+}

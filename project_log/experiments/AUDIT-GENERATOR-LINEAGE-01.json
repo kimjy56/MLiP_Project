@@ -1,0 +1,181 @@
+{
+  "experiment_id": "AUDIT-GENERATOR-LINEAGE-01",
+  "plan_id": null,
+  "status": "completed",
+  "recorded_at_kst": "2026-10-26T00:45:26+09:00",
+  "started_at_kst": "2026-10-26T00:45:26+09:00",
+  "finished_at_kst": "2026-10-26T00:45:36+09:00",
+  "purpose": "Reconstruct AS-06 generator fit lineage before paired scoring experiment",
+  "hypothesis": null,
+  "baseline_experiment_id": null,
+  "changed_factors": [],
+  "fixed_conditions": [],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/channel_training.py": "02529ee98ed73cd57facd326d61344c9f92d6fe04a0f54e3ca03d5c27ee6e3eb",
+      "name_decoder/noise_augmenter.py": "51315596aad8ac26f358d3f44fd94780714c99dc8423dde02446c167b6d7e3d5",
+      "name_decoder/lora.py": "ef6d92c25fd5297f2131a7d2fa995cebc61fc617ff9cb9a4b9732d0d7e0b6587",
+      "name_decoder/noisy_channel.py": "36c88596b2334bf0f8d5f332229abedfbeccb9e939a36eca197f58c4c9874f8f",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "experiments/noisy_channel_common.py": "d55c127ca5581abf8631ce67de441e21585f6c4dc7d2dc5deb7591d50c1098c8",
+      "experiments/train_noisy_channel.py": "e1c591c5698972b7b72d910ece8bdd87d131bc46ada0a7a558f7352c99bbbc91",
+      "experiments/score_noisy_channel_candidates.py": "47d1053c1ac9acafa4e85061934cdad3b495c4286ea37358ed5f071d02c4992a",
+      "experiments/audit_generator_lineage.py": "73234acba9dc8e521f983123e9ee464f49d2b0e2a5ef82fae882322baf65e72d"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    "experiments/audit_as06_lineage.py"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "safetensors": "0.8.0",
+      "pandas": "2.0.3",
+      "numpy": "1.26.4"
+    },
+    "device": "cpu"
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "C:\\Projects\\ML_midterm\\artifacts\\AUDIT-GENERATOR-LINEAGE-01\\audit.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "The unqualified claim that this generator trained on all12222 rows is contradicted by the reproducible9850-row lineage.",
+    "Recorded and reproducible generator fit excludes fold0. It includes folds1-4; this map is unsuitable for leak-free full5fold OOF."
+  ],
+  "interpretations": [],
+  "limitations": [
+    "Historical miner source snapshot was not saved; CSV/record hashes and current source membership checks do not re-prove every historical miner fit.",
+    "Public train and outer fold0 were already explored in previous development; this is not an untouched final test.",
+    "Manual lexicon history is not fold-isolated. Shared lexicon stays fixed in this paired comparison.",
+    "Historical AS-06 record declaration and matching map hash only; no generation-side model/seed manifest exists."
+  ],
+  "failure": null,
+  "decision": "Permit conditional paired fold0 development comparison only; never present shared-map full5fold scores as leak-free.",
+  "next_actions": [],
+  "diagnostics": {
+    "checks": {
+      "source_train.csv": true,
+      "source_vessel_catalog.csv": true,
+      "source_folds": true,
+      "training_vessel_ids_hash": true,
+      "training_vessel_membership": true,
+      "external_vessel_overlap_zero": true,
+      "external_sample_overlap_zero": true,
+      "record_and_manifest_fold0": true,
+      "training_rows_match": true,
+      "reconstructed_pairs_hash": true,
+      "pair_count": true,
+      "learned_token_count": true,
+      "mined_hash": true,
+      "mined_fit_samples_only": true,
+      "mined_no_outer_fold": true,
+      "saved_negatives_hash": true,
+      "mined_assignments_match": true,
+      "negatives_exclude_known_positives": true,
+      "negative_rows_match": true,
+      "checkpoint_chat_template.jinja": true,
+      "checkpoint_config.json": true,
+      "checkpoint_generation_config.json": true,
+      "checkpoint_model.safetensors": true,
+      "checkpoint_special_tokens_map.json": true,
+      "checkpoint_tokenizer.json": true,
+      "checkpoint_tokenizer_config.json": true,
+      "artifact_adapter.safetensors": true,
+      "artifact_adapter_config.json": true,
+      "artifact_model/noisy_channel_manifest.json": true,
+      "artifact_training_history.json": true,
+      "map_matches_recorded_as06_hash": true
+    },
+    "all_checks_passed": true,
+    "training_rows": 9850,
+    "validation_rows": 2372,
+    "training_vessels": 4680,
+    "validation_vessels": 1171,
+    "raw_pairs": 4685,
+    "pairs": 7265,
+    "reconstructed_pairs_sha256": "02a099cc6fdebf3c0946e0fd67c20c599a0bfd21da55261696bb8f7a08f52754",
+    "mining": {
+      "pairs_with_mined_negatives": 4685,
+      "mined_negative_slots": 9370,
+      "lexical_fallback_slots": 5160
+    },
+    "generation_model_link": "Historical AS-06 record declaration and matching map hash only; no generation-side model/seed manifest exists.",
+    "fold_scope": "Recorded and reproducible generator fit excludes fold0. It includes folds1-4; this map is unsuitable for leak-free full5fold OOF.",
+    "historical_correction": "The unqualified claim that this generator trained on all12222 rows is contradicted by the reproducible9850-row lineage.",
+    "residual_limits": [
+      "Historical miner source snapshot was not saved; CSV/record hashes and current source membership checks do not re-prove every historical miner fit.",
+      "Public train and outer fold0 were already explored in previous development; this is not an untouched final test.",
+      "Manual lexicon history is not fold-isolated. Shared lexicon stays fixed in this paired comparison."
+    ]
+  },
+  "naming_correction": {
+    "corrected_at_kst": "2026-10-26T22:17:00+09:00",
+    "legacy_id": "AUDIT-AS06-LINEAGE-01",
+    "same_execution_not_a_new_experiment": true,
+    "original_record_path": "project_log/naming_history/20261026T221700/records/AUDIT-AS06-LINEAGE-01.json",
+    "original_record_sha256": "189381ea36c4d8d2cd8a5cd41b385d682e753f3355eb76c9b9c5b0cd03d8f7f6",
+    "reason": "AS is a submission ZIP filename prefix; experimental runs use descriptive IDs.",
+    "preserved_execution_fields": [
+      "commands",
+      "cost",
+      "data",
+      "diagnostics",
+      "metrics",
+      "model",
+      "phase_results",
+      "preprocessing",
+      "retrieval",
+      "training_pairs",
+      "validation"
+    ],
+    "path_alias_registry": "project_log/EXPERIMENT_NAMING.json"
+  }
+}

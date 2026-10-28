@@ -1,0 +1,159 @@
+{
+  "experiment_id": "SUB-116338",
+  "plan_id": null,
+  "status": "completed_user_reported_server_result",
+  "recorded_at_kst": "2026-10-27T22:17:43+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "Record user-reported AS-07 server result and compare AS-06 without a new experiment.",
+  "hypothesis": "Check whether the documented DPR-Hybrid package improves the aggregate server score; individual components cannot be isolated.",
+  "baseline_experiment_id": "SUB-115506",
+  "changed_factors": [
+    "Existing AS-07 package record links DPR-SYMPHON-01 Bi-Encoder Top-35 union retrieval and DPR-HYBRID-01 dense score features; lookup and synthetic Hangul map retained. No build or model execution in this task."
+  ],
+  "fixed_conditions": [
+    "Weighted metric: 0.7 Hangul accuracy + 0.3 non-Hangul accuracy; exact server subset/version unverified."
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "git_revision_at_recording": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty_at_recording": true,
+    "file_sha256": {
+      "submit_AS-07.zip": "6cc36d661e59057922ec6472ba50796477a668c1a6a0e9b1dcc8de1c74b4b079",
+      "project_log/experiments/AS-07.json": "87dbc20699a362ef6bc58617776d96ced0421bb3dee1f70f697d70246182603f"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": "DACON leaderboard; exact subset/version unverified",
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {
+    "package_record": "project_log/experiments/AS-07.json",
+    "related_experiment_ids": [
+      "DPR-SYMPHON-01",
+      "DPR-HYBRID-01"
+    ],
+    "documented_dense_top_k": 35
+  },
+  "features": [
+    "dense_sim",
+    "dense_rank_recip",
+    "dense_zscore",
+    "dense_margin_top1"
+  ],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "DPR-Hybrid submission package documented in AS-07.json",
+    "parameters": {
+      "documented_dense_mode": "hybrid",
+      "documented_dense_weight": 2.5
+    },
+    "loss": null,
+    "assets": [
+      "train_AS-07/model/model.json",
+      "train_AS-07/model/full_encoder.pt",
+      "train_AS-07/model/catalog_embeds_full_fp16.npy"
+    ]
+  },
+  "commands": [],
+  "environment": {
+    "new_training_or_inference_executed": false,
+    "server_environment_independently_verified": false
+  },
+  "metrics": {
+    "metric_source": "Official server result pasted by user; not independently fetched from DACON",
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": 0.9122153056,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null,
+    "seen_vessel_accuracy": null,
+    "unseen_vessel_accuracy": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": "Leaderboard displayed duration 372s; loading/index/features/scoring/saving stages and row count unavailable.",
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": 22156345,
+    "submission_zip_bytes_scope": "Current local submit_AS-07.zip; uploaded bytes unverified."
+  },
+  "artifacts": [
+    "submit_AS-07.zip",
+    "project_log/experiments/AS-07.json",
+    "project_log/experiments/SUB-115506.json",
+    "project_log/experiments/DPR-HYBRID-01.json",
+    "project_log/experiments/DPR-SYMPHON-01.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "AS-07 displayed score equals AS-06 to all 10 reported decimal places; score delta 0, displayed duration 366s -> 372s (+6s).",
+    "Local ZIP SHA256 matches the existing AS-07 package record; the uploaded ZIP hash is not supplied.",
+    "AS-08 package exists but its server result was not provided in this message."
+  ],
+  "interpretations": [
+    "No aggregate server score improvement observed for AS-07 over AS-06.",
+    "Same weighted score does not establish identical predictions, language-specific accuracy, zero Fix/Break, or no Dense contribution.",
+    "Local synthetic-noise gains do not establish server gains. A single 6s duration difference does not establish repeatable speed change."
+  ],
+  "limitations": [
+    "No private input, label or individual prediction inspected or stored.",
+    "Language counts/accuracy, candidate inclusion, seen/unseen metrics and paired uncertainty unavailable.",
+    "Public/Private partition and exact server dataset version unavailable.",
+    "Package-level result does not identify component causality; current DPR-MULTIVIEW-02 and AS-08 are separate configurations.",
+    "Local hash verification does not independently verify uploaded byte identity."
+  ],
+  "failure": null,
+  "decision": "AS-06 and AS-07 tie on the reported server score. Preserve AS-06 reference assets; do not promote AS-07 as a demonstrated server score improvement. Record only; no training, inference, ZIP creation/upload, commit or push.",
+  "next_actions": [
+    "Record AS-08 or other server results separately by submission ID when provided.",
+    "If improvement work is requested, compare fixed submitted assets on public train to separate retrieval/ranking/lookup effects; not started here."
+  ],
+  "submission": {
+    "submission_id": 116338,
+    "filename": "submit_AS-07.zip",
+    "submitted_at_kst": "2026-10-26T23:57:46+09:00",
+    "displayed_score_text": "0.9122153056",
+    "displayed_duration_text": "6분 12초",
+    "displayed_duration_seconds": 372,
+    "leaderboard_partition": null,
+    "source": "User-provided leaderboard row in current conversation",
+    "package_record": "project_log/experiments/AS-07.json",
+    "related_experiment_ids": [
+      "DPR-SYMPHON-01",
+      "DPR-HYBRID-01"
+    ],
+    "locally_verified_zip_sha256": "6cc36d661e59057922ec6472ba50796477a668c1a6a0e9b1dcc8de1c74b4b079",
+    "local_hash_matches_package_record": true,
+    "submitted_zip_hash_verified": false
+  },
+  "comparisons": [
+    {
+      "submission_id": 115506,
+      "filename": "submit_AS-06.zip",
+      "record": "project_log/experiments/SUB-115506.json",
+      "weighted_accuracy": 0.9122153056,
+      "displayed_duration_seconds": 366,
+      "score_delta": 0,
+      "percentage_point_delta": 0,
+      "displayed_duration_delta_seconds": 6,
+      "predictions_equal": null,
+      "paired_fix_count": null,
+      "paired_break_count": null
+    }
+  ]
+}

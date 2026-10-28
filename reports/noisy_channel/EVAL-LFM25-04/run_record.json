@@ -1,0 +1,189 @@
+{
+  "experiment_id": "EVAL-LFM25-04",
+  "plan_id": null,
+  "status": "evaluated_single_fold",
+  "recorded_at_kst": "2026-10-25T21:47:58+09:00",
+  "started_at_kst": "2026-10-25T21:47:58+09:00",
+  "finished_at_kst": "2026-10-25T22:00:11+09:00",
+  "purpose": "Clean heldout fold0 LM ranking evaluation",
+  "hypothesis": "Evaluate new reverse LM standalone and fixed AS05 fusion without tuning.",
+  "baseline_experiment_id": null,
+  "changed_factors": [],
+  "fixed_conditions": [
+    "clean full fold0",
+    "AR06/EN_V3 fit only fold != 0",
+    "lookup disabled",
+    "top35 fixed shortlist",
+    "fusion weight 0.20; gate margin <=1.0"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/channel_training.py": "02529ee98ed73cd57facd326d61344c9f92d6fe04a0f54e3ca03d5c27ee6e3eb",
+      "name_decoder/noise_augmenter.py": "51315596aad8ac26f358d3f44fd94780714c99dc8423dde02446c167b6d7e3d5",
+      "name_decoder/lora.py": "f33f07c58dbec2766c08bbba53c94946e7c24fee6bbaf3a96f4547f7b4b55804",
+      "name_decoder/noisy_channel.py": "36c88596b2334bf0f8d5f332229abedfbeccb9e939a36eca197f58c4c9874f8f",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "experiments/noisy_channel_common.py": "d55c127ca5581abf8631ce67de441e21585f6c4dc7d2dc5deb7591d50c1098c8",
+      "experiments/train_noisy_channel.py": "37c911d38682388f878847109f50ee051361941afe9972b9c3927f521f3acb6f",
+      "experiments/score_noisy_channel_candidates.py": "47d1053c1ac9acafa4e85061934cdad3b495c4286ea37358ed5f071d02c4992a",
+      "experiments/evaluate_lm_rank_gpu.py": "e37e0eea21297ca9f2df83f2977ab380863f21be6c2eee83b441caeededc2425"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    },
+    "split_id": "G5-s42 fold0 only",
+    "seed": 42,
+    "validation_rows": 2372,
+    "training_rows": 9850,
+    "scope": "single_fold_not_full_OOF",
+    "seen_vessels": 0
+  },
+  "retrieval": {
+    "count_max": 35,
+    "candidate_pairs": 83020,
+    "candidate_sha256": "f0b2573281c7644932592970959ae7dae1258c8f94fe695d730be30f1dd7b99e",
+    "gold_injected": false,
+    "fit_fold_verified": true,
+    "baseline_code_sha256": "44ee368a55c490dd66b43d521bce82c3851e9aeb10f07b84897d87956b174e54",
+    "hangul_candidate_inclusion": 1.0,
+    "non_hangul_candidate_inclusion": 1.0,
+    "count_min": 35
+  },
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "checkpoint": "artifacts\\LM-LFM25-03\\model",
+    "manifest_sha256": "e7f6816962493667b233bcbf6536d87e4c491773e419848f1161ed977957e9ae"
+  },
+  "commands": [
+    "experiments/evaluate_lm_rank_gpu.py --experiment-id EVAL-LFM25-04 --model-path artifacts/LM-LFM25-03/model --candidates-csv reports/noisy_channel/EVAL-LM-RANK-01/candidates.csv"
+  ],
+  "environment": {
+    "python": "3.11.15 (main, Mar  3 2026, 14:55:34) [MSC v.1944 64 bit (AMD64)]",
+    "torch": "2.7.1+cu128",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 5080"
+  },
+  "metrics": {
+    "baseline": {
+      "hangul_correct": 239,
+      "non_hangul_correct": 2130,
+      "hangul_rows": 239,
+      "non_hangul_rows": 2133,
+      "hangul_accuracy": 1.0,
+      "non_hangul_accuracy": 0.9985935302390999,
+      "weighted_accuracy": 0.9995780590717299,
+      "fixes": 0,
+      "breaks": 0
+    },
+    "lm": {
+      "hangul_correct": 232,
+      "non_hangul_correct": 2130,
+      "hangul_rows": 239,
+      "non_hangul_rows": 2133,
+      "hangul_accuracy": 0.9707112970711297,
+      "non_hangul_accuracy": 0.9985935302390999,
+      "weighted_accuracy": 0.9790759670215207,
+      "fixes": 0,
+      "breaks": 7
+    },
+    "fusion": {
+      "hangul_correct": 239,
+      "non_hangul_correct": 2130,
+      "hangul_rows": 239,
+      "non_hangul_rows": 2133,
+      "hangul_accuracy": 1.0,
+      "non_hangul_accuracy": 0.9985935302390999,
+      "weighted_accuracy": 0.9995780590717299,
+      "fixes": 0,
+      "breaks": 0
+    },
+    "gated": {
+      "hangul_correct": 239,
+      "non_hangul_correct": 2130,
+      "hangul_rows": 239,
+      "non_hangul_rows": 2133,
+      "hangul_accuracy": 1.0,
+      "non_hangul_accuracy": 0.9985935302390999,
+      "weighted_accuracy": 0.9995780590717299,
+      "fixes": 0,
+      "breaks": 0
+    }
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": 725.6776944999583,
+    "timing_scope": "baseline index/fit, baseline retrieval and LM load separate; inference includes encoding, batched scoring, ranks and progress writes",
+    "peak_memory_bytes": 1919175168,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null,
+    "baseline_index_fit_seconds": null,
+    "baseline_inference_seconds": null,
+    "model_load_seconds": 1.4650930999778211,
+    "total_seconds": 727.927916900022
+  },
+  "artifacts": [
+    "C:\\Projects\\ML_midterm\\reports\\noisy_channel\\EVAL-LFM25-04"
+  ],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "Not an untouched final test; public train already explored.",
+    "Previous LM weights unavailable: no direct V1/V2 improvement claim.",
+    "Fold0 only; not five-fold OOF.",
+    "Combined changes cannot isolate individual factor effects."
+  ],
+  "failure": null,
+  "decision": "No weight tuning or deployment; interpret measured fixes/breaks before adoption.",
+  "next_actions": [],
+  "fixed_candidate_source": {
+    "path": "reports\\noisy_channel\\EVAL-LM-RANK-01\\candidates.csv",
+    "sha256": "f0b2573281c7644932592970959ae7dae1258c8f94fe695d730be30f1dd7b99e",
+    "retrieval_recomputed": false
+  },
+  "batch_single_max_abs_difference": 0.00023503495114152173,
+  "batch_single_tolerance": 0.001,
+  "single_refined_rows": 0,
+  "unsupported_rows": 0,
+  "eligible_rows": 8,
+  "artifact_sha256": {
+    "candidates.csv": "f0b2573281c7644932592970959ae7dae1258c8f94fe695d730be30f1dd7b99e",
+    "paired_predictions.csv": "21622773218388741c39b5d170be7d1a92b30902edb9e14524fd33ef710e938b",
+    "predictions_baseline.csv": "005247c47e6e37b2a30832b558ca478e67198f6cad19c82e57780c56a298084d",
+    "predictions_fusion.csv": "005247c47e6e37b2a30832b558ca478e67198f6cad19c82e57780c56a298084d",
+    "predictions_gated.csv": "005247c47e6e37b2a30832b558ca478e67198f6cad19c82e57780c56a298084d",
+    "predictions_lm.csv": "d903d9ac66a805b8496a105a333efe121880ed2ed4ae3f1b431954d333e4bfb9",
+    "progress_predictions.csv": "21622773218388741c39b5d170be7d1a92b30902edb9e14524fd33ef710e938b"
+  },
+  "official_evaluator": {
+    "script_sha256": "2c728b357727f8e3962128030dde3bcb6fc6b230fcde287e336d3e0eb6c9f38e",
+    "scope": "--subset clean full fold0; not full five-fold OOF",
+    "bootstrap": 2000,
+    "seed": 0,
+    "outputs": {
+      "official_baseline.txt": "ea9a75191f51329f7d0505c6855ef241ccfac59c8d1a23dd77ee722a02af37ae",
+      "official_lm.txt": "f81c2231ada896a846c0897efbd2ec1908b35b6802c5e74b332daaa984f3dceb",
+      "official_fusion.txt": "bd4064eb25765e7168c5f2c20b102172330a33318da263e1788cbb1e52b1b382",
+      "official_gated.txt": "c744d7782ad39796788faf11bf12abb40778b946da10deb19296708f7c6ec7d0"
+    },
+    "matched_lm_comparison": {
+      "source": "reports\\noisy_channel\\EVAL-LM-RANK-03\\predictions_lm.csv",
+      "source_sha256": "437c48696fdef78c2113ba96eaa4fd23853663c5513e93e2fe0628403fb3f49d",
+      "output_sha256": "f2b8a66f6c6559075c8f227b374d35e1956bdab53697a39e339510c174a3a617"
+    }
+  }
+}

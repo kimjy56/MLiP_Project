@@ -1,0 +1,156 @@
+{
+  "experiment_id": "VERIFY-AS09-RESULT-01",
+  "plan_id": null,
+  "status": "completed_static_verification",
+  "recorded_at_kst": "2026-10-28T22:03:29+09:00",
+  "started_at_kst": "2026-10-28T22:03:29+09:00",
+  "finished_at_kst": "2026-10-28T22:06:06+09:00",
+  "purpose": "Verify user-reported submission 117799, exact score/time comparisons, and static local ZIP provenance without rerunning inference.",
+  "hypothesis": "The supplied aggregate score exceeds recorded AS06/07/08; archive inspection can establish local package settings but cannot alone prove server component contributions.",
+  "baseline_experiment_id": "SUB-116338",
+  "changed_factors": [
+    "Documentation and new verification evidence only"
+  ],
+  "fixed_conditions": [
+    "Preserve existing completed JSON, model/data/snapshot/ZIP bytes",
+    "No training, tuning, ZIP creation or private test data access",
+    "Official metric unchanged: 0.7 Hangul + 0.3 non-Hangul"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "project_log/experiments/SUB-117799.json": "cf523c8e08dddbe1c8b001322208e39a0e70e3d79aedc10eb6f18f9794385fb3",
+      "project_log/experiments/AS-09.json": "dd2e2c9f124cebed91e44312442ddd541509fad7c9a8556e8099a183a7cc58c0",
+      "submit_AS-09.zip": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {
+    "dense_mode": "hybrid",
+    "dense_top_k": 35,
+    "applies_to": "Hangul candidate branch",
+    "legacy_catalog_map_on": true,
+    "lookup_on": true
+  },
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    ".venv-server/Scripts/python.exe -B -X utf8 (read-only zipfile/hash/Decimal verification)"
+  ],
+  "environment": {
+    "executable": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+    "python": "3.11.15",
+    "target_python": "3.11.17",
+    "target_environment_match": false,
+    "historical_environment_report": "reports/server_environment.json (Linux; distinct from current Windows)",
+    "model_execution_performed": false
+  },
+  "metrics": {
+    "metric_source": "User-reported server result verified against prior record, not a new evaluation",
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": 0.9201100425,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": "Leaderboard displays497seconds; stage inclusion unknown; not a new inference timing",
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": 22798425
+  },
+  "artifacts": [
+    "docs/AS09_SERVER_RESULT.md",
+    "reports/submission_results/VERIFY-AS09-RESULT-01/verification.json",
+    "project_log/experiments/SUB-117799.json",
+    "project_log/experiments/AS-09.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "User row matches existing SUB117799 exactly. New verification record only; same submission retained.",
+    "Exact Decimal comparisons and ZIP CRC/member/hash/configuration checks passed.",
+    "Local AS09 archive matches historical local package hash. Manual lexicon empty; legacy catalog map and lookup enabled."
+  ],
+  "interpretations": [
+    "Highest observed score among AS06/07/08/09; use as package-level score reference.",
+    "Conditional evidence supports Dense execution for identical uploaded bytes, but no component causal attribution."
+  ],
+  "limitations": [
+    "User-provided leaderboard row was not independently fetched; Public/Private partition, row counts and language accuracies are unknown.",
+    "Local ZIP hash matches the historical local package record. Uploaded server ZIP bytes/hash were not independently obtained; submitted_zip_hash_verified=true in the prior record overstates the available evidence.",
+    "Static ZIP inspection establishes Dense configuration, dependency inclusion and fatal initialization guards. Server Dense activation is strongly supported conditional on the server using these same bytes, but server logs and per-row route evidence are unavailable.",
+    "AS09 changes encoder, packaging, normalization and synthetic catalog-map availability together. Component accuracy gains and statistical significance cannot be isolated from the aggregate score.",
+    "No current model inference or row-independence test was rerun. Prior AS09 local checker claims are historical reported checks, not new verification results.",
+    "The latest user-provided server guide recorded in EVALUATION_CRITERIA.md and TEAM_RULES is 1800 seconds, not the older 1200 seconds quoted in AS09/SUB117799. Displayed leaderboard time scope is unknown; no measured stage headroom is claimed.",
+    "TEAM_RULES v4 is present; actual eval_kit README is 1.0, requested 1.1 unavailable. Current Windows Python3.11.15 differs from target3.11.17; reports/server_environment.json is historical Linux environment.",
+    "DPR-SYMPHON-02 record describes fold0 with 2372 rows. The INDEX wording 5-fold group OOF standalone is not established by that record and is not reused as verified full OOF."
+  ],
+  "failure": null,
+  "decision": "Keep AS09 as observed score baseline; qualify prior overstatements in appended documentation while retaining original completed JSON.",
+  "next_actions": [
+    "Only on a separately authorized improvement task: matched Dense retrieval/scoring and legacy-map ablations."
+  ],
+  "comparisons": [
+    {
+      "submission": "AS-06",
+      "record_id": "SUB-115506",
+      "score": "0.9122153056",
+      "displayed_duration_seconds": 366,
+      "score_delta": "0.0078947369",
+      "percentage_point_delta": "0.7894736900",
+      "duration_delta_seconds": 131
+    },
+    {
+      "submission": "AS-07",
+      "record_id": "SUB-116338",
+      "score": "0.9122153056",
+      "displayed_duration_seconds": 372,
+      "score_delta": "0.0078947369",
+      "percentage_point_delta": "0.7894736900",
+      "duration_delta_seconds": 125
+    },
+    {
+      "submission": "AS-08",
+      "record_id": "SUB-117501",
+      "score": "0.9003732004",
+      "displayed_duration_seconds": 236,
+      "score_delta": "0.0197368421",
+      "percentage_point_delta": "1.9736842100",
+      "duration_delta_seconds": 261
+    }
+  ],
+  "verification": {
+    "protected_files_unchanged": true,
+    "protected_files_count": 14,
+    "zip_crc_passed": true,
+    "local_hash_matches_record": true,
+    "server_upload_hash_verified": null,
+    "inference_performed": false,
+    "documentation_validation": "JSON and INDEX parsing passed; single SUB117799 row retained; four documents contain the new verification entry;14 protected hashes unchanged.",
+    "git_diff_check": "Reports trailing blank line at docs/PROJECT_STATUS.md EOF. Historical body including existing EOF whitespace retained; not normalized in this scoped update."
+  }
+}

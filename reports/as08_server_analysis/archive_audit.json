@@ -1,0 +1,861 @@
+{
+  "recorded_at_kst": "2026-10-27T22:57:52+09:00",
+  "python": "3.11.15 (main, Mar  3 2026, 14:55:34) [MSC v.1944 64 bit (AMD64)]",
+  "executable": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+  "packages": {
+    "06": {
+      "filename": "submit_AS-06.zip",
+      "zip_sha256": "b028d8e283775a1e420534c98f20eff431c34339f2d4a471ef756d00d2971e22",
+      "zip_bytes": 1596012,
+      "python_members": [
+        "script.py"
+      ],
+      "member_sha256": {
+        "script.py": "8b92a3ec470e751a52f49c389ed876ef6388bba43312adaf8f4d20d444af8755",
+        "requirements.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "model/model.json": "acfa79c305000d40df9ca1ec433e60fd2d70e1d5381977c75202df299af487a4"
+      },
+      "model_summary": {
+        "version": {
+          "type": "str",
+          "length": 9,
+          "sha256": "e464480b285edea3bcbb5b08eee3b5400b60d4b4f22aeeb7b5bf7eada2a9479d"
+        },
+        "kr_mode": {
+          "type": "str",
+          "length": 4,
+          "sha256": "27621d77913c4ac4f46f313ca763060f040513e3a139a3976051d1134b5d2cd1"
+        },
+        "en_mode": {
+          "type": "str",
+          "length": 5,
+          "sha256": "9e3c6019a48ef38859f97aca86d00e0b6db8cb57540d6bb067dd68ce85bb42b9"
+        },
+        "use_train_lookup_default": {
+          "type": "bool",
+          "length": null,
+          "sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "callsign_lookup": {
+          "type": "dict",
+          "length": 5851,
+          "sha256": "663cddbae87c7197ea9d93a44c9138e6b05b646e2b267af5113c702d0d310021"
+        },
+        "name_lookup": {
+          "type": "dict",
+          "length": 5857,
+          "sha256": "a5581af360be6507baed59114c3e324634cf039d1a1b41208d84da88e60e47cf"
+        },
+        "unique_callsign_lookup": {
+          "type": "dict",
+          "length": 5851,
+          "sha256": "663cddbae87c7197ea9d93a44c9138e6b05b646e2b267af5113c702d0d310021"
+        },
+        "unique_name_lookup": {
+          "type": "dict",
+          "length": 5857,
+          "sha256": "a5581af360be6507baed59114c3e324634cf039d1a1b41208d84da88e60e47cf"
+        },
+        "learned_word_map": {
+          "type": "dict",
+          "length": 466,
+          "sha256": "05ed6cf7155fb3a9c906450810a0e8da013b293003a730865d47d2e3c1ca41f9"
+        },
+        "learned_word_top2": {
+          "type": "dict",
+          "length": 466,
+          "sha256": "1957677123af54eec8a0de752fc5b5fd1e33c2858f537c8af510bf7f33fb95ce"
+        },
+        "learned_syl_top2": {
+          "type": "dict",
+          "length": 271,
+          "sha256": "5c9edacb25b240ad5017c3cc7952742fb916cc97ba1d4ba2057ddae3ea001c1e"
+        },
+        "learned_syl_top3": {
+          "type": "dict",
+          "length": 271,
+          "sha256": "bcf87de44aee116c8c5439d4985bb3782d2362d3fe72039100445c8424d00bbc"
+        },
+        "type_log_lift": {
+          "type": "dict",
+          "length": 19,
+          "sha256": "358d1696a12ca12881a785ca813f0757ad155b08af9b7d1133c9482e14782d67"
+        },
+        "flag_log_lift": {
+          "type": "dict",
+          "length": 254,
+          "sha256": "fde3400e23295ca074e984b74e58c6ff49abc611af57518f71bc185072791b89"
+        },
+        "type_trans_prob": {
+          "type": "dict",
+          "length": 19,
+          "sha256": "33c8c3787dbfa160aa45e12fcdaa3fa3b49d2a3a2f859e33c6f9db4879ed21c6"
+        },
+        "flag_trans_prob": {
+          "type": "dict",
+          "length": 254,
+          "sha256": "a05693ce63bc4b2ab61818841d14eeabd1b9cba6f4bd93e617c9c298c505d661"
+        },
+        "catalog_full_ko_map": {
+          "type": "dict",
+          "length": 78586,
+          "sha256": "a5da35cc56b12f5841080df08bc2eac6b765c38ed20aab7cc9710036bc136799"
+        }
+      },
+      "source_summary": {
+        "definitions": {
+          "is_korean_name": "356f45762f19068ce53350d4ff92470e4a681ae17d6517b6352a868ace42f0a2",
+          "hangul_to_jamo": "9265b1243d3256cb160044b44623a60752e69ae11771ebba5175a487545a1733",
+          "load_default_full_ko_map": "02539c0f5144a00542ab01d0ca83c41c15098e933b6c5cef01feb3175712fe03",
+          "syllable_to_rom": "64d28fa48eacbdd68d32d42c7ac0f3252070759ae14f53053b68d2cd76d5d75e",
+          "en_to_phonetic": "3a70e070e9e044dce7f696f7dd867c95872335986328de77bbb3e7b7d8fdd1ca",
+          "kr_to_phonetic": "c0fec160c3a8a172ed9fa17b179a3ada2eaaf81cf4a90fa3e65e69f7a8a675a0",
+          "consonant_skeleton": "2572aeca111331731eb81d25dc63d926f5f9f779f359a80f47789735ed5a2be0",
+          "extract_kr_acronym_prefix": "c4410155a752d184db1dc37331e7583763c41e8ff2d85644d399d7c35eed3ec6",
+          "is_en_inner_typo": "5d4cf5e4ca2ec5acdea0fd087ebae8974e46925f3c0de7066f7539095746b5ad",
+          "normalize_vessel_name": "57b2b38c2e27a5019105e5cd422461db060393eeef0f00a99fab4aa7d7996b81",
+          "parse_kr_row_features": "797b179674505834fc3f2e8496d00704fcd29f53d46271a77e2d034917f8ef52",
+          "dp_align_kr_en": "13240d7c0855488889919bc34baff46af6bf162b9df3e4964c54d066d10dffd8",
+          "kr_word_to_en_candidates": "958e70340a4a3a1feecc565733045b7703feea11c0ef53f3da1ff6edd802fc8e",
+          "generate_idea_b_word_variants": "99a8d69b302f5399f488cd7dff69ac0a74c4d8138ed797ee984d14129e8168fa",
+          "lattice_word_similarity": "39d1be6c217a96bced3a11e89a93de1c150cd5ad2ee67fc5e9c48e31ee4baf9c",
+          "year_bucket": "524f7c7646a0bb3f8d7606b5034e538cd8418cb4b75192981011d0d78cf92780",
+          "fit_matching_model": "d32a7ea7e02766180e6a48f12a7da800d3bdd97f8beb95a09fc101ab6121c7a8",
+          "CatalogIndex": "4ad8000cbc2b691e75153efdda0877e64b8aa5143fd53b85fea35781fefabbc0",
+          "predict_rows": "ff8e82230b33f86544db17ba832fc87efd457af288fc02dca9911024c6fa5627",
+          "c_idx_has_num": "ca94594296a804345252ebee1701cf63bab3cf0af715db1bcc6094d188058456",
+          "resolve_input_dir": "4428702c4da358c1ed117fc1e2ffe7686723cdca1d59baad88362d89ce92da41",
+          "main": "a6e5110bc36ba243d4cd03afaae2c29da002e5dba78da606ed3f62b9bd0c473d"
+        },
+        "constants": {
+          "USE_TRAIN_LOOKUP": true,
+          "KR_MODE": "AR06",
+          "EN_MODE": "EN_V3",
+          "ROMAN_CHAR_MAP": {
+            "length": 15,
+            "ast_sha256": "1f0ff87c24f83cdf89342b9ff5a697b7d395296e87ccfa7c60f65bdb32760f4f"
+          },
+          "ROMAN_TOKEN_MAP": {
+            "length": 10,
+            "ast_sha256": "3f7573ebdce36cd67ba1b9ae5384cd892c025c018a170cb3df9ac6b7d0fd74f6"
+          },
+          "EN_NUM_WORD_MAP": {
+            "length": 20,
+            "ast_sha256": "d7edadfe5f22e98b619ba502708d481628fd067fc1204fd9228efb1376b624f0"
+          },
+          "CHOSUNG": {
+            "length": 19,
+            "ast_sha256": "421712f03830d26c22f7f38ff67d71e75ef4422e09ef915771d598ccafba2f6b"
+          },
+          "JUNGSUNG": {
+            "length": 21,
+            "ast_sha256": "951795caa92c444b7dfc8739ad064136419bdd1d3308265fd951885c586a79d6"
+          },
+          "JONGSUNG": {
+            "length": 28,
+            "ast_sha256": "35aab30c96d05c55629690736b2ef84433211f46542816d9c71f82787dca3730"
+          },
+          "CHOSUNG_PHON": {
+            "length": 19,
+            "ast_sha256": "7946af66302c47537b0434250c5873898b924ae9978201e9fd73a7b4cf692075"
+          },
+          "JUNGSUNG_PHON": {
+            "length": 21,
+            "ast_sha256": "4dfef8aac05017697631368629328d910b8205abd7411a80aa44aa6640644d57"
+          },
+          "JONGSUNG_PHON": {
+            "length": 28,
+            "ast_sha256": "a1a1146459cc22d9fadc01005249e7290dac47d5788abce2f552b586381e3784"
+          },
+          "KR_LETTER_MAP_BASE": {
+            "length": 29,
+            "ast_sha256": "5309109f8cc888696c0dfa6d2b02353534b3dcec739e0be868742140fc452893"
+          },
+          "KR_EN_NUM_WORD_MAP": {
+            "length": 14,
+            "ast_sha256": "545bb4e2468db6e3f2c7cae1cf9cf339d2e9fcfecea0677a58bf7a67ced90976"
+          },
+          "IDEA_B_SYLLABLE_VARS": {
+            "length": 162,
+            "ast_sha256": "ac70c641d5705cd604680930f86034ccec49240f1e9bcb3626613e07bb6e7033"
+          },
+          "IDEA_B_WORD_VARS": {
+            "length": 299,
+            "ast_sha256": "7d4a8e60a002e26bac2e1c24a35e92eff9a503ee304e8da83471063f83f5f5f5"
+          },
+          "PINYIN_BIGRAM_CONTRACTIONS": {
+            "length": 21,
+            "ast_sha256": "f4098d2331bee03a2262137f669917b4f5c2035903b6bf75997d2d444beed69f"
+          },
+          "COMPOUND_SUBWORD_REPLACEMENTS": {
+            "length": 41,
+            "ast_sha256": "b7ca85ac65fc1c8634349f90e32a2a398a93409b67ef88b6f742f47975ab240e"
+          },
+          "_JAMO_CHO": "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ",
+          "_JAMO_JUNG": "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ",
+          "_JAMO_JONG": {
+            "length": 28,
+            "ast_sha256": "80e144904780f21bbad713f6527a58979d714ba20bd9c98a5ef68c6b8d65c68a"
+          },
+          "EN_LETTER_TO_KR": {
+            "length": 26,
+            "ast_sha256": "7e77017dda035710144dcb720f4dd6349ecae5e43599db0da14e6dab84b84a18"
+          }
+        }
+      }
+    },
+    "07": {
+      "filename": "submit_AS-07.zip",
+      "zip_sha256": "6cc36d661e59057922ec6472ba50796477a668c1a6a0e9b1dcc8de1c74b4b079",
+      "zip_bytes": 22156345,
+      "python_members": [
+        "script.py",
+        "model/phonetic_encoder/hybrid_matcher.py",
+        "model/phonetic_encoder/model.py",
+        "model/phonetic_encoder/tokenizer.py",
+        "model/phonetic_encoder/__init__.py"
+      ],
+      "member_sha256": {
+        "requirements.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "script.py": "bf578d4857ee935e099bce69c5b10b848e62621bd5a340aef83be89672692e73",
+        "model/catalog_embeds_full_fp16.npy": "a9f1e54322772e34ec6620c10f4c7e0882b32f3ec452979ac7731c4c1aff7418",
+        "model/full_encoder.pt": "fa330cb392b9e47e2dc613bde159ef5c666aa142b1f69e2a54044563376e681e",
+        "model/model.json": "779068b3f84015f709ce28f80d2179dfafb013adfab9e48dac709a1c8918f6c6",
+        "model/phonetic_encoder/hybrid_matcher.py": "507c51bd59993f2681ddb70b21d5dee8d659cbfca07933c424ae6b5b63a4f8bf",
+        "model/phonetic_encoder/model.py": "3673fd788dd7e037fb82f875d70c71e9ff5cc711661df635c24615984fd2a5c2",
+        "model/phonetic_encoder/tokenizer.py": "374e8550d24134aa268d13ccbb1508a8e98951dc83af5b3de7a75ff2354045b6",
+        "model/phonetic_encoder/__init__.py": "63fd508cfd2f62116578cf2b8919dbdd0c02d86405adc0ecdc628ad862cb6b15"
+      },
+      "model_summary": {
+        "version": {
+          "type": "str",
+          "length": 9,
+          "sha256": "e464480b285edea3bcbb5b08eee3b5400b60d4b4f22aeeb7b5bf7eada2a9479d"
+        },
+        "kr_mode": {
+          "type": "str",
+          "length": 4,
+          "sha256": "27621d77913c4ac4f46f313ca763060f040513e3a139a3976051d1134b5d2cd1"
+        },
+        "en_mode": {
+          "type": "str",
+          "length": 5,
+          "sha256": "9e3c6019a48ef38859f97aca86d00e0b6db8cb57540d6bb067dd68ce85bb42b9"
+        },
+        "use_train_lookup_default": {
+          "type": "bool",
+          "length": null,
+          "sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "callsign_lookup": {
+          "type": "dict",
+          "length": 5851,
+          "sha256": "663cddbae87c7197ea9d93a44c9138e6b05b646e2b267af5113c702d0d310021"
+        },
+        "name_lookup": {
+          "type": "dict",
+          "length": 5857,
+          "sha256": "a5581af360be6507baed59114c3e324634cf039d1a1b41208d84da88e60e47cf"
+        },
+        "unique_callsign_lookup": {
+          "type": "dict",
+          "length": 5851,
+          "sha256": "663cddbae87c7197ea9d93a44c9138e6b05b646e2b267af5113c702d0d310021"
+        },
+        "unique_name_lookup": {
+          "type": "dict",
+          "length": 5857,
+          "sha256": "a5581af360be6507baed59114c3e324634cf039d1a1b41208d84da88e60e47cf"
+        },
+        "learned_word_map": {
+          "type": "dict",
+          "length": 466,
+          "sha256": "05ed6cf7155fb3a9c906450810a0e8da013b293003a730865d47d2e3c1ca41f9"
+        },
+        "learned_word_top2": {
+          "type": "dict",
+          "length": 466,
+          "sha256": "1957677123af54eec8a0de752fc5b5fd1e33c2858f537c8af510bf7f33fb95ce"
+        },
+        "learned_syl_top2": {
+          "type": "dict",
+          "length": 271,
+          "sha256": "5c9edacb25b240ad5017c3cc7952742fb916cc97ba1d4ba2057ddae3ea001c1e"
+        },
+        "learned_syl_top3": {
+          "type": "dict",
+          "length": 271,
+          "sha256": "bcf87de44aee116c8c5439d4985bb3782d2362d3fe72039100445c8424d00bbc"
+        },
+        "type_log_lift": {
+          "type": "dict",
+          "length": 19,
+          "sha256": "358d1696a12ca12881a785ca813f0757ad155b08af9b7d1133c9482e14782d67"
+        },
+        "flag_log_lift": {
+          "type": "dict",
+          "length": 254,
+          "sha256": "fde3400e23295ca074e984b74e58c6ff49abc611af57518f71bc185072791b89"
+        },
+        "type_trans_prob": {
+          "type": "dict",
+          "length": 19,
+          "sha256": "33c8c3787dbfa160aa45e12fcdaa3fa3b49d2a3a2f859e33c6f9db4879ed21c6"
+        },
+        "flag_trans_prob": {
+          "type": "dict",
+          "length": 254,
+          "sha256": "a05693ce63bc4b2ab61818841d14eeabd1b9cba6f4bd93e617c9c298c505d661"
+        },
+        "catalog_full_ko_map": {
+          "type": "dict",
+          "length": 78586,
+          "sha256": "a5da35cc56b12f5841080df08bc2eac6b765c38ed20aab7cc9710036bc136799"
+        },
+        "dense_mode": {
+          "type": "str",
+          "length": 6,
+          "sha256": "4a27f91df4201372d787764fc1c4aec6a51af145d2c21c00b2f39a2904547e16"
+        },
+        "dense_weight": {
+          "type": "float",
+          "length": null,
+          "sha256": "b8736b999909049671d0ea075a42b308a5fbe2df1854899123fe09eb0ee9de61"
+        }
+      },
+      "source_summary": {
+        "definitions": {
+          "is_korean_name": "356f45762f19068ce53350d4ff92470e4a681ae17d6517b6352a868ace42f0a2",
+          "hangul_to_jamo": "9265b1243d3256cb160044b44623a60752e69ae11771ebba5175a487545a1733",
+          "load_default_full_ko_map": "02539c0f5144a00542ab01d0ca83c41c15098e933b6c5cef01feb3175712fe03",
+          "syllable_to_rom": "64d28fa48eacbdd68d32d42c7ac0f3252070759ae14f53053b68d2cd76d5d75e",
+          "en_to_phonetic": "3a70e070e9e044dce7f696f7dd867c95872335986328de77bbb3e7b7d8fdd1ca",
+          "kr_to_phonetic": "c0fec160c3a8a172ed9fa17b179a3ada2eaaf81cf4a90fa3e65e69f7a8a675a0",
+          "consonant_skeleton": "2572aeca111331731eb81d25dc63d926f5f9f779f359a80f47789735ed5a2be0",
+          "extract_kr_acronym_prefix": "c4410155a752d184db1dc37331e7583763c41e8ff2d85644d399d7c35eed3ec6",
+          "is_en_inner_typo": "5d4cf5e4ca2ec5acdea0fd087ebae8974e46925f3c0de7066f7539095746b5ad",
+          "normalize_vessel_name": "57b2b38c2e27a5019105e5cd422461db060393eeef0f00a99fab4aa7d7996b81",
+          "parse_kr_row_features": "797b179674505834fc3f2e8496d00704fcd29f53d46271a77e2d034917f8ef52",
+          "dp_align_kr_en": "13240d7c0855488889919bc34baff46af6bf162b9df3e4964c54d066d10dffd8",
+          "kr_word_to_en_candidates": "958e70340a4a3a1feecc565733045b7703feea11c0ef53f3da1ff6edd802fc8e",
+          "generate_idea_b_word_variants": "99a8d69b302f5399f488cd7dff69ac0a74c4d8138ed797ee984d14129e8168fa",
+          "lattice_word_similarity": "39d1be6c217a96bced3a11e89a93de1c150cd5ad2ee67fc5e9c48e31ee4baf9c",
+          "year_bucket": "524f7c7646a0bb3f8d7606b5034e538cd8418cb4b75192981011d0d78cf92780",
+          "fit_matching_model": "d32a7ea7e02766180e6a48f12a7da800d3bdd97f8beb95a09fc101ab6121c7a8",
+          "CatalogIndex": "4ad8000cbc2b691e75153efdda0877e64b8aa5143fd53b85fea35781fefabbc0",
+          "predict_rows": "909509f034e434154ab6318bcaf240cb8b0d05d7f2ff08ab1182d172dada2055",
+          "c_idx_has_num": "ca94594296a804345252ebee1701cf63bab3cf0af715db1bcc6094d188058456",
+          "resolve_input_dir": "4428702c4da358c1ed117fc1e2ffe7686723cdca1d59baad88362d89ce92da41",
+          "main": "f896275bed328a80bcbaf0f935c5401b3992292fec7dfc8e9423ae775d467b27"
+        },
+        "constants": {
+          "USE_TRAIN_LOOKUP": true,
+          "KR_MODE": "AR06",
+          "EN_MODE": "EN_V3",
+          "ROMAN_CHAR_MAP": {
+            "length": 15,
+            "ast_sha256": "1f0ff87c24f83cdf89342b9ff5a697b7d395296e87ccfa7c60f65bdb32760f4f"
+          },
+          "ROMAN_TOKEN_MAP": {
+            "length": 10,
+            "ast_sha256": "3f7573ebdce36cd67ba1b9ae5384cd892c025c018a170cb3df9ac6b7d0fd74f6"
+          },
+          "EN_NUM_WORD_MAP": {
+            "length": 20,
+            "ast_sha256": "d7edadfe5f22e98b619ba502708d481628fd067fc1204fd9228efb1376b624f0"
+          },
+          "CHOSUNG": {
+            "length": 19,
+            "ast_sha256": "421712f03830d26c22f7f38ff67d71e75ef4422e09ef915771d598ccafba2f6b"
+          },
+          "JUNGSUNG": {
+            "length": 21,
+            "ast_sha256": "951795caa92c444b7dfc8739ad064136419bdd1d3308265fd951885c586a79d6"
+          },
+          "JONGSUNG": {
+            "length": 28,
+            "ast_sha256": "35aab30c96d05c55629690736b2ef84433211f46542816d9c71f82787dca3730"
+          },
+          "CHOSUNG_PHON": {
+            "length": 19,
+            "ast_sha256": "7946af66302c47537b0434250c5873898b924ae9978201e9fd73a7b4cf692075"
+          },
+          "JUNGSUNG_PHON": {
+            "length": 21,
+            "ast_sha256": "4dfef8aac05017697631368629328d910b8205abd7411a80aa44aa6640644d57"
+          },
+          "JONGSUNG_PHON": {
+            "length": 28,
+            "ast_sha256": "a1a1146459cc22d9fadc01005249e7290dac47d5788abce2f552b586381e3784"
+          },
+          "KR_LETTER_MAP_BASE": {
+            "length": 29,
+            "ast_sha256": "5309109f8cc888696c0dfa6d2b02353534b3dcec739e0be868742140fc452893"
+          },
+          "KR_EN_NUM_WORD_MAP": {
+            "length": 14,
+            "ast_sha256": "545bb4e2468db6e3f2c7cae1cf9cf339d2e9fcfecea0677a58bf7a67ced90976"
+          },
+          "IDEA_B_SYLLABLE_VARS": {
+            "length": 162,
+            "ast_sha256": "ac70c641d5705cd604680930f86034ccec49240f1e9bcb3626613e07bb6e7033"
+          },
+          "IDEA_B_WORD_VARS": {
+            "length": 299,
+            "ast_sha256": "7d4a8e60a002e26bac2e1c24a35e92eff9a503ee304e8da83471063f83f5f5f5"
+          },
+          "PINYIN_BIGRAM_CONTRACTIONS": {
+            "length": 21,
+            "ast_sha256": "f4098d2331bee03a2262137f669917b4f5c2035903b6bf75997d2d444beed69f"
+          },
+          "COMPOUND_SUBWORD_REPLACEMENTS": {
+            "length": 41,
+            "ast_sha256": "b7ca85ac65fc1c8634349f90e32a2a398a93409b67ef88b6f742f47975ab240e"
+          },
+          "_JAMO_CHO": "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ",
+          "_JAMO_JUNG": "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ",
+          "_JAMO_JONG": {
+            "length": 28,
+            "ast_sha256": "80e144904780f21bbad713f6527a58979d714ba20bd9c98a5ef68c6b8d65c68a"
+          },
+          "EN_LETTER_TO_KR": {
+            "length": 26,
+            "ast_sha256": "7e77017dda035710144dcb720f4dd6349ecae5e43599db0da14e6dab84b84a18"
+          }
+        }
+      },
+      "isolated_import": {
+        "direct_package_import": {
+          "passed": false,
+          "type": "ModuleNotFoundError",
+          "message": "No module named 'model.phonetic_encoder.loss'"
+        },
+        "entrypoint_dense_class_available": false,
+        "loaded_module_path": null,
+        "model_load_calls": 0,
+        "repository_path_available": false
+      },
+      "temporary_add_loss_probe": {
+        "direct_package_import": {
+          "passed": true
+        },
+        "entrypoint_dense_class_available": true,
+        "loaded_module_path": "model.phonetic_encoder.hybrid_matcher",
+        "model_load_calls": 0,
+        "repository_path_available": false
+      },
+      "temporary_inference_only_init_probe": {
+        "direct_package_import": {
+          "passed": true
+        },
+        "entrypoint_dense_class_available": true,
+        "loaded_module_path": "model.phonetic_encoder.hybrid_matcher",
+        "model_load_calls": 0,
+        "repository_path_available": false
+      }
+    },
+    "08": {
+      "filename": "submit_AS-08.zip",
+      "zip_sha256": "a2e6e6d380910a7cdfa99587135d04e59af4e7844b6666c6f47aa2b63e5a6d9e",
+      "zip_bytes": 20939264,
+      "python_members": [
+        "script.py",
+        "model/phonetic_encoder/hybrid_matcher.py",
+        "model/phonetic_encoder/model.py",
+        "model/phonetic_encoder/tokenizer.py",
+        "model/phonetic_encoder/__init__.py"
+      ],
+      "member_sha256": {
+        "requirements.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "script.py": "da235619b8fc46b6f239f292db26972005e96a6a47be43dded5fbc3e071841b9",
+        "model/catalog_embeds_full_fp16.npy": "dc33c4302d71e929543d1921fe3c98a0ce2b886c152698fa655fd3e2dd62526e",
+        "model/full_encoder.pt": "fa330cb392b9e47e2dc613bde159ef5c666aa142b1f69e2a54044563376e681e",
+        "model/model.json": "3f8cd8fd7a6dbc5fa34dd583bcf37009a2f9439ef2a6787f90b61a12878ed673",
+        "model/phonetic_encoder/hybrid_matcher.py": "507c51bd59993f2681ddb70b21d5dee8d659cbfca07933c424ae6b5b63a4f8bf",
+        "model/phonetic_encoder/model.py": "07a5849b663e0495d8f3c6953994e019b830086fc19ac965fa076fd5c6d2a8ca",
+        "model/phonetic_encoder/tokenizer.py": "2f78640722c928a8fb71b1860b87af81e2589c0ea240150537eb7cb7f0b6fbb1",
+        "model/phonetic_encoder/__init__.py": "63fd508cfd2f62116578cf2b8919dbdd0c02d86405adc0ecdc628ad862cb6b15"
+      },
+      "model_summary": {
+        "version": {
+          "type": "str",
+          "length": 9,
+          "sha256": "e464480b285edea3bcbb5b08eee3b5400b60d4b4f22aeeb7b5bf7eada2a9479d"
+        },
+        "kr_mode": {
+          "type": "str",
+          "length": 4,
+          "sha256": "27621d77913c4ac4f46f313ca763060f040513e3a139a3976051d1134b5d2cd1"
+        },
+        "en_mode": {
+          "type": "str",
+          "length": 5,
+          "sha256": "9e3c6019a48ef38859f97aca86d00e0b6db8cb57540d6bb067dd68ce85bb42b9"
+        },
+        "use_train_lookup_default": {
+          "type": "bool",
+          "length": null,
+          "sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b"
+        },
+        "callsign_lookup": {
+          "type": "dict",
+          "length": 5851,
+          "sha256": "663cddbae87c7197ea9d93a44c9138e6b05b646e2b267af5113c702d0d310021"
+        },
+        "name_lookup": {
+          "type": "dict",
+          "length": 5857,
+          "sha256": "a5581af360be6507baed59114c3e324634cf039d1a1b41208d84da88e60e47cf"
+        },
+        "unique_callsign_lookup": {
+          "type": "dict",
+          "length": 5851,
+          "sha256": "663cddbae87c7197ea9d93a44c9138e6b05b646e2b267af5113c702d0d310021"
+        },
+        "unique_name_lookup": {
+          "type": "dict",
+          "length": 5857,
+          "sha256": "a5581af360be6507baed59114c3e324634cf039d1a1b41208d84da88e60e47cf"
+        },
+        "learned_word_map": {
+          "type": "dict",
+          "length": 466,
+          "sha256": "05ed6cf7155fb3a9c906450810a0e8da013b293003a730865d47d2e3c1ca41f9"
+        },
+        "learned_word_top2": {
+          "type": "dict",
+          "length": 466,
+          "sha256": "1957677123af54eec8a0de752fc5b5fd1e33c2858f537c8af510bf7f33fb95ce"
+        },
+        "learned_syl_top2": {
+          "type": "dict",
+          "length": 271,
+          "sha256": "5c9edacb25b240ad5017c3cc7952742fb916cc97ba1d4ba2057ddae3ea001c1e"
+        },
+        "learned_syl_top3": {
+          "type": "dict",
+          "length": 271,
+          "sha256": "bcf87de44aee116c8c5439d4985bb3782d2362d3fe72039100445c8424d00bbc"
+        },
+        "type_log_lift": {
+          "type": "dict",
+          "length": 19,
+          "sha256": "358d1696a12ca12881a785ca813f0757ad155b08af9b7d1133c9482e14782d67"
+        },
+        "flag_log_lift": {
+          "type": "dict",
+          "length": 254,
+          "sha256": "fde3400e23295ca074e984b74e58c6ff49abc611af57518f71bc185072791b89"
+        },
+        "type_trans_prob": {
+          "type": "dict",
+          "length": 19,
+          "sha256": "33c8c3787dbfa160aa45e12fcdaa3fa3b49d2a3a2f859e33c6f9db4879ed21c6"
+        },
+        "flag_trans_prob": {
+          "type": "dict",
+          "length": 254,
+          "sha256": "a05693ce63bc4b2ab61818841d14eeabd1b9cba6f4bd93e617c9c298c505d661"
+        },
+        "catalog_full_ko_map": {
+          "type": "dict",
+          "length": 0,
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        "dense_mode": {
+          "type": "str",
+          "length": 6,
+          "sha256": "4a27f91df4201372d787764fc1c4aec6a51af145d2c21c00b2f39a2904547e16"
+        },
+        "dense_weight": {
+          "type": "float",
+          "length": null,
+          "sha256": "b8736b999909049671d0ea075a42b308a5fbe2df1854899123fe09eb0ee9de61"
+        }
+      },
+      "source_summary": {
+        "definitions": {
+          "is_korean_name": "356f45762f19068ce53350d4ff92470e4a681ae17d6517b6352a868ace42f0a2",
+          "hangul_to_jamo": "9265b1243d3256cb160044b44623a60752e69ae11771ebba5175a487545a1733",
+          "load_default_full_ko_map": "764c4c0d53d55b6337ec417261bc2f1188f6762d51301cd8c0796d5cedc4d0f8",
+          "syllable_to_rom": "64d28fa48eacbdd68d32d42c7ac0f3252070759ae14f53053b68d2cd76d5d75e",
+          "en_to_phonetic": "3a70e070e9e044dce7f696f7dd867c95872335986328de77bbb3e7b7d8fdd1ca",
+          "kr_to_phonetic": "c0fec160c3a8a172ed9fa17b179a3ada2eaaf81cf4a90fa3e65e69f7a8a675a0",
+          "consonant_skeleton": "2572aeca111331731eb81d25dc63d926f5f9f779f359a80f47789735ed5a2be0",
+          "extract_kr_acronym_prefix": "c4410155a752d184db1dc37331e7583763c41e8ff2d85644d399d7c35eed3ec6",
+          "is_en_inner_typo": "5d4cf5e4ca2ec5acdea0fd087ebae8974e46925f3c0de7066f7539095746b5ad",
+          "normalize_vessel_name": "57b2b38c2e27a5019105e5cd422461db060393eeef0f00a99fab4aa7d7996b81",
+          "parse_kr_row_features": "797b179674505834fc3f2e8496d00704fcd29f53d46271a77e2d034917f8ef52",
+          "dp_align_kr_en": "13240d7c0855488889919bc34baff46af6bf162b9df3e4964c54d066d10dffd8",
+          "kr_word_to_en_candidates": "958e70340a4a3a1feecc565733045b7703feea11c0ef53f3da1ff6edd802fc8e",
+          "generate_idea_b_word_variants": "99a8d69b302f5399f488cd7dff69ac0a74c4d8138ed797ee984d14129e8168fa",
+          "year_bucket": "524f7c7646a0bb3f8d7606b5034e538cd8418cb4b75192981011d0d78cf92780",
+          "fit_matching_model": "d32a7ea7e02766180e6a48f12a7da800d3bdd97f8beb95a09fc101ab6121c7a8",
+          "CatalogIndex": "4ad8000cbc2b691e75153efdda0877e64b8aa5143fd53b85fea35781fefabbc0",
+          "predict_rows": "b3fdf4e8db397489961d596c0664c35bec02badc6f7d3dbf14901f8086602a32",
+          "c_idx_has_num": "ca94594296a804345252ebee1701cf63bab3cf0af715db1bcc6094d188058456",
+          "resolve_input_dir": "4428702c4da358c1ed117fc1e2ffe7686723cdca1d59baad88362d89ce92da41",
+          "main": "e82237417f48e8a49b0b99001cf242a84c0f01136b740410398847fd89d4ddd1"
+        },
+        "constants": {
+          "USE_TRAIN_LOOKUP": true,
+          "USE_FULL_KO_MAP": false,
+          "KR_MODE": "AR06",
+          "EN_MODE": "EN_V3",
+          "ROMAN_CHAR_MAP": {
+            "length": 15,
+            "ast_sha256": "1f0ff87c24f83cdf89342b9ff5a697b7d395296e87ccfa7c60f65bdb32760f4f"
+          },
+          "ROMAN_TOKEN_MAP": {
+            "length": 10,
+            "ast_sha256": "3f7573ebdce36cd67ba1b9ae5384cd892c025c018a170cb3df9ac6b7d0fd74f6"
+          },
+          "EN_NUM_WORD_MAP": {
+            "length": 20,
+            "ast_sha256": "d7edadfe5f22e98b619ba502708d481628fd067fc1204fd9228efb1376b624f0"
+          },
+          "CHOSUNG": {
+            "length": 19,
+            "ast_sha256": "421712f03830d26c22f7f38ff67d71e75ef4422e09ef915771d598ccafba2f6b"
+          },
+          "JUNGSUNG": {
+            "length": 21,
+            "ast_sha256": "951795caa92c444b7dfc8739ad064136419bdd1d3308265fd951885c586a79d6"
+          },
+          "JONGSUNG": {
+            "length": 28,
+            "ast_sha256": "35aab30c96d05c55629690736b2ef84433211f46542816d9c71f82787dca3730"
+          },
+          "CHOSUNG_PHON": {
+            "length": 19,
+            "ast_sha256": "7946af66302c47537b0434250c5873898b924ae9978201e9fd73a7b4cf692075"
+          },
+          "JUNGSUNG_PHON": {
+            "length": 21,
+            "ast_sha256": "4dfef8aac05017697631368629328d910b8205abd7411a80aa44aa6640644d57"
+          },
+          "JONGSUNG_PHON": {
+            "length": 28,
+            "ast_sha256": "a1a1146459cc22d9fadc01005249e7290dac47d5788abce2f552b586381e3784"
+          },
+          "KR_LETTER_MAP_BASE": {
+            "length": 29,
+            "ast_sha256": "5309109f8cc888696c0dfa6d2b02353534b3dcec739e0be868742140fc452893"
+          },
+          "KR_EN_NUM_WORD_MAP": {
+            "length": 14,
+            "ast_sha256": "545bb4e2468db6e3f2c7cae1cf9cf339d2e9fcfecea0677a58bf7a67ced90976"
+          },
+          "IDEA_B_SYLLABLE_VARS": {
+            "length": 162,
+            "ast_sha256": "ac70c641d5705cd604680930f86034ccec49240f1e9bcb3626613e07bb6e7033"
+          },
+          "IDEA_B_WORD_VARS": {
+            "length": 0,
+            "ast_sha256": "0155f1e9b79e0a9466ae5e1efd72faa45619b4c1c2ac86a6c91d7c2a5cd1f2a6"
+          },
+          "PINYIN_BIGRAM_CONTRACTIONS": {
+            "length": 21,
+            "ast_sha256": "f4098d2331bee03a2262137f669917b4f5c2035903b6bf75997d2d444beed69f"
+          },
+          "COMPOUND_SUBWORD_REPLACEMENTS": {
+            "length": 41,
+            "ast_sha256": "b7ca85ac65fc1c8634349f90e32a2a398a93409b67ef88b6f742f47975ab240e"
+          },
+          "_JAMO_CHO": "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ",
+          "_JAMO_JUNG": "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ",
+          "_JAMO_JONG": {
+            "length": 28,
+            "ast_sha256": "80e144904780f21bbad713f6527a58979d714ba20bd9c98a5ef68c6b8d65c68a"
+          },
+          "EN_LETTER_TO_KR": {
+            "length": 26,
+            "ast_sha256": "7e77017dda035710144dcb720f4dd6349ecae5e43599db0da14e6dab84b84a18"
+          }
+        }
+      },
+      "isolated_import": {
+        "direct_package_import": {
+          "passed": false,
+          "type": "ModuleNotFoundError",
+          "message": "No module named 'model.phonetic_encoder.loss'"
+        },
+        "entrypoint_dense_class_available": false,
+        "loaded_module_path": null,
+        "model_load_calls": 0,
+        "repository_path_available": false
+      },
+      "temporary_add_loss_probe": {
+        "direct_package_import": {
+          "passed": true
+        },
+        "entrypoint_dense_class_available": true,
+        "loaded_module_path": "model.phonetic_encoder.hybrid_matcher",
+        "model_load_calls": 0,
+        "repository_path_available": false
+      },
+      "temporary_inference_only_init_probe": {
+        "direct_package_import": {
+          "passed": true
+        },
+        "entrypoint_dense_class_available": true,
+        "loaded_module_path": "model.phonetic_encoder.hybrid_matcher",
+        "model_load_calls": 0,
+        "repository_path_available": false
+      }
+    }
+  },
+  "comparisons": {
+    "06_07": {
+      "same_model_keys": [
+        "callsign_lookup",
+        "catalog_full_ko_map",
+        "en_mode",
+        "flag_log_lift",
+        "flag_trans_prob",
+        "kr_mode",
+        "learned_syl_top2",
+        "learned_syl_top3",
+        "learned_word_map",
+        "learned_word_top2",
+        "name_lookup",
+        "type_log_lift",
+        "type_trans_prob",
+        "unique_callsign_lookup",
+        "unique_name_lookup",
+        "use_train_lookup_default",
+        "version"
+      ],
+      "changed_model_keys": [],
+      "model_keys_added": [
+        "dense_mode",
+        "dense_weight"
+      ],
+      "model_keys_removed": [],
+      "changed_definitions": [
+        "main",
+        "predict_rows"
+      ],
+      "definitions_added": [],
+      "definitions_removed": [],
+      "changed_constants": {}
+    },
+    "07_08": {
+      "same_model_keys": [
+        "callsign_lookup",
+        "dense_mode",
+        "dense_weight",
+        "en_mode",
+        "flag_log_lift",
+        "flag_trans_prob",
+        "kr_mode",
+        "learned_syl_top2",
+        "learned_syl_top3",
+        "learned_word_map",
+        "learned_word_top2",
+        "name_lookup",
+        "type_log_lift",
+        "type_trans_prob",
+        "unique_callsign_lookup",
+        "unique_name_lookup",
+        "use_train_lookup_default",
+        "version"
+      ],
+      "changed_model_keys": [
+        "catalog_full_ko_map"
+      ],
+      "model_keys_added": [],
+      "model_keys_removed": [],
+      "changed_definitions": [
+        "load_default_full_ko_map",
+        "main",
+        "predict_rows"
+      ],
+      "definitions_added": [],
+      "definitions_removed": [
+        "lattice_word_similarity"
+      ],
+      "changed_constants": {
+        "IDEA_B_WORD_VARS": {
+          "before": {
+            "length": 299,
+            "ast_sha256": "7d4a8e60a002e26bac2e1c24a35e92eff9a503ee304e8da83471063f83f5f5f5"
+          },
+          "after": {
+            "length": 0,
+            "ast_sha256": "0155f1e9b79e0a9466ae5e1efd72faa45619b4c1c2ac86a6c91d7c2a5cd1f2a6"
+          }
+        },
+        "USE_FULL_KO_MAP": {
+          "before": null,
+          "after": false
+        }
+      }
+    },
+    "06_08": {
+      "same_model_keys": [
+        "callsign_lookup",
+        "en_mode",
+        "flag_log_lift",
+        "flag_trans_prob",
+        "kr_mode",
+        "learned_syl_top2",
+        "learned_syl_top3",
+        "learned_word_map",
+        "learned_word_top2",
+        "name_lookup",
+        "type_log_lift",
+        "type_trans_prob",
+        "unique_callsign_lookup",
+        "unique_name_lookup",
+        "use_train_lookup_default",
+        "version"
+      ],
+      "changed_model_keys": [
+        "catalog_full_ko_map"
+      ],
+      "model_keys_added": [
+        "dense_mode",
+        "dense_weight"
+      ],
+      "model_keys_removed": [],
+      "changed_definitions": [
+        "load_default_full_ko_map",
+        "main",
+        "predict_rows"
+      ],
+      "definitions_added": [],
+      "definitions_removed": [
+        "lattice_word_similarity"
+      ],
+      "changed_constants": {
+        "IDEA_B_WORD_VARS": {
+          "before": {
+            "length": 299,
+            "ast_sha256": "7d4a8e60a002e26bac2e1c24a35e92eff9a503ee304e8da83471063f83f5f5f5"
+          },
+          "after": {
+            "length": 0,
+            "ast_sha256": "0155f1e9b79e0a9466ae5e1efd72faa45619b4c1c2ac86a6c91d7c2a5cd1f2a6"
+          }
+        },
+        "USE_FULL_KO_MAP": {
+          "before": null,
+          "after": false
+        }
+      }
+    }
+  },
+  "server_score_comparison": {
+    "score_delta": "-0.0118421052",
+    "percentage_point_delta": "-1.1842105200",
+    "duration_delta_vs_AS07_seconds": -136
+  },
+  "scope": {
+    "models_loaded": false,
+    "predictions_computed": false,
+    "network_allowed": false,
+    "original_sources_or_archives_modified": false,
+    "probes": "Exact archived sources and two temporary import-only repairs; same installed interpreter/packages"
+  }
+}

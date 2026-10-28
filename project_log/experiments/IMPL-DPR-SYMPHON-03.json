@@ -1,0 +1,142 @@
+{
+  "experiment_id": "IMPL-DPR-SYMPHON-03",
+  "plan_id": "SPEC-DPR-03",
+  "status": "completed_implementation_and_experiments",
+  "recorded_at_kst": "2026-10-28T22:28:34+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": "2026-10-28T23:17:36+09:00",
+  "purpose": "Implement SPEC-DPR-03 and validate single-pass row-independent inference",
+  "hypothesis": "Removing synthetic initialization, retaining a composite peak, and directly admitting calibrated dense similarity may improve local matching; speed and leaderboard transfer are unproven.",
+  "baseline_experiment_id": "DPR-SYMPHON-02",
+  "changed_factors": [
+    "no Stage A or Stage A checkpoint reuse",
+    "backbone/new module differential learning rate",
+    "global composite best across mining refresh",
+    "single-pass views and one row-local dense result",
+    "dense top60 and Stage2 calibrated similarity",
+    "generic sister-tail and rare-tail scoring"
+  ],
+  "fixed_conditions": [
+    "G5-s42 fold0",
+    "official train/catalog only",
+    "no submission ZIP creation",
+    "legacy manual dictionary disabled for primary benchmark"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "phonetic_encoder/model.py": "e9d1e465bdea6179d22a7333245bc5fe11eea40586a0ffdceabe2c85f3c7b430",
+      "phonetic_encoder/tokenizer.py": "e19e1c9c4a59444be881c285ced063a0f17a9a9ddd19b52cd19953a3e5b7af14",
+      "phonetic_encoder/dataset.py": "defb522d806fbbe8207ae84161aba18e0ab1d756380831f7236f037deb9a8605",
+      "phonetic_encoder/loss.py": "a438e9cff9c2bfe7a3a076f173495e2f53b8fcb650b39ca87effbe86412f47db",
+      "phonetic_encoder/retrieval.py": "31682e9078d9d2666d982ab023809984344e0971d63bf6dbb4c248ce078b8b7e",
+      "phonetic_encoder/hybrid_matcher.py": "5caea0f93853d4481acb2c91d09a0ff3e0e5ab74ce03f93156264c4bdc602fbf",
+      "experimental_matchers/dpr_hybrid/script.py": "b1bfa77f81875983e143973d112827563a2d5fd69a74b110ccf2cfc42491206f",
+      "experiments/dpr03_common.py": "a175a5a5aa57e2066dea4eaf4205db96f87944105fac204641c853aa5adbf6cd",
+      "experiments/train_bi_encoder.py": "0e8a30f2a01a7df8c7fca93d7007d4074bb304b18570558f2507685375cd5f20",
+      "experiments/export_catalog_embeddings.py": "748bd2432383c8e59d293556cc1cd2cd9702bfa236282ad1564b35617eea844a",
+      "experiments/evaluate_bi_encoder_oof.py": "4be68113ddbf163b6b4c7d26b4871f9c1da680f58548d6cbe3e76f798ee49da3",
+      "experiments/evaluate_dpr_robustness.py": "4717890766ceb1868f92568238e6ad0d6b51b831f4e8e0a77232931fbb441a3e",
+      "experiments/benchmark_dpr03_latency.py": "6fdb956402fe02757d7c28365ec8181ea239f14a449128becf1412ae6edb33c3",
+      "tests/test_dpr03.py": "0e7ba04ac5dc749d5db4e94e95f6925f7205663430b9ece16034abc4f2abbc94",
+      "tests/run_dpr_tests.py": "6df94b67e7347a28be8f0e7da5b855e27c46dc6adfe900bfb02f1266852a1d42",
+      "tools/verify_dpr03.py": "7472787ed1f20375b3e8362f19202e8677348b2605ca89f5d85e1a89be258e68",
+      "eval_kit/evaluate.py": "2c728b357727f8e3962128030dde3bcb6fc6b230fcde287e336d3e0eb6c9f38e",
+      "eval_kit/robustness.py": "65a574da60188ca6fa1d660108a1705dc5bd446d0ac150c0f4d1b915d716d230",
+      "experiments/analyze_dpr03_results.py": "f7164a05548faf3c58af4659982323d3556620d7ce4f2d1ec10fc9ee73f8af72"
+    },
+    "hash_scope": "final implementation source; training/evaluation snapshots remain in their own records"
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [],
+  "environment": {},
+  "metrics": {
+    "metric_source": "18 behavioral checks passed; native 300-row checks passed; performance experiments are separate run IDs",
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "docs/SPEC_DPR_03_IMPLEMENTATION.md",
+    "reports/dpr03_final_tests.txt",
+    "reports/dpr03_latency.json",
+    "artifacts/VERIFY-DPR03-01/verification.json",
+    "artifacts/ANALYZE-DPR03-01/summary.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "18 final function/unittest checks passed (reports/dpr03_final_tests.txt).",
+    "Native300 rows: reverse/subset/single3/repeat mismatches0; selected tensors equal archived epoch5; protected35 file hashes unchanged.",
+    "Original external-fold0 composite selection follows explicit user request; results are development-selected.",
+    "No ZIP generation, uploads, commit, push or EXAONE implementation/training performed."
+  ],
+  "interpretations": [],
+  "limitations": [
+    "External fold0 explicitly used for checkpoint selection as requested; resulting score is development-selected, not untouched validation.",
+    "Public train used in prior EDA; local score cannot guarantee leaderboard score.",
+    "Known Glovis/WREN examples motivate rules; case success is development evidence."
+  ],
+  "failure": null,
+  "decision": "Do not promote DPR03 checkpoint/direct calibration as an accuracy improvement; preserve AS09. Packing/row-score reuse have measured local latency evidence.",
+  "next_actions": [
+    "Task complete. Only if further model improvement is requested, isolate initialization/LR/training changes with fit-inner selection; keep submission ZIP generation separately authorized."
+  ],
+  "validation_attempts": [
+    {
+      "command": ".venv-server/Scripts/python.exe -m pytest ...",
+      "status": "failed",
+      "error": "No module named pytest",
+      "retry": "Same modules run through standard-library FunctionTestCase runner"
+    },
+    {
+      "run_id": "EVAL-DPR-SYMPHON-03",
+      "status": "failed",
+      "reason": "TF32 embedding maxdiff2.82e-5 >1e-6"
+    },
+    {
+      "run_id": "EVAL-DPR-SYMPHON-03-RECHECK-01",
+      "status": "failed",
+      "reason": "numpy bool JSON serialization"
+    },
+    {
+      "run_id": "EVAL-DPR-SYMPHON-03-RECHECK-02",
+      "status": "passed",
+      "reason": "IEEE FP32/native bool; original tolerance unchanged"
+    }
+  ]
+}

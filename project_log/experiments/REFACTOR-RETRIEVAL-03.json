@@ -1,0 +1,331 @@
+{
+  "experiment_id": "REFACTOR-RETRIEVAL-03",
+  "plan_id": null,
+  "status": "completed",
+  "recorded_at_kst": "2026-10-27T22:34:46+09:00",
+  "started_at_kst": "2026-10-27T22:38:47+09:00",
+  "finished_at_kst": "2026-10-27T22:46:25+09:00",
+  "purpose": "Behavior-preserving retrieval deduplication; no fitting/tuning/ZIP/accuracy claim",
+  "hypothesis": "Shared Top-K arithmetic and a single dense-map lookup path preserve exact candidates/features/scores/IDs",
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "Shared exact NumPy partial-sort operation in training/evaluation; hybrid submission module unchanged",
+    "One CatalogIndex dense query/map/cache method reused by candidates and features"
+  ],
+  "fixed_conditions": [
+    "Current working tree including pre-existing edits",
+    "CLI/defaults/checkpoints/normalization/folds/seeds/fit scope",
+    "Native NumPy argpartition/argsort tie and bounds behavior",
+    "Historical sources and submission assets"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "model/matcher.py": "160f5e8d51381e158a4d9a362f1ba95cb329be9a12c5065bef6524137d85ef5f",
+      "experiments/train_bi_encoder.py": "7d1b56c44e717e5fbb24a3d29b826af9388432145f033af666b5690cba5c01f2",
+      "experiments/evaluate_bi_encoder_oof.py": "f722e2b2bb07959b40b62a8a6e361dafedae14146db615cfcc20f83c4dda21a9"
+    },
+    "file_sha256_after": {
+      "model/matcher.py": "20798100e35012cbf3ed47f0900eb18e91c12d25ff7a18c0a0ac20b88ab9c538",
+      "experiments/train_bi_encoder.py": "bba7cf6fe840e6f5ba4ebf8ff94a14090f4af54c76fae3284552e91d40d54cc4",
+      "experiments/evaluate_bi_encoder_oof.py": "fd72301e785d07dca106f28a280483734fabe28105ac46502e51d4e13d925d81",
+      "phonetic_encoder/retrieval.py": "be0c40292691c3f6a4b02c51581a266db66eaf3bdd79c01e4568def4aff42633",
+      "tools/verify_retrieval_refactor.py": "c25972ec2c7015febd601893ff45c976e643e5d85ec24ee07f9c949e7da6cd2a",
+      "tests/test_retrieval_refactor.py": "3a1496db7656785fe3fb3c0985282d6ceec760c2b59e22977aa53539b8709020",
+      "README.md": "366a9a6c8332c9aed809071d59e2ca5ce6c14348562e2c2528a87f75a9b42a40",
+      "docs/PROJECT_STATUS.md": "74393e1f6c225257b599ebfd2cee827c833d6ed47b78c7dcbd4992f61317307e",
+      "project_log/README.md": "2a59b38edf0d75a3acebaa4c19ca0c0775596cd9036c8c68ffe83348daea92f2",
+      "project_log/DECISIONS.md": "a20bf783d846b184851c7945c5e7fec40b52935a29ed67fde4b4f595cf045698",
+      "project_log/experiments/INDEX.csv": "da3426120eaeea21966fb95dbbf68a3fc882552528369fda6535825b2c296996",
+      "docs/REFACTOR_RETRIEVAL_03.md": "26f90caa75cd11398d9dcb5e9a3bc1f7aa34c66fbc457d445209fa09932f9bec"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train_sha256": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "catalog_sha256": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9"
+    },
+    "split_id": "existing G5-s42 fold 0, fixed public compatibility sample",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": 64,
+    "sample_ids_sha256": "753c708f048bbc4912c667518bee711808ce27a667e55ce2d0ec62aec5ab6c4d",
+    "sample_selection": "sort sample_id; fold 0; first 32 Hangul and 32 non-Hangul"
+  },
+  "retrieval": {
+    "changed_parameters": false,
+    "exact_candidates_and_order": true,
+    "dense_top_k": 35,
+    "native_numpy_ties_preserved": true,
+    "candidate_inclusion_rate": null
+  },
+  "features": [
+    "Existing feature names, order, dimensions and float32 values unchanged"
+  ],
+  "preprocessing": {
+    "normalization_changed": false,
+    "missing_value_coercion_changed": false
+  },
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "existing saved grouped classifier plus existing dense encoder; no fitting",
+    "parameters": {},
+    "loss": null,
+    "serialization_changed": false
+  },
+  "commands": [
+    ".\\.venv-server\\Scripts\\python.exe -B -X utf8 -m unittest tests.test_matcher_refactor tests.test_name_processing tests.test_retrieval_channels tests.test_switches -v",
+    ".\\.venv-server\\Scripts\\python.exe -B -X utf8 environment/check_environment.py --output reports/refactoring/REFACTOR-RETRIEVAL-03/environment.json",
+    ".\\.venv-server\\Scripts\\python.exe -B -X utf8 tools/verify_retrieval_refactor.py --output reports/refactoring/REFACTOR-RETRIEVAL-03/baseline.json",
+    ".\\.venv-server\\Scripts\\python.exe -B -X utf8 -m unittest tests.test_retrieval_refactor tests.test_matcher_refactor tests.test_name_processing tests.test_retrieval_channels tests.test_switches -v",
+    ".\\.venv-server\\Scripts\\python.exe -B -X utf8 -m unittest tests.test_dense_features -v",
+    ".\\.venv-server\\Scripts\\python.exe -B -X utf8 tools/verify_retrieval_refactor.py"
+  ],
+  "environment": {
+    "executable": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+    "python_actual": "3.11.15",
+    "python_target": "3.11.17",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "version_check_passed": false,
+    "packages": {
+      "torch": {
+        "expected": "2.7.1+cu128",
+        "installed": "2.7.1+cu128",
+        "import_ok": true,
+        "passed": true
+      },
+      "pandas": {
+        "expected": "2.0.3",
+        "installed": "2.0.3",
+        "import_ok": true,
+        "passed": true
+      },
+      "numpy": {
+        "expected": "1.26.4",
+        "installed": "1.26.4",
+        "import_ok": true,
+        "passed": true
+      },
+      "scipy": {
+        "expected": "1.15.3",
+        "installed": "1.15.3",
+        "import_ok": true,
+        "passed": true
+      },
+      "scikit-learn": {
+        "expected": "1.5.2",
+        "installed": "1.5.2",
+        "import_ok": true,
+        "passed": true
+      },
+      "joblib": {
+        "expected": "1.5.2",
+        "installed": "1.6.0",
+        "import_ok": true,
+        "passed": false
+      },
+      "threadpoolctl": {
+        "expected": "3.7.0",
+        "installed": "3.7.0",
+        "import_ok": true,
+        "passed": true
+      },
+      "lightgbm": {
+        "expected": "4.6.0",
+        "installed": "4.6.0",
+        "import_ok": true,
+        "passed": true
+      },
+      "catboost": {
+        "expected": "1.2.8",
+        "installed": "1.2.8",
+        "import_ok": true,
+        "passed": true
+      },
+      "rapidfuzz": {
+        "expected": "3.14.3",
+        "installed": "3.14.3",
+        "import_ok": true,
+        "passed": true
+      },
+      "Unidecode": {
+        "expected": "1.4.0",
+        "installed": "1.4.0",
+        "import_ok": true,
+        "passed": true
+      },
+      "transformers": {
+        "expected": "4.57.6",
+        "installed": "4.57.6",
+        "import_ok": true,
+        "passed": true
+      },
+      "accelerate": {
+        "expected": "1.9.0",
+        "installed": "1.15.0",
+        "import_ok": true,
+        "passed": false
+      },
+      "safetensors": {
+        "expected": "0.6.2",
+        "installed": "0.8.0",
+        "import_ok": true,
+        "passed": false
+      },
+      "sentencepiece": {
+        "expected": "0.2.0",
+        "passed": false,
+        "error": "PackageNotFoundError: No package metadata was found for sentencepiece"
+      },
+      "tqdm": {
+        "expected": "4.66.5",
+        "installed": "4.70.1",
+        "import_ok": true,
+        "passed": false
+      }
+    },
+    "cpu_tensor_test": true,
+    "gpu_tensor_test": true,
+    "evidence": "reports/refactoring/REFACTOR-RETRIEVAL-03/environment.json",
+    "runtime_variables": {}
+  },
+  "metrics": {
+    "metric_source": "compatibility verification only; no accuracy evaluation",
+    "hangul_rows": 32,
+    "non_hangul_rows": 32,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": "verification only, including loading/index/features/scores/CLI; not inference benchmark",
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "docs/REFACTOR_RETRIEVAL_03.md",
+    "reports/refactoring/REFACTOR-RETRIEVAL-03/verification.json",
+    "reports/refactoring/REFACTOR-RETRIEVAL-03/baseline.json",
+    "reports/refactoring/REFACTOR-RETRIEVAL-03/environment.json",
+    "reports/refactoring/REFACTOR-RETRIEVAL-03/source_inventory.json",
+    "reports/refactoring/REFACTOR-RETRIEVAL-03/identical_functions.json",
+    "reports/refactoring/REFACTOR-RETRIEVAL-03/protected_before_sha256.json",
+    "artifacts/REFACTOR-RETRIEVAL-03/before",
+    "artifacts/REFACTOR-RETRIEVAL-03/git_diff_before.patch",
+    "reports/refactoring/REFACTOR-RETRIEVAL-03/refactor_only.patch",
+    "reports/refactoring/REFACTOR-RETRIEVAL-03/final_audit.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Baseline 16 focused tests passed",
+    "Before-edit 64-row snapshot harness passed in 64.984s; 229 protected hashes unchanged",
+    "Scope excludes hybrid_matcher partial-sort extraction because existing submission builders copy explicit module lists; avoids new bundle dependency"
+  ],
+  "interpretations": [],
+  "limitations": [
+    "Public train was previously used for EDA/final fitting; not an independent final test",
+    "Only fold 0 sample; no OOF accuracy or official-server evaluation",
+    "CPU verification; no GPU or Python 3.11.17 parity claim",
+    "Dense prediction probe uses synthetic tie scores; real classifier checked without dense columns",
+    "No model fitting, checkpoint update, ZIP creation or network retrieval",
+    "Python 3.11.15 and five package mismatches/missing entries prevent a target-server compatibility claim",
+    "Existing model.matcher fresh package import fails before and after; production-style legacy imports retained",
+    "Historical source files, submission snapshots, and completed records excluded from deduplication"
+  ],
+  "failure": null,
+  "decision": "Retain limited pure refactoring; no model improvement claim or pipeline/asset promotion",
+  "next_actions": [
+    "Restore or review the intended eval_kit documentation 1.1 separately; do not relabel current 1.0",
+    "Separately fix/test package imports while preserving legacy top-level imports",
+    "Run exact-version/server hardware checks only in a separately provisioned environment"
+  ],
+  "validation_plan": [
+    "Existing focused tests before/after",
+    "Exact snapshot comparisons with frozen synthetic embeddings",
+    "Fixed 32 Hangul + 32 non-Hangul public fold-0 rows; label-free candidate/feature/score/rank/ID parity",
+    "Full/split/reverse/single; lookup hit/miss, missing values and ties",
+    "Saved classifier/dense checkpoint loading; direct/module CLI help"
+  ],
+  "document_versions": {
+    "docs/TEAM_RULES.md": "v4 confirmed",
+    "eval_kit/README.md": "actual 1.0; requested 1.1 not present; D14 claim differs"
+  },
+  "verification_attempts": [
+    {
+      "stage": "baseline_harness",
+      "status": "failed",
+      "reason": "Saved model is a grouped set scorer; harness incorrectly called predict rather than predict_groups",
+      "source_changed": false,
+      "retry": "Use existing predict_groups interface; expectations and tolerance unchanged"
+    },
+    {
+      "stage": "environment",
+      "status": "failed_target_match",
+      "reason": "See environment.json; current interpreter/import checks measured, no dependency changes"
+    }
+  ],
+  "verification": {
+    "baseline_tests_passed": 16,
+    "after_tests_passed": 23,
+    "dense_integration_tests_passed": 2,
+    "public_rows": 64,
+    "hangul_rows": 32,
+    "non_hangul_rows": 32,
+    "prediction_differences": 0,
+    "candidate_feature_score_rank_differences": 0,
+    "rtol": 0,
+    "atol": 0,
+    "lookup_false": {
+      "exact_step_states": true,
+      "prediction_differences": 0,
+      "full_split_reverse_single_empty": true,
+      "direct_hits": 0
+    },
+    "lookup_true": {
+      "exact_step_states": true,
+      "prediction_differences": 0,
+      "full_split_reverse_single_empty": true,
+      "direct_hits": 64
+    },
+    "dense": {
+      "rows": 64,
+      "real_checkpoint_loaded": true,
+      "exact_candidates_features_scores_ranks": true,
+      "prediction_differences": 0,
+      "scorer": "synthetic all-tie scorer to verify first-candidate tie handling; not accuracy",
+      "full_split_reverse_single_empty": true,
+      "missing_values": true
+    },
+    "cli": [
+      {
+        "path": "experiments/train_bi_encoder.py",
+        "before_after_help_identical": true,
+        "direct_and_module": true
+      },
+      {
+        "path": "experiments/evaluate_bi_encoder_oof.py",
+        "before_after_help_identical": true,
+        "direct_and_module": true
+      }
+    ],
+    "protected_files_unchanged": 229,
+    "evidence": "reports/refactoring/REFACTOR-RETRIEVAL-03/verification.json",
+    "wall_seconds": 64.14100000006147,
+    "baseline_wall_seconds": 64.98400000005495,
+    "final_audit": "reports/refactoring/REFACTOR-RETRIEVAL-03/final_audit.json",
+    "all_inspected_and_added_sources_compile": 126
+  }
+}

@@ -1,0 +1,541 @@
+{
+  "experiment_id": "AS07-JAMO-SCORE-01",
+  "plan_id": "PLAN-AS06-IMPROVE-01",
+  "status": "completed_not_promoted",
+  "recorded_at_kst": "2026-10-26T00:48:29+09:00",
+  "started_at_kst": "2026-10-26T00:48:29+09:00",
+  "finished_at_kst": "2026-10-26T00:53:55+09:00",
+  "purpose": "Compare separate1.8*Jamo channel against frozen AS-06 with identical candidate sets",
+  "hypothesis": "Replacing repeated Jamo score injection with one bounded1.8*sim_jamo term may reduce candidate selection errors.",
+  "baseline_experiment_id": "AS-06",
+  "changed_factors": [
+    "Only Hangul score composition: independent original romanization features plus1.8*Jamo similarity, original lattice excludes Jamo."
+  ],
+  "fixed_conditions": [
+    "No model training or ZIP",
+    "Same full candidate sets, map and fit-fold assets for both modes",
+    "Lookup off",
+    "Clean/default/severe fold0, seed20261022; no outer fold tuning",
+    "Use legacy mode by default until evidence supports promotion"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/channel_training.py": "02529ee98ed73cd57facd326d61344c9f92d6fe04a0f54e3ca03d5c27ee6e3eb",
+      "name_decoder/noise_augmenter.py": "51315596aad8ac26f358d3f44fd94780714c99dc8423dde02446c167b6d7e3d5",
+      "name_decoder/lora.py": "ef6d92c25fd5297f2131a7d2fa995cebc61fc617ff9cb9a4b9732d0d7e0b6587",
+      "name_decoder/noisy_channel.py": "36c88596b2334bf0f8d5f332229abedfbeccb9e939a36eca197f58c4c9874f8f",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "experiments/noisy_channel_common.py": "d55c127ca5581abf8631ce67de441e21585f6c4dc7d2dc5deb7591d50c1098c8",
+      "experiments/train_noisy_channel.py": "e1c591c5698972b7b72d910ece8bdd87d131bc46ada0a7a558f7352c99bbbc91",
+      "experiments/score_noisy_channel_candidates.py": "47d1053c1ac9acafa4e85061934cdad3b495c4286ea37358ed5f071d02c4992a",
+      "AS-07/script.py": "1424834b99026af167abdd8edf231801eea8f96021332c1448c647480a911710",
+      "experiments/evaluate_as07_jamo.py": "b841a58847dc2ad590648d722842de5b88760b12db3e4b7c83300d39a4d17753",
+      "experiments/audit_as06_lineage.py": "73234acba9dc8e521f983123e9ee464f49d2b0e2a5ef82fae882322baf65e72d",
+      "tests/test_as07_jamo_scoring.py": "61f05823f2ed281ebe7151cc445524c9fe61c7f037fe6a718a7a002f7debaa05",
+      "artifacts/AS-06/script.py": "9045ca7ed4a2832e78e814a615d857b61d48d64c809322a7bce61dff35323b88"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    },
+    "split_id": "folds_group5_seed42.csv/fold0",
+    "split_file_sha256": null,
+    "seed": 20261022,
+    "training_rows": 9850,
+    "validation_rows": 2372
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    "experiments/evaluate_as07_jamo.py"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "safetensors": "0.8.0",
+      "pandas": "2.0.3",
+      "numpy": "1.26.4"
+    },
+    "device": "cpu",
+    "threads": 2
+  },
+  "metrics": {
+    "metric_source": "Clean outerfold0 development comparison; not server",
+    "hangul_rows": 239,
+    "non_hangul_rows": 2133,
+    "hangul_accuracy": 1.0,
+    "non_hangul_accuracy": 0.9985935302390999,
+    "weighted_accuracy": 0.9995780590717299,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "fit_seconds": 0.32125299994368106,
+    "index_seconds": 5.502405099919997,
+    "timing_scope": "CPU fit/index and chunked retrieval+features+scoring+candidate-hash capture; official evaluation/save reported within total. Not server timing.",
+    "total_seconds": 326.6033150999574
+  },
+  "artifacts": [
+    "C:\\Projects\\ML_midterm\\reports\\as06_improvements\\AS07-JAMO-SCORE-01",
+    "C:\\Projects\\ML_midterm\\artifacts\\AS07-JAMO-SCORE-01\\evaluation",
+    "C:\\Projects\\ML_midterm\\artifacts\\AS07-JAMO-SCORE-01\\reference"
+  ],
+  "error_cases_file": "C:\\Projects\\ML_midterm\\artifacts\\AS07-JAMO-SCORE-01\\evaluation\\public_heldout_errors.json",
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "Historical miner source snapshot was not saved; CSV/record hashes and current source membership checks do not re-prove every historical miner fit.",
+    "Public train and outer fold0 were already explored in previous development; this is not an untouched final test.",
+    "Manual lexicon history is not fold-isolated. Shared lexicon stays fixed in this paired comparison.",
+    "Historical AS-06 record declaration and matching map hash only; no generation-side model/seed manifest exists.",
+    "One fold and one noise seed; not a full5fold or official server improvement."
+  ],
+  "failure": null,
+  "decision": "Keep separate-channel candidate experimental; one pre-explored fold cannot support production promotion.",
+  "next_actions": [
+    "Use public heldout errors to document the result; do not tune weight on this outer fold.",
+    "Follow separately registered pronunciation/retrieval experiments if continuing."
+  ],
+  "evaluation_plan": {
+    "external_fold": 0,
+    "presets": [
+      "clean",
+      "default",
+      "severe"
+    ],
+    "noise_seed": 20261022,
+    "candidate_sets": "Exact per-row SHA256 and count must match",
+    "official_evaluator": "subset comparison and vessel bootstrap2000 seed0",
+    "numeric_mode": "CPU; threads2",
+    "reference_parity": "AS07 legacy vs immutable AS06 source must match predictions, ranks, top scores",
+    "promotion": "No automatic promotion from a single pre-explored fold; reject observed regression without external tuning"
+  },
+  "reference_parity": {
+    "rows": 64,
+    "predictions_ranks_and_top5_equal": true
+  },
+  "lineage_audit": {
+    "record": "AUDIT-AS06-LINEAGE-01",
+    "all_checks_passed": true,
+    "map_generator_link": "Historical AS-06 record declaration and matching map hash only; no generation-side model/seed manifest exists."
+  },
+  "phase_results": {
+    "clean": {
+      "noise_summary": null,
+      "legacy": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 239,
+        "non_hangul_correct": 2130,
+        "hangul_accuracy": 1.0,
+        "non_hangul_accuracy": 0.9985935302390999,
+        "weighted_accuracy": 0.9995780590717299,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 1.0,
+        "retrieval_failures": 0,
+        "selection_failures": 3,
+        "prediction_seconds": 52.09107999992557,
+        "candidate_count_mean": 1751.712900505902,
+        "candidate_count_p95": 4267.0,
+        "prediction_file_sha256": "005247c47e6e37b2a30832b558ca478e67198f6cad19c82e57780c56a298084d"
+      },
+      "separate": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 239,
+        "non_hangul_correct": 2130,
+        "hangul_accuracy": 1.0,
+        "non_hangul_accuracy": 0.9985935302390999,
+        "weighted_accuracy": 0.9995780590717299,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 1.0,
+        "retrieval_failures": 0,
+        "selection_failures": 3,
+        "prediction_seconds": 49.991674500051886,
+        "candidate_count_mean": 1751.712900505902,
+        "candidate_count_p95": 4267.0,
+        "prediction_file_sha256": "005247c47e6e37b2a30832b558ca478e67198f6cad19c82e57780c56a298084d"
+      },
+      "candidate_sets_equal": true,
+      "candidate_sets_sha256": "148188fee3a3494d8d3d3e49d6f9f94605d5473468ddb58e23dc7d56f937c988",
+      "paired": {
+        "all": {
+          "fixes": 0,
+          "breaks": 0,
+          "changed_predictions": 0
+        },
+        "hangul": {
+          "fixes": 0,
+          "breaks": 0,
+          "changed_predictions": 0
+        },
+        "non_hangul": {
+          "fixes": 0,
+          "breaks": 0,
+          "changed_predictions": 0
+        }
+      },
+      "official": {
+        "score": {
+          "h": 1.0,
+          "nh": 0.9985935302390999,
+          "w": 0.99957805907173,
+          "n_h": 239,
+          "n_nh": 2133
+        },
+        "boot": {
+          "h": {
+            "est": 1.0,
+            "lo": 1.0,
+            "hi": 1.0,
+            "se": 0.0
+          },
+          "nh": {
+            "est": 0.9985935302390999,
+            "lo": 0.9967042149130168,
+            "hi": 1.0,
+            "se": 0.000823313919710626
+          },
+          "w": {
+            "est": 0.99957805907173,
+            "lo": 0.999011264473905,
+            "hi": 1.0,
+            "se": 0.00024699417591318886
+          }
+        },
+        "compare": {
+          "d": {
+            "h": 0.0,
+            "nh": 0.0,
+            "w": 0.0
+          },
+          "boot": {
+            "h": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            },
+            "nh": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            },
+            "w": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            }
+          },
+          "verdict": "동등",
+          "n_common": 2372
+        },
+        "warnings": [],
+        "folds": "G5-s42"
+      }
+    },
+    "default": {
+      "noise_summary": {
+        "total_rows": 2372,
+        "seed": 20261022,
+        "typo_applied_count": 519,
+        "typo_applied_rate": 0.2188026981450253,
+        "hangul_spacing_applied_count": 29,
+        "hangul_spacing_applied_rate": 0.012225969645868466,
+        "ton_shift_applied_count": 866,
+        "ton_shift_applied_rate": 0.3650927487352445,
+        "ton_missing_applied_count": 152,
+        "ton_missing_applied_rate": 0.06408094435075885,
+        "flag_missing_applied_count": 404,
+        "flag_missing_applied_rate": 0.1703204047217538,
+        "any_noise_applied_count": 1497,
+        "any_noise_applied_rate": 0.6311129848229342
+      },
+      "legacy": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 239,
+        "non_hangul_correct": 2129,
+        "hangul_accuracy": 1.0,
+        "non_hangul_accuracy": 0.9981247069854665,
+        "weighted_accuracy": 0.99943741209564,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 0.9995311767463666,
+        "retrieval_failures": 1,
+        "selection_failures": 3,
+        "prediction_seconds": 48.033047599950805,
+        "candidate_count_mean": 1710.0096964586846,
+        "candidate_count_p95": 4049.249999999999,
+        "prediction_file_sha256": "cc2b3396986969aab79a5c7b948a7f5442120479a1b101f669036bff844f2591"
+      },
+      "separate": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 239,
+        "non_hangul_correct": 2129,
+        "hangul_accuracy": 1.0,
+        "non_hangul_accuracy": 0.9981247069854665,
+        "weighted_accuracy": 0.99943741209564,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 0.9995311767463666,
+        "retrieval_failures": 1,
+        "selection_failures": 3,
+        "prediction_seconds": 46.247087299940176,
+        "candidate_count_mean": 1710.0096964586846,
+        "candidate_count_p95": 4049.249999999999,
+        "prediction_file_sha256": "cc2b3396986969aab79a5c7b948a7f5442120479a1b101f669036bff844f2591"
+      },
+      "candidate_sets_equal": true,
+      "candidate_sets_sha256": "1cef1e062cb1b152b5052c6ebabfd6fc795a16ed7d5a3bea2cf59e13571fe4ff",
+      "paired": {
+        "all": {
+          "fixes": 0,
+          "breaks": 0,
+          "changed_predictions": 0
+        },
+        "hangul": {
+          "fixes": 0,
+          "breaks": 0,
+          "changed_predictions": 0
+        },
+        "non_hangul": {
+          "fixes": 0,
+          "breaks": 0,
+          "changed_predictions": 0
+        }
+      },
+      "official": {
+        "score": {
+          "h": 1.0,
+          "nh": 0.9981247069854665,
+          "w": 0.99943741209564,
+          "n_h": 239,
+          "n_nh": 2133
+        },
+        "boot": {
+          "h": {
+            "est": 1.0,
+            "lo": 1.0,
+            "hi": 1.0,
+            "se": 0.0
+          },
+          "nh": {
+            "est": 0.9981247069854665,
+            "lo": 0.9961420168669383,
+            "hi": 0.9995427891005898,
+            "se": 0.0009428464276923521
+          },
+          "w": {
+            "est": 0.99943741209564,
+            "lo": 0.9988426050600815,
+            "hi": 0.9998628367301768,
+            "se": 0.0002828539283077073
+          }
+        },
+        "compare": {
+          "d": {
+            "h": 0.0,
+            "nh": 0.0,
+            "w": 0.0
+          },
+          "boot": {
+            "h": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            },
+            "nh": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            },
+            "w": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            }
+          },
+          "verdict": "동등",
+          "n_common": 2372
+        },
+        "warnings": [],
+        "folds": "G5-s42"
+      }
+    },
+    "severe": {
+      "noise_summary": {
+        "total_rows": 2372,
+        "seed": 20261022,
+        "typo_applied_count": 700,
+        "typo_applied_rate": 0.2951096121416526,
+        "hangul_spacing_applied_count": 62,
+        "hangul_spacing_applied_rate": 0.026138279932546374,
+        "ton_shift_applied_count": 979,
+        "ton_shift_applied_rate": 0.4127318718381113,
+        "ton_missing_applied_count": 468,
+        "ton_missing_applied_rate": 0.1973018549747049,
+        "flag_missing_applied_count": 716,
+        "flag_missing_applied_rate": 0.30185497470489037,
+        "any_noise_applied_count": 1904,
+        "any_noise_applied_rate": 0.8026981450252951
+      },
+      "legacy": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 226,
+        "non_hangul_correct": 2127,
+        "hangul_accuracy": 0.9456066945606695,
+        "non_hangul_accuracy": 0.9971870604781997,
+        "weighted_accuracy": 0.9610808043359285,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 0.9995311767463666,
+        "retrieval_failures": 1,
+        "selection_failures": 18,
+        "prediction_seconds": 46.409054399933666,
+        "candidate_count_mean": 1622.0489038785836,
+        "candidate_count_p95": 3717.45,
+        "prediction_file_sha256": "51054e164566e1c35fb7f6eb93a112459b97fb704bef129f9868b4413672bd30"
+      },
+      "separate": {
+        "rows": 2372,
+        "hangul_rows": 239,
+        "non_hangul_rows": 2133,
+        "hangul_correct": 231,
+        "non_hangul_correct": 2127,
+        "hangul_accuracy": 0.9665271966527197,
+        "non_hangul_accuracy": 0.9971870604781997,
+        "weighted_accuracy": 0.9757251558003637,
+        "candidate_inclusion_hangul": 1.0,
+        "candidate_inclusion_non_hangul": 0.9995311767463666,
+        "retrieval_failures": 1,
+        "selection_failures": 13,
+        "prediction_seconds": 43.157588099944405,
+        "candidate_count_mean": 1622.0489038785836,
+        "candidate_count_p95": 3717.45,
+        "prediction_file_sha256": "6b266bb9921a4cb768788eaab25efa95e5b6d8e1f91c557347a036468a129a88"
+      },
+      "candidate_sets_equal": true,
+      "candidate_sets_sha256": "43109c9b0bb725d7fe3370169ed54db050b71b999d02e71280c33901a2970fe2",
+      "paired": {
+        "all": {
+          "fixes": 6,
+          "breaks": 1,
+          "changed_predictions": 11
+        },
+        "hangul": {
+          "fixes": 6,
+          "breaks": 1,
+          "changed_predictions": 11
+        },
+        "non_hangul": {
+          "fixes": 0,
+          "breaks": 0,
+          "changed_predictions": 0
+        }
+      },
+      "official": {
+        "score": {
+          "h": 0.9665271966527197,
+          "nh": 0.9971870604781997,
+          "w": 0.9757251558003637,
+          "n_h": 239,
+          "n_nh": 2133
+        },
+        "boot": {
+          "h": {
+            "est": 0.9665271966527197,
+            "lo": 0.94308675652546,
+            "hi": 0.9873962765022327,
+            "se": 0.01128730034415893
+          },
+          "nh": {
+            "est": 0.9971870604781997,
+            "lo": 0.9947766418344164,
+            "hi": 0.9990804808895506,
+            "se": 0.001150492101478071
+          },
+          "w": {
+            "est": 0.9757251558003637,
+            "lo": 0.9592824877789099,
+            "hi": 0.9904248887442858,
+            "se": 0.007918618876979516
+          }
+        },
+        "compare": {
+          "d": {
+            "h": 0.02092050209205021,
+            "nh": 0.0,
+            "w": 0.014644351464435212
+          },
+          "boot": {
+            "h": {
+              "est": 0.02092050209205021,
+              "lo": 0.0,
+              "hi": 0.04701257861635218,
+              "se": 0.012143251634230804
+            },
+            "nh": {
+              "est": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "se": 0.0
+            },
+            "w": {
+              "est": 0.014644351464435212,
+              "lo": 0.0,
+              "hi": 0.03290880503144652,
+              "se": 0.00850027614396156
+            }
+          },
+          "verdict": "동등",
+          "n_common": 2372
+        },
+        "warnings": [],
+        "folds": "G5-s42"
+      }
+    }
+  },
+  "row_independence": {
+    "legacy": {
+      "rows": 12,
+      "reverse_differences": 0,
+      "single_differences": 0
+    },
+    "separate": {
+      "rows": 12,
+      "reverse_differences": 0,
+      "single_differences": 0
+    }
+  }
+}

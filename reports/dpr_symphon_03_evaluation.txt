@@ -1,0 +1,8 @@
+Row independence test: max abs diff = 2.82e-05 (tolerance = 1e-06)
+Traceback (most recent call last):
+  File "C:\Projects\ML_midterm\experiments\evaluate_bi_encoder_oof.py", line 145, in <module>
+    main()
+  File "C:\Projects\ML_midterm\experiments\evaluate_bi_encoder_oof.py", line 121, in main
+    if not independent:raise AssertionError('Embedding batch invariance exceeds 1e-6')
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Embedding batch invariance exceeds 1e-6

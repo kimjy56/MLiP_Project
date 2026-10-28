@@ -1,0 +1,78 @@
+{
+  "experiment_id": "REFACTOR-RETRIEVAL-03",
+  "recorded_at_kst": "2026-10-27T22:39:21+09:00",
+  "python": "3.11.15 (main, Mar  3 2026, 14:55:34) [MSC v.1944 64 bit (AMD64)]",
+  "executable": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+  "rtol": 0,
+  "atol": 0,
+  "evaluators": {
+    "exact_metric_fields": true,
+    "tie_fixture": true,
+    "missing_target_denominators_preserved": true,
+    "elapsed_times_excluded": true
+  },
+  "data": {
+    "sample_rule": "sort sample_id; fold 0; first 32 Hangul and 32 non-Hangul",
+    "rows": 64,
+    "hangul_rows": 32,
+    "non_hangul_rows": 32,
+    "sample_ids_sha256": "753c708f048bbc4912c667518bee711808ce27a667e55ce2d0ec62aec5ab6c4d",
+    "train_sha256": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+    "catalog_sha256": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+    "folds_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+  },
+  "saved_model_lookup_False": {
+    "exact_step_states": true,
+    "prediction_differences": 0,
+    "full_split_reverse_single_empty": true,
+    "direct_hits": 0
+  },
+  "saved_model_lookup_True": {
+    "exact_step_states": true,
+    "prediction_differences": 0,
+    "full_split_reverse_single_empty": true,
+    "direct_hits": 64
+  },
+  "dense": {
+    "rows": 64,
+    "real_checkpoint_loaded": true,
+    "exact_candidates_features_scores_ranks": true,
+    "prediction_differences": 0,
+    "scorer": "synthetic all-tie scorer to verify first-candidate tie handling; not accuracy",
+    "full_split_reverse_single_empty": true,
+    "missing_values": true
+  },
+  "cli": [
+    {
+      "path": "experiments/train_bi_encoder.py",
+      "before_after_help_identical": true,
+      "direct_and_module": true
+    },
+    {
+      "path": "experiments/evaluate_bi_encoder_oof.py",
+      "before_after_help_identical": true,
+      "direct_and_module": true
+    }
+  ],
+  "source_before_sha256": {
+    "model/matcher.py": "160f5e8d51381e158a4d9a362f1ba95cb329be9a12c5065bef6524137d85ef5f",
+    "experiments/train_bi_encoder.py": "7d1b56c44e717e5fbb24a3d29b826af9388432145f033af666b5690cba5c01f2",
+    "experiments/evaluate_bi_encoder_oof.py": "f722e2b2bb07959b40b62a8a6e361dafedae14146db615cfcc20f83c4dda21a9"
+  },
+  "source_after_sha256": {
+    "model/matcher.py": "20798100e35012cbf3ed47f0900eb18e91c12d25ff7a18c0a0ac20b88ab9c538",
+    "experiments/train_bi_encoder.py": "bba7cf6fe840e6f5ba4ebf8ff94a14090f4af54c76fae3284552e91d40d54cc4",
+    "experiments/evaluate_bi_encoder_oof.py": "fd72301e785d07dca106f28a280483734fabe28105ac46502e51d4e13d925d81"
+  },
+  "protected_files_unchanged": 229,
+  "wall_seconds": 64.14100000006147,
+  "timing_scope": "all verification including loading/index/features/scores/CLI; not inference benchmark",
+  "passed": true,
+  "limitations": [
+    "Public train was previously used for EDA/final fitting; not an independent final test",
+    "Only fold 0 sample; no OOF accuracy or official-server evaluation",
+    "CPU verification; no GPU or Python 3.11.17 parity claim",
+    "Dense prediction probe uses synthetic tie scores; real classifier checked without dense columns",
+    "No model fitting, checkpoint update, ZIP creation or network retrieval"
+  ]
+}

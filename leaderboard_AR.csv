@@ -1,0 +1,2 @@
+﻿date,id,scheme,oof,oof_sha8,rows,hangul,hangul_lo,hangul_hi,non_hangul,non_hangul_lo,non_hangul_hi,weighted,weighted_lo,weighted_hi,recall_h,recall_nh,compare_to,d_weighted,d_lo,d_hi,verdict,train_sec,infer_sec,zip_mb,note,checks,eval_ver
+2026-10-25 23:54,AS-06,G5-s42,oof_AS-06.csv,f0c43dce,12222,1.00000,1.00000,1.00000,0.99927,0.99874,0.99973,0.99978,0.99962,0.99992,1.0000,1.0000,,,,,,0.3,302.5,0.000,AR-06 + 오프라인 합성 한글 Jamo 매칭 + Safe Train Lookup,train=ok;folds=G5-s42;foldcol=ok,1.0

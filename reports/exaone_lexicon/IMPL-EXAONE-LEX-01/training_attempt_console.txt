@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "C:\Projects\ML_midterm\name_decoder\exaone_translit.py", line 110, in resolve_base
+    result=snapshot_download(model_id,local_files_only=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\ML_midterm\.venv-server\Lib\site-packages\huggingface_hub\utils\_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\ML_midterm\.venv-server\Lib\site-packages\huggingface_hub\_snapshot_download.py", line 230, in snapshot_download
+    raise LocalEntryNotFoundError(
+huggingface_hub.errors.LocalEntryNotFoundError: Cannot find an appropriate cached snapshot folder for the specified revision on the local disk and outgoing traffic has been disabled. To enable repo look-ups and downloads online, pass 'local_files_only=False' as input.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Projects\ML_midterm\experiments\train_exaone_translit.py", line 158, in <module>
+    main()
+  File "C:\Projects\ML_midterm\experiments\train_exaone_translit.py", line 78, in main
+    base,base_provenance=resolve_base(args.model_id,args.local_model,args.offline)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Projects\ML_midterm\name_decoder\exaone_translit.py", line 112, in resolve_base
+    raise FileNotFoundError(f"EXAONE base is not cached; expected {candidate}. No fallback model used.") from exc
+FileNotFoundError: EXAONE base is not cached; expected C:\Projects\ML_midterm\artifacts\pretrained\exaone-4.0-1.2b. No fallback model used.

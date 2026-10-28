@@ -1,0 +1,151 @@
+{
+  "experiment_id": "SPEC-KO-FUSION-01",
+  "plan_id": "PLAN-AS09-IMPROVE-01",
+  "status": "specification_completed",
+  "recorded_at_kst": "2026-10-29T00:22:11+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": "2026-10-29T00:22:11+09:00",
+  "purpose": "Write the implementation specification for KO-FUSION-01 only",
+  "hypothesis": "A learned Korean candidate scorer may improve top1 selection on the same candidate sets; not tested",
+  "baseline_experiment_id": "AS-09",
+  "changed_factors": [
+    "Documentation only; future candidate scoring changes are planned"
+  ],
+  "fixed_conditions": [
+    "Future AS09 candidate retrieval and lookup paths fixed between paired methods",
+    "No implementation, fitting, model inference, ZIP creation or upload in this task"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "docs/SPEC_KO_FUSION_01.md": "5542497faefcc8831a1a6e983b17cd9537c630cfa92e6451ea6042b88c5b255d"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [
+    "ko_fusion_v1: 28 features, fixed order and explicit missing rules"
+  ],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "Planned LightGBM4.6.0 LGBMRanker",
+    "parameters": {
+      "fixed": {
+        "objective": "lambdarank",
+        "metric": "ndcg",
+        "eval_at": [
+          1
+        ],
+        "label_gain": [
+          0,
+          1
+        ],
+        "lambdarank_truncation_level": 5,
+        "lambdarank_norm": true,
+        "learning_rate": 0.03,
+        "num_leaves": 7,
+        "max_depth": 3,
+        "min_child_samples": 20,
+        "max_bin": 63,
+        "reg_alpha": 0.0,
+        "reg_lambda": 10.0,
+        "subsample": 1.0,
+        "subsample_freq": 0,
+        "colsample_bytree": 1.0,
+        "random_state": 42,
+        "deterministic": true,
+        "force_col_wise": true,
+        "n_jobs": 6,
+        "verbosity": -1
+      },
+      "inner_search": {
+        "reg_lambda": [
+          10,
+          30
+        ],
+        "trees": [
+          32,
+          64,
+          128
+        ]
+      }
+    },
+    "loss": "planned lambdarank"
+  },
+  "commands": [
+    "Read AS09 ZIP source and project rules; static Markdown/JSON/link validation using .venv-server/Scripts/python.exe -B -X utf8"
+  ],
+  "environment": {
+    "scope": "Documentation read/write and static checks only",
+    "python": "3.11.15",
+    "executable": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe"
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "docs/SPEC_KO_FUSION_01.md",
+    "project_log\\experiments\\SPEC-KO-FUSION-01.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Specification has 12 top-level sections",
+    "Full candidate/float64 trace contract avoids truncated and rounded top_candidates output",
+    "Upstream-isolated A/B selection then crossfit final training specified",
+    "28 feature schema, 6 inner configurations, OOF and row-independence gates specified",
+    "Bypass predictions remain in evaluation; unmeasured non-Hangul candidate ranks are not fabricated"
+  ],
+  "interpretations": [
+    "This is a completed specification, not an executed performance experiment"
+  ],
+  "limitations": [
+    "Historical AS09 training/map lineage must be reconciled before valid full OOF",
+    "All future performance gains, costs and deployment compatibility remain unmeasured"
+  ],
+  "failure": null,
+  "decision": "Implementation can follow SPEC-KO-FUSION-01 after a separate implementation request; start with lineage and adapter parity",
+  "next_actions": [
+    "When implementation is requested, create KO-FUSION-01 planned execution record and verify fit_assets provenance before preparing caches"
+  ],
+  "specification": {
+    "id": "SPEC-KO-FUSION-01",
+    "version": "1.0",
+    "implementation_status": "planned",
+    "training_status": "planned",
+    "performance_validation_status": "planned",
+    "schema_feature_count": 28,
+    "local_markdown_links_checked": true,
+    "embedded_configuration_json_checked": true,
+    "no_model_runs": true
+  }
+}

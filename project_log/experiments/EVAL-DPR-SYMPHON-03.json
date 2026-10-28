@@ -1,0 +1,109 @@
+{
+  "experiment_id": "EVAL-DPR-SYMPHON-03",
+  "plan_id": "SPEC-DPR-03",
+  "status": "failed",
+  "recorded_at_kst": "2026-10-28T22:28:34+09:00",
+  "started_at_kst": "2026-10-28T22:47:48+09:00",
+  "finished_at_kst": "2026-10-28T22:47:51+09:00",
+  "purpose": "Evaluate selected development checkpoint against catalog vessel IDs",
+  "hypothesis": "Removing synthetic initialization, retaining a composite peak, and directly admitting calibrated dense similarity may improve local matching; speed and leaderboard transfer are unproven.",
+  "baseline_experiment_id": "DPR-SYMPHON-02",
+  "changed_factors": [
+    "no Stage A or Stage A checkpoint reuse",
+    "backbone/new module differential learning rate",
+    "global composite best across mining refresh",
+    "single-pass views and one row-local dense result",
+    "dense top60 and Stage2 calibrated similarity",
+    "generic sister-tail and rare-tail scoring"
+  ],
+  "fixed_conditions": [
+    "G5-s42 fold0",
+    "official train/catalog only",
+    "no submission ZIP creation",
+    "legacy manual dictionary disabled for primary benchmark"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "phonetic_encoder/model.py": "1004f3c02fd64ac9ed882cc7fe46d4bddac62e01b4626b80f78bc57f0357fdc9",
+      "phonetic_encoder/tokenizer.py": "e19e1c9c4a59444be881c285ced063a0f17a9a9ddd19b52cd19953a3e5b7af14",
+      "phonetic_encoder/dataset.py": "defb522d806fbbe8207ae84161aba18e0ab1d756380831f7236f037deb9a8605",
+      "phonetic_encoder/loss.py": "a438e9cff9c2bfe7a3a076f173495e2f53b8fcb650b39ca87effbe86412f47db",
+      "phonetic_encoder/retrieval.py": "31682e9078d9d2666d982ab023809984344e0971d63bf6dbb4c248ce078b8b7e",
+      "phonetic_encoder/hybrid_matcher.py": "879f903579eca803eba7fc021fe4b9db88c05d0a4281de87626fe67508563747",
+      "experimental_matchers/dpr_hybrid/script.py": "b1bfa77f81875983e143973d112827563a2d5fd69a74b110ccf2cfc42491206f",
+      "experiments/dpr03_common.py": "e0a9fdada65d8faf11e676a03da550dfb2133022b255f3a4cce7281383a4a184",
+      "experiments/train_bi_encoder.py": "c3f9b47519fc782d959ecc61d287109c3a4656ee7807836e51c25af13446336a",
+      "experiments/export_catalog_embeddings.py": "748bd2432383c8e59d293556cc1cd2cd9702bfa236282ad1564b35617eea844a",
+      "experiments/evaluate_bi_encoder_oof.py": "2c0544b93d819d6e87faac83f3c5a75b660d2130cb77233efb5875e494102579",
+      "experiments/evaluate_dpr_robustness.py": "7c17d9e1398528889bd526271f077f4adf21db2adf963c1bc6f7fb95ef02a877"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe experiments/evaluate_bi_encoder_oof.py --experiment-id DPR-SYMPHON-03 --checkpoint artifacts/DPR-SYMPHON-03/fold_0_encoder.pt --catalog-embeds artifacts/DPR-SYMPHON-03/catalog_embeds_fp16.npy --fold 0 --output-json reports/dpr_symphon_03_evaluation.json"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "executable": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "environment_report": "reports/dpr03_environment.json"
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "External fold0 explicitly used for checkpoint selection as requested; resulting score is development-selected, not untouched validation.",
+    "Public train used in prior EDA; local score cannot guarantee leaderboard score.",
+    "Known Glovis/WREN examples motivate rules; case success is development evidence."
+  ],
+  "failure": {
+    "type": "AssertionError",
+    "message": "Embedding batch invariance exceeds 1e-6",
+    "retry": "Use a new run ID; preserve failed outputs"
+  },
+  "decision": null,
+  "next_actions": []
+}

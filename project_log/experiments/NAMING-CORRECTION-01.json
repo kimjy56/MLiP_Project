@@ -1,0 +1,102 @@
+{
+  "experiment_id": "NAMING-CORRECTION-01",
+  "plan_id": null,
+  "status": "completed_documentation_correction",
+  "recorded_at_kst": "2026-10-26T22:22:07+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "Apply user clarification: AS names are submission filenames, not experimental/model versions.",
+  "hypothesis": null,
+  "baseline_experiment_id": null,
+  "changed_factors": [],
+  "fixed_conditions": [],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": null,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [],
+  "environment": {},
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "project_log/EXPERIMENT_NAMING.md",
+    "project_log/EXPERIMENT_NAMING.json",
+    "project_log/naming_history/20261026T221700"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "12existing run IDs corrected to descriptive names; no new scientific executions.",
+    "Original records and executed-source text archived exactly with SHA256; actual submission filename/score untouched.",
+    "17targeted tests passed after code/import/path renaming. Prediction CSV and core engine hashes remain unchanged."
+  ],
+  "interpretations": [],
+  "limitations": [],
+  "failure": null,
+  "decision": "Reserve AS numbering for actual submission ZIP filenames; maintain independent descriptive experiment IDs.",
+  "next_actions": [
+    "Use the corrected canonical IDs in future work; do not count historical aliases as additional experiments or submissions."
+  ],
+  "validation": {
+    "corrected_ids": [
+      "JAMO-SCORE-01",
+      "JAMO-SCORE-02",
+      "REVIEW-JAMO-SCORE-01",
+      "KO-DIVERSE-PILOT01",
+      "KO-DIVERSE-01",
+      "EVAL-KO-DIVERSE-01",
+      "KO-OWNERSHIP-01",
+      "EVAL-KO-OWNERSHIP-01",
+      "REVIEW-PRONUNCIATION-01",
+      "PLAN-MATCHING-IMPROVE-01",
+      "AUDIT-GENERATOR-LINEAGE-01",
+      "SUB-115506"
+    ],
+    "measured_execution_fields_unchanged": true,
+    "archived_original_hashes_verified": true,
+    "targeted_tests_passed": 17,
+    "prediction_file_hashes_unchanged": true,
+    "matching_engine_bytes_unchanged": true,
+    "actual_submission_score": 0.9122153056,
+    "actual_submission_filename": "submit_AS-06.zip"
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "scope": "all changed LM predictions vs previous and all new-LM errors",
+  "rows": 17,
+  "mismatches": 0,
+  "checks": [
+    {
+      "sample_id": "TRAIN_00082",
+      "batch_pred": "VESSEL_71581",
+      "single_pred": "VESSEL_71581",
+      "match": true
+    },
+    {
+      "sample_id": "TRAIN_00527",
+      "batch_pred": "VESSEL_44833",
+      "single_pred": "VESSEL_44833",
+      "match": true
+    },
+    {
+      "sample_id": "TRAIN_00613",
+      "batch_pred": "VESSEL_73813",
+      "single_pred": "VESSEL_73813",
+      "match": true
+    },
+    {
+      "sample_id": "TRAIN_01154",
+      "batch_pred": "VESSEL_49662",
+      "single_pred": "VESSEL_49662",
+      "match": true
+    },
+    {
+      "sample_id": "TRAIN_01462",
+      "batch_pred": "VESSEL_59009",
+      "single_pred": "VESSEL_59009",
+      "match": true
+    },
+    {
+      "sample_id": "TRAIN_03596",
+      "batch_pred": "VESSEL_44833",
+      "single_pred": "VESSEL_44833",
+      "match": true
+    },
+    {
+      "sample_id": "TRAIN_04325",
+      "batch_pred": "VESSEL_46413",
+      "single_pred": "VESSEL_46413",
+      "match": true
+    },
+    {
+      "sample_id": "TRAIN_05480",
+      "batch_pred": "VESSEL_69652",
+      "single_pred": "VESSEL_69652",
+      "match": true
+    },
+    {
+      "sample_id": "TRAIN_06518",
+      "batch_pred": "VESSEL_69652",
+      "single_pred": "VESSEL_69652",
+      "match": true
+    },
+    {
+      "sample_id": "TRAIN_06979",
+      "batch_pred": "VESSEL_33300",
+      "single_pred": "VESSEL_33300",
+      "match": true
+    },
+    {
+      "sample_id": "TRAIN_07029",
+      "batch_pred": "VESSEL_16584",
+      "single_pred": "VESSEL_16584",
+      "match": true
+    },
+    {
+      "sample_id": "TRAIN_07096",
+      "batch_pred": "VESSEL_46413",
+      "single_pred": "VESSEL_46413",
+      "match": true
+    },
+    {
+      "sample_id": "TRAIN_07247",
+      "batch_pred": "VESSEL_46413",
+      "single_pred": "VESSEL_46413",
+      "match": true
+    },
+    {
+      "sample_id": "TRAIN_07738",
+      "batch_pred": "VESSEL_46413",
+      "single_pred": "VESSEL_46413",
+      "match": true
+    },
+    {
+      "sample_id": "TRAIN_08397",
+      "batch_pred": "VESSEL_16584",
+      "single_pred": "VESSEL_16584",
+      "match": true
+    },
+    {
+      "sample_id": "TRAIN_10670",
+      "batch_pred": "VESSEL_44833",
+      "single_pred": "VESSEL_44833",
+      "match": true
+    },
+    {
+      "sample_id": "TRAIN_11315",
+      "batch_pred": "VESSEL_44833",
+      "single_pred": "VESSEL_44833",
+      "match": true
+    }
+  ]
+}

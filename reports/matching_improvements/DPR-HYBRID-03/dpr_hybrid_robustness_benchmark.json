@@ -1,0 +1,591 @@
+{
+  "experiment_id": "DPR-HYBRID-03",
+  "heldout_fold": 0,
+  "rows": 2372,
+  "evaluated_at_kst": "2026-10-28T22:53:21+09:00",
+  "seed": 20261022,
+  "device": "cpu",
+  "threads": 6,
+  "initialization_seconds": {
+    "lexical_fit": 0.20843019988387823,
+    "indices": {
+      "true_unseen": 1.8133277997840196,
+      "full_system": 5.981661000056192
+    },
+    "neural_load": 0.14505590009503067
+  },
+  "policy": {
+    "manual_dictionary": false,
+    "fit_only_learned_maps": true,
+    "true_unseen_legacy_catalog_map": false,
+    "full_system_legacy_catalog_map": true,
+    "full_system_lookup": true,
+    "true_unseen_lookup": false,
+    "language_partition": "original public train names, including under noise"
+  },
+  "results": {
+    "true_unseen_clean": {
+      "noise_applied_rate": 0.0,
+      "variants": {
+        "reference02": {
+          "hangul_accuracy": 0.99581589958159,
+          "hangul_correct": 238,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9985935302390999,
+          "non_hangul_correct": 2130,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9966491887788429,
+          "inference_time_sec": 48.17058949987404,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 1.0,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "retrieval03": {
+          "hangul_accuracy": 0.99581589958159,
+          "hangul_correct": 238,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9985935302390999,
+          "non_hangul_correct": 2130,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9966491887788429,
+          "inference_time_sec": 51.64682799996808,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 1.0,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "direct03": {
+          "hangul_accuracy": 0.99581589958159,
+          "hangul_correct": 238,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9985935302390999,
+          "non_hangul_correct": 2130,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9966491887788429,
+          "inference_time_sec": 55.06189120002091,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 1.0,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "complete03": {
+          "hangul_accuracy": 0.99581589958159,
+          "hangul_correct": 238,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9985935302390999,
+          "non_hangul_correct": 2130,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9966491887788429,
+          "inference_time_sec": 60.05681969993748,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 1.0,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        }
+      },
+      "retrieval03_vs_reference02": {
+        "num_fixes": 0,
+        "num_breaks": 0,
+        "net_gain": 0,
+        "fixes": [],
+        "breaks": []
+      },
+      "direct03_vs_retrieval03": {
+        "num_fixes": 0,
+        "num_breaks": 0,
+        "net_gain": 0,
+        "fixes": [],
+        "breaks": []
+      },
+      "complete03_vs_direct03": {
+        "num_fixes": 0,
+        "num_breaks": 0,
+        "net_gain": 0,
+        "fixes": [],
+        "breaks": []
+      }
+    },
+    "full_system_clean": {
+      "noise_applied_rate": 0.0,
+      "variants": {
+        "reference02": {
+          "hangul_accuracy": 1.0,
+          "hangul_correct": 239,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9985935302390999,
+          "non_hangul_correct": 2130,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9995780590717299,
+          "inference_time_sec": 71.44222470000386,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 1.0,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "retrieval03": {
+          "hangul_accuracy": 0.99581589958159,
+          "hangul_correct": 238,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9985935302390999,
+          "non_hangul_correct": 2130,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9966491887788429,
+          "inference_time_sec": 72.95031580002978,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 1.0,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "direct03": {
+          "hangul_accuracy": 0.99581589958159,
+          "hangul_correct": 238,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9985935302390999,
+          "non_hangul_correct": 2130,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9966491887788429,
+          "inference_time_sec": 71.04387319996022,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 1.0,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "complete03": {
+          "hangul_accuracy": 0.99581589958159,
+          "hangul_correct": 238,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9985935302390999,
+          "non_hangul_correct": 2130,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9966491887788429,
+          "inference_time_sec": 80.17224260000512,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 1.0,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        }
+      },
+      "retrieval03_vs_reference02": {
+        "num_fixes": 0,
+        "num_breaks": 1,
+        "net_gain": -1,
+        "fixes": [],
+        "breaks": [
+          {
+            "sample_id": "TRAIN_00082",
+            "vessel_name": "펭슈하이",
+            "is_korean": true,
+            "gold_id": "VESSEL_43261",
+            "baseline_pred": "VESSEL_43261",
+            "hybrid_pred": "VESSEL_71581"
+          }
+        ]
+      },
+      "direct03_vs_retrieval03": {
+        "num_fixes": 0,
+        "num_breaks": 0,
+        "net_gain": 0,
+        "fixes": [],
+        "breaks": []
+      },
+      "complete03_vs_direct03": {
+        "num_fixes": 0,
+        "num_breaks": 0,
+        "net_gain": 0,
+        "fixes": [],
+        "breaks": []
+      }
+    },
+    "true_unseen_severe": {
+      "noise_applied_rate": 0.8026981450252951,
+      "variants": {
+        "reference02": {
+          "hangul_accuracy": 0.9832635983263598,
+          "hangul_correct": 235,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9971870604781997,
+          "non_hangul_correct": 2127,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9874406369719116,
+          "inference_time_sec": 42.11218020017259,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 0.9995311767463666,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "retrieval03": {
+          "hangul_accuracy": 0.9623430962343096,
+          "hangul_correct": 230,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9971870604781997,
+          "non_hangul_correct": 2127,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9727962855074765,
+          "inference_time_sec": 43.37834620010108,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 0.9995311767463666,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "direct03": {
+          "hangul_accuracy": 0.9414225941422594,
+          "hangul_correct": 225,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9971870604781997,
+          "non_hangul_correct": 2127,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9581519340430414,
+          "inference_time_sec": 43.42744189989753,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 0.9995311767463666,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "complete03": {
+          "hangul_accuracy": 0.9456066945606695,
+          "hangul_correct": 226,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9971870604781997,
+          "non_hangul_correct": 2127,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9610808043359285,
+          "inference_time_sec": 49.19051490002312,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 0.9995311767463666,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        }
+      },
+      "retrieval03_vs_reference02": {
+        "num_fixes": 1,
+        "num_breaks": 6,
+        "net_gain": -5,
+        "fixes": [
+          {
+            "sample_id": "TRAIN_04047",
+            "vessel_name": "글로비스 심포니",
+            "is_korean": true,
+            "gold_id": "VESSEL_66867",
+            "baseline_pred": "VESSEL_58033",
+            "hybrid_pred": "VESSEL_66867"
+          }
+        ],
+        "breaks": [
+          {
+            "sample_id": "TRAIN_00990",
+            "vessel_name": "바우세실",
+            "is_korean": true,
+            "gold_id": "VESSEL_78279",
+            "baseline_pred": "VESSEL_78279",
+            "hybrid_pred": "VESSEL_27195"
+          },
+          {
+            "sample_id": "TRAIN_01610",
+            "vessel_name": "골든브리지하나",
+            "is_korean": true,
+            "gold_id": "VESSEL_53492",
+            "baseline_pred": "VESSEL_53492",
+            "hybrid_pred": "VESSEL_15805"
+          },
+          {
+            "sample_id": "TRAIN_03008",
+            "vessel_name": "인트 메조",
+            "is_korean": true,
+            "gold_id": "VESSEL_63204",
+            "baseline_pred": "VESSEL_63204",
+            "hybrid_pred": "VESSEL_33282"
+          },
+          {
+            "sample_id": "TRAIN_04648",
+            "vessel_name": "모닝 레나",
+            "is_korean": true,
+            "gold_id": "VESSEL_33666",
+            "baseline_pred": "VESSEL_33666",
+            "hybrid_pred": "VESSEL_13452"
+          },
+          {
+            "sample_id": "TRAIN_08942",
+            "vessel_name": "씨 울프",
+            "is_korean": true,
+            "gold_id": "VESSEL_52940",
+            "baseline_pred": "VESSEL_52940",
+            "hybrid_pred": "VESSEL_46798"
+          },
+          {
+            "sample_id": "TRAIN_11877",
+            "vessel_name": "그레이트 링크",
+            "is_korean": true,
+            "gold_id": "VESSEL_40166",
+            "baseline_pred": "VESSEL_40166",
+            "hybrid_pred": "VESSEL_40067"
+          }
+        ]
+      },
+      "direct03_vs_retrieval03": {
+        "num_fixes": 0,
+        "num_breaks": 5,
+        "net_gain": -5,
+        "fixes": [],
+        "breaks": [
+          {
+            "sample_id": "TRAIN_01156",
+            "vessel_name": "메이플하버",
+            "is_korean": true,
+            "gold_id": "VESSEL_55552",
+            "baseline_pred": "VESSEL_55552",
+            "hybrid_pred": "VESSEL_62728"
+          },
+          {
+            "sample_id": "TRAIN_06367",
+            "vessel_name": "이에스 로즈",
+            "is_korean": true,
+            "gold_id": "VESSEL_03162",
+            "baseline_pred": "VESSEL_03162",
+            "hybrid_pred": "VESSEL_39887"
+          },
+          {
+            "sample_id": "TRAIN_06500",
+            "vessel_name": "포천카렌",
+            "is_korean": true,
+            "gold_id": "VESSEL_65587",
+            "baseline_pred": "VESSEL_65587",
+            "hybrid_pred": "VESSEL_76383"
+          },
+          {
+            "sample_id": "TRAIN_07555",
+            "vessel_name": "이에스로즈",
+            "is_korean": true,
+            "gold_id": "VESSEL_03162",
+            "baseline_pred": "VESSEL_03162",
+            "hybrid_pred": "VESSEL_25628"
+          },
+          {
+            "sample_id": "TRAIN_08986",
+            "vessel_name": "에스티아이저민",
+            "is_korean": true,
+            "gold_id": "VESSEL_75066",
+            "baseline_pred": "VESSEL_75066",
+            "hybrid_pred": "VESSEL_45794"
+          }
+        ]
+      },
+      "complete03_vs_direct03": {
+        "num_fixes": 1,
+        "num_breaks": 0,
+        "net_gain": 1,
+        "fixes": [
+          {
+            "sample_id": "TRAIN_11877",
+            "vessel_name": "그레이트 링크",
+            "is_korean": true,
+            "gold_id": "VESSEL_40166",
+            "baseline_pred": "VESSEL_40067",
+            "hybrid_pred": "VESSEL_40166"
+          }
+        ],
+        "breaks": []
+      }
+    },
+    "full_system_severe": {
+      "noise_applied_rate": 0.8026981450252951,
+      "variants": {
+        "reference02": {
+          "hangul_accuracy": 0.9832635983263598,
+          "hangul_correct": 235,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9971870604781997,
+          "non_hangul_correct": 2127,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9874406369719116,
+          "inference_time_sec": 58.086708300048485,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 0.9995311767463666,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "retrieval03": {
+          "hangul_accuracy": 0.9790794979079498,
+          "hangul_correct": 234,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9971870604781997,
+          "non_hangul_correct": 2127,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9845117666790247,
+          "inference_time_sec": 56.20828019990586,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 0.9995311767463666,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "direct03": {
+          "hangul_accuracy": 0.9665271966527197,
+          "hangul_correct": 231,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9971870604781997,
+          "non_hangul_correct": 2127,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9757251558003637,
+          "inference_time_sec": 61.04318189993501,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 0.9995311767463666,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "complete03": {
+          "hangul_accuracy": 0.9707112970711297,
+          "hangul_correct": 232,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9971870604781997,
+          "non_hangul_correct": 2127,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9786540260932506,
+          "inference_time_sec": 67.1015977000352,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 0.9995311767463666,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        }
+      },
+      "retrieval03_vs_reference02": {
+        "num_fixes": 4,
+        "num_breaks": 5,
+        "net_gain": -1,
+        "fixes": [
+          {
+            "sample_id": "TRAIN_00022",
+            "vessel_name": "돈카를로스",
+            "is_korean": true,
+            "gold_id": "VESSEL_47233",
+            "baseline_pred": "VESSEL_18415",
+            "hybrid_pred": "VESSEL_47233"
+          },
+          {
+            "sample_id": "TRAIN_04047",
+            "vessel_name": "글로비스 심포니",
+            "is_korean": true,
+            "gold_id": "VESSEL_66867",
+            "baseline_pred": "VESSEL_58033",
+            "hybrid_pred": "VESSEL_66867"
+          },
+          {
+            "sample_id": "TRAIN_05497",
+            "vessel_name": "돈카를로스",
+            "is_korean": true,
+            "gold_id": "VESSEL_47233",
+            "baseline_pred": "VESSEL_18415",
+            "hybrid_pred": "VESSEL_47233"
+          },
+          {
+            "sample_id": "TRAIN_09265",
+            "vessel_name": "글로비스심포니",
+            "is_korean": true,
+            "gold_id": "VESSEL_66867",
+            "baseline_pred": "VESSEL_58033",
+            "hybrid_pred": "VESSEL_66867"
+          }
+        ],
+        "breaks": [
+          {
+            "sample_id": "TRAIN_00082",
+            "vessel_name": "펭슈하이",
+            "is_korean": true,
+            "gold_id": "VESSEL_43261",
+            "baseline_pred": "VESSEL_43261",
+            "hybrid_pred": "VESSEL_71581"
+          },
+          {
+            "sample_id": "TRAIN_00990",
+            "vessel_name": "바우세실",
+            "is_korean": true,
+            "gold_id": "VESSEL_78279",
+            "baseline_pred": "VESSEL_78279",
+            "hybrid_pred": "VESSEL_40056"
+          },
+          {
+            "sample_id": "TRAIN_03008",
+            "vessel_name": "인트 메조",
+            "is_korean": true,
+            "gold_id": "VESSEL_63204",
+            "baseline_pred": "VESSEL_63204",
+            "hybrid_pred": "VESSEL_33282"
+          },
+          {
+            "sample_id": "TRAIN_04634",
+            "vessel_name": "팬호라이즌",
+            "is_korean": true,
+            "gold_id": "VESSEL_20690",
+            "baseline_pred": "VESSEL_20690",
+            "hybrid_pred": "VESSEL_34336"
+          },
+          {
+            "sample_id": "TRAIN_11877",
+            "vessel_name": "그레이트 링크",
+            "is_korean": true,
+            "gold_id": "VESSEL_40166",
+            "baseline_pred": "VESSEL_40166",
+            "hybrid_pred": "VESSEL_40067"
+          }
+        ]
+      },
+      "direct03_vs_retrieval03": {
+        "num_fixes": 0,
+        "num_breaks": 3,
+        "net_gain": -3,
+        "fixes": [],
+        "breaks": [
+          {
+            "sample_id": "TRAIN_01156",
+            "vessel_name": "메이플하버",
+            "is_korean": true,
+            "gold_id": "VESSEL_55552",
+            "baseline_pred": "VESSEL_55552",
+            "hybrid_pred": "VESSEL_75419"
+          },
+          {
+            "sample_id": "TRAIN_06367",
+            "vessel_name": "이에스 로즈",
+            "is_korean": true,
+            "gold_id": "VESSEL_03162",
+            "baseline_pred": "VESSEL_03162",
+            "hybrid_pred": "VESSEL_39887"
+          },
+          {
+            "sample_id": "TRAIN_06500",
+            "vessel_name": "포천카렌",
+            "is_korean": true,
+            "gold_id": "VESSEL_65587",
+            "baseline_pred": "VESSEL_65587",
+            "hybrid_pred": "VESSEL_76383"
+          }
+        ]
+      },
+      "complete03_vs_direct03": {
+        "num_fixes": 1,
+        "num_breaks": 0,
+        "net_gain": 1,
+        "fixes": [
+          {
+            "sample_id": "TRAIN_11877",
+            "vessel_name": "그레이트 링크",
+            "is_korean": true,
+            "gold_id": "VESSEL_40166",
+            "baseline_pred": "VESSEL_40067",
+            "hybrid_pred": "VESSEL_40166"
+          }
+        ],
+        "breaks": []
+      }
+    }
+  },
+  "limitations": [
+    "External fold0 explicitly used for checkpoint selection as requested; resulting score is development-selected, not untouched validation.",
+    "Public train used in prior EDA; local score cannot guarantee leaderboard score.",
+    "Known Glovis/WREN examples motivate rules; case success is development evidence.",
+    "Full-system uses the legacy generated map; its historical lineage limits remain.",
+    "Reference DPR02 is remeasured with accelerated row encoding; this is not historical server timing.",
+    "Known Glovis/WREN cases motivated rules, so case success is development evidence, not untouched validation.",
+    "External fold0 is used for neural epoch selection; no leaderboard-equivalence claim."
+  ],
+  "row_independence": {
+    "rows": 12,
+    "reverse": true,
+    "subset": true,
+    "single": true,
+    "repeat": true,
+    "empty": true
+  },
+  "input_sha256": {
+    "checkpoint": "0f5a0f20d841d7653d78a099178f783142d57a2c882a1df48a7a6d6ae6c5c418",
+    "embeddings": "571107ef0cbd4f0338ac7b2a7ac0facbdee1b36f02ffc6120972aaedf65d48e0",
+    "reference_checkpoint": "10227467f5d7ba8e3c9e1979348b2dae0ffd1339e50b28d562d1d89f1ad0e585",
+    "reference_embeddings": "0e7d3c67f721b64707661b728e7392912ae775590c2b92bb26c4f759c850cca8",
+    "legacy_map": "e5a3ed8ce2b8eedfb499f09307e04ccd178992d838091a7e091cddc0c6fc06a4",
+    "reference_scoring_source": "c14d5afbbf48c00df8c4df4fc2d315700f8ef0fc036e4ead5b1f53ad9a18fe15"
+  },
+  "total_seconds": 949.7357501999941
+}

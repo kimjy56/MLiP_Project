@@ -1,5 +1,73 @@
 # 보고서·발표 근거 배치
 
+## 2026-10-28T22:09:58+09:00 — 수정 AS-08(117597) 결과 반영 / VERIFY-AS08-FIXED-RESULT-01
+
+- [x] 사용자 정정: **오류 수정본 AS-08**은 제출 `117597`, `2026-10-27 23:17:35 KST`, **0.9082679372**, **327초(5분27초)**다. 최초 AS-08 `117501`(0.9003732004/236초)은 별도 제출로 보존한다. 기존 SUB-117597 기록과 일치하며 중복 등록하지 않았다.
+- [x] 수정본−최초 AS-08: **+0.0078947368(+0.78947368%p), 표시 시간+91초**. 수정본−AS-06/07: **−0.0039473684(−0.39473684%p)**.
+- [x] **AS-09−수정 AS-08: +0.0118421053(+1.18421053%p), 표시 시간+170초**. 앞선 +1.97368421%p/+261초 비교는 최초 AS-08에 대한 값으로만 유효하다. 향후 최신 AS-08 기준 비교에는 수정본을 쓴다.
+- **주요 결정/해석**: AS-09는 관측된 최고 서버 점수 기준선을 유지한다. 오류 수정 후 점수 회복은 확인되지만 전체 상승분을 Dense 단독 효과로 귀속하거나 잔여 격차를 사전 제거 때문으로 확정하지 않는다. 기존 SUB-117597의 인과 확정 표현은 서버 로그·대응 ZIP 변경 범위가 확인되기 전까지 가설로 한정한다. 현재 로컬 ZIP과 서버 업로드 바이트 일치는 미확인이다.
+- **범위/제약**: 기록·소수 연산·로컬 ZIP 설정 확인만 수행. 새 학습/모델 추론/ZIP 수정/업로드/커밋/push 없음. 언어별 정확도·표본 수·구성별 기여는 미측정이다. TEAM_RULES v4 확인, eval_kit 실제1.0/요청1.1 차이와 Python3.11.15/목표3.11.17 차이를 유지한다.
+- [ ] **다음 작업**: 별도 개선 요청 시 같은 조건의 구성별 비교로 기여를 분리한다. 이번 결과 반영은 완료했다.
+- **근거**: [수정 제출 결과](experiments/SUB-117597.json), [검증 기록](experiments/VERIFY-AS08-FIXED-RESULT-01.json), [갱신 비교표](../docs/AS09_SERVER_RESULT.md). 권장 커밋: `docs(results): distinguish corrected AS08 submission and revise AS09 comparisons`.
+
+## 2026-10-28T22:06:06+09:00 — VERIFY-AS09-RESULT-01: AS-09 결과·패키지 근거 범위 확인
+
+- [x] 기존 제출117799 기록과 사용자 표 일치 확인: **0.9201100425 / 497초**. AS-06/07 대비 **+0.78947369%p**, AS-08 대비 **+1.97368421%p**. 새 제출·실험으로 중복 집계하지 않았다.
+- [x] 로컬 ZIP 해시가 기존 AS-09 기록과 일치하고 CRC 통과. Dense hybrid/가중치2.5, loss.py 포함, 실패 시 중단 확인. 수동 단어장0개지만 기존 한글 map78,586개와 학습 조회는 ON이다. EXAONE-only 결과가 아니다.
+- **주요 결정 사항/해석 정정**: AS-09는 현재 관측된 서버 점수 기준선이다. 서버 로그·업로드 원본 해시는 미확인이며 Dense 활성은 동일 ZIP 실행 가정의 강한 근거로 구분한다. 개별 구성의 성능 기여·언어별 성적은 미측정이다. 아래 이전 기록의 서버 직접 검증/업로드 해시 확인/1,200초 제한 표현은 [최신 확인 범위](../docs/AS09_SERVER_RESULT.md)로 한정한다. 기록된 최신 안내는1,800초이며 표시 시간의 범위는 미확인이다.
+- **제약**: TEAM_RULES v4 확인, eval_kit 실제1.0/요청1.1 불일치. Python3.11.15/목표3.11.17 차이. 기존 DPR 기록은 fold0이며 이번 결과를5-fold OOF로 표시하지 않는다. 모델 추론·새 학습·ZIP 수정·업로드·커밋·push 없음.
+- [ ] **다음 작업**: 별도 개선 요청 시 동일 조건의 Dense OFF/후보만/가산 및 map ON/OFF를 분리 비교한다. 현재 작업은 기록 검증까지 완료, 실행 중 실험 없음.
+- **근거**: [분석 문서](../docs/AS09_SERVER_RESULT.md), [검증 기록](experiments/VERIFY-AS09-RESULT-01.json). 권장 커밋: `docs(results): verify AS09 score, package settings and evidence limits`.
+
+## 2026-10-28T00:11:19+09:00 — SPEC-LEX-01 Rev.2 신규 EXAONE 사전 경로 구현 (IMPL-EXAONE-LEX-01)
+
+기존 수동 사전/합성 map/학습 음역 조회 자산을 읽지 않는 규칙·fold쌍·EXAONE LoRA·Hangul 제약·두 Track 생성/캐시·독립 자모 matcher·공통 평가 연결을 구현했다. 정적 JSON 추론은 torch/transformers를 import하지 않으며 기존 공개 decoder API는 지연 로딩으로 보존했다.
+
+- 검증: **32개 통과**, 실제 생성 map이 필요한 지정 사례 **3개 skip**. 작은 무작위 EXAONE 구조의 gradient/adapter 복원은 기능 검사이며1.2B 실제 품질이 아니다.
+- 데이터: fit9850/보류2372행, 고유 쌍1573개, catalog78595행/고유 이름78592/토큰35418. fold 파일 재생성·보류 정답 후보 주입 없음.
+- **실제 모델 실험 차단**: LEX-EXAONE-PURE-01은 base 부재로 optimizer0단계에서 중단. EXAONE-BASE-FETCH-01은 huggingface.co DNS 실패. 전수 생성/정확도 평가는 planned로 유지하고 대체 모델·기존 사전을 사용하지 않았다.
+- **주요 결정**: 사전 배제만으로 누수0/로컬=리더보드를 보장하지 않는다. HD→특정 회사명은 일반 규칙으로 고정하지 않는다. 유효 batch64/microbatch4, 실제EOS 사용. 기존 DPR은 별도 계보 옵션과 검증 manifest가 필요하며 EXAONE-only와 구분한다.
+- **다음 작업**: 가중치 확보 → 새 학습 ID02 → 생성 → fold 평가. 기존 ZIP/완료 기록 보존, ZIP 생성·커밋·push 없음.
+
+근거: [구현·실행 안내](../docs/SPEC_LEX_01_IMPLEMENTATION.md), [작업 기록](experiments/IMPL-EXAONE-LEX-01.json), [학습 차단](experiments/LEX-EXAONE-PURE-01.json).
+
+## 2026-10-27T23:03:45+09:00 — AS-08 실제 ZIP 감사와 복구 우선순위 (ANALYSIS-AS08-SERVER-01)
+
+- **확인된 결함**: AS-07/08 ZIP의 phonetic_encoder.__init__가 .loss를 import하지만 loss.py가 없다. 저장소 경로 없는 격리 import에서 두 진입점 모두 Dense 클래스 unavailable 재현. 임시 소스에 누락 파일 추가 또는 추론 전용 __init__ 적용 시 import 성공, 모델 로드0회.
+- **해석 정정**: 설계상 Fuzzy+Dense 하이브리드와 ZIP 독립 실행은 구분한다. AS-07의 AS-06 동률은 fallback 가설과 일치하나 서버 로그 없이는 확정하지 않는다. AS-08은 map78586→0·수동 사전299→0·lattice 제거 상태라 Dense 미활성과 보완 장치 제거의 결합이 유력한 하락 가설이다.
+- **추가 근거**: AS-07/08 신경 가중치 hash 동일. 기존 멀티뷰 보고서의 한글 Top1은138→147/239이나 Top35는227→226/239. 현재 외부 fold best 선택과 캐시 provenance 한계도 기록했다. 기존 완료 결과를 덮어쓰지 않았다.
+- **결정/다음 작업**: PLAN-SERVER-RECOVERY-01은 planned. P0 추론 패키지 의존성/활성 확인 → AS-06 기능 보존 + Dense 후보만 추가 → 별도 가산/게이트 → map/사전/lattice 단일 제거 → 보조 뷰 분리 순서다. 점수 향상 폭은 미측정.
+- **범위**: 새 학습·튜닝·모델 추론·ZIP 생성/수정·업로드·커밋·push 없음. 실제 서버 활성화와 각 요소의 점수 기여는 미확인.
+- **근거**: [분석 보고서](../docs/AS08_SERVER_ANALYSIS.md), [실행 기록](experiments/ANALYSIS-AS08-SERVER-01.json), [복구 계획](experiments/PLAN-SERVER-RECOVERY-01.json).
+
+## 2026-10-27T22:53:44+09:00 — AS-08 공식 서버 결과: 점수 하락 기록 (SUB-117501)
+
+사용자 전달 결과: 제출 **117501**, **submit_AS-08.zip**, 제출 시각 **2026-10-27 22:14:50 KST**, 가중 점수 **0.9003732004**, 표시 시간 **236초(3분 56초)**. 사이트 직접 조회는 하지 않았다.
+
+| 제출 파일 | 제출 ID | 표시 가중 점수 | 표시 시간 |
+|---|---:|---:|---:|
+| submit_AS-06.zip | 115506 | 0.9122153056 | 366초 |
+| submit_AS-07.zip | 116338 | 0.9122153056 | 372초 |
+| submit_AS-08.zip | 117501 | 0.9003732004 | 236초 |
+
+AS-06/07 대비 표시 점수 **-0.0118421052(-1.18421052%p)**. 표시 시간은 AS-06 대비 **-130초**, AS-07 대비 **-136초**다. AS-08을 서버 점수 개선으로 채택하지 않고 더 높은 AS-06/07 기준을 유지한다. 기존 AS-08 패키지 기록상 Multi-View V2·수동 사전 제거·lattice 제거·합성 한글 map OFF 등이 함께 바뀌었으므로 개별 원인은 미확인이다. AS-07도 이미 Dense 하이브리드여서 이번 하락만으로 Dense 자체가 문제라고 결론내릴 수 없다.
+
+언어별 정확도/표본 수·후보 포함률·seen/unseen·Fix/Break·시간 반복성은 미측정이다. 이전 “AS-08 서버 결과 미수령”은 그때의 상태이며 이번 기록으로 갱신한다. 새 학습·추론·ZIP 생성·업로드·커밋·push 없음.
+
+근거: [SUB-117501](experiments/SUB-117501.json), [기존 패키지 기록](experiments/AS-08.json). 기존 완료 기록과 ZIP은 보존한다.
+
+## 2026-10-27T22:17:43+09:00 — 공식 서버 동률과 로컬 강건성 구분
+
+| 제출 파일 | 제출 ID | 표시 가중 점수 | 표시 시간 |
+|---|---:|---:|---:|
+| submit_AS-06.zip | 115506 | 0.9122153056 | 366초 |
+| submit_AS-07.zip | 116338 | 0.9122153056 | 372초 |
+
+보고서·발표에는 “DPR 하이브리드 구성은 로컬 합성 노이즈에서 개선을 보였으나, AS-07 서버 제출의 집계 점수는 AS-06과 같았다”로 기록한다. 동일 총점은 동일 예측·언어별 동률의 근거가 아니며, 개별 요소의 기여와 비공개 입력 분포도 알 수 없다. 표시 시간 +6초는 단일 실행 비교이고 단계별 포함 범위는 미확인이다. AS-08 및 이후 멀티뷰 구성의 서버 결과로 전용하지 않는다.
+
+근거: [SUB-116338](experiments/SUB-116338.json), [SUB-115506](experiments/SUB-115506.json). 제출 시각 **2026-10-26 23:57:46 KST**와 이번 기록 시각 **2026-10-27T22:17:43+09:00**를 구분한다.
+
+
 ## 보고서 권장 구성
 
 1. **문제 정의:** 기록과 카탈로그의 관계, 후보 쌍 이진 분류, 최종 ID 선택, 행 독립 규칙.
@@ -56,3 +124,8 @@
 ## 제출 전 확인
 
 보고서 표의 모든 숫자에 실험 ID·근거 파일을 연결하고 로컬/공식 점수를 구분한다. 미완료 항목을 완료처럼 작성하지 않는다. 최종 선택한 코드·모델·ZIP의 버전을 기록하고, 수업 사이트의 정확한 보고서 형식·마감·팀 제출 방식은 별도 안내로 확인한다.
+
+
+## 2026-10-26T21:59:10+09:00 - Negative pronunciation-policy ablation evidence
+
+Pronunciation_PRONUNCIATION_RESULTS.md records matched legacy-engine map comparisons. Adding4327pronunciations and a2998addition ownership-filtered version did not improve all tested conditions; no server gain is claimed. Use this as evidence for representation/selection tradeoffs, with all confidence and repeated-fold limitations. Source: project_log/experiments/REVIEW-PRONUNCIATION-01.json.

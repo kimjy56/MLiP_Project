@@ -1,0 +1,107 @@
+{
+  "experiment_id": "IMPL-LM-AR06-01",
+  "plan_id": "PLAN-LM-AR06-01",
+  "status": "implemented_runtime_blocked",
+  "recorded_at_kst": "2026-10-25T19:54:25+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "Implement requested LM plan sections 1-3 and explicit GPU training",
+  "hypothesis": "Candidate ranking plus improved coverage and fit-only Hangul augmentation may improve disambiguation; unmeasured.",
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "listwise confusion ranking beta=0.1 tau=1 negatives=2",
+    "language nonreplacement cycles",
+    "row-mean target+EOS CE",
+    "unambiguous fit-token Hangul augmentation",
+    "CUDA default with no silent CPU fallback"
+  ],
+  "fixed_conditions": [],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "experiments\\train_noisy_channel.py": "d74a7bb626ad2dc6927c39ea329711f698e6f9faad5df1523425bf7d7c777b36",
+      "name_decoder\\channel_training.py": "dc345260c4abe9e7e5abc41764585c68c1b31ee33f842dedaffe4d694d0c92eb",
+      "name_decoder\\noise_augmenter.py": "51315596aad8ac26f358d3f44fd94780714c99dc8423dde02446c167b6d7e3d5",
+      "experiments\\noisy_channel_common.py": "8748f42d3120784a821222920e61b1a5a2660a1ba913bd591c9d0bc435df39a9",
+      "tests\\test_channel_training.py": "80877334dfdc9320ed86d6188ceca86eaaffa1d7460436bbb608c1a220474098"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "reverse HyperCLOVA X q/v LoRA",
+    "parameters": {
+      "rank_beta": 0.1,
+      "temperature": 1,
+      "negative_count": 2,
+      "device": "cuda"
+    },
+    "loss": "row mean NLL + beta listwise CE over positive and lexical negative catalog names"
+  },
+  "commands": [
+    "powershell -NoProfile -ExecutionPolicy Bypass -File environment/setup_windows.ps1",
+    "python -m py_compile name_decoder/channel_training.py experiments/train_noisy_channel.py name_decoder/noise_augmenter.py"
+  ],
+  "environment": {
+    "required_python": "3.11.17",
+    "required_env": ".venv-server",
+    "gpu_inventory": "NVIDIA GeForce RTX 5080",
+    "cuda_execution_verified": false
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "No training, numerical tests, CUDA kernel execution or accuracy measurement completed.",
+    "GPU inventory reports RTX 5080; CUDA execution remains unverified.",
+    "Lexical catalog negatives are not baseline OOF error negatives.",
+    "Current eval_kit README identifies itself as 1.0; user requested 1.1 is not present."
+  ],
+  "failure": {
+    "stage": "environment setup",
+    "error": "uv: No download found for cpython-3.11.17-windows-x86_64-none",
+    "retry": "Retried with workspace-owned UV cache and Python install directory after access-denied error."
+  },
+  "decision": "Keep implementation pending pinned-runtime tests; do not claim improvement.",
+  "next_actions": [
+    "Resolve availability of required Python 3.11.17 Windows runtime without silently changing version.",
+    "Run new and existing noisy-channel tests using .venv-server.",
+    "Use a fresh experiment ID for training; compare factors separately with common folds."
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "experiment_id": "EXAONE-BASE-FETCH-01",
+  "plan_id": null,
+  "status": "blocked_network_or_missing_base",
+  "recorded_at_kst": "2026-10-27T23:59:01+09:00",
+  "started_at_kst": "2026-10-27T23:59:01+09:00",
+  "finished_at_kst": "2026-10-27T23:59:01+09:00",
+  "purpose": "Resolve/download pinned official EXAONE4 1.2B base; no dataset access",
+  "hypothesis": null,
+  "baseline_experiment_id": null,
+  "changed_factors": [],
+  "fixed_conditions": [],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/deterministic_ko_rules.py": "e819974c699e94aad0aaa9072b8ec21e9fd6d92524c5da5581850d3c7d8b0b8d",
+      "name_decoder/exaone_data.py": "ffa6c49720a24555642930f9379987f13b6823b7a4b86b0ce9e9564fd4fbdafc",
+      "name_decoder/exaone_translit.py": "b15bda96b33748cb16db7b75a5f1ce042444881bbc4d7ce7cf51e0e1aa5ffb84",
+      "name_decoder/exaone_lexicon.py": "6e8f20fabac10982e9b4cb96b42ac374e88636501ae11095da627ca6de792399",
+      "experiments/exaone_common.py": "905d5fe0e6096c42c0f91163102ffa6b431662f267115c6c53bbf7e47e112a2a",
+      "experiments/train_exaone_translit.py": "54dbf99ad8df50515e8ec3091dbee657d9677ca45f81ebd4952ba5bbd78c9109",
+      "experiments/build_exaone_ko_lexicon.py": "55554b39c31ace0892053a2ecf478224a1369fca353b6f81258bbb888c4f5058",
+      "experiments/evaluate_pure_exaone_oof.py": "8f25b47dc42437b2e8e3004117ebd63d45a09e6a74d4fb4970e411df3e30d12a",
+      "experimental_matchers/exaone_lexicon.py": "ef7ca8d15b103fb11d81fee09256f3b14b34bc81a732a5691cf867a2581a7394"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe tools/fetch_exaone.py"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "executable": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "target_python": "3.11.17"
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [],
+  "failure": {
+    "type": "ConnectionError",
+    "message": "(MaxRetryError('HTTPSConnectionPool(host=\\'huggingface.co\\', port=443): Max retries exceeded with url: /api/models/LGAI-EXAONE/EXAONE-4.0-1.2B (Caused by NameResolutionError(\"HTTPSConnection(host=\\'huggingface.co\\', port=443): Failed to resolve \\'huggingface.co\\' ([Errno 11001] getaddrinfo failed)\"))'), '(Request ID: 1f3776e0-4c39-4aef-b403-702461213733)')",
+    "retry": "Preserve partial outputs; use a new experiment ID"
+  },
+  "decision": null,
+  "next_actions": []
+}

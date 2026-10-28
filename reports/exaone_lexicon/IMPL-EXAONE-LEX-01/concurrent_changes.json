@@ -1,0 +1,86 @@
+{
+  "recorded_at_kst": "2026-10-28T00:16:54+09:00",
+  "scope": "Concurrent changes outside this EXAONE implementation; not reverted or attributed to this task",
+  "files": {
+    "submit.zip": {
+      "before_sha256": "a2e6e6d380910a7cdfa99587135d04e59af4e7844b6666c6f47aa2b63e5a6d9e",
+      "observed_sha256": "76f6dfe0be29dd52540fe687ae73ebee5f454eea2e269f60bd0e68be0153791e",
+      "bytes": 20942853,
+      "mtime_epoch": 1793110422.157037
+    },
+    "submit_AS-08.zip": {
+      "before_sha256": "a2e6e6d380910a7cdfa99587135d04e59af4e7844b6666c6f47aa2b63e5a6d9e",
+      "observed_sha256": "76f6dfe0be29dd52540fe687ae73ebee5f454eea2e269f60bd0e68be0153791e",
+      "bytes": 20942853,
+      "mtime_epoch": 1793110421.413242
+    },
+    "project_log/experiments/AS-08.json": {
+      "before_sha256": "e89a6c3268733dac7a8a06abc741e65a874ea0be1e56c3ae2f1a2bff138ffe84",
+      "observed_sha256": "b72204ac230221683f82031e81ddfe871960a3f2c0d9d60dfd46067e2099958e",
+      "bytes": 3207,
+      "mtime_epoch": 1793110489.333424
+    },
+    "experiments/evaluate_bi_encoder_oof.py": {
+      "before_sha256": "fd72301e785d07dca106f28a280483734fabe28105ac46502e51d4e13d925d81",
+      "observed_sha256": "3fe70d31974046d7c4ffa9157dc78509191426428da4eee2d9bf7978b59309a0",
+      "bytes": 8712,
+      "mtime_epoch": 1793113824.3155713
+    },
+    "experiments/train_bi_encoder.py": {
+      "before_sha256": "bba7cf6fe840e6f5ba4ebf8ff94a14090f4af54c76fae3284552e91d40d54cc4",
+      "observed_sha256": "d307571090ee4c8e68615d98a6331de0628242c88693411271ad9bbe8b4e2a20",
+      "bytes": 22393,
+      "mtime_epoch": 1793113944.4789815
+    },
+    "phonetic_encoder/dataset.py": {
+      "before_sha256": "8cff6c3548db85829b6e9af31dd81632a11c4b028a1ace7a65bd2cf6b7f54717",
+      "observed_sha256": "1c948a47af7c15abf5a1730eac2caf88812d266f71c8a42be75e201b6f4f42d6",
+      "bytes": 6502,
+      "mtime_epoch": 1793113424.210557
+    },
+    "phonetic_encoder/hybrid_matcher.py": {
+      "before_sha256": "507c51bd59993f2681ddb70b21d5dee8d659cbfca07933c424ae6b5b63a4f8bf",
+      "observed_sha256": "550738ed54bae9047a8e5c8a1d491b37dcb2dee63c81b5e7cb1894744015832f",
+      "bytes": 7931,
+      "mtime_epoch": 1793113467.1621258
+    },
+    "phonetic_encoder/loss.py": {
+      "before_sha256": "dc577212c190c45810da5726c58c2730c00da715ee35507b03c97522eca301c4",
+      "observed_sha256": "a438e9cff9c2bfe7a3a076f173495e2f53b8fcb650b39ca87effbe86412f47db",
+      "bytes": 8000,
+      "mtime_epoch": 1793113338.2113605
+    },
+    "phonetic_encoder/model.py": {
+      "before_sha256": "07a5849b663e0495d8f3c6953994e019b830086fc19ac965fa076fd5c6d2a8ca",
+      "observed_sha256": "b987f4f98fa860152562a0272eb6d0d2ac036961e7730bb365133d211fc0470c",
+      "bytes": 20961,
+      "mtime_epoch": 1793113240.2358985
+    },
+    "phonetic_encoder/tokenizer.py": {
+      "before_sha256": "2f78640722c928a8fb71b1860b87af81e2589c0ea240150537eb7cb7f0b6fbb1",
+      "observed_sha256": "4ba963b52dd8ae712f2790a8a0e57657694e5ebeb2eadd3d500ef3bc875f3af1",
+      "bytes": 21162,
+      "mtime_epoch": 1793113061.2843757
+    },
+    "phonetic_encoder/__init__.py": {
+      "before_sha256": "5131c1413cccd4439bb05db9463ee3ee5d520b7acea881a10257b4742af4395a",
+      "observed_sha256": "c075ac45fbe6fd33b16f9211269b49f7cf4834f18ed3568d52add2002cc00aa1",
+      "bytes": 746,
+      "mtime_epoch": 1793113351.3537247
+    },
+    "train_AS-08/model/phonetic_encoder/__init__.py": {
+      "before_sha256": "63fd508cfd2f62116578cf2b8919dbdd0c02d86405adc0ecdc628ad862cb6b15",
+      "observed_sha256": "5131c1413cccd4439bb05db9463ee3ee5d520b7acea881a10257b4742af4395a",
+      "bytes": 661,
+      "mtime_epoch": 1793110420.7085135
+    },
+    "train_AS-08/script.py": {
+      "before_sha256": "da235619b8fc46b6f239f292db26972005e96a6a47be43dded5fbc3e071841b9",
+      "observed_sha256": "2e70a3048fce422600725304af4e3e2863053411bc7783e9f87e4abb7cf5aac7",
+      "bytes": 83344,
+      "mtime_epoch": 1793110420.6852653
+    }
+  },
+  "historical_archive_preservation_currently_passed": false,
+  "warning": "Original AS08 reported score is bound to earlier archive hash; current same-named file must not be assumed identical"
+}

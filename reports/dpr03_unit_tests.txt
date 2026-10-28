@@ -1,0 +1,39 @@
+unittest.case.FunctionTestCase (test_calibration_tail_competition_and_rare_tail_boundaries)
+tests.test_dpr03.test_calibration_tail_competition_and_rare_tail_boundaries ... ok
+unittest.case.FunctionTestCase (test_composite_preserves_a_peak_across_remine_boundary)
+tests.test_dpr03.test_composite_preserves_a_peak_across_remine_boundary ... ok
+unittest.case.FunctionTestCase (test_differential_groups_include_actual_conv_attribute_and_scheduler)
+tests.test_dpr03.test_differential_groups_include_actual_conv_attribute_and_scheduler ... ok
+unittest.case.FunctionTestCase (test_fold_validation_rejects_label_mismatch_and_group_overlap)
+tests.test_dpr03.test_fold_validation_rejects_label_mismatch_and_group_overlap ... ok
+unittest.case.FunctionTestCase (test_id_rank_ties_full_mrr_and_top60)
+tests.test_dpr03.test_id_rank_ties_full_mrr_and_top60 ... ok
+unittest.case.FunctionTestCase (test_packed_views_one_forward_and_independence)
+tests.test_dpr03.test_packed_views_one_forward_and_independence ... ok
+unittest.case.FunctionTestCase (test_row_context_reuses_encoder_and_full_catalog_dot)
+tests.test_dpr03.test_row_context_reuses_encoder_and_full_catalog_dot ... ok
+unittest.case.FunctionTestCase (test_loss_backward)
+tests.test_phonetic_encoder.test_loss_backward ... ok
+unittest.case.FunctionTestCase (test_model_forward_and_l2_norm)
+tests.test_phonetic_encoder.test_model_forward_and_l2_norm ... ok
+unittest.case.FunctionTestCase (test_multi_view_formatting)
+tests.test_phonetic_encoder.test_multi_view_formatting ... ok
+unittest.case.FunctionTestCase (test_row_independence)
+tests.test_phonetic_encoder.test_row_independence ... ok
+unittest.case.FunctionTestCase (test_spec_dpr_02_components)
+tests.test_phonetic_encoder.test_spec_dpr_02_components ... ok
+unittest.case.FunctionTestCase (test_tokenizer_batch_encoding)
+tests.test_phonetic_encoder.test_tokenizer_batch_encoding ... ok
+unittest.case.FunctionTestCase (test_trimmed_weight_loading_from_hf_cache)
+tests.test_phonetic_encoder.test_trimmed_weight_loading_from_hf_cache ... ok
+unittest.case.FunctionTestCase (test_dpr_hybrid_matcher)
+tests.test_dpr_hybrid.test_dpr_hybrid_matcher ... ok
+test_catalog_index_with_dense (tests.test_dense_features.TestDenseFeatures.test_catalog_index_with_dense) ... ok
+test_feature_names (tests.test_dense_features.TestDenseFeatures.test_feature_names) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 13.001s
+
+OK
+DPR-Hybrid Unit Tests Passed 100%!
+TestDenseFeatures: All assertions passed successfully!

@@ -1,0 +1,280 @@
+{
+  "experiment_id": "DPR-HYBRID-ROBUST-01",
+  "heldout_fold": 0,
+  "rows": 2372,
+  "seed": 20261022,
+  "dense_weight": 2.5,
+  "results": {
+    "severe": {
+      "noise_applied_rate": 0.8026981450252951,
+      "conditions": {
+        "ko_map_on/noisy": {
+          "baseline": {
+            "hangul_accuracy": 0.9456066945606695,
+            "hangul_correct": 226,
+            "hangul_rows": 239,
+            "non_hangul_accuracy": 0.9971870604781997,
+            "non_hangul_correct": 2127,
+            "non_hangul_rows": 2133,
+            "weighted_accuracy": 0.9610808043359285,
+            "inference_time_sec": 0.001
+          },
+          "hybrid": {
+            "hangul_accuracy": 0.9874476987447699,
+            "hangul_correct": 236,
+            "hangul_rows": 239,
+            "non_hangul_accuracy": 0.9971870604781997,
+            "non_hangul_correct": 2127,
+            "non_hangul_rows": 2133,
+            "weighted_accuracy": 0.9903695072647988,
+            "inference_time_sec": 46.5160845000064
+          },
+          "delta_weighted_pct_points": 2.9288702928870314,
+          "delta_hangul_pct_points": 4.184100418410042,
+          "diff_summary": {
+            "num_fixes": 12,
+            "num_breaks": 2,
+            "net_gain": 10,
+            "fixes": [
+              {
+                "sample_id": "TRAIN_00990",
+                "vessel_name": "바우세실",
+                "is_korean": true,
+                "gold_id": "VESSEL_78279",
+                "baseline_pred": "VESSEL_40056",
+                "hybrid_pred": "VESSEL_78279"
+              },
+              {
+                "sample_id": "TRAIN_03008",
+                "vessel_name": "인트 메조",
+                "is_korean": true,
+                "gold_id": "VESSEL_63204",
+                "baseline_pred": "VESSEL_60698",
+                "hybrid_pred": "VESSEL_63204"
+              },
+              {
+                "sample_id": "TRAIN_03695",
+                "vessel_name": "스파리겔",
+                "is_korean": true,
+                "gold_id": "VESSEL_18685",
+                "baseline_pred": "VESSEL_77782",
+                "hybrid_pred": "VESSEL_18685"
+              },
+              {
+                "sample_id": "TRAIN_04560",
+                "vessel_name": "글로비스심포니",
+                "is_korean": true,
+                "gold_id": "VESSEL_66867",
+                "baseline_pred": "VESSEL_62169",
+                "hybrid_pred": "VESSEL_66867"
+              },
+              {
+                "sample_id": "TRAIN_04634",
+                "vessel_name": "팬호라이즌",
+                "is_korean": true,
+                "gold_id": "VESSEL_20690",
+                "baseline_pred": "VESSEL_68948",
+                "hybrid_pred": "VESSEL_20690"
+              },
+              {
+                "sample_id": "TRAIN_04648",
+                "vessel_name": "모닝 레나",
+                "is_korean": true,
+                "gold_id": "VESSEL_33666",
+                "baseline_pred": "VESSEL_13452",
+                "hybrid_pred": "VESSEL_33666"
+              },
+              {
+                "sample_id": "TRAIN_05510",
+                "vessel_name": "야사샤우선크로스",
+                "is_korean": true,
+                "gold_id": "VESSEL_12277",
+                "baseline_pred": "VESSEL_64660",
+                "hybrid_pred": "VESSEL_12277"
+              },
+              {
+                "sample_id": "TRAIN_07555",
+                "vessel_name": "이에스로즈",
+                "is_korean": true,
+                "gold_id": "VESSEL_03162",
+                "baseline_pred": "VESSEL_46555",
+                "hybrid_pred": "VESSEL_03162"
+              },
+              {
+                "sample_id": "TRAIN_07563",
+                "vessel_name": "이에스 로즈",
+                "is_korean": true,
+                "gold_id": "VESSEL_03162",
+                "baseline_pred": "VESSEL_47197",
+                "hybrid_pred": "VESSEL_03162"
+              },
+              {
+                "sample_id": "TRAIN_08986",
+                "vessel_name": "에스티아이저민",
+                "is_korean": true,
+                "gold_id": "VESSEL_75066",
+                "baseline_pred": "VESSEL_44627",
+                "hybrid_pred": "VESSEL_75066"
+              },
+              {
+                "sample_id": "TRAIN_11226",
+                "vessel_name": "에스티아이 저민",
+                "is_korean": true,
+                "gold_id": "VESSEL_75066",
+                "baseline_pred": "VESSEL_02901",
+                "hybrid_pred": "VESSEL_75066"
+              },
+              {
+                "sample_id": "TRAIN_12062",
+                "vessel_name": "안딩하이",
+                "is_korean": true,
+                "gold_id": "VESSEL_18603",
+                "baseline_pred": "VESSEL_56667",
+                "hybrid_pred": "VESSEL_18603"
+              }
+            ],
+            "breaks": [
+              {
+                "sample_id": "TRAIN_08397",
+                "vessel_name": "우리 썬",
+                "is_korean": true,
+                "gold_id": "VESSEL_16584",
+                "baseline_pred": "VESSEL_16584",
+                "hybrid_pred": "VESSEL_54336"
+              },
+              {
+                "sample_id": "TRAIN_08942",
+                "vessel_name": "씨 울프",
+                "is_korean": true,
+                "gold_id": "VESSEL_52940",
+                "baseline_pred": "VESSEL_52940",
+                "hybrid_pred": "VESSEL_54045"
+              }
+            ]
+          }
+        },
+        "ko_map_off/noisy": {
+          "baseline": {
+            "hangul_accuracy": 0.9539748953974896,
+            "hangul_correct": 228,
+            "hangul_rows": 239,
+            "non_hangul_accuracy": 0.9971870604781997,
+            "non_hangul_correct": 2127,
+            "non_hangul_rows": 2133,
+            "weighted_accuracy": 0.9669385449217025,
+            "inference_time_sec": 0.001
+          },
+          "hybrid": {
+            "hangul_accuracy": 0.9916317991631799,
+            "hangul_correct": 237,
+            "hangul_rows": 239,
+            "non_hangul_accuracy": 0.9971870604781997,
+            "non_hangul_correct": 2127,
+            "non_hangul_rows": 2133,
+            "weighted_accuracy": 0.9932983775576858,
+            "inference_time_sec": 32.07910540001467
+          },
+          "delta_weighted_pct_points": 2.6359832635983294,
+          "delta_hangul_pct_points": 3.765690376569031,
+          "diff_summary": {
+            "num_fixes": 10,
+            "num_breaks": 1,
+            "net_gain": 9,
+            "fixes": [
+              {
+                "sample_id": "TRAIN_00990",
+                "vessel_name": "바우세실",
+                "is_korean": true,
+                "gold_id": "VESSEL_78279",
+                "baseline_pred": "VESSEL_27195",
+                "hybrid_pred": "VESSEL_78279"
+              },
+              {
+                "sample_id": "TRAIN_02399",
+                "vessel_name": "월러스에이스",
+                "is_korean": true,
+                "gold_id": "VESSEL_14505",
+                "baseline_pred": "VESSEL_35925",
+                "hybrid_pred": "VESSEL_14505"
+              },
+              {
+                "sample_id": "TRAIN_03008",
+                "vessel_name": "인트 메조",
+                "is_korean": true,
+                "gold_id": "VESSEL_63204",
+                "baseline_pred": "VESSEL_33282",
+                "hybrid_pred": "VESSEL_63204"
+              },
+              {
+                "sample_id": "TRAIN_03695",
+                "vessel_name": "스파리겔",
+                "is_korean": true,
+                "gold_id": "VESSEL_18685",
+                "baseline_pred": "VESSEL_06797",
+                "hybrid_pred": "VESSEL_18685"
+              },
+              {
+                "sample_id": "TRAIN_04634",
+                "vessel_name": "팬호라이즌",
+                "is_korean": true,
+                "gold_id": "VESSEL_20690",
+                "baseline_pred": "VESSEL_68948",
+                "hybrid_pred": "VESSEL_20690"
+              },
+              {
+                "sample_id": "TRAIN_04648",
+                "vessel_name": "모닝 레나",
+                "is_korean": true,
+                "gold_id": "VESSEL_33666",
+                "baseline_pred": "VESSEL_13452",
+                "hybrid_pred": "VESSEL_33666"
+              },
+              {
+                "sample_id": "TRAIN_07563",
+                "vessel_name": "이에스 로즈",
+                "is_korean": true,
+                "gold_id": "VESSEL_03162",
+                "baseline_pred": "VESSEL_47197",
+                "hybrid_pred": "VESSEL_03162"
+              },
+              {
+                "sample_id": "TRAIN_07823",
+                "vessel_name": "모닝 레나",
+                "is_korean": true,
+                "gold_id": "VESSEL_33666",
+                "baseline_pred": "VESSEL_28536",
+                "hybrid_pred": "VESSEL_33666"
+              },
+              {
+                "sample_id": "TRAIN_08986",
+                "vessel_name": "에스티아이저민",
+                "is_korean": true,
+                "gold_id": "VESSEL_75066",
+                "baseline_pred": "VESSEL_11864",
+                "hybrid_pred": "VESSEL_75066"
+              },
+              {
+                "sample_id": "TRAIN_10374",
+                "vessel_name": "바우 세실",
+                "is_korean": true,
+                "gold_id": "VESSEL_78279",
+                "baseline_pred": "VESSEL_56910",
+                "hybrid_pred": "VESSEL_78279"
+              }
+            ],
+            "breaks": [
+              {
+                "sample_id": "TRAIN_04047",
+                "vessel_name": "글로비스 심포니",
+                "is_korean": true,
+                "gold_id": "VESSEL_66867",
+                "baseline_pred": "VESSEL_66867",
+                "hybrid_pred": "VESSEL_58033"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

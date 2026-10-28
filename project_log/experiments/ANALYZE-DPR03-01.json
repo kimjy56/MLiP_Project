@@ -1,0 +1,259 @@
+{
+  "experiment_id": "ANALYZE-DPR03-01",
+  "plan_id": "SPEC-DPR-03",
+  "status": "analyzed_saved_development_outputs",
+  "recorded_at_kst": "2026-10-28T23:13:04+09:00",
+  "started_at_kst": "2026-10-28T23:13:21+09:00",
+  "finished_at_kst": "2026-10-28T23:13:24+09:00",
+  "purpose": "Analyze saved fixed-condition matching predictions, paired component CIs and public heldout errors",
+  "hypothesis": "The fixed direct-similarity transform can hurt noise robustness even with unchanged candidate settings.",
+  "baseline_experiment_id": null,
+  "changed_factors": [],
+  "fixed_conditions": [
+    "saved DPR-HYBRID-03 predictions only",
+    "no new inference or weight fitting",
+    "existing official evaluator unchanged"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "phonetic_encoder/model.py": "e9d1e465bdea6179d22a7333245bc5fe11eea40586a0ffdceabe2c85f3c7b430",
+      "phonetic_encoder/tokenizer.py": "e19e1c9c4a59444be881c285ced063a0f17a9a9ddd19b52cd19953a3e5b7af14",
+      "phonetic_encoder/dataset.py": "defb522d806fbbe8207ae84161aba18e0ab1d756380831f7236f037deb9a8605",
+      "phonetic_encoder/loss.py": "a438e9cff9c2bfe7a3a076f173495e2f53b8fcb650b39ca87effbe86412f47db",
+      "phonetic_encoder/retrieval.py": "31682e9078d9d2666d982ab023809984344e0971d63bf6dbb4c248ce078b8b7e",
+      "phonetic_encoder/hybrid_matcher.py": "5caea0f93853d4481acb2c91d09a0ff3e0e5ab74ce03f93156264c4bdc602fbf",
+      "experimental_matchers/dpr_hybrid/script.py": "b1bfa77f81875983e143973d112827563a2d5fd69a74b110ccf2cfc42491206f",
+      "experiments/dpr03_common.py": "13e4da61ce9b4ad1c5ef20053f2a8fc00fa5b3fc8c2138f2e27abfad478f28ed",
+      "experiments/train_bi_encoder.py": "0e8a30f2a01a7df8c7fca93d7007d4074bb304b18570558f2507685375cd5f20",
+      "experiments/export_catalog_embeddings.py": "748bd2432383c8e59d293556cc1cd2cd9702bfa236282ad1564b35617eea844a",
+      "experiments/evaluate_bi_encoder_oof.py": "4be68113ddbf163b6b4c7d26b4871f9c1da680f58548d6cbe3e76f798ee49da3",
+      "experiments/evaluate_dpr_robustness.py": "4717890766ceb1868f92568238e6ad0d6b51b831f4e8e0a77232931fbb441a3e",
+      "experiments/benchmark_dpr03_latency.py": "6fdb956402fe02757d7c28365ec8181ea239f14a449128becf1412ae6edb33c3",
+      "tests/test_dpr03.py": "0e7ba04ac5dc749d5db4e94e95f6925f7205663430b9ece16034abc4f2abbc94",
+      "tests/run_dpr_tests.py": "6df94b67e7347a28be8f0e7da5b855e27c46dc6adfe900bfb02f1266852a1d42",
+      "tools/verify_dpr03.py": "7472787ed1f20375b3e8362f19202e8677348b2605ca89f5d85e1a89be258e68",
+      "eval_kit/evaluate.py": "2c728b357727f8e3962128030dde3bcb6fc6b230fcde287e336d3e0eb6c9f38e",
+      "eval_kit/robustness.py": "65a574da60188ca6fa1d660108a1705dc5bd446d0ac150c0f4d1b915d716d230"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe experiments/analyze_dpr03_results.py"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "executable": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "environment_report": "reports/dpr03_environment.json"
+  },
+  "metrics": {
+    "metric_source": "derived analysis of saved public-fold predictions and official paired evaluator; no new model inference",
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "C:\\Projects\\ML_midterm\\artifacts\\ANALYZE-DPR03-01\\summary.json",
+    "C:\\Projects\\ML_midterm\\artifacts\\ANALYZE-DPR03-01\\public_heldout_error_cases.json"
+  ],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [],
+  "failure": null,
+  "decision": "Do not promote DPR03 checkpoint or its direct-similarity rule; preserve AS09 submission reference. Packing and score reuse have separate latency evidence.",
+  "next_actions": [],
+  "analysis": {
+    "benchmark_sha256": "d164781d53bf06da7909ea1cf8514daec339037d461641a306bb3d11b3d4bfa3",
+    "conditions": {
+      "true_unseen_clean": {
+        "reference02": {
+          "hangul_accuracy": 0.99581589958159,
+          "hangul_correct": 238,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9985935302390999,
+          "non_hangul_correct": 2130,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9966491887788429,
+          "inference_time_sec": 48.17058949987404,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 1.0,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "complete03": {
+          "hangul_accuracy": 0.99581589958159,
+          "hangul_correct": 238,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9985935302390999,
+          "non_hangul_correct": 2130,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9966491887788429,
+          "inference_time_sec": 60.05681969993748,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 1.0,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "delta_weighted": 0.0,
+        "direct_fixes": 0,
+        "direct_breaks": 0,
+        "tail_fixes": 0,
+        "tail_breaks": 0
+      },
+      "full_system_clean": {
+        "reference02": {
+          "hangul_accuracy": 1.0,
+          "hangul_correct": 239,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9985935302390999,
+          "non_hangul_correct": 2130,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9995780590717299,
+          "inference_time_sec": 71.44222470000386,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 1.0,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "complete03": {
+          "hangul_accuracy": 0.99581589958159,
+          "hangul_correct": 238,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9985935302390999,
+          "non_hangul_correct": 2130,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9966491887788429,
+          "inference_time_sec": 80.17224260000512,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 1.0,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "delta_weighted": -0.0029288702928870203,
+        "direct_fixes": 0,
+        "direct_breaks": 0,
+        "tail_fixes": 0,
+        "tail_breaks": 0
+      },
+      "true_unseen_severe": {
+        "reference02": {
+          "hangul_accuracy": 0.9832635983263598,
+          "hangul_correct": 235,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9971870604781997,
+          "non_hangul_correct": 2127,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9874406369719116,
+          "inference_time_sec": 42.11218020017259,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 0.9995311767463666,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "complete03": {
+          "hangul_accuracy": 0.9456066945606695,
+          "hangul_correct": 226,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9971870604781997,
+          "non_hangul_correct": 2127,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9610808043359285,
+          "inference_time_sec": 49.19051490002312,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 0.9995311767463666,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "delta_weighted": -0.026359832635983182,
+        "direct_fixes": 0,
+        "direct_breaks": 5,
+        "tail_fixes": 1,
+        "tail_breaks": 0
+      },
+      "full_system_severe": {
+        "reference02": {
+          "hangul_accuracy": 0.9832635983263598,
+          "hangul_correct": 235,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9971870604781997,
+          "non_hangul_correct": 2127,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9874406369719116,
+          "inference_time_sec": 58.086708300048485,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 0.9995311767463666,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "complete03": {
+          "hangul_accuracy": 0.9707112970711297,
+          "hangul_correct": 232,
+          "hangul_rows": 239,
+          "non_hangul_accuracy": 0.9971870604781997,
+          "non_hangul_correct": 2127,
+          "non_hangul_rows": 2133,
+          "weighted_accuracy": 0.9786540260932506,
+          "inference_time_sec": 67.1015977000352,
+          "candidate_inclusion_hangul": 1.0,
+          "candidate_inclusion_non_hangul": 0.9995311767463666,
+          "timing_scope": "row normalization, candidate search, features and scoring; excludes load/index/save"
+        },
+        "delta_weighted": -0.00878661087866106,
+        "direct_fixes": 0,
+        "direct_breaks": 3,
+        "tail_fixes": 1,
+        "tail_breaks": 0
+      }
+    },
+    "component_comparisons": {
+      "direct": [
+        "  가중         -0.01464  [-0.03105, -0.00281]    → 판정: 악화"
+      ],
+      "tail": [
+        "  가중         +0.00293  [0.00000, 0.00925]      → 판정: 동등"
+      ]
+    },
+    "public_error_cases": 23,
+    "error_counts": {
+      "candidate_selection": 22,
+      "retrieval_omission": 1
+    },
+    "decision": "Do not promote DPR03 checkpoint or its direct-similarity rule; preserve AS09 submission reference. Packing and score reuse have separate latency evidence.",
+    "limitations": [
+      "No untouched test or new server result.",
+      "Known cases and outer fold used during development.",
+      "Full-system legacy map provenance limits retained.",
+      "All error cases use public train holdout only."
+    ]
+  }
+}

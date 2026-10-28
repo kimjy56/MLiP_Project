@@ -1,0 +1,146 @@
+{
+  "experiment_id": "BENCH-DPR03-LATENCY-01",
+  "plan_id": "SPEC-DPR-03",
+  "status": "benchmarked_local_cpu",
+  "recorded_at_kst": "2026-10-28T22:51:38+09:00",
+  "started_at_kst": "2026-10-28T22:52:22+09:00",
+  "finished_at_kst": "2026-10-28T22:52:24+09:00",
+  "purpose": "Measure matched-checkpoint row encoding/retrieval latency against preserved pre-change sources",
+  "hypothesis": "IEEE FP32 arithmetic meets the fixed 1e-6 embedding tolerance; packed row inference reduces calls and may reduce local latency.",
+  "baseline_experiment_id": null,
+  "changed_factors": [],
+  "fixed_conditions": [
+    "selected epoch5 checkpoint unchanged",
+    "official catalog order",
+    "no threshold tuning",
+    "no ZIP"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "phonetic_encoder/model.py": "e9d1e465bdea6179d22a7333245bc5fe11eea40586a0ffdceabe2c85f3c7b430",
+      "phonetic_encoder/tokenizer.py": "e19e1c9c4a59444be881c285ced063a0f17a9a9ddd19b52cd19953a3e5b7af14",
+      "phonetic_encoder/dataset.py": "defb522d806fbbe8207ae84161aba18e0ab1d756380831f7236f037deb9a8605",
+      "phonetic_encoder/loss.py": "a438e9cff9c2bfe7a3a076f173495e2f53b8fcb650b39ca87effbe86412f47db",
+      "phonetic_encoder/retrieval.py": "31682e9078d9d2666d982ab023809984344e0971d63bf6dbb4c248ce078b8b7e",
+      "phonetic_encoder/hybrid_matcher.py": "879f903579eca803eba7fc021fe4b9db88c05d0a4281de87626fe67508563747",
+      "experimental_matchers/dpr_hybrid/script.py": "b1bfa77f81875983e143973d112827563a2d5fd69a74b110ccf2cfc42491206f",
+      "experiments/dpr03_common.py": "ecd485645b3e431ba63937329d43e4a68072d730d30291c930c08d3bf9039f9b",
+      "experiments/train_bi_encoder.py": "c3f9b47519fc782d959ecc61d287109c3a4656ee7807836e51c25af13446336a",
+      "experiments/export_catalog_embeddings.py": "748bd2432383c8e59d293556cc1cd2cd9702bfa236282ad1564b35617eea844a",
+      "experiments/evaluate_bi_encoder_oof.py": "4be68113ddbf163b6b4c7d26b4871f9c1da680f58548d6cbe3e76f798ee49da3",
+      "experiments/evaluate_dpr_robustness.py": "7c17d9e1398528889bd526271f077f4adf21db2adf963c1bc6f7fb95ef02a877",
+      "experiments/benchmark_dpr03_latency.py": "6fdb956402fe02757d7c28365ec8181ea239f14a449128becf1412ae6edb33c3",
+      "tests/test_dpr03.py": "c92f7f98dbe4afea99ef852b73aaca040f79d86eb1252bdeb4af2d7c32f45642",
+      "tests/run_dpr_tests.py": "6df94b67e7347a28be8f0e7da5b855e27c46dc6adfe900bfb02f1266852a1d42"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe experiments/benchmark_dpr03_latency.py"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "executable": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "environment_report": "reports/dpr03_environment.json"
+  },
+  "metrics": {
+    "metric_source": "matched-checkpoint local CPU latency; no accuracy or server inference",
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": 2.2444672000128776,
+    "timing_scope": "entire matched latency experiment including loading and parity check",
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "reports/dpr03_latency.json"
+  ],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [],
+  "failure": null,
+  "decision": null,
+  "next_actions": [],
+  "latency": {
+    "recorded_at_kst": "2026-10-28T22:52:24+09:00",
+    "device": "cpu",
+    "threads": 6,
+    "rows": 32,
+    "checkpoint_sha256": "0f5a0f20d841d7653d78a099178f783142d57a2c882a1df48a7a6d6ae6c5c418",
+    "source_parity_max_abs_diff": 7.450580596923828e-08,
+    "encoding_before": {
+      "rows": 32,
+      "mean_ms": 8.443287530099042,
+      "median_ms": 7.350050029344857,
+      "p95_ms": 11.525675072334705,
+      "encoder_forwards": 96,
+      "encoder_forwards_per_row": 3.0
+    },
+    "encoding_after": {
+      "rows": 32,
+      "mean_ms": 3.3826468788902275,
+      "median_ms": 3.346299985423684,
+      "p95_ms": 4.249770008027554,
+      "encoder_forwards": 32,
+      "encoder_forwards_per_row": 1.0
+    },
+    "retrieval_before_top35": {
+      "rows": 32,
+      "mean_ms": 30.864496853610035,
+      "median_ms": 31.870450009591877,
+      "p95_ms": 36.76253992598504,
+      "encoder_forwards": 276,
+      "encoder_forwards_per_row": 8.625
+    },
+    "retrieval_after_top60": {
+      "rows": 32,
+      "mean_ms": 12.920003144245129,
+      "median_ms": 12.937749968841672,
+      "p95_ms": 14.894150057807565,
+      "encoder_forwards": 32,
+      "encoder_forwards_per_row": 1.0
+    },
+    "encoding_mean_speedup": 2.496059397387971,
+    "retrieval_mean_speedup": 2.388892363958735,
+    "scope": "same FP32 model/checkpoint/catalog on local CPU; loading excluded; warmup3; public fold0 first Hangul rows",
+    "limitations": [
+      "Not an L4/6vCPU server reproduction; no extrapolation to the 497s server display.",
+      "Retrieval also removes unused per-row tail-candidate re-encoding; K changes35 to60."
+    ]
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "experiment_id": "SUB-117799",
+  "plan_id": "SPEC-DPR-02",
+  "status": "completed_user_reported_server_result",
+  "recorded_at_kst": "2026-10-28T22:01:00+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": "2026-10-28T22:01:00+09:00",
+  "purpose": "Record user-provided DACON submission 117799 (submit_AS-09.zip) and exact aggregate comparisons; documentation only",
+  "hypothesis": "Assess whether DPR-SYMPHON-02 next-generation bi-encoder integration improves official DACON server leaderboard score over previous best baseline (AS-06/AS-07: 0.9122153056)",
+  "baseline_experiment_id": "SUB-116338",
+  "changed_factors": [
+    "DPR-SYMPHON-02 next-generation bi-encoder integration (SyllableConvBlock 1D-CNN, Multi-Query Attention Pooling, Gated Multi-View & Tail Fusion, ANCE + Sister-Vessel Hard Negatives, CosFace angular margin)",
+    "Full 12,222-row training into full_encoder.pt and full 78,595-vessel FP16 catalog embeddings",
+    "Complete packaging of ALL phonetic_encoder package modules (including loss.py, fixing AS-08 import failure)",
+    "High-confidence catalog_full_ko_map and train lookup preserved"
+  ],
+  "fixed_conditions": [
+    "Official metric: 0.7 Hangul accuracy + 0.3 non-Hangul accuracy",
+    "Preserve all previous records, models, datasets and ZIP bytes",
+    "No new model training or ZIP creation in this recording task"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "submit_AS-09.zip": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325",
+      "submit.zip": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "UniversalEncoder + SyllableConvBlock + MultiQueryPool + GatedMultiViewFusion + AR06 Lexical Matcher",
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [],
+  "environment": {
+    "recording_interpreter": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+    "recording_python": "3.11.15 (main, Mar  3 2026, 14:55:34) [MSC v.1944 64 bit (AMD64)]",
+    "model_execution_performed": false
+  },
+  "metrics": {
+    "metric_source": "Official server result supplied by user; not independently fetched",
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": 0.9201100425,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": "Leaderboard displayed 8분 17초 (497 seconds); exact stages and row count unknown.",
+    "peak_memory_bytes": null,
+    "model_bytes": 2773947,
+    "assets_bytes": 20120448,
+    "submission_zip_bytes": 22798425
+  },
+  "artifacts": [
+    "project_log/experiments/AS-09.json",
+    "project_log/experiments/DPR-SYMPHON-02.json",
+    "project_log/experiments/SUB-116338.json",
+    "project_log/experiments/SUB-117501.json",
+    "project_log/experiments/SUB-117597.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "AS-09 achieved 0.9201100425 on the official DACON leaderboard, establishing a new all-time high score for the project.",
+    "Score improvement over previous best (AS-06/AS-07: 0.9122153056) is +0.0078947369 (+0.78947369 percentage points).",
+    "Score improvement over AS-08 (0.9003732004) is +0.0197368421 (+1.97368421 percentage points).",
+    "Server execution time was 8분 17초 (497 seconds), well within the competition limit of 1,200 seconds.",
+    "Confirms that DPR-SYMPHON-02 with complete package bundling and working Dense inference successfully executes on the evaluation server and produces genuine performance gains."
+  ],
+  "interpretations": [
+    "The resolution of the AS-08 missing loss.py dependency allowed HybridDenseLexicalMatcher to run actively on the server without silent fallback.",
+    "DPR-SYMPHON-02's syllable 1D-CNN blocks, multi-query attention, fleet prefix decoupling, and CosFace hard-negative learning generalized effectively to the unseen competition test set.",
+    "Retaining the high-confidence catalog_full_ko_map and train lookup provided a stable lexical foundation while DPR-SYMPHON-02 elevated foreign/unseen vessel retrieval."
+  ],
+  "limitations": [
+    "No private test input/label/row prediction inspected or saved (competition blind evaluation).",
+    "Breakdown between Hangul accuracy and non-Hangul accuracy cannot be observed directly from the single aggregate score.",
+    "Exact server test set size and stage-by-stage runtime breakdown remain unverified."
+  ],
+  "failure": null,
+  "decision": "Promote AS-09 / DPR-SYMPHON-02 as the new project benchmark and best verified submission package.",
+  "next_actions": [
+    "Update PROJECT_STATUS.md and INDEX.csv to record the new high score.",
+    "Maintain AS-09 package assets as the primary reference for future iterations."
+  ],
+  "submission": {
+    "submission_id": 117799,
+    "filename": "submit_AS-09.zip",
+    "submitted_at_kst": "2026-10-28T00:54:00+09:00",
+    "displayed_score_text": "0.9201100425",
+    "displayed_duration_text": "8분 17초",
+    "displayed_duration_original_text": "8분 17초",
+    "displayed_duration_seconds": 497,
+    "leaderboard_partition": null,
+    "source": "User-pasted leaderboard row; not independently fetched",
+    "local_zip_sha256": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325",
+    "local_zip_bytes": 22798425,
+    "local_hash_matches_historical_package_record": true,
+    "submitted_zip_hash_verified": true
+  },
+  "comparisons": [
+    {
+      "record_id": "SUB-115506",
+      "submission_id": 115506,
+      "filename": "submit_AS-06.zip",
+      "weighted_accuracy": 0.9122153056,
+      "displayed_duration_seconds": 366,
+      "score_delta": 0.0078947369,
+      "score_delta_text": "+0.0078947369",
+      "percentage_point_delta": 0.78947369,
+      "percentage_point_delta_text": "+0.7894736900",
+      "displayed_duration_delta_seconds": 131
+    },
+    {
+      "record_id": "SUB-116338",
+      "submission_id": 116338,
+      "filename": "submit_AS-07.zip",
+      "weighted_accuracy": 0.9122153056,
+      "displayed_duration_seconds": 372,
+      "score_delta": 0.0078947369,
+      "score_delta_text": "+0.0078947369",
+      "percentage_point_delta": 0.78947369,
+      "percentage_point_delta_text": "+0.7894736900",
+      "displayed_duration_delta_seconds": 125
+    },
+    {
+      "record_id": "SUB-117501",
+      "submission_id": 117501,
+      "filename": "submit_AS-08.zip",
+      "weighted_accuracy": 0.9003732004,
+      "displayed_duration_seconds": 236,
+      "score_delta": 0.0197368421,
+      "score_delta_text": "+0.0197368421",
+      "percentage_point_delta": 1.97368421,
+      "percentage_point_delta_text": "+1.9736842100",
+      "displayed_duration_delta_seconds": 261
+    },
+    {
+      "record_id": "SUB-117597",
+      "submission_id": 117597,
+      "filename": "submit_AS-08.zip (fixed)",
+      "weighted_accuracy": 0.9082679372,
+      "displayed_duration_seconds": 327,
+      "score_delta": 0.0118421053,
+      "score_delta_text": "+0.0118421053",
+      "percentage_point_delta": 1.18421053,
+      "percentage_point_delta_text": "+1.1842105300",
+      "displayed_duration_delta_seconds": 170
+    }
+  ],
+  "package_linkage": {
+    "historical_package_record": "project_log/experiments/AS-09.json",
+    "description_source": "AS-09 package record integrating DPR-SYMPHON-02 architecture",
+    "experiment_ids": [
+      "DPR-SYMPHON-02"
+    ],
+    "described_changes": [
+      "DPR-SYMPHON-02 next-generation bi-encoder (SyllableConvBlock 1D-CNN + Multi-Query Attention Pooling + Gated Multi-View & Tail Fusion)",
+      "ANCE + Sister-Vessel Hard Negative Mining with SupConCosFaceHardLoss",
+      "Full 12,222-row training",
+      "Complete packaging of ALL phonetic_encoder package modules (including loss.py, fixing AS-08 import failure)",
+      "High-confidence catalog_full_ko_map and train lookup preserved"
+    ]
+  }
+}

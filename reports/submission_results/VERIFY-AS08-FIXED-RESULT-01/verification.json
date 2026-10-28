@@ -1,0 +1,97 @@
+{
+  "verification_id": "VERIFY-AS08-FIXED-RESULT-01",
+  "checked_at_kst": "2026-10-28T22:09:58+09:00",
+  "submission_id": 117597,
+  "source": "User-provided row; existing SUB117597 checked without duplicate submission",
+  "score_text": "0.9082679372",
+  "displayed_duration_seconds": 327,
+  "comparisons": [
+    {
+      "submission_id": 117501,
+      "fixed_as08_minus_reference_score": "0.0078947368",
+      "percentage_point_delta": "0.7894736800",
+      "displayed_duration_delta_seconds": 91
+    },
+    {
+      "submission_id": 115506,
+      "fixed_as08_minus_reference_score": "-0.0039473684",
+      "percentage_point_delta": "-0.3947368400",
+      "displayed_duration_delta_seconds": -39
+    },
+    {
+      "submission_id": 116338,
+      "fixed_as08_minus_reference_score": "-0.0039473684",
+      "percentage_point_delta": "-0.3947368400",
+      "displayed_duration_delta_seconds": -45
+    },
+    {
+      "submission_id": 117799,
+      "fixed_as08_minus_reference_score": "-0.0118421053",
+      "percentage_point_delta": "-1.1842105300",
+      "displayed_duration_delta_seconds": -170
+    }
+  ],
+  "as09_minus_fixed_as08": {
+    "score_delta": "0.0118421053",
+    "percentage_point_delta": "1.1842105300",
+    "displayed_duration_delta_seconds": 170
+  },
+  "current_local_archive_observation": {
+    "path": "submit_AS-08.zip",
+    "sha256": "76f6dfe0be29dd52540fe687ae73ebee5f454eea2e269f60bd0e68be0153791e",
+    "bytes": 20942853,
+    "server_uploaded_hash_verified": null,
+    "dense_mode": "hybrid",
+    "use_full_ko_map": null,
+    "use_train_lookup_default": true,
+    "catalog_map_entries": 0,
+    "manual_word_variants_count": 0,
+    "packaged_modules": [
+      "model/phonetic_encoder/__init__.py",
+      "model/phonetic_encoder/dataset.py",
+      "model/phonetic_encoder/hybrid_matcher.py",
+      "model/phonetic_encoder/loss.py",
+      "model/phonetic_encoder/model.py",
+      "model/phonetic_encoder/retrieval.py",
+      "model/phonetic_encoder/tokenizer.py"
+    ]
+  },
+  "limitations": [
+    "Official values are user-reported; no independent site fetch or server logs.",
+    "Same ZIP filename represents separate submissions117501 and117597. Server-uploaded bytes cannot be bound to the current local ZIP by the leaderboard row alone.",
+    "The result is consistent with recovery after the reported packaging fix; aggregate score and increased duration do not directly prove Dense activation or isolate its causal gain.",
+    "The remaining difference from AS06/07 does not prove that removing manual/catalog dictionaries caused loss. Architecture, normalization, retrieval, scoring and packaging confounds remain.",
+    "Language-specific accuracy/counts, candidate inclusion, seen/unseen, Fix/Break, confidence intervals and timing stages remain unmeasured.",
+    "Existing SUB117597 causal-confirmation phrases are historical claims; this scoped verification qualifies them without overwriting completed JSON.",
+    "TEAM_RULES v4 is present; eval_kit README actual1.0 differs from requested1.1. Windows Python3.11.15 differs from target3.11.17; historical server_environment.json describes Linux."
+  ],
+  "protected_before_sha256": {
+    "project_log/experiments/SUB-117501.json": "1e5b63ad895a7101703b49ecf3e552c4a8d2af8e4016e8ea38b24b55786f9bf7",
+    "project_log/experiments/SUB-117597.json": "921b50dd7c11f782b28b77d3fd85c93128b4af439df7cec9779100e51a048b19",
+    "project_log/experiments/SUB-117799.json": "f93f7c68b0eff10852a3dad21f0d071ff41fd3dfe382811dc6cc686fff9f5446",
+    "project_log/experiments/AS-08.json": "b72204ac230221683f82031e81ddfe871960a3f2c0d9d60dfd46067e2099958e",
+    "project_log/experiments/AS-09.json": "dd2e2c9f124cebed91e44312442ddd541509fad7c9a8556e8099a183a7cc58c0",
+    "project_log/experiments/VERIFY-AS09-RESULT-01.json": "98f654a485074d12a45f03d3b2502ebb2f349e50a31f6defa116f34411a1df74",
+    "submit_AS-08.zip": "76f6dfe0be29dd52540fe687ae73ebee5f454eea2e269f60bd0e68be0153791e",
+    "submit_AS-09.zip": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325",
+    "submit.zip": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325"
+  },
+  "protected_after_sha256": {
+    "project_log/experiments/SUB-117501.json": "1e5b63ad895a7101703b49ecf3e552c4a8d2af8e4016e8ea38b24b55786f9bf7",
+    "project_log/experiments/SUB-117597.json": "921b50dd7c11f782b28b77d3fd85c93128b4af439df7cec9779100e51a048b19",
+    "project_log/experiments/SUB-117799.json": "f93f7c68b0eff10852a3dad21f0d071ff41fd3dfe382811dc6cc686fff9f5446",
+    "project_log/experiments/AS-08.json": "b72204ac230221683f82031e81ddfe871960a3f2c0d9d60dfd46067e2099958e",
+    "project_log/experiments/AS-09.json": "dd2e2c9f124cebed91e44312442ddd541509fad7c9a8556e8099a183a7cc58c0",
+    "project_log/experiments/VERIFY-AS09-RESULT-01.json": "98f654a485074d12a45f03d3b2502ebb2f349e50a31f6defa116f34411a1df74",
+    "submit_AS-08.zip": "76f6dfe0be29dd52540fe687ae73ebee5f454eea2e269f60bd0e68be0153791e",
+    "submit_AS-09.zip": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325",
+    "submit.zip": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325"
+  },
+  "protected_files_unchanged": true,
+  "operations": {
+    "training": false,
+    "inference": false,
+    "zip_creation_or_update": false,
+    "private_test_access": false
+  }
+}

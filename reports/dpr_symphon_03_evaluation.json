@@ -1,0 +1,61 @@
+{
+  "experiment_id": "DPR-SYMPHON-03",
+  "evaluation_id": "EVAL-DPR-SYMPHON-03-RECHECK-02",
+  "heldout_fold": 0,
+  "evaluated_at_kst": "2026-10-28T22:51:43+09:00",
+  "checkpoint": "artifacts/DPR-SYMPHON-03/fold_0_encoder.pt",
+  "checkpoint_sha256": "0f5a0f20d841d7653d78a099178f783142d57a2c882a1df48a7a6d6ae6c5c418",
+  "korean_metrics": {
+    "recall@1": 0.40585774058577406,
+    "recall@5": 0.6569037656903766,
+    "recall@10": 0.7238493723849372,
+    "recall@35": 0.891213389121339,
+    "recall@60": 0.895397489539749,
+    "num_samples": 239,
+    "eval_count": 239,
+    "mrr": 0.5098957496973192,
+    "mrr@35": 0.5093392205480266,
+    "correct_counts": {
+      "recall@1": 97,
+      "recall@5": 157,
+      "recall@10": 173,
+      "recall@35": 213,
+      "recall@60": 214
+    },
+    "rank_definition": "full catalog by score descending, vessel_id ascending; exact ID match",
+    "encode_time_sec": 0.4391746520996094,
+    "dot_time_sec": 0.01250910758972168,
+    "latency_per_row_ms": 1.8898902079051507,
+    "timing_scope": "batched throughput per row; not single-row latency"
+  },
+  "english_metrics": {
+    "recall@1": 0.9488982653539616,
+    "recall@5": 0.9662447257383966,
+    "recall@10": 0.9732770745428974,
+    "recall@35": 0.9845288326300985,
+    "recall@60": 0.9868729488982654,
+    "num_samples": 2133,
+    "eval_count": 2133,
+    "mrr": 0.9583128427376228,
+    "mrr@35": 0.9581697757499138,
+    "correct_counts": {
+      "recall@1": 2024,
+      "recall@5": 2061,
+      "recall@10": 2076,
+      "recall@35": 2100,
+      "recall@60": 2105
+    },
+    "rank_definition": "full catalog by score descending, vessel_id ascending; exact ID match",
+    "encode_time_sec": 0.24528169631958008,
+    "dot_time_sec": 0.1230306625366211,
+    "latency_per_row_ms": 0.17267339843234936,
+    "timing_scope": "batched throughput per row; not single-row latency"
+  },
+  "weighted_recall@35": 0.9192080221739667,
+  "weighted_recall@60": 0.9228401273473038,
+  "row_independence_verified": true,
+  "embedding_tolerance": 1e-06,
+  "scope": "external fold0 used for epoch selection; development-selected retrieval, not official server",
+  "metric_change": "full-catalog vessel-ID ranking; full MRR and MRR@35 separate; historical selection deduplicated names",
+  "quantization": "FP32 checkpoint, exported catalog embeddings rounded to FP16"
+}

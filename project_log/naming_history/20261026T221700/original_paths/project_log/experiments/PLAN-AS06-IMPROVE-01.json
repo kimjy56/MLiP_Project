@@ -1,0 +1,151 @@
+{
+  "experiment_id": "PLAN-AS06-IMPROVE-01",
+  "plan_id": null,
+  "status": "planned",
+  "recorded_at_kst": "2026-10-26T00:39:19+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "Prioritize independently measurable AS-06 improvements following submission115506 score0.9122153056.",
+  "hypothesis": "Better calibrated Jamo scoring and more diverse offline pronunciations may improve candidate selection and retrieval without online LM cost.",
+  "baseline_experiment_id": "AS-06",
+  "changed_factors": [
+    "Separate original romanized and Jamo features; compare bounded single Jamo correction.",
+    "Compare first-token branching with quality-controlled diverse pronunciation generation.",
+    "Add length-normalized Jamo2-4gram retrieval as a separate channel.",
+    "Audit lookup fallback and missing-tonnage handling independently."
+  ],
+  "fixed_conditions": [
+    "Official0.7/0.3 metric",
+    "Read existing Group5folds; do not regenerate",
+    "Fit every learned asset within the appropriate fold",
+    "Do not build or update ZIP without explicit request"
+  ],
+  "code": {
+    "git_revision_at_run": null,
+    "git_revision_at_recording": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty_at_recording": true,
+    "file_sha256": {
+      "artifacts/AS-06/script.py": "9045ca7ed4a2832e78e814a615d857b61d48d64c809322a7bce61dff35323b88",
+      "artifacts/AS-06/run_ar06.py": "f7cd328960f8cb697476ca73050b5b707b4f19ad20503393d9006c6d9cd8539d",
+      "experiments/build_catalog_full_hangul.py": "aa32f72d0c66ab2d7e56778d476f7c2ebceb76f3e8b3c088a12a35190ff25476",
+      "AR-06/catalog_full_ko_map.json": "e5a3ed8ce2b8eedfb499f09307e04ccd178992d838091a7e091cddc0c6fc06a4",
+      "docs/AS06_IMPROVEMENT_PLAN.md": "07ae49fe4986f07497aaeef5ab6a76e53859f997712422eb3a85ffd23da4a12d",
+      "artifacts/LM-LFM25-FULL-R24-01/model/noisy_channel_manifest.json": "15b90cc9af2757c3215ec7c3874a70398f1a326e99d30af89b5f3f7a7e61d954"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": "folds_group5_seed42.csv",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [],
+  "environment": {
+    "inspection_python": "3.11.15",
+    "executable": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+    "target_python": "3.11.17"
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "docs/AS06_IMPROVEMENT_PLAN.md"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Current Top-K generation branches only at first token then uses greedy continuation.",
+    "Jamo similarity influences multiple score components and final lattice refinement.",
+    "The six missing names and4348 single-pronunciation names are measured coverage facts, not measured accuracy gains."
+  ],
+  "interpretations": [
+    "Score correction is the first proposed experiment due to low implementation cost and directly observed feature dependence.",
+    "Pronunciation diversity is a retrieval hypothesis, not demonstrated cause of server errors."
+  ],
+  "limitations": [
+    "No hidden test rows or individual predictions available.",
+    "No new model training or performance evaluation executed.",
+    "No component gain, target score, inference latency or statistical significance claimed.",
+    "Fold0 metadata is not proof that all data lineage is leak-free."
+  ],
+  "failure": null,
+  "decision": "Save concrete plan; retain AS-06 as reference; execute no training/ZIP based solely on improvement-advice request.",
+  "next_actions": [
+    "On an implementation request, preserve AS-06 and resolve generator/fold provenance first.",
+    "Run one changed factor at a time with fix/break, subgroup and cost reporting."
+  ],
+  "inspection_diagnostics": {
+    "scope": "Existing artifact and official catalog aggregate inspection; no prediction or new training",
+    "catalog_rows": 78595,
+    "raw_unique_catalog_names": 78594,
+    "canonical_unique_catalog_names": 78592,
+    "synthetic_map_keys": 78586,
+    "missing_canonical_names": 6,
+    "extra_keys": 0,
+    "variant_count_histogram": {
+      "1": 4348,
+      "2": 74238
+    },
+    "empty_variant_strings": 0,
+    "generator_manifest_heldout_fold": 0,
+    "provenance_conflict": "Manifest and training record say heldout0; AS-06.json says generator trained on all train. Full fit/augmentation/mining lineage needs audit.",
+    "inspection_failure": "After all aggregates and metadata were printed, an ancillary source-line display exceeded file length and raised IndexError. No artifact mutated by that inspection."
+  },
+  "plan_order": [
+    {
+      "stage": "provenance and frozen baseline",
+      "status": "planned"
+    },
+    {
+      "stage": "Jamo score correction with fixed candidates",
+      "status": "planned"
+    },
+    {
+      "stage": "pronunciation quality and diversity with fixed model",
+      "status": "planned"
+    },
+    {
+      "stage": "Jamo2-4gram retrieval with fixed scoring",
+      "status": "planned"
+    },
+    {
+      "stage": "lookup ambiguity/missingness; auxiliary seen-vessel validation",
+      "status": "planned"
+    },
+    {
+      "stage": "optional small ranker if selection failures justify it",
+      "status": "planned"
+    }
+  ]
+}

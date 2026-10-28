@@ -1,0 +1,191 @@
+{
+  "experiment_id": "AS08-KO-DIVERSE-PILOT01",
+  "plan_id": "PLAN-AS06-IMPROVE-01",
+  "status": "pilot_generated_unvalidated",
+  "recorded_at_kst": "2026-10-26T21:26:44+09:00",
+  "started_at_kst": "2026-10-26T21:26:44+09:00",
+  "finished_at_kst": "2026-10-26T21:26:48+09:00",
+  "purpose": "Quality-controlled offline diverse catalog pronunciation generation",
+  "hypothesis": "Preserving existing pronunciations while adding quality-filtered full-sequence samples may improve unseen Hangul matching.",
+  "baseline_experiment_id": "AS-06",
+  "changed_factors": [
+    "Offline map policy only: retain original entries and add diverse full-sequence samples."
+  ],
+  "fixed_conditions": [
+    "Same recorded fold0-excluded generator weights and V2 prompt",
+    "Original AS-06 legacy scoring and lookupoff",
+    "No private data; no ZIP",
+    "No outer-fold tuning of generation or selection settings"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/channel_training.py": "02529ee98ed73cd57facd326d61344c9f92d6fe04a0f54e3ca03d5c27ee6e3eb",
+      "name_decoder/noise_augmenter.py": "51315596aad8ac26f358d3f44fd94780714c99dc8423dde02446c167b6d7e3d5",
+      "name_decoder/lora.py": "ef6d92c25fd5297f2131a7d2fa995cebc61fc617ff9cb9a4b9732d0d7e0b6587",
+      "name_decoder/noisy_channel.py": "36c88596b2334bf0f8d5f332229abedfbeccb9e939a36eca197f58c4c9874f8f",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "experiments/noisy_channel_common.py": "d55c127ca5581abf8631ce67de441e21585f6c4dc7d2dc5deb7591d50c1098c8",
+      "experiments/train_noisy_channel.py": "e1c591c5698972b7b72d910ece8bdd87d131bc46ada0a7a558f7352c99bbbc91",
+      "experiments/score_noisy_channel_candidates.py": "47d1053c1ac9acafa4e85061934cdad3b495c4286ea37358ed5f071d02c4992a",
+      "experiments/build_catalog_hangul_diverse.py": "0a2d171690a2317bc67d77ea3f8406bca4e958264ec67dc34152191ff9f54ba6",
+      "name_decoder/pronunciation_quality.py": "1ee88e5421157151136e0121dae0218cda9b8f69c97edc9fb1ef265b48744bd3",
+      "experiments/build_catalog_full_hangul.py": "aa32f72d0c66ab2d7e56778d476f7c2ebceb76f3e8b3c088a12a35190ff25476",
+      "artifacts/AS-06/script.py": "9045ca7ed4a2832e78e814a615d857b61d48d64c809322a7bce61dff35323b88"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "catalog": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "base_map": "e5a3ed8ce2b8eedfb499f09307e04ccd178992d838091a7e091cddc0c6fc06a4"
+    },
+    "split_id": "generator excludes fold0; full public catalog inference",
+    "split_file_sha256": null,
+    "seed": 20261026,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "frozen LFM2.5-350M; offline inference only",
+    "parameters": {
+      "seed": 20261026,
+      "batch_size": 64,
+      "samples_per_name": 4,
+      "max_new_tokens": 32,
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "top_k": 0,
+      "max_variants": 4,
+      "anchor_min_raw_jamo_similarity": 0.55,
+      "relative_sample_logprob_margin": 0.75,
+      "preserve_original_variants": true,
+      "require_eos": true,
+      "require_matching_normalized_number_signature": true
+    },
+    "loss": null,
+    "training_experiment": "LM-LFM25-FULL-R24-01",
+    "heldout_fold": 0
+  },
+  "commands": [
+    "experiments/build_catalog_hangul_diverse.py --experiment-id AS08-KO-DIVERSE-PILOT01 --limit-batches 1"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "safetensors": "0.8.0",
+      "pandas": "2.0.3",
+      "numpy": "1.26.4"
+    },
+    "device": "cuda",
+    "gpu_name": "NVIDIA GeForce RTX 5080",
+    "cuda": "12.8",
+    "threads": 2
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "total_seconds": 3.7501119999215007,
+    "inference_seconds": 1.4231940999161452,
+    "peak_cuda_allocated_bytes": 2293050880,
+    "timing_scope": "model/hash/load plus sampling/quality/batch serialization; no neural training or submission inference"
+  },
+  "artifacts": [
+    "C:\\Projects\\ML_midterm\\artifacts\\AS08-KO-DIVERSE-PILOT01"
+  ],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "Sampling-policy logprob is not a correctness probability or teacher-forced NLL.",
+    "Fixed seed/config/hardware is recorded; cross-hardware bitwise identity is not guaranteed.",
+    "Frozen model excludes fold0 but includes folds1-4; no full5fold validation claim.",
+    "No accuracy result until separate matching comparison."
+  ],
+  "failure": null,
+  "decision": "Generation only; preserve AS-06 until fixed-engine matching comparison.",
+  "next_actions": [
+    "Evaluate original AS-06 scoring with this map under pre-registered conditions."
+  ],
+  "policy": {
+    "seed": 20261026,
+    "batch_size": 64,
+    "samples_per_name": 4,
+    "max_new_tokens": 32,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "top_k": 0,
+    "max_variants": 4,
+    "anchor_min_raw_jamo_similarity": 0.55,
+    "relative_sample_logprob_margin": 0.75,
+    "preserve_original_variants": true,
+    "require_eos": true,
+    "require_matching_normalized_number_signature": true
+  },
+  "evaluation_plan": {
+    "fold": 0,
+    "conditions": [
+      "clean",
+      "default20261022",
+      "severe20261022",
+      "severe20261026",
+      "severe20261027"
+    ],
+    "official_bootstrap": 2000,
+    "bootstrap_seed": 0,
+    "no_tuning": true,
+    "scope": "Previously explored fold0, not untouched final test or full5fold; generation-model linkage for baseline remains historical."
+  },
+  "generation_config_sha256": "d328f255afd49ec6b0e603df17bcac4fa6cf4e762452fd000d81917005e19777",
+  "resume_from": null,
+  "diagnostics": {
+    "catalog_unique_names": 78592,
+    "processed_names": 64,
+    "processed_all": false,
+    "original_map_entries": 78586,
+    "new_map_entries": 78586,
+    "names_with_added_variants": 24,
+    "added_variants": 33,
+    "missing_names": 6,
+    "variant_count_histogram": {
+      "3": 14,
+      "2": 74216,
+      "4": 9,
+      "1": 4347
+    },
+    "rejection_counts": {
+      "duplicate_or_empty_jamo": 101,
+      "anchor_dissimilar": 32,
+      "relative_logprob": 0,
+      "invalid_text": 68,
+      "number_signature_mismatch": 16
+    },
+    "all_original_variants_preserved": true,
+    "generated_samples": 256
+  },
+  "artifact_sha256": {
+    "catalog_full_ko_map.json": "f33d4c1689120ef9e55abb0afde2402f8bf403c6ef8f8778a34497b64ec65fc5",
+    "generation_config.json": "d328f255afd49ec6b0e603df17bcac4fa6cf4e762452fd000d81917005e19777"
+  }
+}

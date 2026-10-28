@@ -1,0 +1,212 @@
+{
+  "experiment_id": "EVAL-LM-RANK-02",
+  "plan_id": null,
+  "status": "evaluated_single_fold",
+  "recorded_at_kst": "2026-10-25T20:32:26+09:00",
+  "started_at_kst": "2026-10-25T20:32:26+09:00",
+  "finished_at_kst": "2026-10-25T20:40:31+09:00",
+  "purpose": "Clean heldout fold0 LM ranking evaluation",
+  "hypothesis": "Evaluate new reverse LM standalone and fixed AS05 fusion without tuning.",
+  "baseline_experiment_id": null,
+  "changed_factors": [],
+  "fixed_conditions": [
+    "clean full fold0",
+    "AR06/EN_V3 fit only fold != 0",
+    "lookup disabled",
+    "top35 fixed shortlist",
+    "fusion weight 0.20; gate margin <=1.0"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/channel_training.py": "dc345260c4abe9e7e5abc41764585c68c1b31ee33f842dedaffe4d694d0c92eb",
+      "name_decoder/noise_augmenter.py": "51315596aad8ac26f358d3f44fd94780714c99dc8423dde02446c167b6d7e3d5",
+      "name_decoder/lora.py": "2c3aceecbb3b4d37c744a7a1979cff55b7f24006dc72bb92bb9f4ca8ed972dc5",
+      "name_decoder/noisy_channel.py": "3b93cfd728376e90540e39ffef23079a245a00e8a3f1f80ab0becc21a33f5082",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "experiments/noisy_channel_common.py": "d55c127ca5581abf8631ce67de441e21585f6c4dc7d2dc5deb7591d50c1098c8",
+      "experiments/train_noisy_channel.py": "fd1111e144422407079d5f333c0365b0f823832a5cedefb59517064b1d0ab2f6",
+      "experiments/score_noisy_channel_candidates.py": "47d1053c1ac9acafa4e85061934cdad3b495c4286ea37358ed5f071d02c4992a",
+      "experiments/evaluate_lm_rank_gpu.py": "4641c06ae2b4b00ac39f2bf660777dd615d2e8ab2e3403c149dde5e5ec841f38"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    },
+    "split_id": "G5-s42 fold0 only",
+    "seed": 42,
+    "validation_rows": 2372,
+    "training_rows": 9850,
+    "scope": "single_fold_not_full_OOF",
+    "seen_vessels": 0
+  },
+  "retrieval": {
+    "count_max": 35,
+    "candidate_pairs": 83020,
+    "candidate_sha256": "f0b2573281c7644932592970959ae7dae1258c8f94fe695d730be30f1dd7b99e",
+    "gold_injected": false,
+    "fit_fold_verified": true,
+    "baseline_code_sha256": "44ee368a55c490dd66b43d521bce82c3851e9aeb10f07b84897d87956b174e54",
+    "hangul_candidate_inclusion": 1.0,
+    "non_hangul_candidate_inclusion": 1.0,
+    "count_min": 35
+  },
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "checkpoint": "artifacts\\LM-RANK-GPU-03\\model",
+    "manifest_sha256": "269a4d3baef6c699002239bbc36d15e3b278002e84d516a60fdc8a8cac7fb6a3"
+  },
+  "commands": [
+    "experiments/evaluate_lm_rank_gpu.py --experiment-id EVAL-LM-RANK-02 --model-path artifacts/LM-RANK-GPU-03/model --candidates-csv reports/noisy_channel/EVAL-LM-RANK-01/candidates.csv"
+  ],
+  "environment": {
+    "python": "3.11.15 (main, Mar  3 2026, 14:55:34) [MSC v.1944 64 bit (AMD64)]",
+    "torch": "2.7.1+cu128",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 5080"
+  },
+  "metrics": {
+    "baseline": {
+      "hangul_correct": 239,
+      "non_hangul_correct": 2130,
+      "hangul_rows": 239,
+      "non_hangul_rows": 2133,
+      "hangul_accuracy": 1.0,
+      "non_hangul_accuracy": 0.9985935302390999,
+      "weighted_accuracy": 0.9995780590717299,
+      "fixes": 0,
+      "breaks": 0
+    },
+    "lm": {
+      "hangul_correct": 232,
+      "non_hangul_correct": 2124,
+      "hangul_rows": 239,
+      "non_hangul_rows": 2133,
+      "hangul_accuracy": 0.9707112970711297,
+      "non_hangul_accuracy": 0.9957805907172996,
+      "weighted_accuracy": 0.9782320851649806,
+      "fixes": 0,
+      "breaks": 13
+    },
+    "fusion": {
+      "hangul_correct": 239,
+      "non_hangul_correct": 2130,
+      "hangul_rows": 239,
+      "non_hangul_rows": 2133,
+      "hangul_accuracy": 1.0,
+      "non_hangul_accuracy": 0.9985935302390999,
+      "weighted_accuracy": 0.9995780590717299,
+      "fixes": 0,
+      "breaks": 0
+    },
+    "gated": {
+      "hangul_correct": 239,
+      "non_hangul_correct": 2130,
+      "hangul_rows": 239,
+      "non_hangul_rows": 2133,
+      "hangul_accuracy": 1.0,
+      "non_hangul_accuracy": 0.9985935302390999,
+      "weighted_accuracy": 0.9995780590717299,
+      "fixes": 0,
+      "breaks": 0
+    }
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": 474.4810771000339,
+    "timing_scope": "baseline index/fit, baseline retrieval and LM load separate; inference includes encoding, batched scoring, ranks and progress writes",
+    "peak_memory_bytes": 3014085120,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null,
+    "baseline_index_fit_seconds": null,
+    "baseline_inference_seconds": null,
+    "model_load_seconds": 2.307302200002596,
+    "total_seconds": 477.62973510008305
+  },
+  "artifacts": [
+    "C:\\Projects\\ML_midterm\\reports\\noisy_channel\\EVAL-LM-RANK-02"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Exact cached candidates/scores/order verified identical to EVAL-LM-RANK-01 (83,020 pairs).",
+    "1200-step LM has 16 errors versus 11 at 300 steps. One old error fixed, six new errors.",
+    "Fixed fusion and gate both make zero prediction changes versus AR06.",
+    "Increased training exposure did not improve this clean fold; overfitting is a hypothesis, not established mechanism."
+  ],
+  "interpretations": [],
+  "limitations": [
+    "Single explored fold, not untouched final test or full five-fold OOF.",
+    "Training budget and cosine horizon changed together.",
+    "No inference of official server score; legacy V1/V2 weights unavailable.",
+    "Negative selection remains lexical, not fit-inner-OOF model error mining."
+  ],
+  "failure": null,
+  "decision": "Reject 1200-step candidate for promotion; retain AR06 and prior 300-step LM research baseline.",
+  "next_actions": [
+    "Next controlled experiment: CE-only ablation at same draw budget, then fit-inner-heldout hard negatives/checkpoint selection.",
+    "Do not tune weights/checkpoints using external fold0 labels."
+  ],
+  "fixed_candidate_source": {
+    "path": "reports\\noisy_channel\\EVAL-LM-RANK-01\\candidates.csv",
+    "sha256": "f0b2573281c7644932592970959ae7dae1258c8f94fe695d730be30f1dd7b99e",
+    "retrieval_recomputed": false
+  },
+  "batch_single_max_abs_difference": 1.841224730014801e-05,
+  "unsupported_rows": 0,
+  "eligible_rows": 8,
+  "artifact_sha256": {
+    "candidates.csv": "f0b2573281c7644932592970959ae7dae1258c8f94fe695d730be30f1dd7b99e",
+    "paired_predictions.csv": "5daea2be2f71b1805d7186ba56a2f811934edc156c535e4bc9f4db0f1c7920a4",
+    "predictions_baseline.csv": "005247c47e6e37b2a30832b558ca478e67198f6cad19c82e57780c56a298084d",
+    "predictions_fusion.csv": "005247c47e6e37b2a30832b558ca478e67198f6cad19c82e57780c56a298084d",
+    "predictions_gated.csv": "005247c47e6e37b2a30832b558ca478e67198f6cad19c82e57780c56a298084d",
+    "predictions_lm.csv": "605b0681b51586ee4a7b1345a1bfe93d3722d1c69ac6fe7c88c4ee2318a5453a",
+    "progress_predictions.csv": "5daea2be2f71b1805d7186ba56a2f811934edc156c535e4bc9f4db0f1c7920a4",
+    "evaluator_source.py": "4641c06ae2b4b00ac39f2bf660777dd615d2e8ab2e3403c149dde5e5ec841f38",
+    "matched_lm_changes.csv": "35a1b220921d9720b2b1348ca5dc256ccc5e57f9c69def41ffcff0a459d56ddb"
+  },
+  "official_evaluator": {
+    "script_sha256": "2c728b357727f8e3962128030dde3bcb6fc6b230fcde287e336d3e0eb6c9f38e",
+    "scope": "--subset clean full fold0; not full five-fold OOF",
+    "bootstrap": 2000,
+    "seed": 0,
+    "outputs": {
+      "official_baseline.txt": "ba78cdbe56ae4336aa107104be37bf7c938853f6b7d0bab00cf1f685cc82f298",
+      "official_lm.txt": "870880b63f887ff90892b7b001fb305ae10ccaeac687622f966a457330b0ab5e",
+      "official_fusion.txt": "974d03a2661667a41b2bf596ed426d85801735a207753a8a78f0f22a8f66b0b7",
+      "official_gated.txt": "a3ade6a3ce12108fdb5cce5f524813d28207fa2ff22f59e8f7bcf31cd6988192"
+    },
+    "matched_lm_comparison": {
+      "source": "reports\\noisy_channel\\EVAL-LM-RANK-01\\predictions_lm.csv",
+      "source_sha256": "2e88641cb8feee208a1332785aeccb3f7834e784631c19223c82e0586ecefa93",
+      "output_sha256": "c1699cb951542a9e709c79211f19ce373f3d361c171f99260397ae1627abbf1d"
+    }
+  },
+  "matched_lm_comparison": {
+    "baseline_experiment": "EVAL-LM-RANK-01",
+    "delta_weighted": -0.00907,
+    "delta_ci95": [
+      -0.04098,
+      0.00845
+    ],
+    "fixes": 1,
+    "breaks": 6,
+    "hangul_fixes": 1,
+    "hangul_breaks": 4,
+    "non_hangul_fixes": 0,
+    "non_hangul_breaks": 2,
+    "interpretation": "point estimate lower; interval includes zero, no statistically established difference"
+  }
+}

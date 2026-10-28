@@ -1,0 +1,91 @@
+{
+  "experiment_id": "IMPL-LM-ENV-02",
+  "plan_id": null,
+  "status": "verification_partial",
+  "recorded_at_kst": "2026-10-25T19:56:21+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "Correct virtual environment assessment and verify existing .venv GPU and regression tests",
+  "hypothesis": null,
+  "baseline_experiment_id": null,
+  "changed_factors": [],
+  "fixed_conditions": [],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": null,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    ".\\.venv\\Scripts\\python.exe -m unittest discover -s tests -p \"test_*channel*.py\" -v"
+  ],
+  "environment": {
+    "executable": "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe",
+    "python": "3.11.15",
+    "torch": "2.7.1+cu128",
+    "transformers": "5.20.1",
+    "gpu": "NVIDIA GeForce RTX 5080",
+    "cuda_forward_backward_verified": true
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [],
+  "error_cases_file": null,
+  "observations": [
+    "Existing .venv is present; prior statement that no virtual environment exists was incorrect. Only .venv-server is absent.",
+    "New channel training tests: 4 passed. Retrieval tests: 2 passed. Existing prompt tests: 3 errors.",
+    "CUDA matrix forward/backward completed with finite gradients."
+  ],
+  "interpretations": [],
+  "limitations": [
+    "Python differs from target 3.11.17; transformers differs from target 4.57.6.",
+    "No model training completed."
+  ],
+  "failure": {
+    "stage": "existing prompt tests",
+    "error": "3 TypeError failures: str object cannot be interpreted as integer during tokenizer decode",
+    "retry": null
+  },
+  "decision": null,
+  "next_actions": [
+    "Resolve tokenizer behavior compatibility or install the pinned runtime before LM training."
+  ]
+}

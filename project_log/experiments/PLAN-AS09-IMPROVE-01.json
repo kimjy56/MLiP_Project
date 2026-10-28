@@ -1,0 +1,148 @@
+{
+  "experiment_id": "PLAN-AS09-IMPROVE-01",
+  "plan_id": null,
+  "status": "planned",
+  "recorded_at_kst": "2026-10-29T00:02:27+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "Propose controlled score improvements for the historical AS-09 submission",
+  "hypothesis": "Learning the conditional candidate scoring and verifying lookup conflicts may improve errors that retrieval-only changes do not resolve",
+  "baseline_experiment_id": "AS-09",
+  "changed_factors": [
+    "Planned only: one factor per candidate-scoring, dense-coverage, lookup, or retrieval comparison"
+  ],
+  "fixed_conditions": [
+    "Historical AS09 architecture/settings reference; fold-specific training assets for validation",
+    "Official public train/catalog only; G5-s42; vessel-isolated fit-inner selection",
+    "No new training, inference, metric experiment, or submission ZIP in this task"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "submit_AS-09.zip::script.py": "c14d5afbbf48c00df8c4df4fc2d315700f8ef0fc036e4ead5b1f53ad9a18fe15",
+      "submit_AS-09.zip::model/phonetic_encoder/hybrid_matcher.py": "550738ed54bae9047a8e5c8a1d491b37dcb2dee63c81b5e7cb1894744015832f",
+      "submit_AS-09.zip::model/model.json": "26787c8e722266f328acc8e995b4a2e0fb33bd8c22892755f591e8ea92ae6b93"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    "Read-only AS09 ZIP source/hash inspection and existing experiment-record review"
+  ],
+  "environment": {},
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "docs/AS09_IMPROVEMENT_PLAN.md",
+    "project_log\\experiments\\PLAN-AS09-IMPROVE-01.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "AS09 ZIP hash matches historical local record",
+    "Dense scoring is present only for dense Top35 candidates",
+    "Callsign/name lookup may return before comparative scoring; missing tonnage passes its compatibility check",
+    "Non-Hangul branch has no global ngram TopK or dense channel",
+    "Tail similarity and sister bonus produced by hybrid matcher are not consumed by submitted scoring"
+  ],
+  "interpretations": [
+    "Possible scoring/lookup/retrieval weaknesses are hypotheses; no server error attribution or expected gain is measured"
+  ],
+  "limitations": [
+    "Public train and fold0 already used in development",
+    "Full-fit AS09 assets cannot serve as heldout OOF models",
+    "Legacy map generation binding and historical training-source mismatch require lineage reconciliation",
+    "Windows Python3.11.15 versus target3.11.17 and eval_kit actual1.0 versus requested1.1 remain",
+    "Historical local and server metrics have different scopes"
+  ],
+  "failure": null,
+  "decision": "Prioritize KO-FUSION-01 on fixed candidates, then isolate dense coverage and lookup conflicts; retain AS09 submission reference",
+  "next_actions": [
+    "When implementation is requested, reconcile AS09 training provenance and construct fold-isolated baseline before candidate comparisons"
+  ],
+  "planning_completed_at_kst": "2026-10-29T00:02:27+09:00",
+  "baseline_submission": {
+    "filename": "submit_AS-09.zip",
+    "submission_id": "117799",
+    "local_sha256": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325",
+    "reported_server_score": 0.9201100425,
+    "reported_display_seconds": 497,
+    "source": "User-provided official result recorded in SUB-117799; not fetched today",
+    "uploaded_bytes_verified": false
+  },
+  "planned_experiments": [
+    {
+      "id": "KO-FUSION-01",
+      "status": "planned",
+      "expected_score_delta": null
+    },
+    {
+      "id": "DENSE-COVERAGE-01",
+      "status": "planned",
+      "expected_score_delta": null
+    },
+    {
+      "id": "LOOKUP-CONFLICT-01",
+      "status": "planned",
+      "expected_score_delta": null
+    },
+    {
+      "id": "EN-GLOBAL-RETRIEVAL-01",
+      "status": "planned",
+      "expected_score_delta": null
+    },
+    {
+      "id": "KO-EXAONE-UNION-01",
+      "status": "planned",
+      "expected_score_delta": null
+    }
+  ],
+  "historical_evidence": [
+    "ANALYZE-DPR03-01",
+    "DPR-HYBRID-03",
+    "JAMO-SCORE-01",
+    "JAMO-SCORE-02",
+    "EVAL-KO-DIVERSE-01",
+    "EVAL-KO-OWNERSHIP-01",
+    "EVAL-EXAONE-PURE-01",
+    "EVAL-EXAONE-REV-01"
+  ],
+  "external_reference": "https://lightgbm.readthedocs.io/en/v4.6.0/pythonapi/lightgbm.LGBMRanker.html"
+}

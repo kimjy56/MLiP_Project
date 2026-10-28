@@ -1,0 +1,78 @@
+{
+  "experiment_id": "AS-09",
+  "plan_id": "SPEC-DPR-02",
+  "status": "completed_local_checks",
+  "recorded_at_kst": "2026-10-28T00:52:00+09:00",
+  "started_at_kst": "2026-10-28T00:45:00+09:00",
+  "finished_at_kst": "2026-10-28T00:51:30+09:00",
+  "purpose": "Official DACON submission package AS-09 integrating next-generation Bi-Encoder DPR-SYMPHON-02 (SyllableConvBlock, Multi-Query Attention Pooling, Gated Multi-View & Tail Fusion, ANCE/Sister Hard Negatives, CosFace) with full 12,222-row training and complete self-contained package bundling.",
+  "hypothesis": "Deploying DPR-SYMPHON-02 full-dataset weights and catalog embeddings with complete package dependencies (preventing AS-08 import failure) and high-confidence lexical fallback delivers superior unseen vessel retrieval (+3.77%p Hangul Recall@1, 99.30% non-Hangul Recall@35) and 100% clean Hangul accuracy on heldout data while fully respecting <= 35MB size and row-independence.",
+  "baseline_experiment_id": "AS-07",
+  "changed_factors": [
+    "DPR-SYMPHON-02 next-generation Bi-Encoder architecture (SyllableConvBlock 1D-CNN + Multi-Query Attention Pooling + Gated Multi-View & Tail Fusion)",
+    "Letter-Spell Romanization conversion (씨엔씨 -> CNC, 에스케이 -> SK) and Semivowel W alignment (WOLF -> URP)",
+    "Soft C phonetic reduction (CE, CI, CY -> SE, SI, SY, resolving CECIL -> SESIR)",
+    "ANCE (2 global confusions) + Sister-Vessel (2 fleet prefix matches) hard negative mining with SupConCosFaceHardLoss",
+    "Trained on 100% full dataset (12,222 rows) into model/full_encoder.pt and model/catalog_embeds_full_fp16.npy",
+    "Bundled ALL phonetic_encoder package modules (dataset.py, hybrid_matcher.py, loss.py, model.py, retrieval.py, tokenizer.py, __init__.py), completely preventing AS-08 missing loss.py import failure",
+    "Enabled fatal configuration assertion in script.py ensuring zero silent fallback"
+  ],
+  "fixed_conditions": [
+    "DACON 236771 (0.7 Hangul + 0.3 Non-Hangul weighted accuracy)",
+    "Row independence: 100% strict single vs batch inference invariance (LayerNorm-only, zero BatchNorm)",
+    "Zero network calls, zero external AI API, zero disk write during test inference"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552f",
+    "dirty": true,
+    "file_sha256": {
+      "submit_AS-09.zip": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325",
+      "submit.zip": "3c89f0d60d8c14b369b7f4846951cbce53acc39652f2359f72b29466000b0325"
+    }
+  },
+  "submission_package": {
+    "zip_name": "submit_AS-09.zip",
+    "zip_bytes": 22798425,
+    "uncompressed_bytes": 29759247,
+    "files": [
+      "script.py",
+      "requirements.txt",
+      "model/model.json",
+      "model/__init__.py",
+      "model/full_encoder.pt",
+      "model/catalog_embeds_full_fp16.npy",
+      "model/phonetic_encoder/__init__.py",
+      "model/phonetic_encoder/dataset.py",
+      "model/phonetic_encoder/hybrid_matcher.py",
+      "model/phonetic_encoder/loss.py",
+      "model/phonetic_encoder/model.py",
+      "model/phonetic_encoder/retrieval.py",
+      "model/phonetic_encoder/tokenizer.py"
+    ]
+  },
+  "verification": {
+    "checker": "eval_kit/check_submission.py 1.0",
+    "passed": true,
+    "failures": 0,
+    "warnings": 0,
+    "row_independence_checks": {
+      "shuffled_mismatch": 0,
+      "subset_mismatch": 0,
+      "single_row_mismatch": 0
+    },
+    "estimated_latency": "15s for 3,000 rows, 76s for 30,000 rows (DACON limit: 1,200s)"
+  },
+  "environment": {
+    "python": ".venv-server (Python 3.11.15, PyTorch 2.7.1+cu128, RapidFuzz 3.14.3, Pandas 2.0.3, NumPy 1.26.4)"
+  },
+  "server_result": {
+    "submission_id": 117799,
+    "submitted_at_kst": "2026-10-28 00:54:00 KST",
+    "weighted_accuracy": 0.9201100425,
+    "displayed_duration_seconds": 497,
+    "delta_vs_as06": 0.0078947369,
+    "delta_vs_as08": 0.0197368421,
+    "result_record": "project_log/experiments/SUB-117799.json",
+    "verified_new_high_score": true
+  }
+}

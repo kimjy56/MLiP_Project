@@ -1,0 +1,1244 @@
+{
+  "experiment_id": "LM-HCX-BEST-R24-20261025-230147",
+  "plan_id": null,
+  "status": "trained_unvalidated",
+  "recorded_at_kst": "2026-10-25T23:01:47+09:00",
+  "started_at_kst": "2026-10-25T23:01:47+09:00",
+  "finished_at_kst": "2026-10-25T23:11:31+09:00",
+  "purpose": "Reverse name-channel LoRA training",
+  "hypothesis": "A reverse name likelihood may add candidate-ranking information.",
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "lexical confusion listwise ranking",
+    "language cycle sampling",
+    "row-mean CE",
+    "fit-learned Hangul augmentation",
+    "explicit CUDA placement",
+    "candidate learning rate 2e-4 (unless overridden)",
+    "observation normalization preserves case and internal spaces"
+  ],
+  "fixed_conditions": [],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/channel_training.py": "02529ee98ed73cd57facd326d61344c9f92d6fe04a0f54e3ca03d5c27ee6e3eb",
+      "name_decoder/noise_augmenter.py": "51315596aad8ac26f358d3f44fd94780714c99dc8423dde02446c167b6d7e3d5",
+      "name_decoder/lora.py": "ef6d92c25fd5297f2131a7d2fa995cebc61fc617ff9cb9a4b9732d0d7e0b6587",
+      "name_decoder/noisy_channel.py": "36c88596b2334bf0f8d5f332229abedfbeccb9e939a36eca197f58c4c9874f8f",
+      "name_decoder/catalog.py": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "name_decoder/data.py": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "experiments/noisy_channel_common.py": "d55c127ca5581abf8631ce67de441e21585f6c4dc7d2dc5deb7591d50c1098c8",
+      "experiments/train_noisy_channel.py": "e1c591c5698972b7b72d910ece8bdd87d131bc46ada0a7a558f7352c99bbbc91",
+      "experiments/score_noisy_channel_candidates.py": "47d1053c1ac9acafa4e85061934cdad3b495c4286ea37358ed5f071d02c4992a"
+    }
+  },
+  "data": {
+    "source_files_sha256": {
+      "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+      "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+      "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+    },
+    "split_id": "folds_group5_seed42.csv",
+    "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+    "seed": 42,
+    "heldout_fold": 0,
+    "training_rows": 9560,
+    "validation_rows": 2372,
+    "training_vessels": 4552,
+    "validation_is_independent_final_test": false,
+    "training_vessel_ids_sha256": "66ea69eb5da31a0c19f7fa370919a2d07dd77b41bdff5e556a98be37050ff0a8"
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {
+    "catalog": "NFC-uppercase-collapse-whitespace",
+    "observed": "NFC-strip-preserve-case-internal-space-digits-punctuation",
+    "deduplicate": [
+      "catalog_name",
+      "observed_name"
+    ],
+    "pair_sort_order": [
+      "catalog_name",
+      "observed_name"
+    ],
+    "prompt_version": "catalog-to-observed-name-v2-task-prefix",
+    "max_length": 256,
+    "truncation": "error",
+    "prompt_labels": -100,
+    "padding_labels": -100,
+    "target": "separately tokenized observed name plus EOS"
+  },
+  "training_pairs": {
+    "positive_rule": "training-fold target ID -> catalog name; raw observed name normalized",
+    "negative_rule": "inner-cross-fitted AR06 confusions, exact original pair; lexical fallback",
+    "count": 7068,
+    "raw_pairs_count": 4556,
+    "augmented_pairs_count": 2512,
+    "augment_factor": 0.5,
+    "hangul_pairs": 769,
+    "non_hangul_pairs": 6299,
+    "ordered_pairs_sha256": "159d748c35c79df6907f6d6b2b9ebb1eba88f80ca14473ef8c8d0523ea2d51d9",
+    "sampling": "cycle",
+    "learned_hangul_token_count": 290,
+    "hangul_probability_mass": 0.7,
+    "draws_planned": 7200,
+    "mining_policy": "recomputed after internal vessel split; supplied outer-fit CSV NOT reused",
+    "internal_confusions_sha256": "654ca45bf979ae072edec6e49c2bbe39eff8054171a198574b6527b19c5fd5f0",
+    "miner_fit_audit_sha256": "985e8c19aa1f1eaa910d43cab7c484cf95c48ef011515e8e96588220535271db",
+    "confusions_sha256": "fe63c9dc3dbb20749d4360a551c77483b138a7e855e1515dfbc99136678a66af",
+    "confusions_record_sha256": "e1e339ba685f857005f15bdf1d078844a870a89127b5cfda52afb520889d9187",
+    "pairs_with_mined_negatives": 4556,
+    "mined_negative_slots": 9112,
+    "lexical_fallback_slots": 5024,
+    "negative_names_sha256": "e9529fd598117f45c0dfeae8a42f5d21360e4ce1a7bbdc5b53ea83afe45aeabe",
+    "coverage": {
+      "unique_pairs_seen": 2902,
+      "hangul_unique_seen": 769,
+      "non_hangul_unique_seen": 2133,
+      "max_repetitions": 7,
+      "target_tokens_seen": 44147
+    },
+    "sampled_indices_sha256": "627ce5759251a5f970c3509505389a226910dd5e53b44991e709934e5f0b6707",
+    "hangul_draws": 5067,
+    "non_hangul_draws": 2133
+  },
+  "model": {
+    "type": "llama causal LM with plain PyTorch linear LoRA",
+    "base_path": "C:\\Projects\\ML_midterm\\artifacts\\pretrained\\hyperclovax-seed-0.5b",
+    "base_sha256": {
+      "config.json": "8ca7ef298158b40715f57ff8bd59dbb5369d4524f321ddd1e153b551ceb73644",
+      "download_manifest.json": "d32abee557f177f9a1466b7ed619ee33a46479e0afe5d385c0c0fe9c733ba2a3",
+      "model.safetensors": "f40f63fa6a118eb9b59e8910c3ab5a6e6499805966284bb2cd41e197719d156b",
+      "special_tokens_map.json": "82f45c169fe5b200cdb121e184af2216507c5ef9f0c3bf610e110e421e69af4d",
+      "tokenizer.json": "8f0315bdb48efd1e154beb40a265b09961d0162766bc0daa72a296993b49004a",
+      "tokenizer_config.json": "fdb2a0c7b1c1f108a232b11e6ec0248cdfa9b6fb0c29f1840346216fd414051c"
+    },
+    "parameters": {
+      "rank": 24,
+      "alpha": 48.0,
+      "model_type": "llama",
+      "attention_layer_count": 24,
+      "targets": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj"
+      ],
+      "modules": [
+        {
+          "name": "model.layers.0.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.0.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.0.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.0.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.0.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.0.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.0.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.1.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.1.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.1.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.1.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.1.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.1.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.1.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.2.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.2.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.2.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.2.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.2.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.2.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.2.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.3.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.3.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.3.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.3.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.3.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.3.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.3.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.4.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.4.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.4.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.4.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.4.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.4.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.4.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.5.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.5.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.5.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.5.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.5.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.5.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.5.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.6.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.6.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.6.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.6.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.6.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.6.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.6.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.7.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.7.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.7.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.7.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.7.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.7.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.7.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.8.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.8.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.8.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.8.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.8.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.8.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.8.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.9.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.9.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.9.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.9.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.9.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.9.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.9.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.10.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.10.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.10.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.10.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.10.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.10.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.10.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.11.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.11.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.11.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.11.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.11.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.11.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.11.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.12.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.12.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.12.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.12.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.12.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.12.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.12.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.13.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.13.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.13.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.13.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.13.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.13.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.13.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.14.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.14.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.14.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.14.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.14.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.14.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.14.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.15.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.15.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.15.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.15.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.15.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.15.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.15.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.16.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.16.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.16.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.16.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.16.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.16.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.16.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.17.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.17.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.17.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.17.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.17.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.17.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.17.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.18.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.18.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.18.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.18.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.18.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.18.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.18.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.19.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.19.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.19.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.19.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.19.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.19.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.19.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.20.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.20.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.20.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.20.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.20.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.20.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.20.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.21.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.21.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.21.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.21.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.21.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.21.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.21.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.22.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.22.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.22.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.22.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.22.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.22.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.22.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.23.self_attn.q_proj",
+          "in_features": 1024,
+          "out_features": 2048,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.23.self_attn.k_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.23.self_attn.v_proj",
+          "in_features": 1024,
+          "out_features": 1024,
+          "adapter_parameters": 49152
+        },
+        {
+          "name": "model.layers.23.self_attn.o_proj",
+          "in_features": 2048,
+          "out_features": 1024,
+          "adapter_parameters": 73728
+        },
+        {
+          "name": "model.layers.23.mlp.gate_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.23.mlp.up_proj",
+          "in_features": 1024,
+          "out_features": 4096,
+          "adapter_parameters": 122880
+        },
+        {
+          "name": "model.layers.23.mlp.down_proj",
+          "in_features": 4096,
+          "out_features": 1024,
+          "adapter_parameters": 122880
+        }
+      ],
+      "trainable_parameters": 14745600,
+      "total_parameters_with_adapters": 581026816,
+      "steps": 900,
+      "batch_size": 4,
+      "accumulation": 2,
+      "learning_rate": 0.0002,
+      "scheduler": "warmup_cosine",
+      "warmup_steps": 45,
+      "weight_decay": 0.01,
+      "gradient_clip_norm": 1.0
+    },
+    "loss": {
+      "sft_reduction": "row",
+      "rank_beta": 0.25,
+      "rank_temperature": 1.0,
+      "negative_count": 2
+    }
+  },
+  "commands": [
+    "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe experiments/train_noisy_channel.py --experiment-id LM-HCX-BEST-R24-20261025-230147 --pretrained artifacts/pretrained/hyperclovax-seed-0.5b --device cuda --heldout-fold 0 --steps 900 --warmup-steps 45 --batch-size 4 --accumulation 2 --learning-rate 2e-4 --rank 24 --alpha 48 --lora-targets q_proj,k_proj,v_proj,o_proj,gate_proj,up_proj,down_proj --rank-beta 0.25 --negative-count 2 --sampling cycle --loss-reduction row --hangul-mass 0.7 --augment-factor 0.5 --learned-hangul --checkpoint-selection internal-best --dev-fraction 0.05 --dev-max-vessels 128 --dev-every 25 --confusions-csv artifacts/INNER-CONFUSIONS-01/confusions.csv --confusions-record project_log/experiments/INNER-CONFUSIONS-01.json --seed 42"
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "platform": "Windows-10-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.7.1+cu128",
+      "transformers": "4.57.6",
+      "safetensors": "0.8.0",
+      "pandas": "2.0.3",
+      "numpy": "1.26.4"
+    },
+    "device": "cuda",
+    "cuda": "12.8",
+    "gpu_name": "NVIDIA GeForce RTX 5080",
+    "threads": 2
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": 288.8793568003457,
+    "inference_seconds": null,
+    "timing_scope": "preparation includes hashes/data/tokenization/load; training is optimizer loop excluding internal dev/snapshot blocks; internal_dev_seconds includes validation and best snapshots; saving includes adapters/merge/tokenizer/checkpoint hashing",
+    "peak_memory_bytes": 6743926784,
+    "model_bytes": 2276168367,
+    "assets_bytes": null,
+    "submission_zip_bytes": null,
+    "preparation_seconds": 201.11748609994538,
+    "optimization_loop_seconds": 375.140195999993,
+    "internal_dev_seconds": 86.26083919964731,
+    "saving_seconds": 2.603523400030099,
+    "total_seconds": 578.8642806999851,
+    "adapter_bytes": 59018912
+  },
+  "artifacts": [
+    "C:\\Projects\\ML_midterm\\artifacts\\LM-HCX-BEST-R24-20261025-230147"
+  ],
+  "error_cases_file": null,
+  "observations": [],
+  "interpretations": [],
+  "limitations": [
+    "Not a LoRA-only ablation against AS-HCX-04.",
+    "No accuracy, merge equivalence, throughput or memory claim without separate verification.",
+    "A name-only model cannot distinguish IDs with the same catalog name.",
+    "Public train was previously explored; heldout is not an untouched final test."
+  ],
+  "failure": null,
+  "decision": "Do not promote until the separate validation agent reports.",
+  "next_actions": [],
+  "checkpoint_selection": {
+    "method": "internal-best",
+    "dev_every": 25,
+    "split_sha256": "2f03693cfc8f9c4a6627b885108c23263b7fa319b815a9c8f1df9401807d3b30",
+    "dev_rows": 290,
+    "dev_vessels": 128,
+    "actual_dev_vessel_fraction": 0.02735042735042735,
+    "best_step": 175,
+    "best_dev_loss": 0.9671028923265756,
+    "criterion": "0.7/0.3 (or hangul-mass) language weighted SFT+rank; matching row/token SFT reduction",
+    "dev_augmentation": false,
+    "external_heldout_used_for_selection": false,
+    "dev_pairs": 129,
+    "dev_pairs_sha256": "65cfc65b293de0ddf1c090b14c51f26b04c93665d9fa5f617d9404819d2b16ab",
+    "dev_negatives_sha256": "972652ca928f5fb8c72d711a2953890551d0cf9593c60c4acb3b8989c0987e1a",
+    "dev_negative_policy": "fixed catalog lexical candidates; no fitted dev miner",
+    "saved_step": 175
+  },
+  "completed_optimizer_steps": 900,
+  "validation_status": "pending_external_agent",
+  "artifact_sha256": {
+    "adapter.safetensors": "fefeb0cea1f623c0064866f383c35def82d61fc397404d001a01b108d2c7e883",
+    "adapter_config.json": "f9328f990d3cb89f1e628ebc75b15eab0ca9aa38b290688028ee111d201dc288",
+    "model/noisy_channel_manifest.json": "2523b4f37b3dd38cfc44bd9b41b70a1d51334ef29ce9820b04f72c3353ccf41a",
+    "training_history.json": "cdc8227d768d7871ee96337eedac4404e342515741410900e3d7e3f57fbd108e"
+  }
+}

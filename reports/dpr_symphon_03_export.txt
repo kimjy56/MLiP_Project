@@ -1,0 +1,1 @@
+Exported: artifacts\DPR-SYMPHON-03\catalog_embeds_fp16.npy (78595, 128) 11.136469000019133

@@ -1,0 +1,32 @@
+{
+  "experiment_id": "DPR-HYBRID-01",
+  "heldout_fold": 0,
+  "dense_weight": 2.5,
+  "korean": {
+    "num_rows": 239,
+    "baseline_accuracy": 1.0,
+    "hybrid_accuracy": 1.0,
+    "delta_pct_points": 0.0
+  },
+  "non_korean": {
+    "num_rows": 2133,
+    "baseline_accuracy": 0.9985935302390999,
+    "hybrid_accuracy": 0.9985935302390999,
+    "delta_pct_points": 0.0
+  },
+  "official_weighted": {
+    "baseline_accuracy": 0.9995780590717299,
+    "hybrid_accuracy": 0.9995780590717299,
+    "delta_pct_points": 0.0
+  },
+  "net_gain_rows": 0,
+  "num_fixes": 0,
+  "num_breaks": 0,
+  "fixes": [],
+  "breaks": [],
+  "inference_time": {
+    "baseline_sec": 56.313392639160156,
+    "hybrid_sec": 54.67675280570984,
+    "delta_sec": -1.6366398334503174
+  }
+}

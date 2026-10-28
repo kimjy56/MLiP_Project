@@ -1,0 +1,231 @@
+{
+  "experiment_id": "IMPL-EXAONE-LEX-01",
+  "plan_id": null,
+  "status": "completed_implementation_blocked_model",
+  "recorded_at_kst": "2026-10-27T23:43:18+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": "2026-10-28T00:11:19+09:00",
+  "purpose": "Implement SPEC-LEX-01 Rev2 as a separate legacy-free EXAONE lexicon pipeline, with measured validation and honest blocked runs",
+  "hypothesis": "Fold-bound EXAONE full-name and word pronunciations plus general rules can be evaluated without old dictionary assets",
+  "baseline_experiment_id": null,
+  "changed_factors": [
+    "New deterministic rules, fold-only data extraction, EXAONE LoRA/constrained generation, resumable two-track builder and independent matcher/evaluator"
+  ],
+  "fixed_conditions": [
+    "No old IDEA_B or catalog_full_ko_map assets read by new pipeline",
+    "Existing submissions/weights/completed records preserved",
+    "No ZIP creation, commit or push",
+    "No heldout-example hardcoding/outer-fold tuning"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {
+      "name_decoder/deterministic_ko_rules.py": "e819974c699e94aad0aaa9072b8ec21e9fd6d92524c5da5581850d3c7d8b0b8d",
+      "name_decoder/exaone_data.py": "ffa6c49720a24555642930f9379987f13b6823b7a4b86b0ce9e9564fd4fbdafc",
+      "name_decoder/exaone_translit.py": "b15bda96b33748cb16db7b75a5f1ce042444881bbc4d7ce7cf51e0e1aa5ffb84",
+      "name_decoder/exaone_lexicon.py": "6e8f20fabac10982e9b4cb96b42ac374e88636501ae11095da627ca6de792399",
+      "experiments/exaone_common.py": "3e7a5d9b8bb9ff39465a832a48352d88fe37d8b2e2c43fef28c508911fbc4c78",
+      "experiments/train_exaone_translit.py": "54dbf99ad8df50515e8ec3091dbee657d9677ca45f81ebd4952ba5bbd78c9109",
+      "experiments/build_exaone_ko_lexicon.py": "b31c7c0f8ea26f1d47ae7b46bc4c230cb77698952fc175efd2eda60938b78eff",
+      "experiments/evaluate_pure_exaone_oof.py": "607d131f4f4e527361350f33b346f298c7a8a495f0cbaa0ca9278a01f8a834bd",
+      "experimental_matchers/exaone_lexicon.py": "6965add2dbab3be10a94b9939ddcea03d2ae18aa713872a058714c2d13151e49",
+      "tools/fetch_exaone.py": "d5215b030860ac3658e9ae6133549b331cf358ff84ecdfc9cbe034594ef01731",
+      "tests/test_exaone_lexicon.py": "6a3f2430bd01aeb88d160040ea3c0a3bdc6ce3f3e7ad395ed47fa41067513dda",
+      "tests/test_exaone_generated_acceptance.py": "450a0c9f66efa99ec01c773abe76c7b3512f9878299fece5a2587f6cc17698cd",
+      "docs/SPEC_LEX_01_IMPLEMENTATION.md": "4a06c4320d7d04ca4fa2d8e763e9652ee43a6b9e2f835f9d60d1231e5ad9819e",
+      "name_decoder/__init__.py": "206796a86d6258efa7a24352de3459802a496b9cfd45daed59ba097baba47ca3"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [],
+  "environment": {
+    "python": "3.11.15 (main, Mar  3 2026, 14:55:34) [MSC v.1944 64 bit (AMD64)]",
+    "executable": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+    "target_python": "3.11.17",
+    "torch": "2.7.1+cu128",
+    "transformers": "4.57.6",
+    "gpu": "NVIDIA GeForce RTX 5080",
+    "exact_server_environment": false,
+    "prior_environment_report": "reports/refactoring/REFACTOR-RETRIEVAL-03/environment.json"
+  },
+  "metrics": {
+    "metric_source": "Functional/data preparation only; matching accuracy and candidate recall unmeasured",
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "docs/SPEC_LEX_01_IMPLEMENTATION.md",
+    "reports/exaone_lexicon/IMPL-EXAONE-LEX-01/verification.json",
+    "reports/exaone_lexicon/IMPL-EXAONE-LEX-01/tests_complete.txt",
+    "artifacts/EXAONE-DATA-AUDIT-02/data_manifest.json",
+    "project_log/experiments/LEX-EXAONE-PURE-01.json",
+    "project_log/experiments/EXAONE-BASE-FETCH-01.json",
+    "project_log/experiments/LEX-EXAONE-GENERATE-01.json",
+    "project_log/experiments/EVAL-EXAONE-PURE-01.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Official model card exists and requires transformers>=4.54; local4.57.6 installed",
+    "Local exact base weights absent; direct Hugging Face API access failed DNS",
+    "Current mandated interpreter3.11.15 differs from target3.11.17",
+    "Only existing source modification is lazy public name_decoder imports;18 existing decoder/catalog tests passed",
+    "32 functional checks passed;3 actual generated-map case checks skipped, not reported as successes",
+    "Effective training batch64 uses microbatch4; generation OOM can reduce physical microbatch without changing sources",
+    "Default matcher/evaluator uses new static map only; existing DPR is optional and requires fit/hash provenance acknowledgement",
+    "ActualEXAONE training/generation/OOF objectives remain unmeasured"
+  ],
+  "interpretations": [],
+  "limitations": [
+    "No local EXAONE weights; network download currently fails DNS",
+    "Current local/server environment differs",
+    "No real adapter or generated map exists; no Recall@35/Top1/server evaluation claim",
+    "Generic deterministic aliases do not certify unknown proper-name pronunciation",
+    "Equal token counts are a heuristic for word alignment",
+    "First preflight runs have code hashes but no source snapshot; subsequent runner snapshots are preserved",
+    "Submission check requiring a ZIP not executed; no ZIP authorization",
+    "Concurrent external Bi-Encoder code changes detected during final audit; optional DPR behavior not validated against those changes",
+    "Concurrent AS08 archive/completed-record updates observed; current archive differs from original submitted-result provenance"
+  ],
+  "failure": null,
+  "decision": "Deliver separate implemented and functionally verified pipeline; real model experiments blocked on missing base and DNS",
+  "next_actions": [
+    "Resolve official base acquisition in artifacts/pretrained/exaone-4.0-1.2b",
+    "Train under new ID LEX-EXAONE-PURE-02, preserve failed01",
+    "Run planned generator from02 adapter, then fold-bound evaluator",
+    "Do not claim local=leaderboard, complete leakage elimination or target accuracy without measurements"
+  ],
+  "specification_corrections": [
+    "Legacy removal alone does not guarantee no leakage or local=leaderboard",
+    "Use actual tokenizer EOS rather than hardcoded endoftext",
+    "Physical microbatch separated from effective batch64",
+    "HD/SS company-name expansion not a universal deterministic rule",
+    "250+35 variable candidate union is not Recall@35",
+    "Existing DPR has separate legacy training lineage and is optional, not described as EXAONE-only",
+    "Static map avoids online LLM calls but lookup/index/scoring time and size must be measured",
+    "Known outerfold examples are diagnostics, never candidate injection or tuning targets"
+  ],
+  "verification": {
+    "functional_tests_passed": 32,
+    "real_generation_case_tests_skipped": 3,
+    "evidence": "reports/exaone_lexicon/IMPL-EXAONE-LEX-01/verification.json",
+    "new_pipeline_legacy_reads": 0,
+    "runtime_import_without_torch_transformers": true,
+    "tiny_random_EXAONE4_LoRA_gradient_reload": true,
+    "real_EXAONE1_2B_quality_validated": false
+  },
+  "implementation_files": [
+    "name_decoder/deterministic_ko_rules.py",
+    "name_decoder/exaone_data.py",
+    "name_decoder/exaone_translit.py",
+    "name_decoder/exaone_lexicon.py",
+    "experiments/exaone_common.py",
+    "experiments/train_exaone_translit.py",
+    "experiments/build_exaone_ko_lexicon.py",
+    "experiments/evaluate_pure_exaone_oof.py",
+    "experimental_matchers/exaone_lexicon.py",
+    "tools/fetch_exaone.py",
+    "tests/test_exaone_lexicon.py",
+    "tests/test_exaone_generated_acceptance.py",
+    "docs/SPEC_LEX_01_IMPLEMENTATION.md"
+  ],
+  "modified_existing_files": [
+    "name_decoder/__init__.py"
+  ],
+  "data_preparation": {
+    "fit_rows": 9850,
+    "heldout_rows": 2372,
+    "unique_pairs": 1573,
+    "pair_counts": {
+      "general_rule": 976,
+      "aligned_word": 328,
+      "full_name": 269
+    },
+    "catalog_rows": 78595,
+    "unique_names": 78592,
+    "unique_tokens": 35418,
+    "evidence": "artifacts/EXAONE-DATA-AUDIT-02/data_manifest.json"
+  },
+  "attempts": [
+    {
+      "id": "EXAONE-DATA-AUDIT-01",
+      "status": "completed_data_audit"
+    },
+    {
+      "id": "LEX-EXAONE-PURE-01",
+      "status": "blocked_missing_base",
+      "optimizer_steps": 0
+    },
+    {
+      "id": "EXAONE-BASE-FETCH-01",
+      "status": "blocked_network_or_missing_base",
+      "reason": "huggingface.co DNS failed"
+    },
+    {
+      "id": "EXAONE-DATA-AUDIT-02",
+      "status": "completed_data_audit"
+    }
+  ],
+  "verification_attempts": [
+    {
+      "phase": "expanded existing tests",
+      "result": "one existing test failed on default temp-folder permissions",
+      "retry": "Verified workspace scratch TEMP/TMP, expectations unchanged;32 pass and3 skipped"
+    }
+  ],
+  "concurrent_changes": {
+    "evidence": "reports/exaone_lexicon/IMPL-EXAONE-LEX-01/concurrent_changes.json",
+    "files": [
+      "experiments/evaluate_bi_encoder_oof.py",
+      "experiments/train_bi_encoder.py",
+      "phonetic_encoder/__init__.py",
+      "phonetic_encoder/dataset.py",
+      "phonetic_encoder/hybrid_matcher.py",
+      "phonetic_encoder/loss.py",
+      "phonetic_encoder/model.py",
+      "phonetic_encoder/tokenizer.py",
+      "project_log/experiments/AS-08.json",
+      "submit.zip",
+      "submit_AS-08.zip",
+      "train_AS-08/model/phonetic_encoder/__init__.py",
+      "train_AS-08/script.py"
+    ],
+    "action": "No writes/revert to these external changes by this task",
+    "archive_preservation_check": false
+  }
+}

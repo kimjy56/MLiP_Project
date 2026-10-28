@@ -1,0 +1,12 @@
+{
+  "compiled_sources": 123,
+  "syntax_failures": [],
+  "fresh_package_import": {
+    "command": "python -B -c \"import model.matcher\"",
+    "returncode": 1,
+    "error": "ModuleNotFoundError: No module named 'name_processing'",
+    "before_snapshot_returncode": 1,
+    "before_snapshot_error": "ModuleNotFoundError: No module named 'name_processing'"
+  },
+  "scope": "Read/compile only; no entrypoint, training or ZIP builder executed"
+}

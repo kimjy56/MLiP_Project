@@ -1,0 +1,83 @@
+{
+  "experiment_id": "ENV-TRANSFORMERS-4576-01",
+  "plan_id": null,
+  "status": "failed",
+  "recorded_at_kst": "2026-10-25T19:58:21+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "User requested reinstall transformers 4.57.6 in existing .venv",
+  "hypothesis": null,
+  "baseline_experiment_id": null,
+  "changed_factors": [],
+  "fixed_conditions": [],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": null,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [
+    "uv pip install --python .\\.venv\\Scripts\\python.exe transformers==4.57.6"
+  ],
+  "environment": {
+    "venv": ".venv",
+    "python": "3.11.15",
+    "transformers_before": "5.20.1"
+  },
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [],
+  "error_cases_file": null,
+  "observations": [
+    "No package installation completed; existing environment retained."
+  ],
+  "interpretations": [],
+  "limitations": [],
+  "failure": {
+    "stage": "dependency resolution before installation",
+    "error": "pypi.org DNS resolution failed after 3 retries",
+    "retry": "Workspace-owned UV cache resolved initial cache access denial; no cached 4.57.6 distribution found."
+  },
+  "decision": null,
+  "next_actions": [
+    "With PyPI network access restored, rerun installation then prompt regression tests."
+  ]
+}

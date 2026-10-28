@@ -1,0 +1,174 @@
+{
+  "experiment_id": "SUB-117597",
+  "plan_id": null,
+  "status": "completed_user_reported_server_result",
+  "recorded_at_kst": "2026-10-28T22:05:00+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": "2026-10-28T22:05:00+09:00",
+  "purpose": "Record user-provided DACON submission 117597 (revised submit_AS-08.zip with Dense import fix) and exact aggregate comparisons",
+  "hypothesis": "Verify whether fixing the missing loss.py packaging dependency in AS-08 activates Dense hybrid inference on the evaluation server and recovers score over broken AS-08 (117501)",
+  "baseline_experiment_id": "SUB-117501",
+  "changed_factors": [
+    "Fixed missing loss.py dependency in submit_AS-08.zip, enabling HybridDenseLexicalMatcher on server without silent fallback",
+    "Retained AS-08 features: Multi-View V2 encoder, manual dictionary removed (0 entries), synthetic Hangul catalog map OFF, lattice loop excised"
+  ],
+  "fixed_conditions": [
+    "Official metric: 0.7 Hangul accuracy + 0.3 non-Hangul accuracy",
+    "Preserve all previous records, models, datasets and ZIP bytes",
+    "No new model training or ZIP creation in this recording task"
+  ],
+  "code": {
+    "git_revision_at_run": "5bd552fbf89e3393d4493fa6bb34f28e32ce8388",
+    "dirty": true,
+    "file_sha256": {}
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": "Multi-View V2 Bi-Encoder (DPR-MULTIVIEW-02) + Lexical Matcher (ko_map OFF)",
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [],
+  "environment": {
+    "recording_interpreter": "C:\\Projects\\ML_midterm\\.venv-server\\Scripts\\python.exe",
+    "recording_python": "3.11.15 (main, Mar  3 2026, 14:55:34) [MSC v.1944 64 bit (AMD64)]",
+    "model_execution_performed": false
+  },
+  "metrics": {
+    "metric_source": "Official server result supplied by user; not independently fetched",
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": 0.9082679372,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": "Leaderboard displayed 5분 27초 (327 seconds); exact stages and row count unknown.",
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "project_log/experiments/AS-08.json",
+    "project_log/experiments/SUB-115506.json",
+    "project_log/experiments/SUB-116338.json",
+    "project_log/experiments/SUB-117501.json",
+    "project_log/experiments/SUB-117799.json"
+  ],
+  "error_cases_file": null,
+  "observations": [
+    "Revised AS-08 (submission 117597) achieved 0.9082679372, an improvement of +0.0078947368 (+0.7895 percentage points) over the broken AS-08 (117501: 0.9003732004).",
+    "Server execution time increased from 236s (3분 56초) to 327s (5분 27초), confirming that Dense inference was actively executing on the server.",
+    "However, 0.9082679372 remained -0.0039473684 (-0.3947 percentage points) lower than AS-06/AS-07 (0.9122153056), confirming that turning OFF catalog_full_ko_map and removing the manual dictionary harmed baseline coverage on known names.",
+    "Subsequent submission AS-09 (117799, 0.9201100425) with DPR-SYMPHON-02 and catalog_full_ko_map preserved outperformed this revised AS-08 by +0.0118421053 (+1.1842 percentage points)."
+  ],
+  "interpretations": [
+    "Direct causal confirmation of the AS-08 packaging diagnosis: fixing the missing loss.py immediately restored Dense matching and gained +0.7895%p.",
+    "Confirms that Dense alone without high-confidence lexical knowledge (ko_map) left a gap (-0.3947%p vs AS-06), which AS-09 successfully closed and exceeded (+0.7895%p over AS-06) by unifying DPR-SYMPHON-02 with full lexical-dense hybrid synergy."
+  ],
+  "limitations": [
+    "Private test inputs and ground truth remain blind.",
+    "Breakdown between Hangul and non-Hangul accuracy remains unobserved."
+  ],
+  "failure": null,
+  "decision": "Record SUB-117597 as vital historical ablation evidence confirming that Dense activation recovered +0.7895%p, while retaining AS-09 as the project's best verified submission.",
+  "next_actions": [
+    "Update PROJECT_STATUS.md, DECISIONS.md, and INDEX.csv to include SUB-117597.",
+    "Update SUB-117799 comparisons with SUB-117597."
+  ],
+  "submission": {
+    "submission_id": 117597,
+    "filename": "submit_AS-08.zip",
+    "memo": "수정 edit",
+    "submitted_at_kst": "2026-10-27T23:17:35+09:00",
+    "displayed_score_text": "0.9082679372",
+    "displayed_duration_text": "5분 27초",
+    "displayed_duration_original_text": "5분 27초",
+    "displayed_duration_seconds": 327,
+    "leaderboard_partition": null,
+    "source": "User-pasted leaderboard row; not independently fetched",
+    "local_zip_sha256": null,
+    "local_zip_bytes": null,
+    "local_hash_matches_historical_package_record": null,
+    "submitted_zip_hash_verified": false
+  },
+  "comparisons": [
+    {
+      "record_id": "SUB-117501",
+      "submission_id": 117501,
+      "filename": "submit_AS-08.zip (broken)",
+      "weighted_accuracy": 0.9003732004,
+      "displayed_duration_seconds": 236,
+      "score_delta": 0.0078947368,
+      "score_delta_text": "+0.0078947368",
+      "percentage_point_delta": 0.78947368,
+      "percentage_point_delta_text": "+0.7894736800",
+      "displayed_duration_delta_seconds": 91
+    },
+    {
+      "record_id": "SUB-115506",
+      "submission_id": 115506,
+      "filename": "submit_AS-06.zip",
+      "weighted_accuracy": 0.9122153056,
+      "displayed_duration_seconds": 366,
+      "score_delta": -0.0039473684,
+      "score_delta_text": "-0.0039473684",
+      "percentage_point_delta": -0.39473684,
+      "percentage_point_delta_text": "-0.3947368400",
+      "displayed_duration_delta_seconds": -39
+    },
+    {
+      "record_id": "SUB-116338",
+      "submission_id": 116338,
+      "filename": "submit_AS-07.zip",
+      "weighted_accuracy": 0.9122153056,
+      "displayed_duration_seconds": 372,
+      "score_delta": -0.0039473684,
+      "score_delta_text": "-0.0039473684",
+      "percentage_point_delta": -0.39473684,
+      "percentage_point_delta_text": "-0.3947368400",
+      "displayed_duration_delta_seconds": -45
+    },
+    {
+      "record_id": "SUB-117799",
+      "submission_id": 117799,
+      "filename": "submit_AS-09.zip",
+      "weighted_accuracy": 0.9201100425,
+      "displayed_duration_seconds": 497,
+      "score_delta": -0.0118421053,
+      "score_delta_text": "-0.0118421053",
+      "percentage_point_delta": -1.18421053,
+      "percentage_point_delta_text": "-1.1842105300",
+      "displayed_duration_delta_seconds": -170
+    }
+  ],
+  "package_linkage": {
+    "historical_package_record": "project_log/experiments/AS-08.json",
+    "description_source": "AS-08 package with fixed packaging dependencies",
+    "experiment_ids": [
+      "DPR-MULTIVIEW-02",
+      "DPR-ABLATE-LEXICON-01"
+    ]
+  }
+}

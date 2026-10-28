@@ -1,0 +1,19 @@
+unittest.case.FunctionTestCase (test_calibration_tail_competition_and_rare_tail_boundaries)
+tests.test_dpr03.test_calibration_tail_competition_and_rare_tail_boundaries ... ok
+unittest.case.FunctionTestCase (test_composite_preserves_a_peak_across_remine_boundary)
+tests.test_dpr03.test_composite_preserves_a_peak_across_remine_boundary ... ok
+unittest.case.FunctionTestCase (test_differential_groups_include_actual_conv_attribute_and_scheduler)
+tests.test_dpr03.test_differential_groups_include_actual_conv_attribute_and_scheduler ... ok
+unittest.case.FunctionTestCase (test_fold_validation_rejects_label_mismatch_and_group_overlap)
+tests.test_dpr03.test_fold_validation_rejects_label_mismatch_and_group_overlap ... ok
+unittest.case.FunctionTestCase (test_id_rank_ties_full_mrr_and_top60)
+tests.test_dpr03.test_id_rank_ties_full_mrr_and_top60 ... ok
+unittest.case.FunctionTestCase (test_packed_views_one_forward_and_independence)
+tests.test_dpr03.test_packed_views_one_forward_and_independence ... ok
+unittest.case.FunctionTestCase (test_row_context_reuses_encoder_and_full_catalog_dot)
+tests.test_dpr03.test_row_context_reuses_encoder_and_full_catalog_dot ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 2.131s
+
+OK

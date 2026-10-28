@@ -1,0 +1,24 @@
+{
+  "recorded_at_kst": "2026-10-27T22:46:25+09:00",
+  "passed": true,
+  "changed_tracked_since_task_start": [
+    "README.md",
+    "docs/PROJECT_STATUS.md",
+    "model/matcher.py",
+    "project_log/DECISIONS.md",
+    "project_log/README.md",
+    "project_log/experiments/INDEX.csv"
+  ],
+  "changed_existing_sources": [
+    "experiments/evaluate_bi_encoder_oof.py",
+    "experiments/train_bi_encoder.py",
+    "model/matcher.py"
+  ],
+  "unexpected_changes": [],
+  "protected_files_unchanged": 229,
+  "compiled_sources": 126,
+  "baseline_captured_before_edits": true,
+  "index_entry_count": 1,
+  "new_report_links_valid": true,
+  "git_diff_check_passed": true
+}

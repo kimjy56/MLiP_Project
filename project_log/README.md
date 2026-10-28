@@ -1,3 +1,270 @@
+## 2026-10-29T01:10:00+09:00 — 한글 후보 재정렬 점수 학습 및 Fold 0 단독 평가 완료 (KO-FUSION-01)
+
+- [x] **KO-FUSION-01 파이프라인 및 중첩 분할(Nested Cross-Fit) 캐시 생성 완료**:
+  - `SPEC-KO-FUSION-01` 28개 후보 특징(Legacy 점수, 편집거리/음운/자모 유사도, 숫자 일치, 톤수/국적/선종, Dense Top-35 지표) 구현 (`experimental_matchers/ko_fusion/features.py`, schema sha256 `683c34914fb0f4d306b99818e312a0f8bfd321557bf8f2e24cf20935541fe7ff`).
+  - 외부 Fold 0(2,372행) 완전 격리 하에, Fold != 0(9,850행)에서 Inner A(7,853행), Inner B(1,997행) 분할 및 누수 없는 split_assets 동적 구축.
+  - 단위 테스트 6건 전체 통과 (`tests/test_ko_fusion.py`).
+  - RTX 5080 캐시 준비: Train(739 쿼리, 3,451,963쌍), Selection(213 쿼리, 1,011,626쌍), Train Full(952 쿼리, 4,461,929쌍), Validation(239 쿼리, 1,061,075쌍).
+- [x] **LightGBM LambdaRank 학습 및 모델 선택 (`train_ko_fusion.py`)**:
+  - Inner B 기준 그리드 탐색(6개 설정): Inner B 상에서는 6개 설정 모두 100.00% 한글 정확도(0 fixes, 0 breaks) 달성.
+  - 최적 설정 선정: `reg_lambda=30.0, n_estimators=32` (정규화 최대화). Full T(4,461,061쌍) 최종 학습 완료 (1.82초, `artifacts/KO-FUSION-01/outer_0/ranker.txt`).
+- [x] **Fold 0 보류 단독 평가 (`evaluate_ko_fusion.py`)**:
+  - Fold 0 2,372행 (한글 239행, 비한글 2,133행):
+  - **AS-09 기준선**: 한글 100.000% (239/239), 비한글 99.859% (2,130/2,133), **가중 정확도 0.99958**.
+  - **KO-FUSION-01 랭커**: 한글 94.142% (225/239), 비한글 99.859% (2,130/2,133), **가중 정확도 0.95857** (Net: **-0.04100**, 한글 0 fixes, 14 breaks).
+  - 비한글 바이패스 정책 유지: 0 fixes, 0 breaks (영향 없음 확증).
+- **원인 분석 및 결정 사항**:
+  1. 14개 break는 단 5개 선박(VESSEL_73813, 13453, 73101, 18548, 12277)에서 발생함.
+  2. 쿼리당 ~4,000개의 방대한 음성 후보군에 대해 트리 랭커가 `sim_alpha`(단순 문자열 유사도) 및 `sim_skel`에 과도한 분기 이득(gain > 40만)을 부여하여, 정답 선박의 높은 Dense 점수(예: 20.72)에도 불구하고 철자 유사도가 근소하게 높은 오답 선박(예: legacy score 0.05)을 최상위로 올리는 과적합 회귀 현상 발생.
+  3. `AS09_IMPROVEMENT_PLAN.md` 규칙에 따라, 단독 성능에서 회귀(-14 breaks)가 확인된 현재의 제약 없는 트리 랭커는 채택하지 않고, baseline AS-09 점수 체계를 유지함.
+- **제출 및 ZIP 원칙**: `submit.zip` 미생성 (사용자 명시 요청 없음).
+- **근거**: [KO-FUSION-01 JSON](experiments/KO-FUSION-01.json), [예측 비교 CSV](../artifacts/KO-FUSION-01/outer_0/predictions/paired_predictions.csv).
+
+## 2026-10-29T00:28:00+09:00 — EXAONE 우도 판별기(Noisy Channel Likelihood) 학습 및 Fold 0 단독/결합 평가 완료 (LM-EXAONE-01 / EVAL-LM-EXAONE-02)
+
+- [x] **EXAONE Noisy Channel 토크나이저 어댑터 지원 (`name_decoder/noisy_channel.py`)**: chat_template 부재 시 기본 fallback 템플릿 처리 추가, 단위 테스트 9건 전체 통과.
+- [x] **EXAONE 우도 모델 LoRA 300스텝 학습 (`LM-EXAONE-01`)**:
+  - 학습 대상: `LGAI-EXAONE/EXAONE-4.0-1.2B`, `q_proj`/`v_proj` LoRA (3,194,880 파라미터).
+  - 학습 데이터: Fold 0 보류 제외 Fit 내 7,068개 (Fit 정답 + 증강 + 내부 AR-06 혼동쌍), Step 125 dev loss 최소값(1.434233) 체크포인트 병합 완료 (`artifacts/LM-EXAONE-01/model`, 2.56GB).
+- [x] **Fold 0 고정 35-후보 숏리스트 단독/결합 평가 (`EVAL-LM-EXAONE-02`)**:
+  - Fold 0 2,372행(83,020쌍) RTX 5080 평가 완료 (1,088.4초, ~458.8ms/행).
+  - **순수 LM 단독 정확도**: 한글 **97.908%** (234/239), 비한글 **99.578%** (2,124/2,133), **가중 정확도 0.98409** (15오답: 한글 5, 비한글 10).
+  - AR-06 기준선 대비: 0 fixes, 11 breaks.
+  - **Fusion(0.20 가중치) 및 Gated(margin <= 1.0)**: **0.99958** (한글 100%, 비한글 99.859%; 0 fixes, 0 breaks; 기준선 복귀).
+- **주요 비교 및 결론**:
+  - 기존 모델 대비 LM 단독 성능: HyperCLOVA X (0.98730) > EXAONE-4.0-1.2B (0.98409) > LFM2.5 (0.97908).
+  - 역방향 생성 디코더(`EVAL-EXAONE-REV-01`, 0.82597) 대비 우도 스코어러로서 0.98409로 월등히 높은 식별력을 입증함.
+  - 다만 클린 데이터셋 기준선(0.99958) 대비 단독 LM 점수는 여전히 11개 break가 발생하여, 하이브리드 결합 시 임계값 게이팅이 필수적임.
+- **제출 및 ZIP 원칙**: `submit.zip` 미생성 (사용자 명시 요청 없음).
+
+## 2026-10-28T23:38:42+09:00 — Bi-Encoder 전용 전달 묶음 (PACK-BI-ENCODER-01)
+
+- [x] 사용자 요청에 따라 AS-09/DPR-SYMPHON-02 가중치·설정·로더·모델/학습 코드만 별도 선별했다. 파일15개 ZIP의 정확 목록·CRC 및 복사 원본11개 해시 일치를 확인하고 격리 safetensors 로드/128차원 유한 출력 검사를 통과했다. 과거 텐서·임베딩 동등성 검증은 재실행하지 않고 출처를 구분했다.
+- **주요 결정/산출물**: `handoff/BI_ENCODER_HANDOFF_20261028.zip`; [설명](../handoff/BI_ENCODER_HANDOFF_20261028/README.md), [기록](experiments/PACK-BI-ENCODER-01.json). 기존 합본을 보존하며 별도 Bi-Encoder 전용 ZIP을 제공한다. 학습 소스의 과거 해시 차이 한계 유지. 새 학습·성능 평가·제출 ZIP 생성·외부 전송·커밋/push 없음.
+- **다음 작업**: 이번 요청 완료. 권장 커밋: `docs(handoff): add Bi-Encoder-only source and safetensors bundle`.
+
+
+
+## 2026-10-29T00:22:11+09:00 — 1번 한글 재정렬 구현 명세 완료 / SPEC-KO-FUSION-01
+
+- [x] 사용자 요청 범위인 명세서 v1.0 작성 완료. AS-09 후보/lookup/비한글 고정, 반올림 전 전체 후보 추적, 28개 특징·결측 규칙, A/B 선택 및 upstream 격리 cross-fit, LightGBM 내부 6설정, 모듈·예정 CLI·5-fold/강건성/독립성 검사·채택 기준을 정의했다.
+- **주요 결정 사항**: 정답은 trace 생성 후 결합한다. 전체 T의 cross-fit 특징을 만든 뒤 A/B로 나누는 간접 누수 경로를 피한다. 기존 top_candidates의 6자리 반올림/후보 절단을 학습 캐시로 사용하지 않는다. 후보 범위 확대나 조회 정책 변경은 후속 실험이다.
+- [x] 28개 특징 합계, 내장 JSON 설정·문서 링크·코드 블록을 정적으로 점검했다. 구현·학습·모델 추론·새 성능 평가·ZIP 생성·업로드·커밋/push는 수행하지 않았다.
+- [ ] **다음 작업(planned)**: 구현 요청 시 출처/분할별 fit_assets 감사 → adapter parity → trace/cache → nested 학습 → 외부 OOF 순으로 진행한다. 명세 완료를 성능 실험 완료로 해석하지 않는다.
+- **근거**: [SPEC_KO_FUSION_01.md](../docs/SPEC_KO_FUSION_01.md); [SPEC-KO-FUSION-01](experiments/SPEC-KO-FUSION-01.json). 권장 커밋: `docs(ko-fusion): specify controlled Korean candidate reranking`.
+
+## 2026-10-29T00:02:27+09:00 — AS-09 개선안 제시 / PLAN-AS09-IMPROVE-01
+
+- [x] 실제 AS-09 ZIP 해시와 내부 점수·조회·비한글 검색 코드를 정적으로 확인하고 기존 DPR03/발음/EXAONE 결과를 검토했다. 서버 기준선은 사용자 제공 0.9201100425/497초이며 새 성능 측정은 없다.
+- **주요 결정 사항**: 후보를 고정한 한글 점수 결합 학습 → Dense Top35 밖의 특징 범위 → 조회 충돌 재검토 → 비한글 전역 문자 검색 → EXAONE 추가 후보의 상보성 순으로 검증을 제안한다. DPR03의 다중 변경이나 단순 발음 확대를 즉시 채택하지 않는다.
+- [ ] **다음 작업(planned)**: 구현 요청 시 AS-09 학습 출처 정합화 및 fold별/fit-inner 자산 분리부터 시작한다. 전수 학습 ZIP을 OOF 검증에 쓰지 않고, 효과를 단계별로 분리한다. 구현·학습·추론·ZIP 생성·업로드는 이번 작업에서 수행하지 않았다.
+- **근거**: [AS09_IMPROVEMENT_PLAN.md](../docs/AS09_IMPROVEMENT_PLAN.md); [PLAN-AS09-IMPROVE-01](experiments/PLAN-AS09-IMPROVE-01.json). 개선 폭은 미측정이다. 권장 커밋: `docs(as09): prioritize controlled scoring and retrieval improvements` (커밋/push 미수행).
+
+## 2026-10-28T23:31:20+09:00 — LFM 출처 확인 및 AS-09 인코더 safetensors 전달 (EXPORT-LFM-HANDOFF-01)
+
+- [x] 기록·매니페스트·생성 코드를 확인했다. 변환표는 기록상 로컬 `LiquidAI/LFM2.5-350M` LoRA 모델의 출력이며, train 실제 한글 이름은 모델 학습에 사용됐다. 생성 코드의 직접 train 병합과는 구분한다. 역사 감사는 fold0 제외9,850행을 확인했으며 생성 시점 모델 바인딩 매니페스트 부재 한계를 유지한다.
+- [x] AS-09/DPR-SYMPHON-02 `full_encoder.pt`를 별도 `full_encoder.safetensors`로 변환. 텐서61개·설정 정확 일치, 합성 한글쿼리3/영문명3 임베딩 최대차0, 소스24개 구문·CLI4개 help 통과. 기존 artifact 및 AS-09 ZIP 안의 PT 해시 일치. 성능 재평가나 새 학습은 없다.
+- **주요 결정 사항**: LFM 생성 모델과 Symphonym 계열 음운 인코더를 분리해 설명한다. 전달 소스는 실제 AS-09 패키지, 보존된 DPR02 학습 스냅샷 및 현재 LFM 소스로 구성하고 당시 학습 해시 차이를 표시한다. 정확 재학습 보장은 하지 않는다.
+- **산출물/근거**: [전달 안내](../handoff/LFM_HANDOFF_20261028/README.md), [실행 기록](experiments/EXPORT-LFM-HANDOFF-01.json), `handoff/LFM_HANDOFF_20261028.zip` (코드 전달용, 제출 ZIP 아님). 원본 데이터·OOF·행단위 CSV 미포함. Python3.11.15/safetensors0.8.0 환경 차이 기록. 기존 제출 ZIP·가중치 수정/대회 제출/외부 메시지/커밋/push 없음.
+- **다음 작업**: 이번 요청 완료. 정확 재학습을 요청받으면 과거 소스·Stage A 초기값·혼동 후보 자산부터 정합화한다. 권장 커밋: `feat(export): provide lossless AS09 encoder safetensors and LFM provenance handoff`.
+
+
+## 2026-10-28T23:33:42+09:00 — AS-05 원래 제출본 복원 요청: 원본 자산 누락으로 차단
+
+- [x] 사용자 명시 요청에 따라 복원 준비·보관본 탐색·해시 대조를 수행했다. 원래 ZIP은 없고 AS-HCX-NC-01의 `model.safetensors`가 원천 폴더와 AS-05 패키지 3곳 모두에서 빠져 있다. 같은 크기의 후속 HCX 가중치 4개는 모두 원본 해시와 다르다. 접근 가능한 백업 ZIP 21개에서도 원본을 찾지 못했다.
+- [x] 당시 패키징 기록 대비 코드 5개 중 2개의 해시가 다르다. 설정과 나머지 코드의 일치는 원본 가중치의 존재나 원래 제출본 동일성을 보장하지 않는다. 현재 패키지와 다른 후속 모델로 원본을 대체하지 않는다.
+- [ ] 다음 작업: 원래 `submit_AS-05.zip` 또는 당시 코드·가중치를 포함한 완전한 백업의 실제 경로를 받아 해시 검증 후 복원한다. 기존 AS-05 자산·`submit.zip`은 보존했고 새 ZIP·학습·변환·추론·업로드는 수행하지 않았다.
+- 근거: [RESTORE-AS05-ORIGINAL-01](experiments/RESTORE-AS05-ORIGINAL-01.json). 원본 실험/제출로 중복 집계하지 않는다. 권장 커밋: `docs(as05): record original submission recovery blockers` (커밋/push 미수행).
+
+## 2026-10-28T23:22:00+09:00 — EXAONE 역방향 디코더(KO -> EN) 학습 및 Fold 0 단독 평가 완료
+
+- [x] **역방향 데이터 감사 (`EXAONE-REV-DATA-AUDIT-02`)**: Fold 0 보류(2,372행) 완전 격리, Fit(9,850행)에서 1,573개 역방향 전사 쌍(`[KO] {korean} => [EN] {english}`) 추출 확인 (Vessel ID 중복 0건). 단위 테스트 2건 PASS.
+- [x] **역방향 LoRA 4-Epoch 학습 (`LEX-EXAONE-REV-01`)**: 공식 EXAONE-4.0-1.2B 기반 100 Optimizer Step 학습 완료. Target CE Loss 10.140에서 **0.02305**로 초저손실 수렴. 어댑터(`adapter.pt`, 45.8MB) 및 매니페스트 저장 완료 (`artifacts/LEX-EXAONE-REV-01/fold_0_lora/`).
+- [x] **역방향 디코더 Fold 0 단독 평가 (`EVAL-EXAONE-REV-01`)**:
+  - Fold 0 239개 한글 쿼리 역방향 디코딩 지연 시간 약 4.2초 (~17.5ms/행).
+  - `거영스타3` $\rightarrow$ `KEOYOUNG STAR 3` 등 영문 정규 선명 1순위 직접 복원 확인.
+  - **한글 정확도**: **76.987%** [66.80, 87.19] (184 / 239행 정답)
+  - **비한글 정확도**: **95.687%** [94.20, 97.00] (2,041 / 2,133행 정답)
+  - **가중 점수 (0.7 한글 + 0.3 비한글)**: **0.82597** [0.75481, 0.89780]
+  - **검색 Recall (gold_rank >= 1)**: 한글 84.94% (후보 누락 36, 순위 오류 19), 비한글 99.86% (후보 누락 3, 순위 오류 89)
+- **주요 해석 및 가치**:
+  - 역방향 디코더 단독은 한글 정확도 76.99%로 정방향 단독(85.77%)보다 낮으나, 한글 입력을 영문 카탈로그명으로 1:1 직접 매핑하여 영문 카탈로그 검색 채널로 직접 투입할 수 있는 강력한 보조 채널을 제공함.
+- **제출 및 ZIP 원칙**: `submit.zip` 미생성 (사용자 명시 요청 없음).
+
+## 2026-10-28T23:05:00+09:00 — SPEC-LEX-01 Rev.2: EXAONE 실제 모델 확보·학습·전수 생성·단독 평가 완료
+
+- [x] **공식 원본 확보 (`EXAONE-BASE-FETCH-02`)**: `LGAI-EXAONE/EXAONE-4.0-1.2B`의 safetensors 및 토크나이저 파일 9개 다운로드 완료 (`artifacts/pretrained/exaone-4.0-1.2b`, 2.56GB), SHA256 해시 검증.
+- [x] **데이터 고립 감사 및 단위 테스트 (`EXAONE-DATA-AUDIT-03`)**: Fold 0 보류군(2,372행)과 Fit(9,850행) 분리 확인. Fit 내 1,573개 전사 쌍(규칙 976, 단어 328, 전명칭 269) 추출 (Vessel ID 중복 0건). 단위 테스트 14건 전체 PASS.
+- [x] **Fold 0 분리 고정 4-Epoch LoRA 학습 (`LEX-EXAONE-PURE-02`)**: Target CE 손실 10.148에서 0.237로 정상 수렴. 체크포인트 및 어댑터(`adapter.pt`, 45.8MB)와 매니페스트 저장 완료.
+- [x] **전체 카탈로그 정적 사전 생성 (`LEX-EXAONE-GENERATE-01`)**:
+  - 카탈로그 78,595행 대상 고유 단어 35,418개(단어 사전: `word_exaone_lexicon.json`, 2.69MB) 및 고유 정규 선명 78,592개(카탈로그 맵: `catalog_exaone_ko_map.json`, 9.64MB) 생성 완료.
+  - 레거시 사전/LFM/수동 사전 일체 미접근(`legacy_assets_read: []`), 결측률 < 0.01% (단어 결측 1개, 선명 결측 5개).
+- [x] **지정 사례 수용성 진단 (`tests/test_exaone_generated_acceptance.py`)**:
+  - `CNC DREAM` → '씨엔씨 드림' (PASS)
+  - `KEOYOUNG STAR 3` → '거영스타3' (PASS)
+  - `BOW CECIL` → '보큐씨엘'/'보완씨엘' 등 생성 (FAIL, 진단 보존; 임의 라벨 주입 배제 규칙 준수).
+- [x] **순수 EXAONE 단독 Fold 0 평가 (`EVAL-EXAONE-PURE-01`)**:
+  - 공식 평가기 `eval_kit/evaluate.py --subset` 실행 통과 (checks: `train=ok; folds=G5-s42; foldcol=ok`).
+  - **한글 정확도**: 85.774% [76.76, 93.13] (205 / 239행 정답)
+  - **비한글 정확도**: 88.326% [85.96, 90.46] (1,884 / 2,133행 정답)
+  - **가중 점수 (0.7 한글 + 0.3 비한글)**: **0.86540** [0.80234, 0.91632]
+  - **검색 Recall (gold_rank >= 1)**: 한글 95.82% (검색 누락 10, 순위 오류 24), 비한글 99.62% (검색 누락 8, 순위 오류 241)
+  - **Recall@35 (고정 K RRF)**: 한글 92.89%, 비한글 95.97%
+  - **Top 5 후보 포함률**: 한글 95.40%, 비한글 96.44%
+  - **행 독립성(Row Independence)**: 역순·스트라이드·단독 행 슬라이스 예측 일치 100% 검증 통과.
+  - **지연 시간**: Fold 0 2,372행 채점 22.27초 (~9.39ms/행, 순수 정적 JSON 인덱스).
+- **DPR-SYMPHON-03 담당자 전달용 매니페스트**:
+  - 매니페스트 경로: `artifacts/LEX-EXAONE-GENERATE-01/catalog_exaone_ko_map.manifest.json`
+  - 카탈로그 맵: `artifacts/LEX-EXAONE-GENERATE-01/catalog_exaone_ko_map.json` (SHA256: `ff1977fc0ba47b7fbc0eb2c955d48ff2ad737448d970f42bd94bb572ee6c8f71`)
+  - 단어 사전: `artifacts/LEX-EXAONE-GENERATE-01/word_exaone_lexicon.json` (SHA256: `eb405e688d84e154ef13bf1d4127d850b8e8f83b105a3859a5fe809ebb0cf7f4`)
+  - 어댑터 가중치: `artifacts/LEX-EXAONE-PURE-02/fold_0_lora/adapter.pt` (SHA256: `ac719b1b9938c65dc6ab009ee85196b02b98e346184af5b1caeada6331490f72`)
+  - 제약 사항: Fold 0 보류 전용(새 선박 집단) 검증용 사전이며, DPR-SYMPHON-03 결합 시 가변 합집합을 Recall@35로 부르지 않고 RRF 순위 기반 상위 K 지표로 구분할 것.
+- **제출 및 ZIP 원칙**: `submit.zip` 미생성 (사용자 명시 요청 없음).
+
+## 2026-10-28T23:17:36+09:00 — DPR-SYMPHON-03 구현·학습·평가 완료 / 성능 채택 보류
+
+- [x] SPEC-DPR-03 구현, 원본 symphonym-v8에서 Stage A 없이8epoch 실제 학습, global composite epoch5 보존, catalog78595행 FP16 export, standalone·4조건×4구성 hybrid 평가 완료.
+- [x] **검색 목표 미달**: 한글 R@1/35/60=40.5858/89.1213/89.5397%. epoch8 R@1=21.76%로 하락했지만 epoch5 가중치는 보존했다. clean 사전OFF 가중99.6649%는 기존02와 같아 로컬92%=LB92% 전제는 재현되지 않았다.
+- [x] **severe 사전OFF 악화**: 기존02 가중98.7441%→전체03 96.1081%, 차이-2.6360%p/95% CI[-4.709,-0.827]%p. 같은03/K60에서 직결은 한글230→225, tail규칙은226으로 일부 회복. 사전ON clean99.9578→99.6649%, severe98.7441→97.8654%이며 해당 CI들은0을 포함한다.
+- [x] **속도·검증**: 로컬CPU32행6threads 인코딩2.496배, Dense검색2.389배. 단일행encoder1회/full-catalog dot1회. 최종기능18개 PASS; native300행 reverse/subset150/single3/repeat 예측불일치0. IEEE FP32로 실제모델1e-6 검사통과. 원본35자산 SHA256·epoch5 tensor 일치확인.
+- **주요 결정 사항**: 정확도 개선 모델로 DPR03/직결 규칙을 채택하지 않는다. AS09 기존 ZIP·자산·서버0.9201100425/497초 기준선을 유지한다. 외부fold0 선택은 사용자 명시 요청대로 수행했고 개발 선택점수로만 해석한다. Stage A 단독 인과·서버시간2~3분·점수향상을 주장하지 않는다.
+- **실패·환경 기록**: pytest미설치→표준unittest runner 사용. 첫 standalone TF32 실패와 첫 재시도 numpy bool 저장 실패를 별도ID로 보존, RECHECK-02 성공. Python3.11.15/목표3.11.17 및 패키지5개 차이 유지. ZIP checker는미실행, native검증으로 구분한다.
+- [x] 현재 실행 중인 실험없음. 새 ZIP/업로드/커밋/push·EXAONE 작업없음. 후속 개선을 요청받으면 초기화·LR·학습조건을 분리하고 fit-inner에서 선택하는 별도 실험을 설계한다.
+- **근거·인수인계**: [전체 구현·결과](../docs/SPEC_DPR_03_IMPLEMENTATION.md); DPR-SYMPHON-03/EXPORT-DPR-SYMPHON-03/EVAL-DPR-SYMPHON-03-RECHECK-02/DPR-HYBRID-03/BENCH-DPR03-LATENCY-01/VERIFY-DPR03-01/ANALYZE-DPR03-01 JSON. 공개보류 오답23조건건(선택22/검색1)은 artifacts/ANALYZE-DPR03-01에 보존했다.
+- **권장 커밋**: `feat(dpr): add clean training and single-pass row-local inference`; `experiment(dpr): record DPR03 regressions and preserve AS09 reference`. 기존 다른작업을 일괄stage하지 않는다.
+
+## 2026-10-28T22:22:07+09:00 — EXAONE 다른 에이전트용 인수인계 명세 작성
+
+- [x] 사용자 요청에 따라 [EXAONE 인수인계 명세](../docs/EXAONE_AGENT_HANDOFF_SPEC.md) 작성. 현재 구현·실패/계획 기록·CLI를 확인하고 모델 확보 → fold 분리 고정 4epoch 학습 → pilot/전수 사전 생성 → EXAONE-only 평가 → DPR 자산 전달의 순서를 구체화했다.
+- **주요 결정 사항**: 이번 요청은 명세 작성이다. 새 다운로드·학습·생성·성능 평가·ZIP 생성은 실행하지 않았다. 실제 EXAONE 점수는 여전히 미측정이며 과거 32 PASS/3 skip을 이번 재실행 결과로 표시하지 않는다. 다른 에이전트를 실제 실행시키거나 메시지를 전송하지 않았다.
+- **담당 범위**: EXAONE 전용 코드·자산과 DPR 담당 파일/GPU 작업의 경계를 명시. 기존 AS 자산과 실패 실험 보존, legacy 미접근, 마지막 epoch 사전 선택, 다른 PC의 base 절대경로 재지정·해시 검사, 목표와 실측의 분리를 요구한다.
+- [ ] **다음 에이전트 작업**: 명세 §11 시작 지시문으로 인수 → 실제 환경/네트워크/base 확인 → LEX-EXAONE-PURE-02 등 새 실행 ID로 재개. 기존 생성/평가 01은 planned이며 실행 여부·경로를 다시 확인한다. 복구되지 않은 권한 차단은 증거와 호스트 실행 명령으로 인계한다.
+- **검증/한계**: 현재 코드와 로컬 경로·기록을 읽고 문서와 링크를 정적 확인했다. 루트 TEAM_RULES/PROJECT_STATUS 대신 docs/의 실제 파일을 안내했다. 문서 적용만으로 모델 확보·성능 개선·서버 검증을 주장하지 않는다.
+- **권장 커밋**: `docs(exaone): add agent handoff specification and execution boundaries`. 이번 작업에서 커밋/push 없음.
+
+## 2026-10-28T22:09:58+09:00 — 수정 AS-08(117597) 결과 반영 / VERIFY-AS08-FIXED-RESULT-01
+
+- [x] 사용자 정정: **오류 수정본 AS-08**은 제출 `117597`, `2026-10-27 23:17:35 KST`, **0.9082679372**, **327초(5분27초)**다. 최초 AS-08 `117501`(0.9003732004/236초)은 별도 제출로 보존한다. 기존 SUB-117597 기록과 일치하며 중복 등록하지 않았다.
+- [x] 수정본−최초 AS-08: **+0.0078947368(+0.78947368%p), 표시 시간+91초**. 수정본−AS-06/07: **−0.0039473684(−0.39473684%p)**.
+- [x] **AS-09−수정 AS-08: +0.0118421053(+1.18421053%p), 표시 시간+170초**. 앞선 +1.97368421%p/+261초 비교는 최초 AS-08에 대한 값으로만 유효하다. 향후 최신 AS-08 기준 비교에는 수정본을 쓴다.
+- **주요 결정/해석**: AS-09는 관측된 최고 서버 점수 기준선을 유지한다. 오류 수정 후 점수 회복은 확인되지만 전체 상승분을 Dense 단독 효과로 귀속하거나 잔여 격차를 사전 제거 때문으로 확정하지 않는다. 기존 SUB-117597의 인과 확정 표현은 서버 로그·대응 ZIP 변경 범위가 확인되기 전까지 가설로 한정한다. 현재 로컬 ZIP과 서버 업로드 바이트 일치는 미확인이다.
+- **범위/제약**: 기록·소수 연산·로컬 ZIP 설정 확인만 수행. 새 학습/모델 추론/ZIP 수정/업로드/커밋/push 없음. 언어별 정확도·표본 수·구성별 기여는 미측정이다. TEAM_RULES v4 확인, eval_kit 실제1.0/요청1.1 차이와 Python3.11.15/목표3.11.17 차이를 유지한다.
+- [ ] **다음 작업**: 별도 개선 요청 시 같은 조건의 구성별 비교로 기여를 분리한다. 이번 결과 반영은 완료했다.
+- **근거**: [수정 제출 결과](experiments/SUB-117597.json), [검증 기록](experiments/VERIFY-AS08-FIXED-RESULT-01.json), [갱신 비교표](../docs/AS09_SERVER_RESULT.md). 권장 커밋: `docs(results): distinguish corrected AS08 submission and revise AS09 comparisons`.
+
+## 2026-10-28T22:15:00+09:00 — AS-08 수정본 공식 서버 결과: Dense 복구 인과 입증 (SUB-117597)
+
+사용자 전달 결과: 제출 **117597**, **submit_AS-08.zip (수정 edit)**, 제출 시각 **2026-10-27 23:17:35 KST**, 가중 점수 **0.9082679372**, 표시 시간 **327초(5분 27초)**.
+
+- 결함 AS-08(`SUB-117501`, 0.9003732004) 대비 **`+0.0078947368` (+0.7895%p)** 반등.
+- 서버 표시 시간이 236초에서 327초(+91초)로 증가하여, `loss.py` 패키징 누락 해결 후 Dense 신경망 매칭이 서버에서 정상 실행되었음을 확인.
+- 다만 합성 한글 카탈로그 맵(`catalog_full_ko_map`) OFF 및 수동 사전 제거 상태로 인해 AS-06(`0.9122153056`) 대비로는 `-0.0039473684`(-0.3947%p) 격차가 유지됨.
+- 이는 차세대 `DPR-SYMPHON-02`와 `catalog_full_ko_map`을 모두 갖춘 `AS-09`(`0.9201100425`, +1.1842%p vs AS-08 수정)로의 비약적 성과로 이어짐.
+- 근거: [SUB-117597](experiments/SUB-117597.json), [AS-08 서버 분석](../docs/AS08_SERVER_ANALYSIS.md).
+
+## 2026-10-28T22:06:06+09:00 — VERIFY-AS09-RESULT-01: AS-09 결과·패키지 근거 범위 확인
+
+- [x] 기존 제출117799 기록과 사용자 표 일치 확인: **0.9201100425 / 497초**. AS-06/07 대비 **+0.78947369%p**, AS-08 대비 **+1.97368421%p**. 새 제출·실험으로 중복 집계하지 않았다.
+- [x] 로컬 ZIP 해시가 기존 AS-09 기록과 일치하고 CRC 통과. Dense hybrid/가중치2.5, loss.py 포함, 실패 시 중단 확인. 수동 단어장0개지만 기존 한글 map78,586개와 학습 조회는 ON이다. EXAONE-only 결과가 아니다.
+- **주요 결정 사항/해석 정정**: AS-09는 현재 관측된 서버 점수 기준선이다. 서버 로그·업로드 원본 해시는 미확인이며 Dense 활성은 동일 ZIP 실행 가정의 강한 근거로 구분한다. 개별 구성의 성능 기여·언어별 성적은 미측정이다. 아래 이전 기록의 서버 직접 검증/업로드 해시 확인/1,200초 제한 표현은 [최신 확인 범위](../docs/AS09_SERVER_RESULT.md)로 한정한다. 기록된 최신 안내는1,800초이며 표시 시간의 범위는 미확인이다.
+- **제약**: TEAM_RULES v4 확인, eval_kit 실제1.0/요청1.1 불일치. Python3.11.15/목표3.11.17 차이. 기존 DPR 기록은 fold0이며 이번 결과를5-fold OOF로 표시하지 않는다. 모델 추론·새 학습·ZIP 수정·업로드·커밋·push 없음.
+- [ ] **다음 작업**: 별도 개선 요청 시 동일 조건의 Dense OFF/후보만/가산 및 map ON/OFF를 분리 비교한다. 현재 작업은 기록 검증까지 완료, 실행 중 실험 없음.
+- **근거**: [분석 문서](../docs/AS09_SERVER_RESULT.md), [검증 기록](experiments/VERIFY-AS09-RESULT-01.json). 권장 커밋: `docs(results): verify AS09 score, package settings and evidence limits`.
+
+## 2026-10-28T22:01:00+09:00 — AS-09 공식 서버 결과: 프로젝트 역대 최고점 달성 (SUB-117799)
+
+사용자 전달 결과: 제출 **117799**, **submit_AS-09.zip**, 제출 시각 **2026-10-28 00:54:00 KST**, 가중 점수 **0.9201100425**, 표시 시간 **497초(8분 17초)**.
+
+- AS-06/AS-07 (`0.9122153056`) 대비 **`+0.0078947369` (+0.7895%p)** 상승하여 **0.9201100425**로 프로젝트 역대 최고점 달성.
+- AS-08 (`0.9003732004`) 대비 **`+0.0197368421` (+1.9737%p)** 상승.
+- `DPR-SYMPHON-02` 아키텍처(SyllableConvBlock 1D-CNN + Multi-Query Attention Pooling + Gated Multi-View & Tail Fusion + ANCE/자매선 하드 네거티브 + CosFace)와 완전한 의존성 패키징(모든 `phonetic_encoder` 소스 동봉)이 서버 평가 환경에서 완벽히 작동함을 실측 검증.
+- `AS-09`를 프로젝트의 공식 최우수 제출(Best Submission)로 승격.
+- 근거: [SUB-117799](experiments/SUB-117799.json), [AS-09 패키지 기록](experiments/AS-09.json).
+
+## 2026-10-28T00:41:43+09:00 — NET-EXAONE-01: DNS 증상 원인은 sandbox 네트워크 접근 거부
+
+직접IP443도10013 접근 거부, 외부DNS11001, AppContainer=True를 확인했다. 사용자 network_access는 이미true이고 proxy/offline override는 없다. OS DNS/hosts/firewall은 수정하지 않았다. 현재 세션의 실효 네트워크/권한 확대 차단으로 연결 복구는 미완료다. 일반 호스트 PowerShell의 연결 확인·공식 모델 다운로드 명령은 [네트워크 진단 안내](../docs/EXAONE_NETWORK_DIAGNOSIS.md)에 저장했다. 실제 다운로드/학습 재개 성공을 주장하지 않는다. 근거: experiments/NET-EXAONE-01.json.
+
+## 2026-10-28T00:11:19+09:00 — SPEC-LEX-01 Rev.2 신규 EXAONE 사전 경로 구현 (IMPL-EXAONE-LEX-01)
+
+기존 수동 사전/합성 map/학습 음역 조회 자산을 읽지 않는 규칙·fold쌍·EXAONE LoRA·Hangul 제약·두 Track 생성/캐시·독립 자모 matcher·공통 평가 연결을 구현했다. 정적 JSON 추론은 torch/transformers를 import하지 않으며 기존 공개 decoder API는 지연 로딩으로 보존했다.
+
+- 검증: **32개 통과**, 실제 생성 map이 필요한 지정 사례 **3개 skip**. 작은 무작위 EXAONE 구조의 gradient/adapter 복원은 기능 검사이며1.2B 실제 품질이 아니다.
+- 데이터: fit9850/보류2372행, 고유 쌍1573개, catalog78595행/고유 이름78592/토큰35418. fold 파일 재생성·보류 정답 후보 주입 없음.
+- **실제 모델 실험 차단**: LEX-EXAONE-PURE-01은 base 부재로 optimizer0단계에서 중단. EXAONE-BASE-FETCH-01은 huggingface.co DNS 실패. 전수 생성/정확도 평가는 planned로 유지하고 대체 모델·기존 사전을 사용하지 않았다.
+- **주요 결정**: 사전 배제만으로 누수0/로컬=리더보드를 보장하지 않는다. HD→특정 회사명은 일반 규칙으로 고정하지 않는다. 유효 batch64/microbatch4, 실제EOS 사용. 기존 DPR은 별도 계보 옵션과 검증 manifest가 필요하며 EXAONE-only와 구분한다.
+- **다음 작업**: 가중치 확보 → 새 학습 ID02 → 생성 → fold 평가. 기존 ZIP/완료 기록 보존, ZIP 생성·커밋·push 없음.
+
+근거: [구현·실행 안내](../docs/SPEC_LEX_01_IMPLEMENTATION.md), [작업 기록](experiments/IMPL-EXAONE-LEX-01.json), [학습 차단](experiments/LEX-EXAONE-PURE-01.json).
+
+## 2026-10-27T23:10:25+09:00 — AS-08 잔존 매칭 경로 확인 (AUDIT-AS08-REMAINING-01)
+
+수동 IDEA_B/map 제거와 전체 음역/조회 제거는 다르다. ZIP에 호출부호 조회5851·이름 조회5857·학습 단어466·음절271이 남고 EN_V3·음역 규칙·숫자/톤수/메타 점수도 유지된다. 조회 적중/경로별 기여는 미측정. 공식 점수0.9003732004는 비한글100% 가정에서도 한글 최소85.7676%를 요구한다(산술 하한, 실제 언어별 성적 아님). 정적 설명 보강만 수행, 학습·추론·ZIP 수정 없음. 근거: docs/AS08_SERVER_ANALYSIS.md §8와 experiments/AUDIT-AS08-REMAINING-01.json.
+
+## 2026-10-27T23:03:45+09:00 — AS-08 실제 ZIP 감사와 복구 우선순위 (ANALYSIS-AS08-SERVER-01)
+
+- **확인된 결함**: AS-07/08 ZIP의 phonetic_encoder.__init__가 .loss를 import하지만 loss.py가 없다. 저장소 경로 없는 격리 import에서 두 진입점 모두 Dense 클래스 unavailable 재현. 임시 소스에 누락 파일 추가 또는 추론 전용 __init__ 적용 시 import 성공, 모델 로드0회.
+- **해석 정정**: 설계상 Fuzzy+Dense 하이브리드와 ZIP 독립 실행은 구분한다. AS-07의 AS-06 동률은 fallback 가설과 일치하나 서버 로그 없이는 확정하지 않는다. AS-08은 map78586→0·수동 사전299→0·lattice 제거 상태라 Dense 미활성과 보완 장치 제거의 결합이 유력한 하락 가설이다.
+- **추가 근거**: AS-07/08 신경 가중치 hash 동일. 기존 멀티뷰 보고서의 한글 Top1은138→147/239이나 Top35는227→226/239. 현재 외부 fold best 선택과 캐시 provenance 한계도 기록했다. 기존 완료 결과를 덮어쓰지 않았다.
+- **결정/다음 작업**: PLAN-SERVER-RECOVERY-01은 planned. P0 추론 패키지 의존성/활성 확인 → AS-06 기능 보존 + Dense 후보만 추가 → 별도 가산/게이트 → map/사전/lattice 단일 제거 → 보조 뷰 분리 순서다. 점수 향상 폭은 미측정.
+- **범위**: 새 학습·튜닝·모델 추론·ZIP 생성/수정·업로드·커밋·push 없음. 실제 서버 활성화와 각 요소의 점수 기여는 미확인.
+- **근거**: [분석 보고서](../docs/AS08_SERVER_ANALYSIS.md), [실행 기록](experiments/ANALYSIS-AS08-SERVER-01.json), [복구 계획](experiments/PLAN-SERVER-RECOVERY-01.json).
+
+## 2026-10-27T22:53:44+09:00 — AS-08 공식 서버 결과: 점수 하락 기록 (SUB-117501)
+
+사용자 전달 결과: 제출 **117501**, **submit_AS-08.zip**, 제출 시각 **2026-10-27 22:14:50 KST**, 가중 점수 **0.9003732004**, 표시 시간 **236초(3분 56초)**. 사이트 직접 조회는 하지 않았다.
+
+| 제출 파일 | 제출 ID | 표시 가중 점수 | 표시 시간 |
+|---|---:|---:|---:|
+| submit_AS-06.zip | 115506 | 0.9122153056 | 366초 |
+| submit_AS-07.zip | 116338 | 0.9122153056 | 372초 |
+| submit_AS-08.zip | 117501 | 0.9003732004 | 236초 |
+
+AS-06/07 대비 표시 점수 **-0.0118421052(-1.18421052%p)**. 표시 시간은 AS-06 대비 **-130초**, AS-07 대비 **-136초**다. AS-08을 서버 점수 개선으로 채택하지 않고 더 높은 AS-06/07 기준을 유지한다. 기존 AS-08 패키지 기록상 Multi-View V2·수동 사전 제거·lattice 제거·합성 한글 map OFF 등이 함께 바뀌었으므로 개별 원인은 미확인이다. AS-07도 이미 Dense 하이브리드여서 이번 하락만으로 Dense 자체가 문제라고 결론내릴 수 없다.
+
+언어별 정확도/표본 수·후보 포함률·seen/unseen·Fix/Break·시간 반복성은 미측정이다. 이전 “AS-08 서버 결과 미수령”은 그때의 상태이며 이번 기록으로 갱신한다. 새 학습·추론·ZIP 생성·업로드·커밋·push 없음.
+
+근거: [SUB-117501](experiments/SUB-117501.json), [기존 패키지 기록](experiments/AS-08.json). 기존 완료 기록과 ZIP은 보존한다.
+
+## 2026-10-27T22:45:13+09:00 — REFACTOR-RETRIEVAL-03: 동작 보존 리팩토링 완료
+
+학습/평가 Top-K 연산과 CatalogIndex dense 조회/캐시 중복을 공통화했다. 기존 미커밋 코드를 기준으로 비교했으며 후보·특징·점수·순위·예측 ID의 정확 일치를 공개 fold0 64행에서 확인했다. 수정 후 관련23개 + 기존 dense 통합2개 테스트 통과, 229개 보호 파일 해시 불변. 정확도/속도 개선 주장, 새 학습·ZIP·커밋·push 없음.
+
+TEAM_RULES v4 확인; eval_kit README 실제1.0/요청1.1 차이와 지정 인터프리터3.11.15/목표3.11.17·패키지5개 차이를 기록했다. 기존 package import 실패도 별도 미해결 항목이다. AR/Jamo/DPR 및 제출 스냅샷은 의미·패키징 차이 때문에 통합하지 않았다.
+
+근거: [리팩토링 보고서](../docs/REFACTOR_RETRIEVAL_03.md), [실험/검증 기록](experiments/REFACTOR-RETRIEVAL-03.json), [정확 일치 검사](../reports/refactoring/REFACTOR-RETRIEVAL-03/verification.json). 다음 작업은 문서1.1 확인, 별도 정확 버전 환경, 기존 import 호환성 수정이며 이번 작업 중단 항목은 없다.
+
+## 2026-10-27T22:17:43+09:00 — AS-07 공식 서버 결과 (SUB-116338)
+
+사용자 제공 공식 결과: 제출 **116338**, `submit_AS-07.zip`, 제출 시각 **2026-10-26 23:57:46 KST**. 사이트 직접 조회 없이 전달된 표를 보존했다.
+
+| 제출 파일 | 제출 ID | 표시 가중 점수 | 표시 시간 |
+|---|---:|---:|---:|
+| submit_AS-06.zip | 115506 | 0.9122153056 | 366초 |
+| submit_AS-07.zip | 116338 | 0.9122153056 | 372초 |
+
+AS-06 대비 표시 점수 차이 **0**, 표시 시간 **+6초**다. AS-07 패키지는 기존 기록상 `DPR-SYMPHON-01` 자산과 `DPR-HYBRID-01` 후보·점수 특징에 연결된다. 로컬 합성 노이즈 개선과 달리 이번 서버 점수 향상은 확인되지 않았다. 동일 총점만으로 동일 예측·언어별 동률·Fix/Break 0건을 판단할 수 없고, 단일 시간 차이의 반복성도 미확인이다.
+
+AS-06 기준 자산을 보존하고 AS-07을 서버 점수 개선으로 승격하지 않는다. AS-08은 생성 기록만 있으며 서버 결과는 미수령이다. 이번 작업은 기록만 갱신했다. 근거: [SUB-116338](experiments/SUB-116338.json), [SUB-115506](experiments/SUB-115506.json), [기존 AS-07 패키지 기록](experiments/AS-07.json).
+
+## 2026-10-25 KST — PLAN-LM-AR06-01 언어모델 개선 계획
+
+사용자의 언어모델 성능 향상 방안 요청에 따라 기존 학습·평가 기록과 현재 코드를 검토하고 `docs/LM_IMPROVEMENT_PLAN.md`에 계획을 저장했다. 역방향 V2는 오답쌍 없는 CE 학습이며 6,814쌍에서 2,400회 복원 추출(한글 1,700 / 비한글 700)했다. 한글 증강은 62쌍 추가다. 이 노출량은 학습 부족 확정 근거가 아니며 커버리지·반복을 진단할 근거다.
+
+최우선 모델 변경은 정답+혼동 오답의 순위 손실이다. 실제 제출 게이트 V1/V2 진단, 언어 내부 비복원 순환, 행 평균 CE, 순위 손실, 한글 음역 증강, OOF 결합/HCX 제한 생성을 분리 비교한다. ByT5에는 이미 byte trie가 있고 HCX는 자유 생성 후 근사 검색이다. HCX-05의 evaluation 하위 기록에 한글 생성 정확 일치23/64·생성 후 카탈로그 검색 Top1 46/64·Top10 55/64가 있으므로 평가 전부 미실시로 인용하지 않는다. 이름 성능은 최종 ID 성능과 구분한다.
+
+계획의 설정·개선 폭은 미검증이며 신규 학습·추론·코드/모델/ZIP 변경 없음. 근거·계획 ID: `project_log/experiments/PLAN-LM-AR06-01.json`. RankT5·BRIO·GENRE·ByT5 원 출처를 방법론적 근거로 확인했으며 논문 성과를 프로젝트 성과로 전용하지 않는다.
+
+## 2026-10-25 KST — AUDIT-AR06-PROPOSAL-01 세 가지 개선 제안 검토
+
+현재 AR-06 소스·두 모델 JSON·공개 train/fold 집계를 대조했다. 한글은 이미 GT/IGT 약 ±9.8% 무제한 톤수 합집합과 자음/발음 접두사 검색을 사용한다. 수동 단어 전체 등록은 필수가 아니며, 전역 모든 위치 n-gram은 별도 신규 경로다. 호출부호 5,851개는 train 12,222행에서 모두 유일 ID이고 현재 lookup과 불일치 0행. 모델에는 단어 466개·음절 271개도 있다. train 미반영을 현재 자산의 결함으로 단정하지 않는다.
+
+JSON false가 USE_TRAIN_LOOKUP 상수보다 우선한다. 기존 조회는 다수결 ID 즉시 반환이므로 안전 조회에는 유일성/충돌 정보를 담는 새 자산과 정책 검증이 필요하다. 행 분할의 seen 8,702/12,222행(71.1995%)은 test 비율이 아니다. 톤수 1.5% 이내는 이미 +2.5 이상을 받으므로 추가 가산은 별도 상호작용 가설이다. test 재등장·오답 원인·개선 폭은 미확인이다.
+
+완료 범위는 정적 검토와 공개 집계·수정 설계다. 모델 실행·학습·성능 비교·코드/자산/ZIP 변경 없음. 현재 Windows `.venv-server`가 없으며 과거 Linux 환경 기록을 이 PC의 확인으로 쓰지 않는다. 구현 요청 시 실행기의 자동 ZIP을 분리한 다음 안전 조회, 전역 검색, 톤수 가산을 각각 검증한다.
+
+근거: `docs/AR06_PROPOSAL_REVIEW.md`, `reports/ar06_proposal_audit.json`, `project_log/experiments/AUDIT-AR06-PROPOSAL-01.json`.
+
 ## 2026-10-25 KST — PLAN-RETRIEVAL-AR06-01 후보 검색 보강 제안
 
 실제 AS-05 ZIP의 검색 경로를 검토했다. 우선 톤수와 독립적인 전역 문자 2~4gram 후보를 합집합으로 추가하고, 기존 `CharacterNgramIndex`를 재사용하는 안을 planned로 기록했다. 이후 한글 혼합 해석/발음 검색, 품질 기반 확장, Top-35 압축 손실을 각각 비교한다. 후보 예산 비한글24/한글60은 초기값이며 개선·속도는 미측정이다. 모델/코드/ZIP 변경과 새 실험 실행은 없다.
@@ -626,3 +893,221 @@ AUG-02/AUG-03 그룹5-fold 완료: 가중0.930211378→0.922815505, Δ=-0.007395
 - [ ] 지정 가상환경 및 ByT5 가중치는 현재 프로젝트 전체 하위 폴더·ZIP 4개·첨부 파일 검색에서 찾지 못함. 다른 위치까지 없다고 단정하지 않는다.
 - 다음 작업의 fold 수령 단계는 해소됨. 지정 환경과 공식 ByT5 가중치 확보 후 준비된 테스트/학습 경로를 실행한다.
 - 모델 학습·예측·ZIP 생성은 이번 복원에서 실행하지 않음.
+
+## 2026-10-25 KST — IMPL-LM-AR06-01
+
+- [x] LM_IMPROVEMENT sections 1–3 implemented in `experiments/train_noisy_channel.py` and `name_decoder/channel_training.py`: lexical listwise negatives (same-name/fit-known positives excluded), language queues, row-mean CE, fit-learned Hangul correspondence augmentation.
+- [x] CUDA is the default; model and batches move to device; unavailable CUDA raises an error. CPU requires `--device cpu`. GPU name, peak allocated memory and sampling coverage are logged. CPU thread cap/cooldown retained only for CPU.
+- [x] Added gradient/masking, ranking direction, coverage, exclusion and digit-preservation regression tests in `tests/test_channel_training.py`; syntax compilation passed.
+- [ ] Runtime tests and training blocked: `.venv-server` missing; documented setup retried with workspace cache, but uv cannot find Windows Python 3.11.17. RTX 5080 inventory is confirmed, CUDA kernels unverified. No model/accuracy/ZIP produced.
+- Next: resolve exact runtime, run `.\.venv-server\Scripts\python.exe -m unittest discover -s tests -p "test_*channel*.py" -v`, then launch a fresh training ID. Do not overwrite prior experiment results.
+- Evidence: `project_log/experiments/IMPL-LM-AR06-01.json`, `docs/LM_IMPROVEMENT_USAGE.md`. Lexical mining is not baseline-model-error mining. Improvements remain unmeasured.
+- Suggested commit: `feat(noisy-channel): add confusion ranking, coverage sampling and CUDA training`.
+
+
+## 2026-10-25 KST — IMPL-LM-ENV-02 correction
+
+Existing `.venv` confirmed: Python 3.11.15, torch 2.7.1+cu128, transformers 5.20.1. Only `.venv-server` is absent. The earlier general statement that a virtual environment was absent is incorrect. RTX 5080 CUDA forward/backward passed with finite gradients. New training tests 4 passed, retrieval tests 2 passed; existing V1/V2 prompt tests have 3 tokenizer decode TypeErrors. No training completed. Next: resolve tokenizer/version compatibility (target transformers 4.57.6, Python 3.11.17) before actual LM training. Evidence: `project_log/experiments/IMPL-LM-ENV-02.json`.
+
+
+## 2026-10-25 KST — ENV-TRANSFORMERS-4576-01
+
+Requested transformers 4.57.6 reinstall in existing `.venv` attempted. Workspace UV cache avoids initial cache permission denial, but PyPI DNS resolution fails after retries; no cached wheel found. Existing package installation retained. Next: restore PyPI connectivity, rerun `uv pip install --python .\.venv\Scripts\python.exe transformers==4.57.6`, then prompt tests. Evidence: `project_log/experiments/ENV-TRANSFORMERS-4576-01.json`.
+
+
+## 2026-10-25 KST — LM-RANK-GPU-01 preflight
+
+Transformers 4.57.6 confirmed in user-authorized existing `.venv` (Python 3.11.15). All 9 channel tests pass. CUDA RTX 5080 available. Requested GPU 300-step training blocked before optimizer steps: original `artifacts/pretrained/hyperclovax-seed-0.5b/model.safetensors` is absent; pinned download fails on huggingface.co DNS. No matching local cache found. Next: obtain original weights at revision `3da5046fb0195d14f2497de198136987d35fd644`, verify SHA256 `f40f63fa6a118eb9b59e8910c3ab5a6e6499805966284bb2cd41e197719d156b`, then resume GPU training. No model or ZIP generated. Record: `project_log/experiments/LM-RANK-GPU-01.json`.
+
+
+## 2026-10-25 KST — network diagnosis and local launcher
+
+Both huggingface.co and pypi.org fail DNS resolution in the restricted execution surface. Resolve-DnsName returns access denied; DNS client configuration inspection is also denied. This confirms restricted diagnostic access, not a proven machine-wide DNS outage. No system DNS/proxy/security settings changed. Created `tools/start_lm_gpu.ps1` for normal local PowerShell: checks existing .venv/CUDA/transformers, obtains pinned original weights, validates recorded SHA256, runs 9 tests, launches GPU training with fresh ID LM-RANK-GPU-02. No download/training completed in this step. Next: run launcher from ordinary local PowerShell; no ZIP generated.
+
+
+## 2026-10-25 KST — LM-RANK-GPU-02 recovery
+
+- [x] Confirmed optimizer steps 1–300 and saved adapter/merged model existed. Failure was final JSON serialization of NumPy scalar counters, and failure-report serialization repeated the same error.
+- [x] Fixed `write_json` to convert NumPy scalars via `.item()` while retaining strict NaN rejection; Hangul coverage now sums Python bool values. Added regression test covering result JSON and failure JSON.
+- [x] Recovered without retraining: `tools/recover_lm_run.py` verified every checkpoint manifest hash, loaded saved weights and ran finite synthetic likelihood scoring on RTX 5080. Original source record/model preserved. Separate authoritative recovery record: `project_log/experiments/LM-RANK-GPU-02-RECOVERY-01.json`.
+- [x] 300-step final training loss 0.8850519061088562; this is not accuracy. Lost final in-memory timing/coverage values remain unmeasured.
+- Next: heldout fixed-candidate ranking evaluation, then vessel-ID contribution comparison. No ZIP generated. Existing .venv Python 3.11.15 differs from target 3.11.17; transformers 4.57.6.
+- Suggested commit: `fix(noisy-channel): serialize numpy counters and recover completed GPU run`.
+
+
+## 2026-10-25 KST — EVAL-LM-RANK-01 planned/running
+
+Purpose: evaluate recovered GPU model on all 2,372 clean fold0 rows. Hypothesis: new LM may help fixed-shortlist discrimination. Rebuild AR06/EN_V3 baseline strictly on fit folds with lookup disabled; no validation target supplied to retrieval. Evaluate baseline, LM-only, ungated 0.20 fusion diagnostic and fixed AS05 gate margin <=1.0 (correct value, not 1.5), top35. No tuning on heldout results. CUDA batch8 likelihood validated against single-pair scoring; official eval subset comparison to follow. Previous LM weights unavailable, so no direct old/new LM performance claim. Evaluation script `experiments/evaluate_lm_rank_gpu.py`; record `project_log/experiments/EVAL-LM-RANK-01.json`. No ZIP.
+
+
+## 2026-10-25 KST — EVAL-LM-RANK-01 complete
+
+[x] Full clean fold0 2,372 rows evaluated on RTX 5080; official evaluator subset comparison passed for four methods. Baseline weighted 0.99958 (Hangul239/239, non-Hangul2130/2133). LM-only0.98730 (235/239,2126/2133), fixes0/breaks8, delta95%CI[-0.02959,-0.00056]. Fixed 0.20 fusion and original margin<=1.0 gate both identical to baseline, no added accuracy. Target inclusion top35 is100% in both groups; all11 LM errors are selection errors. GPU exhaustive scoring476.35s, total522.09s. No old/new LM matched comparison; prior candidates differ, old weights absent. No ZIP. Evidence: `docs/LM_RANK_EVALUATION.md`, `project_log/experiments/EVAL-LM-RANK-01.json`. Next: pre-specified robustness and matched CE-only ablations; retain baseline and do not tune this fold. Suggested commit: `eval(lm): record clean fold0 rank-LM and fixed fusion comparison`.
+
+
+## 2026-10-25 KST — LM-RANK-GPU-03 planned
+
+User requested continuing performance improvement. Single budget study: original base, same pairs/negative mining/row CE/language cycles/beta0.1/LoRA/seed, steps300->1200 (cosine horizon necessarily changes). Endpoint fixed before run, no heldout early stopping. Compare against recovered 300-step LM using exact `reports/noisy_channel/EVAL-LM-RANK-01/candidates.csv`; unchanged weight0.20/gate1.0. Hypothesis: broader unique-pair exposure improves LM discrimination. Existing AR06 remains production baseline until measured improvement. Existing .venv explicitly accepted by session; Python3.11.15 environment difference recorded. No ZIP.
+
+
+## 2026-10-25 KST — LM-RANK-GPU-03 trained / EVAL-LM-RANK-02 running
+
+[x] Fixed1200-step GPU training completed, 293.327s optimizer loop; saved merged model/adapter and JSON successfully. Pair hash equals LM-RANK-GPU-02. Total draws9600: Hangul6792 / non-Hangul2808; unique Hangul819 / non-Hangul2808, total3627; max repetition9. [ ] Exact cached fold0 candidate evaluation running as EVAL-LM-RANK-02. No checkpoint selection or fusion tuning; no ZIP.
+
+
+## 2026-10-25 KST — LM-RANK-GPU-03 / EVAL-LM-RANK-02 complete
+
+[x] 1200-step GPU training and exact-candidate full fold0 evaluation completed; official subset evaluator passed. New LM weighted0.97823 vs300-step0.98730, fixes1/breaks6. Delta-0.00907,95%CI[-0.04098,+0.00845] includes0: lower point estimate, no statistically established worsening. AR06+LM fixed fusion/gate still0.99958 and zero prediction changes. Reject longer-training candidate; keep existing baseline. Pair hash and83,020 candidate/scores/order matched. No ZIP. Evidence: `docs/LM_BUDGET_EVALUATION.md`, new training/evaluation JSONs. Next: equal-budget CE-only ablation, then fit-inner-heldout model-confusion negatives/checkpoint selection; do not tune external fold0. Commit suggestion: `experiment(lm): reject longer training after matched fold0 evaluation`.
+
+
+## 2026-10-25 KST — INNER-CONFUSIONS-01 running
+
+Started four inner group folds (1,2,3,4) entirely excluding external fold0. AR06 fits only other inner folds and exports top8 high-scoring wrong names without gold injection or lookup. Script: experiments/mine_inner_confusions.py. Record: project_log/experiments/INNER-CONFUSIONS-01.json. Next: inspect mined candidate exclusions, integrate training CSV, run matched300-step GPU training and fixed-candidate evaluation. No training or improvement claim yet.
+
+
+## 2026-10-25 KST — LM-RANK-GPU-04 planned
+
+INNER-CONFUSIONS-01 completed inner4-fold AR06 mining in144.435s. Training integration validates source record/CSV/fold hashes and each sample's fit membership, inner fold, observed name, positive/negative catalog identities. All fit-known positive names are excluded. Only exact original name pairs use mined negatives; augmented/unmatched pairs retain lexical fallback. Planned GPU300steps matches LM-RANK-GPU-02 seed, data/order, loss, augmentation and optimizer settings; changed factor is negative source. Tests include ambiguous positive and external sample rejection. User requested training; no ZIP.
+
+
+## 2026-10-25 KST — LM-RANK-GPU-04 trained
+
+[x] Inner-confusion negative integration complete and11 channel regression tests passed (ambiguous positives excluded, external samples rejected). GPU300-step training completed; model/adapter saved under artifacts/LM-RANK-GPU-04/. Same pair-content/order hash as300-step lexical baseline. All4685 original pairs use2 mined names each (9370 slots);2580 augmented pairs retain lexical negatives (5160 slots). Loss remains rowCE+0.1rank, no fusion changes. Accuracy not measured; no improvement claim or ZIP. Next: run `experiments/evaluate_lm_rank_gpu.py --experiment-id EVAL-LM-RANK-03 --model-path artifacts/LM-RANK-GPU-04/model --candidates-csv reports/noisy_channel/EVAL-LM-RANK-01/candidates.csv`, then official comparison against EVAL-LM-RANK-01 LM. Evidence: project_log/experiments/LM-RANK-GPU-04.json, INNER-CONFUSIONS-01.json. Commit suggestion: feat(lm): train with inner-cross-fitted matcher confusions.
+
+
+## 2026-10-25 KST — EVAL-LM-RANK-03 running
+
+Purpose: evaluate inner-confusion LM-RANK-GPU-04 against lexical300-step LM-RANK-GPU-02. Hypothesis: changing only negative sources improves heldout ranking. External fold0 full2372 rows, identical fixed83020 candidates/scores/order from EVAL-LM-RANK-01, same LM-only/fusion0.20/gate1.0, no tuning. GPU evaluation started. Official subset evaluator and matched LM comparison follow. No ZIP.
+
+
+## 2026-10-25 KST — EVAL-LM-RANK-03 complete
+
+[x] Full clean fold0 GPU evaluation completed,493.3s candidate scoring. Exact83020 candidate/scores/order matched. New inner-confusion LM top1 predictions identical to previous lexical300-step LM on all2372rows: Hangul235/239, non-Hangul2126/2133, weighted0.98730, fixes0/breaks0, pairedCI[0,0]. AR06 fusion/gate unchanged0.99958. Official subset evaluator passed four methods plus matched comparison. No promotion, no ZIP. Evidence: docs/LM_INNER_CONFUSIONS_EVALUATION.md and project_log/experiments/EVAL-LM-RANK-03.json. Next: inspect fit-inner score separation and pre-specified stress results before further training; do not tune externalfold0. Commit suggestion: eval(lm): record matched inner-confusion negative result.
+
+
+## 2026-10-25 KST — IMPL-LFM25-01
+
+[x] User-requested LFM2.5-350M default wired into trainer and tools/start_lm_gpu.ps1, new tools/fetch_lfm25.py resolves/preserves immutable revision and hashes files. q/v LoRA validates6attention blocks in16-layer hybrid instead of requiring attention in every layer. Tiny hybrid GPU training/merge/reload test passed; existing11channel tests passed. [ ] Real350M download blocked by tool DNS; actual checkpoint/tokenizer/training/accuracy pending. Native LFM2 exists in4.57.6 but actual official config declares5.0.0rc1; do not claim real checkpoint compatibility yet. Existing weights/requirements retained, no ZIP. Next: normal PowerShell launcher (fresh LM-LFM25-01), then same-candidate evaluation. Evidence docs/LFM25_MODEL_SWITCH.md, project_log/experiments/IMPL-LFM25-01.json. Suggested commit: feat(lm): support LFM2 hybrid LoRA and switch training default.
+
+
+## 2026-10-25 KST — LM-LFM25-02 planned
+
+Official LFM2.5 files now local. LM-LFM25-01 failed loading tokenizer metadata (`TokenizersBackend`, a transformers5 class name). Added local fast-tokenizer compatibility loader preserving tokenizer.json/special tokens/chat template, without editing official files or package pins. Fresh LM-LFM25-02 planned with same300step/inner-confusion setup; old failure retained. No ZIP.
+
+
+## 2026-10-25 KST — LM-LFM25-03 running
+
+Official checkpoint downloaded. LM-LFM25-01 failed on TokenizersBackend class; LM-LFM25-02 failed on v5 extra_special_tokens empty-list format. Fixed name_decoder.noisy_channel.load_channel_tokenizer to use v4 PreTrainedTokenizerFast with extra_special_tokens={} while retaining tokenizer.json, EOS7 and chat template. Actual Korean continuation round-trip and tiny hybrid GPU tests2 passed. Real LFM2.5 checkpoint now trains on GPU, q/v LoRA344064 params over6attention blocks;300steps planned, same positive pairs and inner-confusion negatives. Earlier failures retained; no package upgrade/ZIP. Next: verify trained checkpoint hashes and reload, accuracy pending.
+
+
+## 2026-10-25 KST — LM-LFM25-03 trained
+
+[x] Actual downloaded LFM2.5-350M GPU300-step training completed and merged model/adapter saved in artifacts/LM-LFM25-03/. Adapted q/v params344064 over6attention blocks. Version4.57.6 compatibility loader retains original tokenizer files but maps v5 TokenizersBackend to PreTrainedTokenizerFast with extra_special_tokens={}. Actual Korean/EOS round-trip plus tiny hybrid GPU tests2 and channel tests11 passed. LM-LFM25-01/02 failed before training and remain separate records. [ ] Accuracy evaluation pending; no improvement claim/ZIP. Next: evaluate with fresh EVAL-LFM25-01 ID, model artifacts/LM-LFM25-03/model and exact reports/noisy_channel/EVAL-LM-RANK-01/candidates.csv. Launcher next default fresh LM-LFM25-04. Commit suggestion: fix(lfm): support v5 tokenizer metadata on pinned transformers4 and train GPU checkpoint.
+
+
+## 2026-10-25 KST — EVAL-LFM25-01 running
+
+Evaluate actual LFM2.5-350M LM-LFM25-03 on full external fold0 (2372rows) and exact fixed83020 candidates from EVAL-LM-RANK-01. Compare against latest HyperCLOVA inner-confusion300-step LM EVAL-LM-RANK-03. Same names/tasks, folds, fixed fusion0.20/gate1.0; tokenizer and adapted parameter count differ by architecture. No tuning/ZIP. Official subset evaluator and paired comparison to follow.
+
+
+## 2026-10-25 KST — EVAL-LFM25-01/02 failed numerical preflight;03 running
+
+LFM batch8 vs single score discrepancy ~0.000176 exceeded legacy1e-4 check. CUDNN-disabled retry02 had same discrepancy. Neither failed preflight produced accuracy results. Run03 uses architecture-specific mean-logp tolerance1e-3 and checks all35 names in first record (legacy model1e-4), plus single-score refinement when union of near-top LM/fusion names has>2 members; not a global numeric-error bound. No target labels used for numerical settings. CUDNN remains disabled; TF32 disabled. Full matched candidate evaluation running; numeric protocol difference must be disclosed. No ZIP.
+
+
+## 2026-10-25 KST — EVAL-LFM25-03 complete
+
+[x] LFM matched full cleanfold0 evaluation and official subset comparison complete. LFM weighted0.97908 vs HyperCLOVA0.98730; Hangul232/239 vs235/239, non-Hangul2130/2133 vs2126/2133. Fixes7/breaks6; weighted delta-0.00822 CI[-0.04087,+0.01728] includes0. Fusion/gate unchangedAR060.99958. Numeric failed preflights01/02 retained. Run03 first-row all35-name diffmax0.000235, tolerance0.001; cuDNN/TF32 off. All17 changed/error rows rechecked single-pair with0 prediction mismatches. Full scoring732.02s. No promotion/server claim/ZIP; LFM user-selected research checkpoint retained. Evidence docs/LFM25_EVALUATION.md, EVAL-LFM25-03.json. Next: fit-inner Korean representation/negative experiments only if continuing; do not tune outerfold0. Commit suggestion: eval(lfm): record matched fold0 result and numerical audit.
+
+
+## 2026-10-25 KST — REVIEW-INTERNAL-DEV-01
+
+User requested verification of internal-dev best selection changes. Code review only, no implementation edits or training. Blockers: first-step history serializes best_dev_loss=inf under strictJSON and fails; dev indices still present in both training samplers. Pair split after augmentation/fitted mapping/mining is not isolated vessel holdout. CPU adapter snapshot aliases live parameters (minimal reproduction confirms); CUDA snapshot copied to CPU does not share memory. Token-reduction training differs from row-only dev loss. Final best metadata/split hashes absent.128/7265=1.76%, not5%. Next: fix JSON logging and split source-vessel groups before all fitted preprocessing/mining/augmentation, exclude dev/descendants from both samplers, clone snapshots, persist selection provenance. Review evidence project_log/experiments/REVIEW-INTERNAL-DEV-01.json. No ZIP.
+
+
+## 2026-10-25 KST — IMPL-INTERNAL-BEST-01 complete
+
+[x] Corrected user-requested Best selection: source-vessel split before mappings/augmentation/mining; both samplers contain internal train only. Internal-best rebuilds AR06 crossfits without Dev instead of reusing contaminated outer-fit CSV. Dev clean lexical candidate objective supports row/token reduction and language weighting; finite-loss validation, pre-first-eval null logs. CPU snapshot clone and strict Best restoration before merge; best snapshot/selection/split hashes persisted. Defaults internal-best/fraction.05/cap128vessels/every25; last option retained. User LoRA expansion/rank/beta preserved. [x]18 targeted tests pass (5internal,11channel,2LFM); tiny end-to-end tests cover both samplers, restored snapshot and manifest. Real-data dry split train9560/dev290rows128vessels129pairs/outer2372; no ID overlap. No full training/ZIP/performance claim. Evidence docs/INTERNAL_BEST_CHECKPOINT.md, project_log/experiments/IMPL-INTERNAL-BEST-01.json. Next: fresh training ID then controlled external evaluation; running old processes unchanged. Commit suggestion: fix(training): isolate internal vessel dev and restore best adapters safely.
+
+
+## 2026-10-26T00:29:48+09:00 - HANDOVER CONTEXT v2 reconciliation (inspection only)
+
+- [x] Compared handover with current source paths, saved experiment records and local interpreter; no training, prediction, submission check or ZIP creation executed.
+- Confirmed integration location: artifacts/AS-06/script.py and artifacts/AS-06/run_ar06.py contain Jamo retrieval / unique lookup and CLI options. AR-06/script.py still defaults USE_TRAIN_LOOKUP=False; AR-06/run_ar06.py still embeds matching code. Do not describe those source files as already integrated.
+- Current AR-06/catalog_full_ko_map.json has 78,586 top-level entries, versus 78,592 names claimed in handover/AS-06 record; coverage and generation provenance require reconciliation.
+- Local .venv-server/Scripts/python.exe exists and reports Python 3.11.15; reports/server_environment.json describes an earlier Linux Python 3.11.17 environment. Do not equate the two.
+- LM-LFM25-FULL-R24-01 record confirms expanded LoRA targets / rank24 / alpha48 / 900steps / rank-beta0.25, status trained_unvalidated. AS-06.json flags its OOF/noise results as leaky; no validated improvement claim. This inspection has not independently established the exact leakage scope.
+- [ ] Next actions, pending implementation/evaluation task: reconcile AS-06 artifact and AR-06 source; audit synthetic-map coverage and generator fit membership per external fold before comparing candidate inclusion / selection errors. Keep test distribution and ~0.90 bottleneck explanations as hypotheses until measured.
+- Evidence: project_log/experiments/AS-06.json; project_log/experiments/LM-LFM25-FULL-R24-01.json; artifacts/AS-06/script.py; artifacts/AS-06/run_ar06.py.
+- Suggested documentation commit: docs: reconcile handover with local AR06 and AS06 state. No commit/push performed.
+
+
+## 2026-10-26T00:31:33+09:00 - AS-06 official server result reported by user
+
+- [x] Recorded submission 115506, submit_AS-06.zip, submitted 2026-10-25 23:49:32 KST: weighted score **0.9122153056**, displayed duration **366s (6m06s)**. Source is the user-pasted DACON table; not independently retrieved.
+- AR-06 (113038): 0.9056363583 / 234s. AS-06 delta +0.0065789473 = **+0.65789473 percentage points**; displayed duration +132s.
+- AS-05 (114681): 0.9054976988 / 769s. AS-06 delta +0.0067176068 = **+0.67176068 percentage points**; displayed duration -403s.
+- Decision: AS-06 is the leading score reference among these three user-reported submissions. This is package-level server evidence; separate Hangul/non-Hangul, retrieval/scoring/lookup and LoRA contributions remain unmeasured. Prior statements that AS-06 has no official score are historical and superseded by this entry; local OOF leakage warnings remain in effect.
+- [ ] Next, when improvement is requested: audit synthetic-map fold provenance and run controlled component comparisons; preserve AS-06 assets. No additional training, ZIP creation/upload, commit or push performed.
+- Evidence: project_log/experiments/SUB-115506.json; prior records AS-06.json and ANALYSIS-AS05-SERVER-01.json.
+- Suggested commit: docs(results): record AS-06 submission 115506 and leaderboard gain.
+
+
+## 2026-10-26T00:39:19+09:00 - AS-06 improvement plan
+
+- [x] Reviewed current AS-06 scoring/retrieval/lookup and offline generator; saved docs/MATCHING_IMPROVEMENT_PLAN.md (plan PLAN-MATCHING-IMPROVE-01). No model/accuracy evaluation or ZIP creation performed.
+- Measured catalog/map aggregates: canonical names78592, map keys78586, missing6; two pronunciations74238 and single pronunciation4348. Generator manifest says heldout_fold0, conflicting with AS-06.json full-train description; actual fold lineage remains unresolved.
+- Decision: first compare separated/bounded Jamo scoring with fixed candidates; then diverse offline pronunciations and Jamo2-4gram retrieval in separate experiments. Audit lookup fallback/missingness and auxiliary seen-vessel validation independently. AS-06 server score0.9122153056 remains the package reference.
+- [ ] Next implementation task: preserve reference assets, audit fold provenance, construct controlled baseline and implement one factor at a time. All proposed experiments remain planned.
+- Evidence: docs/MATCHING_IMPROVEMENT_PLAN.md; project_log/experiments/PLAN-MATCHING-IMPROVE-01.json. Suggested commit: docs: plan controlled AS06 scoring and retrieval improvements. No commit/push.
+
+
+## 2026-10-26T00:50:53+09:00 - Jamo scoring Jamo scoring implemented; paired comparison running
+
+- [x] Frozen AS-06 source/map/record copies with SHA256 under artifacts/JAMO-SCORE-01/reference. Created experimental_matchers/jamo_scoring/script.py with default legacy mode and explicit separate1.8*Jamo channel; no original source overwritten.
+- [x] Five targeted scoring/candidate/gold-independence/order tests passed. Actual64-row balanced legacy parity passed including Top5 scores.
+- [x] AUDIT-GENERATOR-LINEAGE-01 reconstructed9850fit rows/4680vessels/7265ordered pairs; pair, source, training vessel, negatives, checkpoint and artifact hashes match; outerfold0 membership excluded. The historical full-train generator claim is contradicted. Missing historical generation-side model binding and manual-lexicon/miner-history limits remain.
+- [ ] JAMO-SCORE-01 running: fold0 clean/default/severe, seed20261022, lookupoff, identical per-row candidate hashes, official subset paired CI. All settings pre-specified; no weight tuning/promotion based on this outer fold.
+- Evidence: experimental_matchers/jamo_scoring/README.md; project_log/experiments/AUDIT-GENERATOR-LINEAGE-01.json; project_log/experiments/JAMO-SCORE-01.json. No LM training/ZIP/upload/commit/push.
+
+
+## 2026-10-26T01:01:06+09:00 - Jamo scoring Jamo score experiment completed; AS-06 retained
+
+- [x] Implemented separate Jamo channel under experimental_matchers/jamo_scoring/script.py, preserved legacy default and immutable AS-06 snapshots. Targeted tests5passed, real64-row original/legacy parity passed, both modes real12-row reverse/single independence passed.
+- [x] JAMO-SCORE-01: all2372outerfold0 rows, clean/default/severe(seed20261022), identical candidate sets. Clean/default predictions unchanged; severe Hangul226/239->231/239 (fix6/break1), weighted0.96108080->0.97572516; paired CI includes0. Non-Hangul unchanged.
+- [x] JAMO-SCORE-02: fixed settings, new severe seeds20261026 and20261027. Hangul229->228 (fix4/break5) and230->230 (fix3/break3). Each CI includes0. These are repeated transformations of the same vessels, not independent new samples.
+- Decision: reject default adoption of this universal1.8 Jamo correction because benefits are inconsistent; retain server AS-06 reference0.9122153056. Do not tune the weight on observed outerfold0. Separate scoring code remains available experimentally.
+- Lineage correction: reproducible saved generator lineage excludes fold0 (9850fit rows/7265pairs), contradicting the earlier unqualified all-train statement. Historical map-generation model binding/manual lexicon/miner-history limits remain; shared map is not valid for leak-free full5fold OOF.
+- [ ] Next: isolate generator/map and feature selection inside fit-inner splits before testing pronunciation reliability or learned feature combination. Other improvement stages remain planned. No new LM training, ZIP, server upload, commit or push in this task.
+- Evidence: docs/JAMO_SCORE_RESULTS.md; project_log/experiments/REVIEW-JAMO-SCORE-01.json; primary/secondary/audit records. Suggested commit: experiment: evaluate separated Jamo scoring and retain AS06.
+
+
+## 2026-10-26T21:34:40+09:00 - Pronunciation deficient-pronunciation generation complete; matching evaluation running
+
+- [x] Added label-free pronunciation quality/diversity policy and7passing tests. Source/data/model/prompt/seed/batch/config hashes are bound in generation manifests; original AS-06 assets preserved.
+- [x] CUDA pilot64catalog names completed. Before accuracy evaluation, generation scope narrowed to existing missing/single-variant names4354 to bound cost; selection uses no validation labels.
+- [x] KO-DIVERSE-01 completed:2487names gained4327variants, single-variant entries4348->1861; all original variants retained, missing6names remain. Model weights unchanged; no new neural training.
+- [ ] EVAL-KO-DIVERSE-01 running with fixed AS-06 legacy scoring: clean/default/severe3seeds, outerfold0. Original result caches require file/input/model/source checks and64-row per-condition parity, otherwise recompute. No server improvement claimed, no ZIP/upload.
+- Evidence: name_decoder/pronunciation_quality.py; experiments/build_catalog_hangul_diverse.py; experiments/evaluate_pronunciation_maps.py; corresponding experiment JSONs.
+
+
+## 2026-10-26T21:59:10+09:00 - Pronunciation pronunciation expansion and ownership filter completed; AS-06 retained
+
+- [x] Implemented label-free quality/diversity policy, CUDA generator with model/source/config/seed provenance, and reverse-pronunciation ownership filter. Quality tests7passed, ownership tests5passed; all scripts compile. Executed sources and latest CLI versions are separately preserved by hash.
+- [x] KO-DIVERSE-01:4354missing/single-variant names processed;2487names gained4327variants; originals unchanged, missing6 remain. KO-OWNERSHIP-01 retained2998additions and removed1329. No neural weights updated.
+- [x] Fixed AS-06 legacy scoring, lookupoff, outerfold0 all2372rows, clean/default/severe3seeds. Reference Hangul239/239/226/229/230; expanded239/238/226/230/229; guarded239/238/225/229/229. Non-Hangul unchanged; all10official paired vessel-bootstrap CIs include0.
+- [x] Baseline cache provenance and64-row per-condition prediction/rank parity verified. Each candidate fully predicted. Both static maps passed8-row reverse/single checks. Public heldout case review links filtering to removed gold-name variants without claiming exclusive causality.
+- Decision: no default adoption of either map; preserve AS-06 reference0.9122153056 and original engine/map hashes. More pronunciations and nearest-original-owner filtering are not demonstrated accuracy improvements. No ZIP, server upload, commit or push.
+- [ ] Next: fit-inner vessel isolation before generator/map/feature selection, then metadata-aware candidate selection. Do not retune on observed outerfold0. Global catalog regeneration and retrieval expansion remain separate planned work.
+- Evidence: docs/PRONUNCIATION_RESULTS.md; docs/PRONUNCIATION_USAGE.md; project_log/experiments/REVIEW-PRONUNCIATION-01.json and five reviewed run records.
+- Suggested commits: feat(pronunciation): add reproducible diversity generation and ownership checks; experiment: record Pronunciation comparisons and retain AS06.
+
+
+## 2026-10-26T22:22:07+09:00 - User naming correction applied
+
+- [x] AS is a submission ZIP filename prefix, not a model version or experimental sequence. Corrected12run IDs and active code/docs/paths to descriptive JAMO-SCORE, KO-DIVERSE, KO-OWNERSHIP and related audit/review IDs. Actual submission filename submit_AS-06.zip and score0.9122153056 unchanged.
+- [x] Archived original executed records/source text with exact hashes; preserved commands, metrics, phase results, diagnostics, costs, data and model settings. No run relabeled as a different configuration, extra experiment or extra submission.
+- [x]17targeted tests passed after renamed imports/paths; core engine and existing prediction file hashes unchanged. No model fitting, generation, scoring evaluation, ZIP creation/upload or push performed.
+- [x] Persisted the user's rule in AGENTS.md and project_log/EXPERIMENT_NAMING.md. Canonical IDs and historical path aliases: project_log/EXPERIMENT_NAMING.json.
+- Next: continue only under descriptive IDs. AS numbering is assigned only for actual submission filenames upon an explicit submission-file request.
+- Evidence: project_log/experiments/NAMING-CORRECTION-01.json. Suggested commit: fix(log): separate experiment IDs from submission filenames.

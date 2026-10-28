@@ -1,0 +1,207 @@
+{
+  "experiment_id": "REVIEW-PRONUNCIATION-01",
+  "plan_id": "PLAN-MATCHING-IMPROVE-01",
+  "status": "completed_review",
+  "recorded_at_kst": "2026-10-26T21:59:10+09:00",
+  "started_at_kst": null,
+  "finished_at_kst": null,
+  "purpose": "Review deficient-name pronunciation expansion and ownership filtering; decide whether to adopt.",
+  "hypothesis": null,
+  "baseline_experiment_id": null,
+  "changed_factors": [],
+  "fixed_conditions": [],
+  "code": {
+    "git_revision_at_run": null,
+    "dirty": null,
+    "file_sha256": {
+      "name_decoder/pronunciation_quality.py": "4d0873b3b23162d1161b61acfbbd178610547e969969a73eb8823acd8bcd5f08",
+      "name_decoder/pronunciation_ownership.py": "a29194af20bc387cc5a60a909a080019d21a219e997f07195959e76709009f22",
+      "experiments/build_catalog_hangul_diverse.py": "6a4c3522722160c8d20d9ca761a7f159c03955422cc0e7015692e49041d428b5",
+      "experiments/filter_catalog_hangul_ownership.py": "7b126031063000d667484fb13f364562865ff800b6ea6019da21b44a20defd0a",
+      "experiments/evaluate_pronunciation_maps.py": "079206ee1d93572f436ca16bfd924c4986c8e3d91cab969205e2ae1f9743f5de",
+      "experiments/summarize_pronunciation_results.py": "9b81f6c4a445cd0370aaf067109fe2a6d260efff824d2ff0a33a33dd4bf0d501",
+      "tests/test_pronunciation_quality.py": "12cd5fb38206b2d56ac1b9231d387daa80177cc2387ddb5dd52b5346dd3aa955",
+      "tests/test_pronunciation_ownership.py": "74874073fc5bbb34130a5c288b947a0a65d0813d4586a1d17224fe3a65703e1e",
+      "docs/PRONUNCIATION_RESULTS.md": "d072effd762817d0c3c8da97e9d07735a26e6be6ac4fa905148ec12b19786674",
+      "docs/PRONUNCIATION_USAGE.md": "e7602dbb1bb89c02becb1bdc6e9e7a2f0ac7e55c3b80ae4f8f345c335c6c28eb"
+    }
+  },
+  "data": {
+    "source_files_sha256": {},
+    "split_id": null,
+    "split_file_sha256": null,
+    "seed": null,
+    "training_rows": null,
+    "validation_rows": null
+  },
+  "retrieval": {},
+  "features": [],
+  "preprocessing": {},
+  "training_pairs": {
+    "positive_rule": null,
+    "negative_rule": null,
+    "count": null
+  },
+  "model": {
+    "type": null,
+    "parameters": {},
+    "loss": null
+  },
+  "commands": [],
+  "environment": {},
+  "metrics": {
+    "metric_source": null,
+    "hangul_rows": null,
+    "non_hangul_rows": null,
+    "hangul_accuracy": null,
+    "non_hangul_accuracy": null,
+    "weighted_accuracy": null,
+    "candidate_recall_hangul": null,
+    "candidate_recall_non_hangul": null,
+    "seen_vessel_fraction": null
+  },
+  "cost": {
+    "training_seconds": null,
+    "inference_seconds": null,
+    "timing_scope": null,
+    "peak_memory_bytes": null,
+    "model_bytes": null,
+    "assets_bytes": null,
+    "submission_zip_bytes": null
+  },
+  "artifacts": [
+    "docs/PRONUNCIATION_RESULTS.md",
+    "docs/PRONUNCIATION_USAGE.md",
+    "C:\\Projects\\ML_midterm\\artifacts\\REVIEW-PRONUNCIATION-01\\source_snapshot"
+  ],
+  "error_cases_file": "artifacts/EVAL-KO-OWNERSHIP-01/filter_review_public_cases.json",
+  "observations": [
+    "4354deficient catalog names sampled;2487names gained4327optional variants. Original variants preserved;6missing names remain.",
+    "Ownership filtering retained2998additions and removed1329; original variants preserved.",
+    "Expanded Hangul correct by condition:239,238,226,230,229 vs reference239,239,226,229,230.",
+    "Guarded Hangul correct by condition:239,238,225,229,229. Non-Hangul predictions unchanged in all10comparisons.",
+    "All paired official vessel-bootstrap intervals include0; no statistical worsening or improvement claim.",
+    "All tested Hangul targets remained in variable candidate sets; observed differences are selection effects."
+  ],
+  "interpretations": [
+    "Increasing pronunciation count or enforcing nearest baseline ownership did not yield stable heldout/stress gains.",
+    "Fit-inner isolated pronunciation reliability and metadata-aware candidate selection are more appropriate next comparisons than further outerfold threshold tuning."
+  ],
+  "limitations": [
+    "One previously explored outerfold0, not untouched final test/full5fold/server score.",
+    "Map-generation/filter rules use public catalog and original map only; earlier aggregate development results informed follow-up selection.",
+    "Fixed rules jointly filter and diversify samples; not separate ablations of every filter.",
+    "Existing baseline map historical generation provenance/manual lexicon limits remain.",
+    "Cached old-map results have source/model/file hashes and64-row per-phase parity checks; timing is not an old/new speed comparison.",
+    "Repeated fold0/noise development, not independent final evaluation or server result."
+  ],
+  "failure": null,
+  "decision": "Reject default adoption of both candidate maps. Preserve AS-06 score reference0.9122153056; do not tune filters on explored outerfold0.",
+  "next_actions": [
+    "Create generator/map using an internal vessel split that precedes all fitted preprocessing; then compare candidate feature combination without outerfold tuning.",
+    "Keep retrieval expansion as a separate future experiment; current fold0 Hangul inclusion gives no measured retrieval-repair benefit."
+  ],
+  "reviewed_experiments": [
+    "KO-DIVERSE-PILOT01",
+    "KO-DIVERSE-01",
+    "EVAL-KO-DIVERSE-01",
+    "KO-OWNERSHIP-01",
+    "EVAL-KO-OWNERSHIP-01"
+  ],
+  "validation": {
+    "quality_tests_passed": 7,
+    "ownership_tests_passed": 5,
+    "official_subset_comparisons": 10,
+    "bootstrap_repetitions": 2000,
+    "bootstrap_seed": 0,
+    "baseline_cache_parity_rows_per_condition": 64,
+    "row_independence": {
+      "expanded": {
+        "rows": 8,
+        "reverse_differences": 0,
+        "single_differences": 0
+      },
+      "guarded": {
+        "rows": 8,
+        "reverse_differences": 0,
+        "single_differences": 0
+      }
+    },
+    "original_as06_engine_and_map_hashes_unchanged": true,
+    "no_new_neural_training": true,
+    "no_zip_created": true
+  },
+  "diagnostics": {
+    "remaining_map_missing": 6,
+    "missing_names_categories": {
+      "digits_only": 3,
+      "has_latin": 3
+    },
+    "filter_case_review": {
+      "clean": {
+        "expanded_correct_guarded_wrong": 0,
+        "gold_name_had_removed_variants": 0
+      },
+      "default": {
+        "expanded_correct_guarded_wrong": 0,
+        "gold_name_had_removed_variants": 0
+      },
+      "severe": {
+        "expanded_correct_guarded_wrong": 1,
+        "gold_name_had_removed_variants": 1
+      },
+      "severe_20261026": {
+        "expanded_correct_guarded_wrong": 1,
+        "gold_name_had_removed_variants": 1
+      },
+      "severe_20261027": {
+        "expanded_correct_guarded_wrong": 0,
+        "gold_name_had_removed_variants": 0
+      }
+    }
+  },
+  "asset_inventory": [
+    {
+      "kind": "retrieval asset, not classifier or ZIP",
+      "path": "C:\\Projects\\ML_midterm\\AR-06\\catalog_full_ko_map.json",
+      "sha256": "e5a3ed8ce2b8eedfb499f09307e04ccd178992d838091a7e091cddc0c6fc06a4",
+      "bytes": 4365804
+    },
+    {
+      "kind": "retrieval asset, not classifier or ZIP",
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\KO-DIVERSE-01\\catalog_full_ko_map.json",
+      "sha256": "6661d057d2cb16251fddb1c666cc878e506eaf8d75943ce07f403a53c3144287",
+      "bytes": 5873898
+    },
+    {
+      "kind": "retrieval asset, not classifier or ZIP",
+      "path": "C:\\Projects\\ML_midterm\\artifacts\\KO-OWNERSHIP-01\\catalog_full_ko_map.json",
+      "sha256": "faf9f7827576edf2ad75430de18f1b9227829083a8b230b5dce7eefedfcd0f91",
+      "bytes": 5841412
+    }
+  ],
+  "baseline_submission_filename": "submit_AS-06.zip",
+  "baseline_artifact_record": "project_log/experiments/AS-06.json",
+  "naming_correction": {
+    "corrected_at_kst": "2026-10-26T22:17:00+09:00",
+    "legacy_id": "REVIEW-AS08-PRONUNCIATION-01",
+    "same_execution_not_a_new_experiment": true,
+    "original_record_path": "project_log/naming_history/20261026T221700/records/REVIEW-AS08-PRONUNCIATION-01.json",
+    "original_record_sha256": "25d51ce2cf279e5163f655b29fadd813e49d3db8879c8ce00924b324c4688f71",
+    "reason": "AS is a submission ZIP filename prefix; experimental runs use descriptive IDs.",
+    "preserved_execution_fields": [
+      "commands",
+      "cost",
+      "data",
+      "diagnostics",
+      "metrics",
+      "model",
+      "phase_results",
+      "preprocessing",
+      "retrieval",
+      "training_pairs",
+      "validation"
+    ],
+    "path_alias_registry": "project_log/EXPERIMENT_NAMING.json"
+  }
+}
