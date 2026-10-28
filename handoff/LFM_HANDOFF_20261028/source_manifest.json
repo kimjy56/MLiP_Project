@@ -1,0 +1,247 @@
+{
+  "recorded_at_kst": "2026-10-28T23:27:29+09:00",
+  "map": {
+    "path": "AR-06/catalog_full_ko_map.json",
+    "sha256": "e5a3ed8ce2b8eedfb499f09307e04ccd178992d838091a7e091cddc0c6fc06a4",
+    "entries": 78586,
+    "generator_base": "LiquidAI/LFM2.5-350M",
+    "generator_run": "LM-LFM25-FULL-R24-01",
+    "historical_generation_binding": "AS-06 record declaration plus matching map hash; no generation-side model/seed manifest",
+    "generator_fit_rows": 9850,
+    "generator_heldout_fold": 0,
+    "direct_train_merge_in_generation_code": false,
+    "real_train_names_used_in_generator_training": true,
+    "matches_recorded_as06_sha256": true
+  },
+  "encoder": {
+    "run": "DPR-SYMPHON-02",
+    "submission": "AS-09",
+    "source": "train_AS-09/model/full_encoder.pt",
+    "type": "Symphonym-v8 derived phonetic bi-encoder, separate from LFM"
+  },
+  "source_files": {
+    "phonetic_encoder/dataset.py": {
+      "source": "train_AS-09/model/phonetic_encoder/dataset.py",
+      "sha256": "defb522d806fbbe8207ae84161aba18e0ab1d756380831f7236f037deb9a8605",
+      "matches_DPR-SYMPHON-02_record": false
+    },
+    "phonetic_encoder/hybrid_matcher.py": {
+      "source": "train_AS-09/model/phonetic_encoder/hybrid_matcher.py",
+      "sha256": "550738ed54bae9047a8e5c8a1d491b37dcb2dee63c81b5e7cb1894744015832f",
+      "matches_DPR-SYMPHON-02_record": false
+    },
+    "phonetic_encoder/loss.py": {
+      "source": "train_AS-09/model/phonetic_encoder/loss.py",
+      "sha256": "a438e9cff9c2bfe7a3a076f173495e2f53b8fcb650b39ca87effbe86412f47db",
+      "matches_DPR-SYMPHON-02_record": false
+    },
+    "phonetic_encoder/model.py": {
+      "source": "train_AS-09/model/phonetic_encoder/model.py",
+      "sha256": "38dcd2dbec779b5cd24449a5e91122a042f2654d74d0c948441457530a0ef0b8",
+      "matches_DPR-SYMPHON-02_record": false
+    },
+    "phonetic_encoder/retrieval.py": {
+      "source": "train_AS-09/model/phonetic_encoder/retrieval.py",
+      "sha256": "be0c40292691c3f6a4b02c51581a266db66eaf3bdd79c01e4568def4aff42633"
+    },
+    "phonetic_encoder/tokenizer.py": {
+      "source": "train_AS-09/model/phonetic_encoder/tokenizer.py",
+      "sha256": "e19e1c9c4a59444be881c285ced063a0f17a9a9ddd19b52cd19953a3e5b7af14",
+      "matches_DPR-SYMPHON-02_record": false
+    },
+    "phonetic_encoder/__init__.py": {
+      "source": "train_AS-09/model/phonetic_encoder/__init__.py",
+      "sha256": "c075ac45fbe6fd33b16f9211269b49f7cf4834f18ed3568d52add2002cc00aa1"
+    },
+    "name_decoder/__init__.py": {
+      "source": "name_decoder/__init__.py",
+      "sha256": "206796a86d6258efa7a24352de3459802a496b9cfd45daed59ba097baba47ca3"
+    },
+    "name_decoder/catalog.py": {
+      "source": "name_decoder/catalog.py",
+      "sha256": "809cc65d803082546fdf29999893978fb18b2aa758c60039796224efa6320863",
+      "matches_LM-LFM25-FULL-R24-01_record": true
+    },
+    "name_decoder/data.py": {
+      "source": "name_decoder/data.py",
+      "sha256": "98309f9ce71bda74ae00e1d6c70a02c598844d5cb3cc2bf9f4be6f4034a3b3d7",
+      "matches_LM-LFM25-FULL-R24-01_record": true
+    },
+    "name_decoder/lora.py": {
+      "source": "name_decoder/lora.py",
+      "sha256": "ef6d92c25fd5297f2131a7d2fa995cebc61fc617ff9cb9a4b9732d0d7e0b6587",
+      "matches_LM-LFM25-FULL-R24-01_record": false
+    },
+    "name_decoder/noisy_channel.py": {
+      "source": "name_decoder/noisy_channel.py",
+      "sha256": "36c88596b2334bf0f8d5f332229abedfbeccb9e939a36eca197f58c4c9874f8f",
+      "matches_LM-LFM25-FULL-R24-01_record": true
+    },
+    "name_decoder/channel_training.py": {
+      "source": "name_decoder/channel_training.py",
+      "sha256": "02529ee98ed73cd57facd326d61344c9f92d6fe04a0f54e3ca03d5c27ee6e3eb",
+      "matches_LM-LFM25-FULL-R24-01_record": true
+    },
+    "name_decoder/noise_augmenter.py": {
+      "source": "name_decoder/noise_augmenter.py",
+      "sha256": "51315596aad8ac26f358d3f44fd94780714c99dc8423dde02446c167b6d7e3d5",
+      "matches_LM-LFM25-FULL-R24-01_record": true
+    },
+    "name_decoder/internal_dev.py": {
+      "source": "name_decoder/internal_dev.py",
+      "sha256": "1927983b0e86c236dbdd4492625436f2330100a1b10a949101b5b558adce583b"
+    },
+    "experiments/build_catalog_full_hangul.py": {
+      "source": "experiments/build_catalog_full_hangul.py",
+      "sha256": "aa32f72d0c66ab2d7e56778d476f7c2ebceb76f3e8b3c088a12a35190ff25476"
+    },
+    "experiments/train_noisy_channel.py": {
+      "source": "experiments/train_noisy_channel.py",
+      "sha256": "e1c591c5698972b7b72d910ece8bdd87d131bc46ada0a7a558f7352c99bbbc91",
+      "matches_LM-LFM25-FULL-R24-01_record": false
+    },
+    "experiments/noisy_channel_common.py": {
+      "source": "experiments/noisy_channel_common.py",
+      "sha256": "d55c127ca5581abf8631ce67de441e21585f6c4dc7d2dc5deb7591d50c1098c8",
+      "matches_LM-LFM25-FULL-R24-01_record": true
+    },
+    "experiments/score_noisy_channel_candidates.py": {
+      "source": "experiments/score_noisy_channel_candidates.py",
+      "sha256": "47d1053c1ac9acafa4e85061934cdad3b495c4286ea37358ed5f071d02c4992a",
+      "matches_LM-LFM25-FULL-R24-01_record": true
+    },
+    "experiments/mine_inner_confusions.py": {
+      "source": "experiments/mine_inner_confusions.py",
+      "sha256": "37aa0e7a5daf2549036fe998f00e9a4ae212d9eea3b0a8721ce0b23a1c44706b"
+    },
+    "experiments/build_synthetic_phonetic.py": {
+      "source": "experiments/build_synthetic_phonetic.py",
+      "sha256": "4d6c2434c76e0767e474e418152c2444312d8266ef2d1febb1e1d4c8f94738d7"
+    },
+    "experiments/train_bi_encoder.py": {
+      "source": "artifacts/IMPL-DPR-SYMPHON-03/before/experiments/train_bi_encoder.py",
+      "sha256": "6ad351f63cb0566842f56e134d423107788f55d321415071800340c12868baea",
+      "matches_DPR-SYMPHON-02_record": false
+    },
+    "AR-06/script.py": {
+      "source": "AR-06/script.py",
+      "sha256": "44ee368a55c490dd66b43d521bce82c3851e9aeb10f07b84897d87956b174e54"
+    },
+    "tools/export_encoder_safetensors.py": {
+      "source": "tools/export_encoder_safetensors.py",
+      "sha256": "eefc32145885a93220339e7d5e44d0a7a0a4f804b7d37554f50d831ecb35d2b4"
+    },
+    "environment/windows-requirements.txt": {
+      "source": "environment/windows-requirements.txt",
+      "sha256": "9c424e4f019c393a38798c7ea1960b15d5025c545093de89269d69171d239719"
+    },
+    "environment/server-requirements.txt": {
+      "source": "environment/server-requirements.txt",
+      "sha256": "184959befa625716b13b83fa9af30bc335bf889afaecb44d86bbb0a881ee515c"
+    },
+    "environment/README_original.md": {
+      "source": "environment/README.md",
+      "sha256": "52b2ca1f032a260a6350e59b8525fa863e49c0b60e241d44c5b81c5f7eeaad23"
+    },
+    "licenses/LFM2.5-350M_LICENSE": {
+      "source": "artifacts/pretrained/lfm2.5-350m/LICENSE",
+      "sha256": "4d28ca14dedc0b3d0fcc2b3339f0e79931faa33874f3d24f522183a8fc70068c"
+    },
+    "project_log/templates/experiment.json": {
+      "source": "project_log/templates/experiment.json",
+      "sha256": "e6d9f6392d16b3bed1c943cccc838e4f6714db8980c62cd308e39eef5663b490"
+    }
+  },
+  "historical_records": {
+    "LM-LFM25-FULL-R24-01": {
+      "experiment_id": "LM-LFM25-FULL-R24-01",
+      "data": {
+        "source_files_sha256": {
+          "train.csv": "61bfd199c827c9f7486fc8c9febb419c87ff0611a62d60cfbd7c6d177fa0648c",
+          "vessel_catalog.csv": "d3ad65c262ac9ee237d9fb86d36f0866b194cfc17bee58d948f23c97acff81f9",
+          "folds": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51"
+        },
+        "split_id": "folds_group5_seed42.csv",
+        "split_file_sha256": "9d09ede0f9254949aacf8cf80638a6c24de0ca5516ca3e9db329f55b9476ca51",
+        "seed": 42,
+        "heldout_fold": 0,
+        "training_rows": 9850,
+        "validation_rows": 2372,
+        "training_vessels": 4680,
+        "validation_is_independent_final_test": false,
+        "training_vessel_ids_sha256": "f7094848b233532e5000ac39697a10704d0db4860ea25160fa8c1ad598aaeb0e"
+      },
+      "commands": [
+        "C:\\Projects\\ML_midterm\\.venv\\Scripts\\python.exe experiments/train_noisy_channel.py --experiment-id LM-LFM25-FULL-R24-01 --pretrained artifacts/pretrained/lfm2.5-350m --device cuda --steps 900 --warmup-steps 45 --rank 24 --alpha 48 --lora-targets q_proj,k_proj,v_proj,out_proj,in_proj,w1,w2,w3 --rank-beta 0.25 --confusions-csv artifacts/INNER-CONFUSIONS-01/confusions.csv --confusions-record project_log/experiments/INNER-CONFUSIONS-01.json"
+      ]
+    },
+    "DPR-SYMPHON-02": {
+      "experiment_id": "DPR-SYMPHON-02",
+      "data": {
+        "source_files_sha256": {
+          "data/train.csv": "85a6a6c116d4c1808605ee35d3d0f757f72260ffc3ad4f35835694c9f1315b74",
+          "data/vessel_catalog.csv": "144f808fe2ba4df7dfa81e9f168f8045620935544fcfa815ca55519fdb47e7eb"
+        },
+        "split_id": "eval_kit/folds_group5_seed42.csv",
+        "seed": 42,
+        "training_rows": 9850,
+        "validation_rows": 2372,
+        "heldout_korean_rows": 239,
+        "heldout_non_korean_rows": 2133,
+        "synthetic_pairs": 100000
+      },
+      "commands": [
+        ".\\.venv-server\\Scripts\\python.exe -m pytest tests/test_phonetic_encoder.py -v",
+        ".\\.venv-server\\Scripts\\python.exe experiments/train_bi_encoder.py --experiment-id DPR-SYMPHON-02 --epochs-pretrain 0 --epochs-finetune 12 --batch-size 128 --fold 0",
+        ".\\.venv-server\\Scripts\\python.exe experiments/export_catalog_embeddings.py --checkpoint artifacts/DPR-SYMPHON-02/fold_0_encoder.pt --output-npy artifacts/DPR-SYMPHON-02/catalog_embeds_fp16.npy",
+        ".\\.venv-server\\Scripts\\python.exe experiments/evaluate_bi_encoder_oof.py --experiment-id DPR-SYMPHON-02 --checkpoint artifacts/DPR-SYMPHON-02/fold_0_encoder.pt --catalog-embeds artifacts/DPR-SYMPHON-02/catalog_embeds_fp16.npy --fold 0 --output-json reports/dpr_symphon_02_evaluation.json",
+        ".\\.venv-server\\Scripts\\python.exe experiments/evaluate_dpr_robustness.py --checkpoint artifacts/DPR-SYMPHON-02/fold_0_encoder.pt --catalog-embeds artifacts/DPR-SYMPHON-02/catalog_embeds_fp16.npy --output-json reports/matching_improvements/DPR-HYBRID-02/dpr_hybrid_robustness_benchmark.json"
+      ]
+    }
+  },
+  "export": {
+    "source_sha256": "ec69eb5959dc414953eb66efbdde69274e5170bb8cddd29bacafbe9d8520d489",
+    "output_sha256": "e73567af6ebd3bd32489e3993eefc4858a1b9d7c3ada6563a58e3c22cc700ff0",
+    "source_bytes": 2773947,
+    "output_bytes": 2759992,
+    "tensor_count": 61,
+    "tensor_elements": 1375976,
+    "exact_tensor_roundtrip": true,
+    "exact_metadata_roundtrip": true,
+    "as09_artifact_checkpoint_matches": true,
+    "as09_zip_checkpoint_matches": true,
+    "embedding_checks": {
+      "queries": {
+        "rows": 3,
+        "dimension": 128,
+        "max_absolute_difference": 0.0,
+        "exact_equal": true
+      },
+      "catalog": {
+        "rows": 3,
+        "dimension": 128,
+        "max_absolute_difference": 0.0,
+        "exact_equal": true
+      }
+    },
+    "source_syntax_count": 24,
+    "cli_help": {
+      "experiments/train_bi_encoder.py": true,
+      "experiments/train_noisy_channel.py": true,
+      "experiments/build_catalog_full_hangul.py": true,
+      "tools/export_encoder_safetensors.py": true
+    },
+    "environment": {
+      "python": "3.11.15",
+      "torch": "2.7.1+cu128",
+      "numpy": "1.26.4",
+      "safetensors": "0.8.0",
+      "transformers": "4.57.6",
+      "device": "cpu",
+      "compute_dtype_for_embedding_comparison": "float32",
+      "checkpoint_dtype_preserved": "float16"
+    },
+    "verification_seconds": 13.674079300137237,
+    "timing_scope": "checkpoint loading, embedding comparisons, source syntax and CLI help; excludes original training and catalog-map generation"
+  }
+}

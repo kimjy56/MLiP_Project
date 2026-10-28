@@ -1,0 +1,45 @@
+{
+  "source_sha256": "ec69eb5959dc414953eb66efbdde69274e5170bb8cddd29bacafbe9d8520d489",
+  "output_sha256": "e73567af6ebd3bd32489e3993eefc4858a1b9d7c3ada6563a58e3c22cc700ff0",
+  "source_bytes": 2773947,
+  "output_bytes": 2759992,
+  "tensor_count": 61,
+  "tensor_elements": 1375976,
+  "exact_tensor_roundtrip": true,
+  "exact_metadata_roundtrip": true,
+  "as09_artifact_checkpoint_matches": true,
+  "as09_zip_checkpoint_matches": true,
+  "embedding_checks": {
+    "queries": {
+      "rows": 3,
+      "dimension": 128,
+      "max_absolute_difference": 0.0,
+      "exact_equal": true
+    },
+    "catalog": {
+      "rows": 3,
+      "dimension": 128,
+      "max_absolute_difference": 0.0,
+      "exact_equal": true
+    }
+  },
+  "source_syntax_count": 24,
+  "cli_help": {
+    "experiments/train_bi_encoder.py": true,
+    "experiments/train_noisy_channel.py": true,
+    "experiments/build_catalog_full_hangul.py": true,
+    "tools/export_encoder_safetensors.py": true
+  },
+  "environment": {
+    "python": "3.11.15",
+    "torch": "2.7.1+cu128",
+    "numpy": "1.26.4",
+    "safetensors": "0.8.0",
+    "transformers": "4.57.6",
+    "device": "cpu",
+    "compute_dtype_for_embedding_comparison": "float32",
+    "checkpoint_dtype_preserved": "float16"
+  },
+  "verification_seconds": 13.674079300137237,
+  "timing_scope": "checkpoint loading, embedding comparisons, source syntax and CLI help; excludes original training and catalog-map generation"
+}

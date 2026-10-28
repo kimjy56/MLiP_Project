@@ -1,0 +1,55 @@
+{
+  "encoder": {
+    "run": "DPR-SYMPHON-02",
+    "submission": "AS-09",
+    "source": "train_AS-09/model/full_encoder.pt",
+    "type": "Symphonym-v8 derived phonetic bi-encoder, separate from LFM"
+  },
+  "files": {
+    "full_encoder.safetensors": {
+      "sha256": "e73567af6ebd3bd32489e3993eefc4858a1b9d7c3ada6563a58e3c22cc700ff0",
+      "source": "AS-09 encoder converted in EXPORT-LFM-HANDOFF-01"
+    },
+    "full_encoder.config.json": {
+      "sha256": "0260f6e8b33a5ab19033cc96fee147d929c198ed2b4fcfdfb44224e16b4a5f80",
+      "source": "AS-09 encoder converted in EXPORT-LFM-HANDOFF-01"
+    },
+    "tools/export_encoder_safetensors.py": {
+      "sha256": "eefc32145885a93220339e7d5e44d0a7a0a4f804b7d37554f50d831ecb35d2b4",
+      "source": "tools/export_encoder_safetensors.py"
+    },
+    "experiments/train_bi_encoder.py": {
+      "sha256": "6ad351f63cb0566842f56e134d423107788f55d321415071800340c12868baea",
+      "source": "artifacts/IMPL-DPR-SYMPHON-03/before/experiments/train_bi_encoder.py"
+    },
+    "experiments/build_synthetic_phonetic.py": {
+      "sha256": "4d6c2434c76e0767e474e418152c2444312d8266ef2d1febb1e1d4c8f94738d7",
+      "source": "experiments/build_synthetic_phonetic.py"
+    },
+    "phonetic_encoder/__init__.py": {
+      "sha256": "c075ac45fbe6fd33b16f9211269b49f7cf4834f18ed3568d52add2002cc00aa1",
+      "source": "train_AS-09/model/phonetic_encoder/__init__.py"
+    },
+    "phonetic_encoder/model.py": {
+      "sha256": "38dcd2dbec779b5cd24449a5e91122a042f2654d74d0c948441457530a0ef0b8",
+      "source": "train_AS-09/model/phonetic_encoder/model.py"
+    },
+    "phonetic_encoder/tokenizer.py": {
+      "sha256": "e19e1c9c4a59444be881c285ced063a0f17a9a9ddd19b52cd19953a3e5b7af14",
+      "source": "train_AS-09/model/phonetic_encoder/tokenizer.py"
+    },
+    "phonetic_encoder/loss.py": {
+      "sha256": "a438e9cff9c2bfe7a3a076f173495e2f53b8fcb650b39ca87effbe86412f47db",
+      "source": "train_AS-09/model/phonetic_encoder/loss.py"
+    },
+    "phonetic_encoder/dataset.py": {
+      "sha256": "defb522d806fbbe8207ae84161aba18e0ab1d756380831f7236f037deb9a8605",
+      "source": "train_AS-09/model/phonetic_encoder/dataset.py"
+    },
+    "phonetic_encoder/retrieval.py": {
+      "sha256": "be0c40292691c3f6a4b02c51581a266db66eaf3bdd79c01e4568def4aff42633",
+      "source": "train_AS-09/model/phonetic_encoder/retrieval.py"
+    }
+  },
+  "training_source_limit": "Preserved DPR02-family snapshot; differs from the historical training source SHA256."
+}

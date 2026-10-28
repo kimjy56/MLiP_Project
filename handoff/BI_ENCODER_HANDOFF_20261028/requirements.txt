@@ -1,0 +1,5 @@
+# Bi-Encoder dependencies only. Use the project's existing .venv-server.
+torch==2.7.1
+numpy==1.26.4
+pandas==2.0.3
+safetensors==0.6.2

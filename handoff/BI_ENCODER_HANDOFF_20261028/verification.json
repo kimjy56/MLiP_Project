@@ -1,0 +1,33 @@
+{
+  "original_export_checks": {
+    "source_sha256": "ec69eb5959dc414953eb66efbdde69274e5170bb8cddd29bacafbe9d8520d489",
+    "output_sha256": "e73567af6ebd3bd32489e3993eefc4858a1b9d7c3ada6563a58e3c22cc700ff0",
+    "tensor_count": 61,
+    "exact_tensor_roundtrip": true,
+    "exact_metadata_roundtrip": true,
+    "embedding_checks": {
+      "queries": {
+        "rows": 3,
+        "dimension": 128,
+        "max_absolute_difference": 0.0,
+        "exact_equal": true
+      },
+      "catalog": {
+        "rows": 3,
+        "dimension": 128,
+        "max_absolute_difference": 0.0,
+        "exact_equal": true
+      }
+    }
+  },
+  "current_package_checks": {
+    "isolated_safetensors_load": true,
+    "shape": [
+      1,
+      128
+    ],
+    "finite": true
+  },
+  "copied_files_sha256_match": true,
+  "note": "Original export checks were not re-run; current work verifies selected copied bytes and isolated loader only."
+}

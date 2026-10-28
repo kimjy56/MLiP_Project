@@ -1,0 +1,19 @@
+# Local server-compatible environment; NOT the submission requirements.txt.
+# Linux x86_64 / CPython 3.11, official torch==2.7.1+cu128 wheel.
+# Other packages and CUDA dependencies resolve from PyPI, not extra indexes.
+torch @ https://download.pytorch.org/whl/cu128/torch-2.7.1%2Bcu128-cp311-cp311-manylinux_2_28_x86_64.whl
+pandas==2.0.3
+numpy==1.26.4
+scipy==1.15.3
+scikit-learn==1.5.2
+joblib==1.5.2
+threadpoolctl==3.7.0
+lightgbm==4.6.0
+catboost==1.2.8
+rapidfuzz==3.14.3
+Unidecode==1.4.0
+transformers==4.57.6
+accelerate==1.9.0
+safetensors==0.6.2
+sentencepiece==0.2.0
+tqdm==4.66.5
