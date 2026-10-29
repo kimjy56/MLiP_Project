@@ -148,3 +148,7 @@ EVAL-LM-EXAONE-01,EXAONE noisy channel likelihood,failed,batch tolerance exceede
 EVAL-LM-EXAONE-02,EXAONE noisy channel likelihood,completed,clean fold0 fixed-candidate evaluation,0.9840898257507547,experiments/EVAL-LM-EXAONE-02.json
 SPEC-KO-FUSION-01,specification,specification_completed,documentation and static validation only; training planned,,docs/SPEC_KO_FUSION_01.md
 KO-FUSION-01,LightGBM LambdaRank Korean candidate selection,completed,heldout fold0,0.9585738749713115,experiments/KO-FUSION-01.json
+DENSE-COVERAGE-01,AS09 controlled improvement,implemented_blocked_evaluation,synthetic function checks only; no measured accuracy,,experiments/DENSE-COVERAGE-01.json
+LOOKUP-CONFLICT-01,AS09 controlled improvement,implemented_blocked_evaluation,synthetic function checks only; no measured accuracy,,experiments/LOOKUP-CONFLICT-01.json
+EN-GLOBAL-RETRIEVAL-01,AS09 controlled improvement,implemented_blocked_evaluation,synthetic function checks only; no measured accuracy,,experiments/EN-GLOBAL-RETRIEVAL-01.json
+KO-EXAONE-UNION-01,AS09 controlled improvement,implemented_blocked_evaluation,synthetic function checks only; no measured accuracy,,experiments/KO-EXAONE-UNION-01.json

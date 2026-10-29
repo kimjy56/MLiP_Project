@@ -1,0 +1,74 @@
+{
+  "experiment_id": "KO-EXAONE-UNION-01",
+  "status": "implemented_blocked_evaluation",
+  "purpose": "Measure whether reverse-transliteration candidates add coverage beyond the existing Korean candidate set",
+  "hypothesis": "A fold-isolated decoder may recover some missing candidates, but any ranking and speed benefits are unmeasured.",
+  "fixed_conditions": "AS-09 scoring and lookup policies unless explicitly changed by this experiment; fixed distributed folds and fold-isolated assets required",
+  "measurements": null,
+  "zip_created": false,
+  "parent_commit": "e3a51b5",
+  "planned_record_file_time_kst": "2026-10-29T16:00:31+09:00",
+  "recorded_at_kst": "2026-10-29T16:10:55+09:00",
+  "code_sha256": {
+    "experimental_matchers/dense_coverage/comparison.py": "573d7226b851752cd3622f6d34fa640c440140076d70f9708d8bf4ca10cd7c51",
+    "experimental_matchers/as09_candidate_extension.py": "ceeebc333dd6dafe9dbc87ea8591d8f97df31fabc1fca28cc6bf4fd5e726a054",
+    "experimental_matchers/lookup_conflict.py": "f9f5832fa4c3c21c31cc20c608bd8f4526225ef2b93e8413fbdd4cf281798708",
+    "experimental_matchers/en_global_retrieval.py": "fabd2056322384814285492f2fb42443e85d894c2cac21f7a117594cec123b25",
+    "experimental_matchers/exaone_candidate_union.py": "cb0c8874a7bdd89daaae851cb368103531235d95a8d761c4f98bc1f77a2f9c26",
+    "tests/test_dense_coverage.py": "36a5f5dac2f983c50cea60bf792aabf86d75246d99f05a9b5f6e7943a8630cbf",
+    "tests/test_as09_improvement_paths.py": "c456a6ce16ef2e9cd9b0f2883353888a16f30b96ba87f301e3c44c38077672f2"
+  },
+  "environment": {
+    "python": "3.11.17",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "numpy": "1.26.4",
+    "torch": "2.7.1+cu128",
+    "cuda_available": false
+  },
+  "tests": {
+    "synthetic_contract_tests_passed": 10,
+    "synthetic_contract_tests_total": 10,
+    "command": "PYTHONDONTWRITEBYTECODE=1 python -m unittest tests.test_dense_coverage tests.test_as09_improvement_paths -v",
+    "test_data": "synthetic only",
+    "AS09_actual_encoder_synthetic_smoke": "passed on CPU with synthetic 40-name catalog; no accuracy evaluation",
+    "initial_test_failure": "Korean synthetic fixture without transition tables triggered an uninitialized baseline meta_score; added explicit guard and valid fixture, then retested.",
+    "final_result": "10/10 passed"
+  },
+  "limitations": [
+    "No real fold accuracy or speed measurement",
+    "No full 5-fold OOF or team evaluator execution",
+    "No server score or inference-time measurement",
+    "No model adopted or submission ZIP created",
+    "Current source matches the recorded local ZIP script after CRLF reconstruction; server upload bytes remain unverified"
+  ],
+  "required_followup": [
+    "original distributed folds_group5_seed42.csv",
+    "fold-isolated encoder and catalog embeddings with auditable lineage",
+    "fold-isolated Korean map and lookup assets with auditable lineage",
+    "paired selection and evaluation on the same queries without target leakage"
+  ],
+  "historical_ko_fusion_audit": {
+    "recorded_code_hash_matches": {
+      "as09_adapter.py": true,
+      "features.py": true,
+      "cache.py": true,
+      "ranker.py": true
+    },
+    "current_split_preparation_copies_full_korean_map": true,
+    "current_adapter_uses_shared_full_encoder_path": true,
+    "prior_run_upstream_lineage_verified": false,
+    "prior_run_artifacts_available_here": false,
+    "evaluation_route_used_as_language": true,
+    "effect_on_prior_aggregates": "unknown"
+  },
+  "implementation": "Row-wise Korean-to-English decoder candidate generation with rank and similarity metadata; original score retained; decoder not loaded in synthetic test.",
+  "synthetic_fixture_real_encoder": false,
+  "additional_blockers": [
+    "Fold-specific EXAONE reverse decoder adapter and base model not available in this workspace"
+  ],
+  "reference_source_evidence": {
+    "script_matches_recorded_local_zip_after_crlf": true,
+    "model_json_matches_recorded_local_zip": true,
+    "uploaded_server_zip_bytes_verified": false
+  }
+}

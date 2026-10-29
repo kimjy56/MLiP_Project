@@ -1,0 +1,95 @@
+{
+  "experiment_id": "DENSE-COVERAGE-01",
+  "status": "implemented_blocked_evaluation",
+  "purpose": "Compare Top-35-only and full-candidate Dense similarity with the same Korean candidate sets and ranker configuration.",
+  "hypothesis": "Providing cosine similarity for existing non-Top-35 candidates can improve candidate selection; direction and magnitude are unmeasured.",
+  "baseline": "KO-FUSION-01 structure; AS-09 search and scoring settings",
+  "fixed_conditions": [
+    "candidate IDs and order",
+    "Dense Top-35 retrieval",
+    "legacy scores",
+    "ranker hyperparameters",
+    "data splits and upstream assets",
+    "lookup and non-Korean routes"
+  ],
+  "changed_factor": "Only the dense_sim feature for existing candidates outside the Dense Top-35 is filled with the fixed catalog cosine similarity.",
+  "evaluation_plan": "Use the team-distributed group-5 folds with fold-isolated upstream models and fit-only preprocessing, train both rankers separately on the same training candidates, then compare all validation rows using language determined from the original input name.",
+  "expected_inputs": [
+    "official train and catalog",
+    "unmodified folds_group5_seed42.csv",
+    "fold-isolated encoder and catalog embeddings",
+    "fold-isolated pronunciation map with verifiable lineage",
+    "fold-isolated candidate traces"
+  ],
+  "current_findings": [
+    "The fixed fold file and prior KO-FUSION-01 caches are not present in this workspace.",
+    "The AS-09 full encoder and full catalog embeddings expected by the previous adapter are not present.",
+    "The previous fit_split_model copies the base full Korean map and the adapter loads a common full encoder when present; fold independence is not established by that code alone.",
+    "The previous KO-FUSION evaluator uses the processing route as the language label, which can classify Korean lookup rows as non-Korean; prior aggregate metrics require audit."
+  ],
+  "implementation_plan": "Create an experimental isolated paired feature path, reject missing Dense assets, and use small synthetic tests without changing the submitted AS-09 entry point.",
+  "measurements": null,
+  "zip_created": false,
+  "parent_commit": "e3a51b5",
+  "planned_record_file_time_kst": "2026-10-29T15:55:46+09:00",
+  "recorded_at_kst": "2026-10-29T16:10:55+09:00",
+  "code_sha256": {
+    "experimental_matchers/dense_coverage/comparison.py": "573d7226b851752cd3622f6d34fa640c440140076d70f9708d8bf4ca10cd7c51",
+    "experimental_matchers/as09_candidate_extension.py": "ceeebc333dd6dafe9dbc87ea8591d8f97df31fabc1fca28cc6bf4fd5e726a054",
+    "experimental_matchers/lookup_conflict.py": "f9f5832fa4c3c21c31cc20c608bd8f4526225ef2b93e8413fbdd4cf281798708",
+    "experimental_matchers/en_global_retrieval.py": "fabd2056322384814285492f2fb42443e85d894c2cac21f7a117594cec123b25",
+    "experimental_matchers/exaone_candidate_union.py": "cb0c8874a7bdd89daaae851cb368103531235d95a8d761c4f98bc1f77a2f9c26",
+    "tests/test_dense_coverage.py": "36a5f5dac2f983c50cea60bf792aabf86d75246d99f05a9b5f6e7943a8630cbf",
+    "tests/test_as09_improvement_paths.py": "c456a6ce16ef2e9cd9b0f2883353888a16f30b96ba87f301e3c44c38077672f2"
+  },
+  "environment": {
+    "python": "3.11.17",
+    "platform": "Linux-6.18.55-x86_64-with-glibc2.41",
+    "numpy": "1.26.4",
+    "torch": "2.7.1+cu128",
+    "cuda_available": false
+  },
+  "tests": {
+    "synthetic_contract_tests_passed": 10,
+    "synthetic_contract_tests_total": 10,
+    "command": "PYTHONDONTWRITEBYTECODE=1 python -m unittest tests.test_dense_coverage tests.test_as09_improvement_paths -v",
+    "test_data": "synthetic only",
+    "AS09_actual_encoder_synthetic_smoke": "passed on CPU with synthetic 40-name catalog; no accuracy evaluation",
+    "initial_test_failure": "Korean synthetic fixture without transition tables triggered an uninitialized baseline meta_score; added explicit guard and valid fixture, then retested.",
+    "final_result": "10/10 passed"
+  },
+  "limitations": [
+    "No real fold accuracy or speed measurement",
+    "No full 5-fold OOF or team evaluator execution",
+    "No server score or inference-time measurement",
+    "No model adopted or submission ZIP created",
+    "Current source matches the recorded local ZIP script after CRLF reconstruction; server upload bytes remain unverified"
+  ],
+  "required_followup": [
+    "original distributed folds_group5_seed42.csv",
+    "fold-isolated encoder and catalog embeddings with auditable lineage",
+    "fold-isolated Korean map and lookup assets with auditable lineage",
+    "paired selection and evaluation on the same queries without target leakage"
+  ],
+  "historical_ko_fusion_audit": {
+    "recorded_code_hash_matches": {
+      "as09_adapter.py": true,
+      "features.py": true,
+      "cache.py": true,
+      "ranker.py": true
+    },
+    "current_split_preparation_copies_full_korean_map": true,
+    "current_adapter_uses_shared_full_encoder_path": true,
+    "prior_run_upstream_lineage_verified": false,
+    "prior_run_artifacts_available_here": false,
+    "evaluation_route_used_as_language": true,
+    "effect_on_prior_aggregates": "unknown"
+  },
+  "implementation": "Paired rankers use identical candidate IDs, scores, features except non-Top-35 dense_sim; repeated query encoder call checked against original Top-35.",
+  "synthetic_fixture_real_encoder": true,
+  "reference_source_evidence": {
+    "script_matches_recorded_local_zip_after_crlf": true,
+    "model_json_matches_recorded_local_zip": true,
+    "uploaded_server_zip_bytes_verified": false
+  }
+}
